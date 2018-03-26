@@ -1,0 +1,49 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Server.Network;
+using SphereSharp.ServUO;
+using Server.Mobiles;
+
+namespace Server.Sphere.<#= NameSpace #>
+{
+    public class <#= ClassName #> : <#= BaseClassName #>
+    {
+        [Constructable]
+        public <#= ClassName #>() : this("<#= ClassName #>")
+        {
+            OnCreated();
+        }
+
+        protected <#= ClassName #>(string defName) : base(defName)
+        {
+            Name = "<#= CharDef.Name #>";
+            Body = <#= Id #>;
+            VirtualArmor = <#= CharDef.Armor #>;
+            SetDamage(<#= CharDef.Attack #>, <#= CharDef.Attack #>);
+        }
+
+        [Constructable]
+        public <#= ClassName #>(Serial serial) : base(serial)
+        {
+        }
+
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
+            writer.Write((int)0);
+        }
+
+        public override void Deserialize(GenericReader reader)
+        {
+            base.Deserialize(reader);
+            int version = reader.ReadInt();
+        }
+    }
+}

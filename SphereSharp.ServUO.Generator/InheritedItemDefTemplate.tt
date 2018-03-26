@@ -1,0 +1,48 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Server.Network;
+using SphereSharp.ServUO;
+
+namespace Server.Sphere.<#= NameSpace #>
+{
+    public class <#= ClassName #> : <#= BaseClassName #>
+    {
+        [Constructable]
+        public <#= ClassName #>() : base("<#= ClassName #>")
+        {
+        }
+
+		protected <#= ClassName #>(string defName) : base(defName)
+        {
+        }
+
+        [Constructable]
+        public <#= ClassName #>(Serial serial) : base(serial)
+        {
+        }
+
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
+            writer.Write((int)0);
+        }
+
+        public override void Deserialize(GenericReader reader)
+        {
+            base.Deserialize(reader);
+            int version = reader.ReadInt();
+        }
+
+		public override void OnItemUsed(Mobile from, Item item)
+        {
+            SphereSharpRuntime.Current.RunItemEvent(from, item, "<#= ClassName #>", "userdclick");
+        }
+    }
+}

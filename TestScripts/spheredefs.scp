@@ -1,0 +1,67 @@
+//****************************************************************************
+//SPHERE by : Menasoft �1997-2000
+//www.sphereserver.com
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Friday, April 28, 2000
+//
+//VERSION=0.54
+
+// Brain types
+[DEFNAMES BRAINS]
+BRAIN_NONE             0
+BRAIN_ANIMAL           1
+BRAIN_HUMAN            2
+BRAIN_HEALER           3
+BRAIN_GUARD            4
+BRAIN_BANKER            5
+BRAIN_VENDOR            6
+BRAIN_BEGGAR            7
+BRAIN_ANIMAL_TRAINER    8
+BRAIN_THIEF             9
+BRAIN_MONSTER           10
+BRAIN_BESERK            11
+BRAIN_UNDEAD            12
+BRAIN_DRAGON            13
+BRAIN_VENDOR_OFFDUTY    14
+BRAIN_TOWNCRIER         2
+BRAIN_HYPNOTIZING_MYSTIC	15
+
+[DEFNAMES CAN_FLAGS]
+// Monster "Can" type flags.
+MT_NONMOVER		00000
+MT_GHOST		00001
+MT_SWIM			00002
+MT_WALK			00014
+MT_CLIMB		00010
+MT_FIRE_IMMUNE		00020
+MT_FLY			00080
+MT_EQUIP		00100
+MT_USEHANDS		00200
+MT_MALE			00000
+MT_FEMALE		00800
+MT_NONHUM		01000
+MT_RUN			02000
+
+[DEFNAMES dam_flags] 
+dam_god		000001  //0	- Unblockable "god" damage 
+dam_physical	000002  //1	- Some sort of physical damage (as opposed to magical) 
+dam_magic	000004  //2	- Some sort of magical damage 
+dam_poison	000008  //3	- Poisonous or biological (harm spell) damage 
+dam_fire	000010  //4	- Fire-based damage 
+dam_lightning	000020  //5	- Electrical damage (lightning) 
+dam_drain	000040  //6	- Draining damage 
+dam_general	000080  //7	- Damage that hits the entire body, rather than just one part of it 
+dam_acidic	000100  //8	- Acidic damage (will destroy armor) 
+dam_cold	000200  //9	- Cold-based damage 
+dam_slashing	000400  //10	- Damage done by slashing (swords, etc) 
+dam_piercing	000800  //11	- Damage done by piercing (spears, archery, etc) 
+dam_blunt	001000  //12	- tupe
+dam_sharp	002000	//13	- ostre
+dam_summon      004000  //14    - damage od summona
+dam_bleed	008000  //15    - bleeding damage
+dam_dragon	010000  //16    - dragon breath
