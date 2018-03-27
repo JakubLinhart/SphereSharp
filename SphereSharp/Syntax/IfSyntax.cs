@@ -46,7 +46,7 @@ namespace SphereSharp.Syntax
             from ifKeyword in CommonParsers.IfKeyword
             from _2 in CommonParsers.OneLineWhiteSpace.Many()
             from condition in ExpressionParser.Expr
-            from _3 in Parse.LineEnd
+            from _3 in CommonParsers.Ignored
             from thenBlock in CodeBlockParser.CodeBlock
             from elseIfs in ElseIf.Many()
             from elseBlock in Else.Optional()
@@ -59,7 +59,7 @@ namespace SphereSharp.Syntax
         public static Parser<CodeBlockSyntax> Else =>
             from _1 in CommonParsers.OneLineWhiteSpace.Many()
             from elseKeyword in CommonParsers.ElseKeyword
-            from _ in Parse.LineEnd
+            from _ in CommonParsers.Ignored
             from elseBlock in CodeBlockParser.CodeBlock
             select elseBlock;
 
@@ -68,7 +68,7 @@ namespace SphereSharp.Syntax
             from elseIfKeyword in CommonParsers.ElseIfKeyword
             from _2 in CommonParsers.OneLineWhiteSpace.Many()
             from condition in ExpressionParser.Expr
-            from _3 in Parse.LineEnd
+            from _3 in CommonParsers.Ignored
             from thenBlock in CodeBlockParser.CodeBlock
             select new ElseIfSyntax(condition, thenBlock);
 

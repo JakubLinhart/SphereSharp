@@ -22,6 +22,24 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_parse_assignment_with_whitespace_between_assignment_operator()
+        {
+            var syntax = AssignmentSyntax.Parse("var1 = 1");
+
+            syntax.LValue.As<MemberAccessSyntax>().MemberName.Should().Be("var1");
+            syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+        }
+
+        [TestMethod]
+        public void Can_parse_constant_integer_assignment_followed_by_comment()
+        {
+            var syntax = AssignmentSyntax.Parse("var1=1 // comment");
+
+            syntax.LValue.As<MemberAccessSyntax>().MemberName.Should().Be("var1");
+            syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+        }
+
+        [TestMethod]
         public void Can_parse_assignment_to_multipart_member_access()
         {
             var syntax = AssignmentSyntax.Parse("var1.var2.var3=1");

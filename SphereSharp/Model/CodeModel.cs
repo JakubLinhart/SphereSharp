@@ -37,7 +37,7 @@ namespace SphereSharp.Model
             this.itemDefs = itemDefs?.ToImmutableDictionary(x => x.DefName, StringComparer.OrdinalIgnoreCase) ?? ImmutableDictionary<string, ItemDef>.Empty;
             this.charDefs = charDefs?.ToImmutableDictionary(x => x.DefName, StringComparer.OrdinalIgnoreCase) ?? ImmutableDictionary<string, CharDef>.Empty;
             this.gumpDefs = gumpDefs?.ToImmutableDictionary(x => x.DefName, StringComparer.OrdinalIgnoreCase) ?? ImmutableDictionary<string, GumpDef>.Empty;
-            this.defNames = defNames?.ToDictionary(x => x.Key.ToLower());
+            this.defNames = defNames?.ToDictionary(x => x.Key, StringComparer.OrdinalIgnoreCase);
             this.functions = functions?.ToImmutableDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase) ?? ImmutableDictionary<string, FunctionDef>.Empty;
             this.professionDefs = professionDefs?.ToImmutableDictionary(x => x.Id) ?? ImmutableDictionary<int, ProfessionDef>.Empty;
             this.skillDefsById = skillDefs?.ToImmutableDictionary(x => x.Id) ?? ImmutableDictionary<int, SkillDef>.Empty;

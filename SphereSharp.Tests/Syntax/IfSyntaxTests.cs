@@ -183,5 +183,18 @@ endif");
 
             syntax.Condition.Should().BeOfType<UnaryOperatorSyntax>().Which.Kind.Should().Be(UnaryOperatorKind.LogicalNot);
         }
+
+        [TestMethod]
+        public void Can_parse_if_endif_else_followed_by_comment()
+        {
+            var syntax = IfSyntax.Parse(@"if (1) // comment
+    call1
+else // comment
+    call2
+endif // comment");
+            syntax.Should().NotBeNull();
+            syntax.ThenBlock.Statements.Should().HaveCount(1);
+            syntax.ElseBlock.Statements.Should().HaveCount(1);
+        }
     }
 }
