@@ -63,6 +63,8 @@ namespace SphereSharp.Syntax
                     }
                 case "profession":
                     return ProfessionSectionParser.ParseProfession(sectionType, sectionName);
+                case "skill":
+                    return SkillSectionParser.ParseSkillDef(sectionType, sectionName);
                 case "spell":
                     return SpellSectionParser.ParseSpell(sectionType, sectionName);
                 default:

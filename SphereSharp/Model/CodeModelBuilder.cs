@@ -21,6 +21,7 @@ namespace SphereSharp.Model
         private Dictionary<string, FunctionSectionSyntax> functionSections = new Dictionary<string, FunctionSectionSyntax>(StringComparer.OrdinalIgnoreCase);
         private Dictionary<int, ProfessionSectionSyntax> professionSections = new Dictionary<int, ProfessionSectionSyntax>();
         private List<SpellSectionSyntax> spellSections = new List<SpellSectionSyntax>();
+        private List<SkillSectionSyntax> skillSections = new List<SkillSectionSyntax>();
 
         public void Add(ItemDefSectionSyntax itemDef)
         {
@@ -47,6 +48,7 @@ namespace SphereSharp.Model
         public void Add(FunctionSectionSyntax section) => functionSections.Add(section.Name, section);
         public void Add(ProfessionSectionSyntax section) => professionSections.Add(section.Id, section);
         public void Add(SpellSectionSyntax section) => spellSections.Add(section);
+        public void Add(SkillSectionSyntax section) => skillSections.Add(section);
 
         public void Add(SectionSyntax section)
         {
@@ -79,6 +81,9 @@ namespace SphereSharp.Model
                 case SpellSectionSyntax spell:
                     Add(spell);
                     break;
+                case SkillSectionSyntax skill:
+                    Add(skill);
+                    break;
             }
         }
 
@@ -91,8 +96,9 @@ namespace SphereSharp.Model
             var functions = BuildFunctions();
             var professions = BuildProfessions();
             var spells = BuildSpells();
+            var skills = BuildSkills();
 
-            return new CodeModel(itemDefs, dialogs, defNames, functions, professions, spells, charDefs);
+            return new CodeModel(itemDefs, dialogs, defNames, functions, professions, spells, charDefs, skills);
         }
 
         private IEnumerable<ProfessionDef> BuildProfessions()
@@ -112,13 +118,32 @@ namespace SphereSharp.Model
         {
             var spells = new List<SpellDef>();
 
-            foreach (var section in professionSections.Values)
+            foreach (var section in spellSections)
             {
                 spells.Add(new SpellDef(section.Id, section.GetSinglePropertyValue("defname"),
                     section.GetSinglePropertyValue("name")));
             }
 
             return spells;
+        }
+
+        private IEnumerable<SkillDef> BuildSkills()
+        {
+            var skills = new List<SkillDef>();
+
+            foreach (var section in skillSections)
+            {
+                var skill = new SkillDef()
+                {
+                    Id = section.Id,
+                    DefName = section.GetPropertyValue("defname"),
+                    Triggers = BuildTriggers(section.Triggers),
+                };
+                skills.Add(skill);
+            }
+
+            return skills;
+
         }
 
         private IEnumerable<FunctionDef> BuildFunctions()
@@ -194,20 +219,27 @@ namespace SphereSharp.Model
             return charDefs.Values;
         }
 
-        private void BuildCharDef(CharDefSectionSyntax section, Dictionary<string, CharDef> results, HashSet<CharDefSectionSyntax> sectionsToProcess)
+        private ImmutableDictionary<string, TriggerDef> BuildTriggers(IEnumerable<TriggerSyntax> triggerSyntaxes)
         {
-            CharDef charDef;
-
             var triggers = new Dictionary<string, TriggerDef>();
 
-            foreach (var triggerSyntax in section.Triggers)
+            foreach (var triggerSyntax in triggerSyntaxes)
             {
                 triggers.Add(triggerSyntax.Name, new TriggerDef(triggerSyntax.Name, triggerSyntax.CodeBlock));
             }
 
+            return triggers.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);
+        }
+
+        private void BuildCharDef(CharDefSectionSyntax section, Dictionary<string, CharDef> results, HashSet<CharDefSectionSyntax> sectionsToProcess)
+        {
+            CharDef charDef;
+
+            var triggers = BuildTriggers(section.Triggers);
+
             if (ushort.TryParse(section.Name, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out ushort id))
             {
-                charDef = new CharDef() { Id = id, DefName = section.GetPropertyValue("defname"), Triggers = triggers.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase) };
+                charDef = new CharDef() { Id = id, DefName = section.GetPropertyValue("defname"), Triggers = triggers };
             }
             else
             {
@@ -223,7 +255,7 @@ namespace SphereSharp.Model
                         throw new NotImplementedException();
                 }
 
-                charDef = new CharDef() { DefName = section.Name, Id = baseCharDef.Id, BaseCharDef = baseCharDef, Triggers = triggers.ToImmutableDictionary() };
+                charDef = new CharDef() { DefName = section.Name, Id = baseCharDef.Id, BaseCharDef = baseCharDef, Triggers = triggers };
             }
 
             charDef.Name = section.GetPropertyValue("name");
@@ -254,16 +286,11 @@ namespace SphereSharp.Model
         {
             ItemDef itemDef;
 
-            var triggers = new Dictionary<string, TriggerDef>();
-
-            foreach (var triggerSyntax in section.Triggers)
-            {
-                triggers.Add(triggerSyntax.Name, new TriggerDef(triggerSyntax.Name, triggerSyntax.CodeBlock));
-            }
+            var triggers = BuildTriggers(section.Triggers);
 
             if (ushort.TryParse(section.Name, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out ushort id))
             {
-                itemDef = new ItemDef() { Id = id, DefName = section.GetPropertyValue("defname"), Triggers = triggers.ToImmutableDictionary() };
+                itemDef = new ItemDef() { Id = id, DefName = section.GetPropertyValue("defname"), Triggers = triggers };
             }
             else
             {
@@ -279,7 +306,7 @@ namespace SphereSharp.Model
                         throw new NotImplementedException();
                 }
 
-                itemDef = new ItemDef() { DefName = section.Name, Id = baseItemDef.Id, BaseItemDef = baseItemDef, Triggers = triggers.ToImmutableDictionary() };
+                itemDef = new ItemDef() { DefName = section.Name, Id = baseItemDef.Id, BaseItemDef = baseItemDef, Triggers = triggers };
             }
 
             results.Add(itemDef.DefName, itemDef);

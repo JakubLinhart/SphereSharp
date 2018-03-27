@@ -1,3 +1,24 @@
+[SKILL 46]
+DEFNAME=SKILL_MEDITATION
+KEY=Meditation
+TITLE=Stoic
+effect=0,50
+STAT_STR=20
+STAT_INT=20
+STAT_DEX=20
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=0
+BONUSSTATS=0
+ADVRATE=0fffffff //info viz comment pred prvnim skillem
+
+on=@start
+if (findid(i_a_mana_shield)) 
+ sysmessage("Tva mysl se soustredi na udrzeni ochranne bariery...")
+ action=-1 
+ return 1
+endif
+
 [profession 0]
 // undeclared class.
 // max skills for players of this skill class. 

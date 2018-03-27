@@ -82,6 +82,7 @@
     <Compile Include="Runtime\TestItem.cs" />
     <Compile Include="Syntax\ArgumentListSyntaxParsingTests.cs" />
     <Compile Include="Syntax\CallSyntaxTests.cs" />
+    <Compile Include="Syntax\SkillSectionSyntaxTests.cs" />
     <Compile Include="Syntax\CodeBlockSyntaxTests.cs" />
     <Compile Include="Syntax\DialogButtonsSectionSyntaxTests.cs" />
     <Compile Include="Syntax\DialogSectionSyntaxTests.cs" />
