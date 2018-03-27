@@ -1,3 +1,5 @@
+# SphereSharp
+
 SphereSharp is experimental project to run SphereScript 0.99 under ServUO server. SphereServer 0.99 is a long dead project with no source code available. There are still some awesome shards running on more than a decade dead server.
 
 It is not easy to migrate hundreds of thousands of lines that power theses shards to a newer [SphereServer](https://github.com/Sphereserver/Source) version because of script language incompatibility.
@@ -10,13 +12,30 @@ This is an experiment at a very early stage to make these shards a little bit be
 
 - Clone SphereSharp.
 - Checkout ServUO submodule.
-- Open SphereSharp.sln and start SphereSharp.ServUO.Generator.Console. This reads all *.scp scripts in TestScripts folder and translate all itemdef/chardef/gumps for ServUO. It writes resulting files to SphereSharp.ServUO.Generator.Console\Bin\Debug\output.
+- Open SphereSharp.sln in [VS 2017.6](https://www.visualstudio.com/downloads) and start SphereSharp.ServUO.Generator.Console project. The project reads all *.scp scripts in TestScripts folder and translate all itemdef/chardef/gumps for ServUO. It writes resulting files to SphereSharp.ServUO.Generator.Console\Bin\Debug\output.
 - Copy all files from SphereSharp.ServUO.Generator.Console\Bin\Debug\output to ServUO\Scripts\Sphere\Generated folder.
 - Open SphereSharp.ServUO.sln.
 - Include all files in ServUO\Scripts\Sphere\Generated to Scripts project.
-- [Start](https://www.servuo.com/tutorials/double-your-coding-speed-shortcuts-tips-and-tricks-to-coding-faster.16/?page=1#section_38) Scripts project.
+- [Start](https://www.servuo.com/threads/debugging-servuo-with-visual-studio-image-heavy.810/) Scripts project.
 
 If you want to see what is already supported, take a look to TestScripts folder. It contains all compatible scripts from [Moria](https://github.com/SirGlorg/MoriaSphereScripts) shard.
+
+## How does it work
+
+ServUO requires a separate class for each Sphere's itemdef/chardef. Before you can start Sphere scripts on ServUO, you have to start `SphereSharp.ServUO.Generator.Console` project to generate these item/char classes from scp files. Item/char classes contain static item/char property definitions and glue ServUO core together with SphereSharp runtime (`SphereSharp.ServUO.Sphere` namespace) and takes care about starting specific SphereScript triggers.
+
+ServUO core:
+
+- Handles communication with clients.
+- Instantiate items and mobiles according to generated item/char classes.
+- Provides scaffolding for running partially implemented SphereSharp runtime.
+
+SphereSharp runtime:
+
+- Implements SphereServer 0.99 behavior.
+- Loads SphereScript from scp files.
+- Maintains item/char/skill/profession/function definitions.
+- Starts SphereScript triggers by interpreting content of scp files.
 
 ## Goals
 
