@@ -10,6 +10,7 @@ BONUS_STR=0
 BONUS_DEX=0
 BONUS_INT=0
 BONUSSTATS=0
+DELAY=1.0
 ADVRATE=0fffffff //info viz comment pred prvnim skillem
 
 on=@start

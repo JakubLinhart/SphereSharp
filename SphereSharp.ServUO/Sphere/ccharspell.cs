@@ -27,11 +27,11 @@ namespace SphereSharp.ServUO.Sphere
 
 
 
-            //CSpellDefPtr pSpellDef = g_Cfg.GetSpellDef(spell);
+            CSpellDefPtr pSpellDef = g_Cfg.GetSpellDef(spell);
 
-            //if (pSpellDef == NULL)
+            if (pSpellDef == NULL)
 
-            //    return (false);
+                return (false);
 
             //if (pSpellDef->IsSpellType(SPELLFLAG_DISABLED))
 
@@ -65,7 +65,7 @@ namespace SphereSharp.ServUO.Sphere
 
 
 
-            //int wManaUse = pSpellDef->m_wManaUse;
+            int wManaUse = pSpellDef.m_wManaUse;
 
 
 
@@ -233,23 +233,23 @@ namespace SphereSharp.ServUO.Sphere
 
 
 
-            //if (!fTest && wManaUse)
+            if (!fTest && wManaUse > 0)
 
-            //{
+            {
 
-            //    // Consume mana.
+                // Consume mana.
 
-            //    if (m_Act.m_Difficulty < 0) // use diff amount of mana if we fail.
+                if (m_Act.m_Difficulty < 0) // use diff amount of mana if we fail.
 
-            //    {
+                {
 
-            //        wManaUse = wManaUse / 2 + Calc_GetRandVal(wManaUse / 2 + wManaUse / 4);
+                    wManaUse = wManaUse / 2 + Calc_GetRandVal(wManaUse / 2 + wManaUse / 4);
 
-            //    }
+                }
 
-            //    Stat_Change(STAT_Mana, -wManaUse);
+                Stat_Change(STAT_TYPE.STAT_Mana, -wManaUse);
 
-            //}
+            }
 
 
 
@@ -1431,11 +1431,11 @@ namespace SphereSharp.ServUO.Sphere
 
             int iPureBonus =
 
-            (pSkillDef.m_StatBonus[(int)STAT_TYPE.STAT_Str] * m_Stat[(int)STAT_TYPE.STAT_Str]) +
+            (pSkillDef.m_StatBonus[(int)STAT_TYPE.STAT_Str] * m_Stat[STAT_TYPE.STAT_Str]) +
 
-            (pSkillDef.m_StatBonus[(int)STAT_TYPE.STAT_Int] * m_Stat[(int)STAT_TYPE.STAT_Int]) +
+            (pSkillDef.m_StatBonus[(int)STAT_TYPE.STAT_Int] * m_Stat[STAT_TYPE.STAT_Int]) +
 
-            (pSkillDef.m_StatBonus[(int)STAT_TYPE.STAT_Dex] * m_Stat[(int)STAT_TYPE.STAT_Dex]);
+            (pSkillDef.m_StatBonus[(int)STAT_TYPE.STAT_Dex] * m_Stat[STAT_TYPE.STAT_Dex]);
 
 
 

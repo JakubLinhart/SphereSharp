@@ -15,6 +15,7 @@ namespace SphereSharp.ServUO.Sphere
         public CChar(Mobile mobile) : base(mobile.Serial.Value)
         {
             this.m_Skill = new SkillsArray(this);
+            this.m_Stat = new StatsArray(this);
             this.mobile = mobile;
         }
 

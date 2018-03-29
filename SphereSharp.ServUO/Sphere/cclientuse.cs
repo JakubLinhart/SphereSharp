@@ -345,22 +345,85 @@ namespace SphereSharp.ServUO.Sphere
             return runes[ich];
         }
 
+        private static Dictionary<SKILL_TYPE, CSkillDefPtr> skills = new Dictionary<SKILL_TYPE, CSkillDefPtr>();
+
+        static g_Cfg()
+        {
+            var magery = new CSkillDefPtr();
+            magery.m_StatBonus[(int)STAT_TYPE.STAT_Str] = 0;
+            magery.m_StatBonus[(int)STAT_TYPE.STAT_Int] = 0;
+            magery.m_StatBonus[(int)STAT_TYPE.STAT_Dex] = 0;
+            magery.m_StatPercent = 0;
+            skills[SKILL_TYPE.SKILL_MAGERY] = magery;
+
+            var meditation = new CSkillDefPtr();
+            meditation.m_Delay = new CValueCurveDef() { m_aiValues = new int[] { 1000 } };
+            skills[SKILL_TYPE.SKILL_MEDITATION] = meditation;
+        }
+
         public static CSkillDefPtr GetSkillDef(SKILL_TYPE skill)
         {
-            var skillDef = new CSkillDefPtr();
-
-            skillDef.m_StatBonus[(int)STAT_TYPE.STAT_Str] = 0;
-            skillDef.m_StatBonus[(int)STAT_TYPE.STAT_Int] = 0;
-            skillDef.m_StatBonus[(int)STAT_TYPE.STAT_Dex] = 0;
-            skillDef.m_StatPercent = 0;
-
-            return skillDef;
+            return skills[skill];
         }
 
         internal static int GetSpellEffect(SPELL_TYPE spell, int iSkillLevel)
         {
             // TODO:
             return 10;
+        }
+
+        public static bool Calc_SkillCheck(int iSkillLevel, int iDifficulty)
+
+        {
+
+            // Chance to complete skill check given skill x and difficulty y
+
+            // ARGS:
+
+            //  iSkillLevel = 0-1000
+
+            //  difficulty = 0-100
+
+            // RETURN:
+
+            //  true = success check.
+
+
+
+            if (iDifficulty < 0 || iSkillLevel < 0) // auto failure.
+
+                return (false);
+
+
+
+            int iChanceForSuccess = Calc_GetSCurve(iSkillLevel - (iDifficulty * 10), SKILL_VARIANCE);
+
+            int iRoll = Calc_GetRandVal(1000);
+
+
+
+#if _0
+
+	// Print out the skillvalues for now for debugging purposes
+
+	if ( m_wDebugFlags & DEBUGF_ADVANCE_STATS )
+
+	{
+
+		Printf( "%d.%d Difficult=%d Success Chance=%d%% Roll=%d%%",
+
+			iSkillLevel/10,(iSkillLevel)%10,
+
+			difficulty, iChanceForSuccess/10, iRoll/10 );
+
+	}
+
+#endif
+
+
+
+            return (iRoll <= iChanceForSuccess);
+
         }
     }
 

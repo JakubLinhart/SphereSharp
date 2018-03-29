@@ -44,6 +44,7 @@ namespace SphereSharp.ServUO.Sphere
         public string m_sRunes => "AM";
         public int m_iCastTime => 1200;
         public WORD m_wFlags = SPELLFLAG_DIR_ANIM | SPELLFLAG_FX_TARG;
+        public int m_wManaUse = 10;
 
         public ITEMID_TYPE m_idEffect => ITEMID_TYPE.ITEMID_FX_CURSE_EFFECT;		// Animation effect ID
 
@@ -69,6 +70,9 @@ namespace SphereSharp.ServUO.Sphere
 
         public BYTE[] m_StatBonus = new BYTE[STAT_BASE_QTY]; // % of each stat toward success at skill, total 100
         public BYTE m_StatPercent;
+
+        public CValueCurveDef m_Delay = new CValueCurveDef();       // The base delay for use of the skill. (tenth of seconds)
+        public string m_sTargetPrompt;
     }
 
     public class CSkillDefPtr : CSkillDef

@@ -99,26 +99,28 @@ namespace SphereSharp.ServUO.Sphere
 
 
 
-                //if (IsSkillBase(skill))
+                if (IsSkillBase(skill))
 
-                //{
-                //    CSkillDefPtr pSkillDef = g_Cfg.GetSkillDef(skill);
+                {
+                    CSkillDefPtr pSkillDef = g_Cfg.GetSkillDef(skill);
 
-                //    ASSERT(pSkillDef);
+                    ASSERT(pSkillDef);
 
-                //    int iWaitTime = pSkillDef.m_Delay.GetLinear(Skill_GetBase(skill));
+                    int iWaitTime = pSkillDef.m_Delay.GetLinear(Skill_GetBase(skill));
+                    // TODO: just a workaround for IsTimerExpired
+                    iWaitTime = iWaitTime > 0 ? iWaitTime : 1;
 
-                //    if (iWaitTime != 0)
+                    if (iWaitTime != 0)
 
-                //    {
+                    {
 
-                //        // How long before complete skill.
+                        // How long before complete skill.
 
-                //        SetTimeout(iWaitTime);
+                        SetTimeout(iWaitTime);
 
-                //    }
+                    }
 
-                //}
+                }
 
                 // TODO:
                 //if (IsTimerExpired())
@@ -131,14 +133,14 @@ namespace SphereSharp.ServUO.Sphere
 
                 //}
 
-                //if (m_Act.m_Difficulty > 0)
+                if (m_Act.m_Difficulty > 0)
 
-                //{
-                //    if (!Skill_CheckSuccess(skill, m_Act.m_Difficulty))
+                {
+                    if (!Skill_CheckSuccess(skill, m_Act.m_Difficulty))
 
-                //        m_Act.m_Difficulty = -m_Act.m_Difficulty; // will result in Failure ?
+                        m_Act.m_Difficulty = -m_Act.m_Difficulty; // will result in Failure ?
 
-                //}
+                }
 
             }
 
@@ -639,6 +641,9 @@ namespace SphereSharp.ServUO.Sphere
                     else
                         throw new NotImplementedException();
                     break;
+                case STAT_TYPE.STAT_Mana:
+                    mobile.Mana += iChange;
+                    break;
                 default:
                     throw new NotImplementedException();
             }
@@ -872,13 +877,158 @@ namespace SphereSharp.ServUO.Sphere
 
             int iSkillLevel = Skill_GetBase(skill);
 
-            throw new NotImplementedException();
-            //int iDelay = g_Cfg.GetSkillDef(skill).m_Delay.GetLinear(iSkillLevel);
+            int iDelay = g_Cfg.GetSkillDef(skill).m_Delay.GetLinear(iSkillLevel);
 
-            //SetTimeout(iDelay);
-
+            SetTimeout(iDelay);
         }
 
+        public bool Skill_CheckSuccess(SKILL_TYPE skill, int difficulty)
+
+        {
+
+            // PURPOSE:
+
+            //  Check a skill for success or fail.
+
+            //  DO NOT give experience here.
+
+            // ARGS:
+
+            //  difficulty = 0-100 = The point at which the equiv skill level has a 50% chance of success.
+
+            // RETURN:
+
+            //	true = success in skill.
+
+            //
+
+
+
+#if _0
+
+// WESTY MOD
+
+	// In the following, the return vlaue from the script is the success or fail,
+
+	// not weather to override default processing or not
+
+
+
+	// RES_Skill
+
+	CSkillDefPtr pSkillDef = g_Cfg.GetSkillDef(skill);
+
+	TRIGRET_TYPE iTrigRet = TRIGRET_RET_VAL;
+
+
+
+	CSphereExpContext exec(this,this);
+
+
+
+	if ( ! IsSkillBase(skill) || IsGM())
+
+	{
+
+		if( pSkillDef )
+
+		{
+
+			// Run the script and use the return value for our succeess or failure
+
+			// RES_Skill
+
+
+
+			CCharActState SaveState = m_Act;
+
+			iTrigRet = pSkillDef->OnTriggerScript( exec, CSkillDef::T_CHECKSUCCESS, CSkillDef::sm_Triggers[CSkillDef::T_CHECKSUCCESS][0] );
+
+			m_Act = SaveState;
+
+
+
+			// GM's ALWAYS succeed, no matter what
+
+			if ( IsGM())
+
+				return( true );
+
+			if ( pSkillDef->HasTrigger( CSkillDef::T_CHECKSUCCESS ))
+
+			{
+
+				if( iTrigRet == TRIGRET_RET_FALSE )
+
+					return( false );
+
+			}
+
+		}
+
+		return( true );
+
+	}
+
+
+
+	// RES_Skill
+
+
+
+	if ( pSkillDef )
+
+	{
+
+		CCharActState SaveState = m_Act;
+
+		iTrigRet = pSkillDef->OnTriggerScript( exec, CSkillDef::T_CHECKSUCCESS, CSkillDef::sm_Triggers[CSkillDef::T_CHECKSUCCESS][0] );
+
+		m_Act = SaveState;
+
+	}
+
+
+
+	if( pSkillDef )
+
+	{
+
+		// return whatever the trigger returned
+
+		if( iTrigRet == TRIGRET_RET_VAL )
+
+			return( true );
+
+		if( pSkillDef->HasTrigger( CSkillDef::T_CHECKSUCCESS ) && iTrigRet == TRIGRET_RET_FALSE )
+
+			return( false );
+
+		// fall through for default (end of script, no return???)
+
+	}
+
+// WESTY MOD
+
+#endif
+
+
+
+            // Either no script, or TRIGRET_RET_DEFAULT was returned, procede with default
+
+            bool fResult = g_Cfg.Calc_SkillCheck(Skill_GetAdjusted(skill), difficulty);
+
+            if (fResult)
+
+            {
+
+                return (true);
+
+            }
+
+            return false;
+
+        }
 
     }
 }

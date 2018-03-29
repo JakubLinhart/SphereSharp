@@ -25,6 +25,16 @@ namespace SphereSharp.ServUO
 
         private static Dictionary<string, Type> gumpRegistry = new Dictionary<string, Type>();
 
+        public void HandleSkillRequest(object caller, SkillRequestedArgs args)
+        {
+            var adapter = GetAdapter(args.Source);
+
+            if (adapter != null)
+            {
+                adapter.SphereClient.Event_Skill_Use((SKILL_TYPE)args.SkillId);
+            }
+        }
+
         private void HandleCreated(IHoldTriggers triggerHolder)
         {
             var context = new EvaluationContext();

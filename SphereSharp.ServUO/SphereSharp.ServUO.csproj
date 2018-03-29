@@ -73,6 +73,7 @@
     <Compile Include="Sphere\csphereexp.cs" />
     <Compile Include="Sphere\cspheresrv.cs" />
     <Compile Include="Sphere\CSphereUIDBase.cs" />
+    <Compile Include="Sphere\CValueCurveDef.cs" />
     <Compile Include="Sphere\g_World.cs" />
     <Compile Include="Sphere\resource.cs" />
     <Compile Include="Sphere\spheremul.cs" />

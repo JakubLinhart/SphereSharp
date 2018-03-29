@@ -7,6 +7,11 @@ using static SphereSharp.ServUO.Sphere._Global;
 
 namespace SphereSharp.ServUO.Sphere
 {
+    public partial class _Global
+    {
+        public const int SKILL_VARIANCE = 100;		// Difficulty modifier for determining success. 10.0 %
+    }
+
     public abstract partial class CObjBase : CObjBaseTemplate
     {
         public HUE_TYPE m_SpeechHue;    // previous Client select speech hue. or npc selected.
@@ -32,9 +37,9 @@ namespace SphereSharp.ServUO.Sphere
 
     public partial class CChar
     {
-        public STAT_LEVEL[] m_Stat = new STAT_LEVEL[STAT_QTY];		// karma is signed. (stats should be able to go temporariliy negative !)
-        public STAT_LEVEL m_StatMana { get => m_Stat[(int)STAT_TYPE.STAT_Mana]; set => m_Stat[(int)STAT_TYPE.STAT_Mana] = value; }
-        public STAT_LEVEL m_StatMaxMana { get => m_Stat[(int)STAT_TYPE.STAT_MaxMana]; set => m_Stat[(int)STAT_TYPE.STAT_MaxMana] = value; }
+        public StatsArray m_Stat;		// karma is signed. (stats should be able to go temporariliy negative !)
+        public STAT_LEVEL m_StatMana { get => m_Stat[STAT_TYPE.STAT_Mana]; set => m_Stat[STAT_TYPE.STAT_Mana] = value; }
+        public STAT_LEVEL m_StatMaxMana { get => m_Stat[STAT_TYPE.STAT_MaxMana]; set => m_Stat[STAT_TYPE.STAT_MaxMana] = value; }
 
         public bool IsGM()
     
@@ -88,6 +93,50 @@ namespace SphereSharp.ServUO.Sphere
             }
 
             public STAT_LEVEL this[int skillNum] => (STAT_LEVEL)this.cChar.mobile.Skills[skillNum].Fixed;
+        }
+
+        public class StatsArray
+        {
+            private CChar cChar;
+
+            public StatsArray(CChar cChar)
+            {
+                this.cChar = cChar;
+            }
+
+            public STAT_LEVEL this[STAT_TYPE statType]
+            {
+                get
+                {
+                    switch (statType)
+                    {
+                        case STAT_TYPE.STAT_Mana:
+                            return this.cChar.mobile.Mana;
+                        case STAT_TYPE.STAT_MaxMana:
+                            return this.cChar.mobile.ManaMax;
+                        case STAT_TYPE.STAT_Str:
+                            return this.cChar.mobile.Str;
+                        case STAT_TYPE.STAT_Int:
+                            return this.cChar.mobile.Int;
+                        case STAT_TYPE.STAT_Dex:
+                            return this.cChar.mobile.Dex;
+                        default:
+                            throw new NotImplementedException($"STAT_TYPE {statType}");
+                    }
+                }
+
+                set
+                {
+                    switch (statType)
+                    {
+                        case STAT_TYPE.STAT_Mana:
+                            this.cChar.mobile.Mana = value;
+                            break;
+                        default:
+                            throw new NotImplementedException($"STAT_TYPE {statType}");
+                    }
+                }
+            }
         }
 
     }

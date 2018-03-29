@@ -9,7 +9,7 @@ namespace SphereSharp.ServUO.Sphere
 {
     public partial class CClient
     {
-        void Event_Target(DWORD context, CSphereUID uid, CPointMap pt, ITEMID_TYPE id)
+        public void Event_Target(DWORD context, CSphereUID uid, CPointMap pt, ITEMID_TYPE id)
 
         {
 
@@ -192,6 +192,182 @@ namespace SphereSharp.ServUO.Sphere
             }
 
         }
+
+        public void Event_Skill_Use(SKILL_TYPE skill) // Skill is clicked on the skill list
+
+        {
+
+            // All the push button skills come through here.
+
+            // Any "Last skill" macro comes here as well. (push button only)
+
+
+
+            bool fContinue = false;
+
+
+            // TODO:
+            //if (m_pChar.Skill_Wait(skill))
+
+            //    return;
+
+
+
+            SetTargMode();
+
+            m_Targ.m_UID.InitUID(); // This is a start point for targ more.
+
+
+
+            CSkillDef pSkillDef = g_Cfg.GetSkillDef(skill);
+
+
+
+            bool fCheckCrime;
+
+
+
+            switch (skill)
+
+            {
+
+                case SKILL_TYPE.SKILL_ARMSLORE:
+
+                case SKILL_TYPE.SKILL_ITEMID:
+
+                case SKILL_TYPE.SKILL_ANATOMY:
+
+                case SKILL_TYPE.SKILL_ANIMALLORE:
+
+                case SKILL_TYPE.SKILL_EVALINT:
+
+                case SKILL_TYPE.SKILL_FORENSICS:
+
+                case SKILL_TYPE.SKILL_TASTEID:
+
+
+
+                case SKILL_TYPE.SKILL_BEGGING:
+
+                case SKILL_TYPE.SKILL_TAMING:
+
+                case SKILL_TYPE.SKILL_RemoveTrap:
+
+                    fCheckCrime = false;
+
+
+
+                    dotargetting:
+
+                    // Go into targtting mode.
+
+                    ASSERT(pSkillDef);
+
+                    if (string.IsNullOrEmpty(pSkillDef.m_sTargetPrompt))
+
+                    {
+
+                        //DEBUG_ERR(("%x: Event_Skill_Use no prompt skill %d" + LOG_CR, m_Socket.GetSocket(), skill));
+
+                        return;
+
+                    }
+
+
+
+                    m_Targ.m_tmSkillTarg.m_Skill = skill;   // targetting what skill ?
+
+                    addTarget(CLIMODE_TYPE.CLIMODE_TARG_SKILL, pSkillDef.m_sTargetPrompt, false, fCheckCrime);
+
+                    return;
+
+
+
+                //case SKILL_TYPE.SKILL_ENTICEMENT:
+
+                //case SKILL_TYPE.SKILL_PROVOCATION:
+
+                //    if (m_pChar.ContentFind(CSphereUID(RES_TypeDef, IT_MUSICAL), 0, 255) == NULL)
+
+                //    {
+
+                //        WriteString("You have no musical instrument available");
+
+                //        return;
+
+                //    }
+
+                case SKILL_TYPE.SKILL_STEALING:
+
+                case SKILL_TYPE.SKILL_POISONING:
+
+                    // Go into targeting mode.
+
+                    fCheckCrime = true;
+
+                    goto dotargetting;
+
+
+
+                case SKILL_TYPE.SKILL_PEACEMAKING:
+
+                case SKILL_TYPE.SKILL_Stealth: // How is this supposed to work.
+
+                case SKILL_TYPE.SKILL_HIDING:
+
+                case SKILL_TYPE.SKILL_SPIRITSPEAK:
+
+                case SKILL_TYPE.SKILL_DETECTINGHIDDEN:
+
+                case SKILL_TYPE.SKILL_MEDITATION:
+
+                    // These start/stop automatically.
+
+                    m_pChar.Skill_Start(skill);
+
+                    return;
+
+
+
+                //case SKILL_TYPE.SKILL_TRACKING:
+
+                //    Cmd_Skill_Tracking(-1, false);
+
+                //    break;
+
+
+
+                //case SKILL_TYPE.SKILL_CARTOGRAPHY:
+
+                //    // Menu select for map type.
+
+                //    Cmd_Skill_Cartography(0);
+
+                //    break;
+
+
+
+                //case SKILL_TYPE.SKILL_INSCRIPTION:
+
+                //    // Menu select for spell type.
+
+                //    Cmd_Skill_Inscription();
+
+                //    break;
+
+
+
+                default:
+
+                    // TODO:
+                    // Printf("There is no skill %d. Please tell support you saw this message.", skill);
+
+                    break;
+
+            }
+
+        }
+
 
     }
 }

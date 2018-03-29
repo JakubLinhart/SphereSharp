@@ -1,4 +1,6 @@
-﻿namespace SphereSharp.ServUO.Sphere
+﻿using System;
+
+namespace SphereSharp.ServUO.Sphere
 {
     public class CSphereUIDBase
     {
@@ -7,6 +9,11 @@
         public CSphereUIDBase(int serial)
         {
             Serial = serial;
+        }
+
+        internal void InitUID()
+        {
+            Serial = 0;
         }
     }
 }
