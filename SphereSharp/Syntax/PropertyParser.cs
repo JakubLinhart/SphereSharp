@@ -19,9 +19,9 @@ namespace SphereSharp.Syntax
             from _2 in CommonParsers.OneLineWhiteSpace.Many()
             from _3 in Parse.Char('=').Once()
             from _4 in CommonParsers.OneLineWhiteSpace.Many()
-            from rValue in RValue.Once()
+            from rValue in RValue.Optional()
             from _5 in CommonParsers.Eol
-            select new PropertySyntax(lValue.Single(), rValue.Single());
+            select new PropertySyntax(lValue.Single(), rValue.GetOrDefault() ?? string.Empty);
     }
 
 

@@ -1,4 +1,7 @@
-﻿using SphereSharp.Runtime;
+﻿using SphereSharp.Interpreter;
+using SphereSharp.Model;
+using SphereSharp.Runtime;
+using SphereSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,7 @@ namespace SphereSharp.Tests.Runtime
         private StringBuilder output = new StringBuilder();
 
         private StandardTagHolder tagHolder = new StandardTagHolder();
+        private StandardTriggerHolder triggerHolder;
 
         public int Fame { get; set; }
         public int Karma { get; set; }
@@ -32,6 +36,11 @@ namespace SphereSharp.Tests.Runtime
         public int Color { get; set; }
 
         public int Npc { get; set; }
+
+        public TestChar(Func<string, TriggerDef> triggerSource, Func<CodeBlockSyntax, EvaluationContext, string> codeBlockRunner)
+        {
+            triggerHolder = new StandardTriggerHolder(triggerSource, codeBlockRunner);
+        }
 
         public void RemoveTag(string key)
         {
@@ -56,5 +65,14 @@ namespace SphereSharp.Tests.Runtime
         }
 
         public string GetOutput() => output.ToString();
+
+        public string RunTrigger(string triggerName, EvaluationContext context) =>
+            triggerHolder.RunTrigger(triggerName, context);
+
+        public void SubscribeEvents(EventsDef eventsDef) =>
+            triggerHolder.SubscribeEvents(eventsDef);
+
+        public void UnsubscribeEvents(EventsDef eventsDef) =>
+            triggerHolder.UnsubscribeEvents(eventsDef);
     }
 }

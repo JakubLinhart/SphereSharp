@@ -22,6 +22,7 @@ namespace SphereSharp.Model
         private Dictionary<int, ProfessionSectionSyntax> professionSections = new Dictionary<int, ProfessionSectionSyntax>();
         private List<SpellSectionSyntax> spellSections = new List<SpellSectionSyntax>();
         private List<SkillSectionSyntax> skillSections = new List<SkillSectionSyntax>();
+        private List<EventsSectionSyntax> eventsSections = new List<EventsSectionSyntax>();
 
         public void Add(ItemDefSectionSyntax itemDef)
         {
@@ -49,6 +50,7 @@ namespace SphereSharp.Model
         public void Add(ProfessionSectionSyntax section) => professionSections.Add(section.Id, section);
         public void Add(SpellSectionSyntax section) => spellSections.Add(section);
         public void Add(SkillSectionSyntax section) => skillSections.Add(section);
+        public void Add(EventsSectionSyntax section) => eventsSections.Add(section);
 
         public void Add(SectionSyntax section)
         {
@@ -84,6 +86,9 @@ namespace SphereSharp.Model
                 case SkillSectionSyntax skill:
                     Add(skill);
                     break;
+                case EventsSectionSyntax events:
+                    Add(events);
+                    break;
             }
         }
 
@@ -97,8 +102,9 @@ namespace SphereSharp.Model
             var professions = BuildProfessions();
             var spells = BuildSpells();
             var skills = BuildSkills();
+            var events = BuildEvents();
 
-            return new CodeModel(itemDefs, dialogs, defNames, functions, professions, spells, charDefs, skills);
+            return new CodeModel(itemDefs, dialogs, defNames, functions, professions, spells, charDefs, skills, events);
         }
 
         private IEnumerable<ProfessionDef> BuildProfessions()
@@ -143,7 +149,31 @@ namespace SphereSharp.Model
             }
 
             return skills;
+        }
 
+        private IEnumerable<EventsDef> BuildEvents()
+        {
+            var events = new List<EventsDef>();
+
+            foreach (var section in eventsSections)
+            {
+                var eventsInstance = BuildEventsDef(section);
+                events.Add(eventsInstance);
+            }
+
+            return events;
+
+        }
+
+        public static EventsDef BuildEventsDef(EventsSectionSyntax syntax)
+        {
+            var eventsInstance = new EventsDef()
+            {
+                Name = syntax.Name,
+                Triggers = BuildTriggers(syntax.Triggers),
+            };
+
+            return eventsInstance;
         }
 
         private IEnumerable<FunctionDef> BuildFunctions()
@@ -219,7 +249,7 @@ namespace SphereSharp.Model
             return charDefs.Values;
         }
 
-        private ImmutableDictionary<string, TriggerDef> BuildTriggers(IEnumerable<TriggerSyntax> triggerSyntaxes)
+        public static ImmutableDictionary<string, TriggerDef> BuildTriggers(IEnumerable<TriggerSyntax> triggerSyntaxes)
         {
             var triggers = new Dictionary<string, TriggerDef>();
 

@@ -75,6 +75,16 @@ endif
         }
 
         [TestMethod]
+        public void Can_parse_events_statment()
+        {
+            var syntax = CodeBlockSyntax.Parse(@"events +e_something");
+            syntax.Statements.Should().HaveCount(1);
+
+            syntax.Statements[0].Should().BeOfType<EventsStatementSyntax>().Which
+                .EventName.Should().Be("e_something");
+        }
+
+        [TestMethod]
         public void Can_parse_complex_block()
         {
             var syntax = CodeBlockSyntax.Parse(@"call1
@@ -82,11 +92,13 @@ if (1==1)
     call2
 endif
 var1=1
+events +e_something
 ");
 
-            syntax.Statements[0].As<CallSyntax>().MemberName.Should().Be("call1");
-            syntax.Statements[1].As<IfSyntax>().Should().NotBeNull();
-            syntax.Statements[2].As<AssignmentSyntax>().Should().NotBeNull();
+            syntax.Statements[0].Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("call1");
+            syntax.Statements[1].Should().BeOfType<IfSyntax>();
+            syntax.Statements[2].Should().BeOfType<AssignmentSyntax>();
+            syntax.Statements[3].Should().BeOfType<EventsStatementSyntax>();
         }
 
         [TestMethod]

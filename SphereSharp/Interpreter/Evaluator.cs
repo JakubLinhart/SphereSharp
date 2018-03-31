@@ -1,4 +1,5 @@
 ﻿using SphereSharp.Model;
+using SphereSharp.Runtime;
 using SphereSharp.Syntax;
 using System;
 using System.Collections.Generic;
@@ -358,6 +359,21 @@ namespace SphereSharp.Interpreter
             return Evaluate(doSwitchSyntax.Cases[conditionValue], context, out bool _);
         }
 
+        private void Evaluate(EventsStatementSyntax eventsStatement, EvaluationContext context)
+        {
+            switch (eventsStatement.Kind)
+            {
+                case EventsOperationKind.Subscribe:
+                    ((IHoldTriggers)context.Default).SubscribeEvents(Model.GetEventsDef(eventsStatement.EventName));
+                    break;
+                case EventsOperationKind.Unsubscribe:
+                    ((IHoldTriggers)context.Default).UnsubscribeEvents(Model.GetEventsDef(eventsStatement.EventName));
+                    break;
+                default:
+                    throw new NotImplementedException($"Events operation {eventsStatement.Kind}");
+            }
+        }
+
         public string Evaluate(StatementSyntax statementSyntax, EvaluationContext context, out bool terminate)
         {
             terminate = false;
@@ -381,6 +397,9 @@ namespace SphereSharp.Interpreter
                     break;
                 case DoSwitchSyntax doSwitch:
                     Evaluate(doSwitch, context);
+                    break;
+                case EventsStatementSyntax eventsStatement:
+                    Evaluate(eventsStatement, context);
                     break;
                 default:
                     throw new NotImplementedException($"Evaluation of {statementSyntax.GetType().Name}");

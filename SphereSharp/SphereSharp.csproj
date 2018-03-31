@@ -64,6 +64,7 @@
     <Compile Include="Model\ItemDef.cs" />
     <Compile Include="Model\NameDef.cs" />
     <Compile Include="Model\ProfessionDef.cs" />
+    <Compile Include="Model\EventsDef.cs" />
     <Compile Include="Model\SkillDef.cs" />
     <Compile Include="Model\SpellDef.cs" />
     <Compile Include="Model\TriggerDef.cs" />
@@ -86,6 +87,11 @@
     <Compile Include="Syntax\CallExpressionSyntax.cs" />
     <Compile Include="Syntax\CallParser.cs" />
     <Compile Include="Syntax\CallSyntax.cs" />
+    <Compile Include="Syntax\EventsOperationKind.cs" />
+    <Compile Include="Syntax\EventsSectionParser.cs" />
+    <Compile Include="Syntax\EventsSectionSyntax.cs" />
+    <Compile Include="Syntax\EventsStatementParser.cs" />
+    <Compile Include="Syntax\EventsStatementSyntax.cs" />
     <Compile Include="Syntax\SkillSectionParser.cs" />
     <Compile Include="Syntax\CharDefSectionParser.cs" />
     <Compile Include="Syntax\SkillSectionSyntax.cs" />

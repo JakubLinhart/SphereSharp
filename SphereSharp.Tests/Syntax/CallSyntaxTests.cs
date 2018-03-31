@@ -98,5 +98,13 @@ namespace SphereSharp.Tests.Syntax
             argumentLiteral.Segments.Should().HaveCount(1);
             argumentLiteral.Segments[0].Should().BeOfType<TextSegmentSyntax>().Which.Text.Should().Be("something safe");
         }
+
+        [TestMethod]
+        public void Can_parse_call_with_literal_inside_parentheses_without_doublequotes()
+        {
+            var syntax = CallSyntax.Parse("sysmessage(Pohybem jsi ztratil soustredeni)");
+
+            Assert.Inconclusive();
+        }
     }
 }

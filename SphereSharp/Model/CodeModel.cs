@@ -15,6 +15,7 @@ namespace SphereSharp.Model
         private readonly ImmutableDictionary<int, SkillDef> skillDefsById;
         private readonly ImmutableDictionary<string, SkillDef> skillDefsByDefName;
         private readonly Dictionary<string, NameDef> defNames;
+        private readonly Dictionary<string, EventsDef> eventsDefs;
         private readonly ImmutableDictionary<string, FunctionDef> functions;
 
         public SpellDef GetSpellDef(int spellId) => spellDefsById[spellId];
@@ -32,7 +33,8 @@ namespace SphereSharp.Model
             IEnumerable<ProfessionDef> professionDefs = null,
             IEnumerable<SpellDef> spellDefs = null,
             IEnumerable<CharDef> charDefs = null,
-            IEnumerable<SkillDef> skillDefs = null)
+            IEnumerable<SkillDef> skillDefs = null,
+            IEnumerable<EventsDef> eventsDefs = null)
         {
             this.itemDefs = itemDefs?.ToImmutableDictionary(x => x.DefName, StringComparer.OrdinalIgnoreCase) ?? ImmutableDictionary<string, ItemDef>.Empty;
             this.charDefs = charDefs?.ToImmutableDictionary(x => x.DefName, StringComparer.OrdinalIgnoreCase) ?? ImmutableDictionary<string, CharDef>.Empty;
@@ -42,6 +44,7 @@ namespace SphereSharp.Model
             this.professionDefs = professionDefs?.ToImmutableDictionary(x => x.Id) ?? ImmutableDictionary<int, ProfessionDef>.Empty;
             this.skillDefsById = skillDefs?.ToImmutableDictionary(x => x.Id) ?? ImmutableDictionary<int, SkillDef>.Empty;
             this.skillDefsByDefName = skillDefs?.ToImmutableDictionary(x => x.DefName, StringComparer.OrdinalIgnoreCase) ?? ImmutableDictionary<string, SkillDef>.Empty;
+            this.eventsDefs = eventsDefs?.ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, EventsDef>();
 
             this.spellDefsById = spellDefs?.ToDictionary(x => x.Id) ?? new Dictionary<int, SpellDef>();
             this.spellDefsByDefName = spellDefs?.ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, SpellDef>();
@@ -69,6 +72,7 @@ namespace SphereSharp.Model
         public NameDef GetDefName(string name) => GetValue(name, defNames, "unknown defname '{0}'");
         public SkillDef GetSkillDef(string name) => GetValue(name, skillDefsByDefName, "unknown skill '{0}'");
         public SkillDef GetSkillDef(int id) => GetValue(id, skillDefsById, "unknown skill '{0}'");
+        public EventsDef GetEventsDef(string name) => GetValue(name, eventsDefs, "unknown event '{0}'");
 
         public FunctionDef GetFunction(string name) => GetValue(name, functions, "unknown function '{0}'");
         public bool TryGetFunction(string name, out FunctionDef function) => functions.TryGetValue(name, out function);

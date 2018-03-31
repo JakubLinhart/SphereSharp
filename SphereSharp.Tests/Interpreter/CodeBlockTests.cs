@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SphereSharp.Interpreter;
 using SphereSharp.Syntax;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,49 @@ gumppic 200 140 2200
 
             var output = evaluator.TestObjBase.GetOutput();
             output.Should().Contain("sysmessage asdf");
+        }
+
+        [TestMethod]
+        public void Can_subscribe_events()
+        {
+            var events = SectionSyntax.Parse(@"[events e_something]
+on=@mytrigger
+src.sysmessage success - mytrigger fired
+").Should().BeOfType<EventsSectionSyntax>().Which;
+
+            var evaluator = new TestEvaluator();
+            evaluator
+                .SetDefault(evaluator.TestChar)
+                .SetSrc(evaluator.TestObjBase)
+                .AddEvents(events)
+                .Create();
+
+            evaluator.EvaluateCodeBlock(@"events +e_something");
+            evaluator.TestChar.RunTrigger("mytrigger", evaluator.Context);
+
+            evaluator.TestObjBase.GetOutput().Should().Contain("success - mytrigger fired");
+        }
+
+        [TestMethod]
+        public void Can_unsubscribe_events()
+        {
+            var events = SectionSyntax.Parse(@"[events e_something]
+on=@mytrigger
+src.sysmessage success - mytrigger fired
+").Should().BeOfType<EventsSectionSyntax>().Which;
+
+            var evaluator = new TestEvaluator();
+            evaluator
+                .SetDefault(evaluator.TestChar)
+                .SetSrc(evaluator.TestObjBase)
+                .AddEvents(events)
+                .Create();
+
+            evaluator.EvaluateCodeBlock(@"events +e_something");
+            evaluator.EvaluateCodeBlock(@"events -e_something");
+            evaluator.TestChar.RunTrigger("mytrigger", evaluator.Context);
+
+            evaluator.TestObjBase.GetOutput().Should().NotContain("success - mytrigger fired");
         }
     }
 }

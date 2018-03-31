@@ -1,4 +1,5 @@
 ﻿using SphereSharp.Interpreter;
+using SphereSharp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace SphereSharp.Runtime
 {
     public interface IHoldTriggers
     {
-        string Run(string triggerName, EvaluationContext context);
+        void SubscribeEvents(EventsDef eventsDef);
+        void UnsubscribeEvents(EventsDef eventsDef);
+        string RunTrigger(string triggerName, EvaluationContext context);
     }
 }

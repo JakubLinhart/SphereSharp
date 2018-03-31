@@ -17,12 +17,13 @@ namespace SphereSharp.Tests.Interpreter
     {
         private Dictionary<string, NameDef> nameDefs = new Dictionary<string, NameDef>();
         private Dictionary<string, FunctionDef> functions = new Dictionary<string, FunctionDef>();
+        private Dictionary<string, EventsDef> events = new Dictionary<string, EventsDef>();
 
         private object src;
         private object defaultTargetObject;
         private IGump argo;
 
-        public TestChar TestChar { get; set; } = new TestChar();
+        public TestChar TestChar { get; set; }
         public TestItem TestItem { get; set; } = new TestItem();
         public TestClient TestObjBase { get; } = new TestClient();
         public TestGump TestGump { get; } = new TestGump();
@@ -31,9 +32,22 @@ namespace SphereSharp.Tests.Interpreter
         public EvaluationContext Context { get; private set; }
         public Evaluator Evaluator { get; private set; }
 
+        public TestEvaluator()
+        {
+            TestChar = new TestChar(name => null, (syntax, context) => Evaluator.Evaluate(syntax, context));
+        }
+
         public TestEvaluator AddNameDef(string key, string value)
         {
             nameDefs.Add(key, new NameDef(key, value));
+
+            return this;
+        }
+
+        internal TestEvaluator AddEvents(EventsSectionSyntax section)
+        {
+            var eventsDef = CodeModelBuilder.BuildEventsDef(section);
+            this.events[section.Name] = eventsDef;
 
             return this;
         }
@@ -62,7 +76,7 @@ namespace SphereSharp.Tests.Interpreter
         public TestEvaluator Create()
         {
             CodeModel = new CodeModel(Enumerable.Empty<ItemDef>(), Enumerable.Empty<GumpDef>(),
-                nameDefs.Values, functions.Values);
+                nameDefs.Values, functions.Values, eventsDefs: events.Values);
 
             Context = new EvaluationContext();
             Context.ArgO = argo;

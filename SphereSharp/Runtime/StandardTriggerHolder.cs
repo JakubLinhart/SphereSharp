@@ -11,23 +11,48 @@ namespace SphereSharp.Runtime
 {
     public class StandardTriggerHolder : IHoldTriggers
     {
-        private readonly Dictionary<string, TriggerDef> triggers;
+        private readonly Func<string, TriggerDef> triggerSource;
         private readonly Func<CodeBlockSyntax, EvaluationContext, string> codeBlockRunner;
+        private readonly Dictionary<string, EventsDef> eventsSubscriptions = new Dictionary<string, EventsDef>();
 
-        public StandardTriggerHolder(IEnumerable<TriggerDef> triggers, Func<CodeBlockSyntax, EvaluationContext, string> codeBlockRunner)
+        public StandardTriggerHolder(Func<string, TriggerDef> triggerSource, Func<CodeBlockSyntax, EvaluationContext, string> codeBlockRunner)
         {
-            this.triggers = triggers.ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
+            this.triggerSource = triggerSource;
             this.codeBlockRunner = codeBlockRunner;
         }
 
-        public string Run(string triggerName, EvaluationContext context)
+        public string RunTrigger(string triggerName, EvaluationContext context)
         {
-            if (triggers.TryGetValue(triggerName, out TriggerDef trigger))
+            // TODO: semantics of events not clear, only the first found trigger runs,
+            // own triggers have priority
+            // reason for running just one trigger: triggers can returns something, if multiple
+            // triggers run, then only last one can return something, this would be strange (further investigation needed)
+            // no reason for prioritization, has to be investigated yet
+            var triggerDef = triggerSource(triggerName);
+            if (triggerDef != null)
             {
-                return codeBlockRunner(trigger.CodeBlock, context);
+                return codeBlockRunner(triggerDef.CodeBlock, context);
+            }
+
+            foreach (var subscription in eventsSubscriptions.Values)
+            {
+                if (subscription.Triggers.TryGetValue(triggerName, out triggerDef))
+                {
+                    return codeBlockRunner(triggerDef.CodeBlock, context);
+                }
             }
 
             return string.Empty;
+        }
+
+        public void SubscribeEvents(EventsDef eventsDef)
+        {
+            eventsSubscriptions.Add(eventsDef.Name, eventsDef);
+        }
+
+        public void UnsubscribeEvents(EventsDef eventsDef)
+        {
+            eventsSubscriptions.Remove(eventsDef.Name);
         }
     }
 }

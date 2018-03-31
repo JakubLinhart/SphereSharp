@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SphereSharp.Interpreter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -177,13 +178,29 @@ namespace SphereSharp.ServUO.Sphere
                 return -1;
 
 
+            var context = new EvaluationContext();
+            context.Src = SphereSharpRuntime.Current.GetAdapter(this.mobile);
+            context.Default = this;
+
+            string triggerName = null;
+
+            switch (stage)
+            {
+                case CSkillDef.T_TYPE_.T_Start:
+                    triggerName = "start";
+                    break;
+                case CSkillDef.T_TYPE_.T_Stroke:
+                    triggerName = "stroke";
+                    break;
+                case CSkillDef.T_TYPE_.T_Success:
+                    triggerName = "success";
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(triggerName))
+                SphereSharpRuntime.Current.RunSkillTrigger(this, skill, triggerName);
+
             // <TODO>
-            //CSphereExpArgs execArgs(this, this, skill, 0, 0 );
-
-
-
-            //TRIGRET_TYPE iTrigRet = OnTrigger((CCharDef::T_TYPE_)(CCharDef::T_SkillAbort + (stage - CSkillDef::T_Abort)), execArgs);
-
             //if (iTrigRet == TRIGRET_RET_VAL)
 
             //{

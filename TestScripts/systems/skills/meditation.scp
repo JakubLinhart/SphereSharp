@@ -1,0 +1,19 @@
+[events e_meditation]
+on=@step
+//if (action==skill_meditation)
+ sysmessage("Pohybem jsi ztratil soustredeni")
+// skill=-1
+//endif
+events=-e_meditation
+
+//the rest is momentally unused
+
+
+//if (findid(i_medit_timer))
+// findid(i_medit_timer).morex=0//preruseni meditace
+// findid(i_medit_timer).timer=0
+//else
+// events=-e_meditation
+//endif
+
+

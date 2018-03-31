@@ -1,4 +1,5 @@
 ﻿using SphereSharp.Interpreter;
+using SphereSharp.Model;
 using SphereSharp.Runtime;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,6 @@ namespace SphereSharp.Tests.Runtime
         public void RemoveTag(string key)
         {
             tagHolder.RemoveTag(key);
-        }
-
-        public string Run(string triggerName, EvaluationContext context)
-        {
-            throw new NotImplementedException();
         }
 
         public void Tag(string key, string value)

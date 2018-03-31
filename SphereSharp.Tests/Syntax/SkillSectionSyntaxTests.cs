@@ -13,7 +13,7 @@ namespace SphereSharp.Tests.Syntax
     public class SkillSectionSyntaxTests
     {
         [TestMethod]
-        public void Can_parse_skill_with_multiple_triggers()
+        public void Can_parse_skill_with_multiple_triggers_and_properties()
         {
             var syntax = SectionSyntax.Parse(@"[SKILL 48]
 DEFNAME=SKILL_REMOVE_TRAP

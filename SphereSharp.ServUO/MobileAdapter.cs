@@ -1,6 +1,7 @@
 using Server;
 using Server.Gumps;
 using SphereSharp.Interpreter;
+using SphereSharp.Model;
 using SphereSharp.Runtime;
 using SphereSharp.ServUO.Sphere;
 using System;
@@ -11,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace SphereSharp.ServUO
 {
-    public class MobileAdapter : IClient
+    public class MobileAdapter : IClient, IHoldTriggers
     {
         private readonly IHoldTags tagHolder = new StandardTagHolder();
+        private readonly IHoldTriggers triggerHolder;
         private readonly Mobile mobile;
         public CClient SphereClient { get; }
 
@@ -21,6 +23,7 @@ namespace SphereSharp.ServUO
         {
             this.mobile = mobile;
             this.SphereClient = new CClient(mobile);
+            triggerHolder = new StandardTriggerHolder(name => null, (syntax, context) => SphereSharpRuntime.Current.RunCodeBlock(syntax, context));
         }
 
         public void CloseDialog(string defName, int buttonId)
@@ -60,6 +63,21 @@ namespace SphereSharp.ServUO
         public string Tag(string key)
         {
             return tagHolder.Tag(key);
+        }
+
+        public void SubscribeEvents(EventsDef eventsDef)
+        {
+            this.triggerHolder.SubscribeEvents(eventsDef);
+        }
+
+        public void UnsubscribeEvents(EventsDef eventsDef)
+        {
+            this.triggerHolder.UnsubscribeEvents(eventsDef);
+        }
+
+        public string RunTrigger(string triggerName, EvaluationContext context)
+        {
+            return this.triggerHolder.RunTrigger(triggerName, context);
         }
     }
 }

@@ -27,25 +27,53 @@ namespace SphereSharp.ServUO
 
         public void HandleSkillRequest(object caller, SkillRequestedArgs args)
         {
-            var adapter = GetAdapter(args.Source);
-
-            if (adapter != null)
+            Protect(() =>
             {
-                adapter.SphereClient.Event_Skill_Use((SKILL_TYPE)args.SkillId);
-            }
+                var adapter = GetAdapter(args.Source);
+
+                if (adapter != null)
+                {
+                    adapter.SphereClient.Event_Skill_Use((SKILL_TYPE)args.SkillId);
+                }
+            });
         }
 
         private void HandleCreated(IHoldTriggers triggerHolder)
         {
-            var context = new EvaluationContext();
-            context.Default = triggerHolder;
-            triggerHolder.Run("create", context);
+            Protect(() =>
+            {
+                var context = new EvaluationContext();
+                context.Default = triggerHolder;
+                triggerHolder.RunTrigger("create", context);
+            });
         }
 
         public void HandleItemCreated(ItemCreatedEventArgs e)
         {
-            if (e.Item is IHoldTriggers triggerHolder)
-                HandleCreated(triggerHolder);
+            Protect(() =>
+            {
+                if (e.Item is IHoldTriggers triggerHolder)
+                    HandleCreated(triggerHolder);
+            });
+        }
+
+        public void HandleMobileLocationChanged(object sender, MobileLocationChanged e)
+        {
+            Protect(() =>
+            {
+                var triggerHolder = e.Mobile as IHoldTriggers;
+                if (triggerHolder == null)
+                    triggerHolder = GetAdapter(e.Mobile);
+
+                if (triggerHolder != null)
+                {
+                    triggerHolder.RunTrigger("step", new EvaluationContext()
+                    {
+                        Src = triggerHolder,
+                        Default = triggerHolder,
+                    });
+                }
+            });
         }
 
         public CharDef GetCharDef(string defName) => CodeModel.GetCharDef(defName);
@@ -58,7 +86,7 @@ namespace SphereSharp.ServUO
             gumpRegistry.Add(defName.ToLower(), typeof(TGump));
         }
 
-        private MobileAdapter GetAdapter(Mobile mobile)
+        public MobileAdapter GetAdapter(Mobile mobile)
         {
             if (!mobileAdapters.TryGetValue(mobile, out MobileAdapter adapter))
             {
@@ -83,7 +111,7 @@ namespace SphereSharp.ServUO
             return result;
         }
 
-        private void Protect(Action action)
+        public void Protect(Action action)
         {
             try
             {
@@ -124,6 +152,20 @@ namespace SphereSharp.ServUO
         public Type GetGumpType(string defName)
         {
             return gumpRegistry[defName.ToLower()];
+        }
+
+        internal void RunSkillTrigger(CChar source, SKILL_TYPE skill, string triggerName)
+        {
+            var adapter = GetAdapter(source.mobile);
+            var skillDef = CodeModel.GetSkillDef((int)skill);
+            if (skillDef.Triggers.TryGetValue(triggerName, out var trigger))
+            {
+                var context = new EvaluationContext();
+                context.Default = adapter;
+                context.Src = adapter;
+
+                RunCodeBlock(trigger.CodeBlock, context);
+            }
         }
 
         public void InitializeDialog(Gump gump, Mobile src, string gumpDefName, Arguments args)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SphereSharp.Runtime
 {
-    public interface IItem : IHoldTags, IHoldTriggers
+    public interface IItem : IHoldTags
     {
         int Color { get; set; }
     }

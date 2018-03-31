@@ -20,8 +20,8 @@ DEFNAME=class_necro
 NAME=Necro
 
 on=@login
-events e_character
-events e_allplayers
+call1
+call2
 ").Should().BeOfType<ProfessionSectionSyntax>().Which;
 
             syntax.Id.Should().Be(1);

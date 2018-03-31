@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SphereSharp.Runtime
 {
-    public interface IChar : IHoldTags
+    public interface IChar : IHoldTags, IHoldTriggers
     {
         int Fame { get; set; }
         int Karma { get; set; }
