@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SphereSharp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -207,6 +208,32 @@ return 123
             var result = evaluator.EvaluateExpression("<eval strlen(\"asdf\")>");
 
             result.Should().Be(4);
+        }
+
+        [TestMethod]
+        public void Can_evaluate_expression_with_namedef()
+        {
+            var evaluator = new TestEvaluator();
+            evaluator
+                .AddNameDef("test", "123")
+                .Create();
+
+            evaluator.EvaluateExpression("test==123").Should().NotBe(0);
+        }
+
+        [TestMethod]
+        public void Can_evaluate_expression_with_skilldef()
+        {
+            var evaluator = new TestEvaluator();
+            evaluator
+                .AddSkillDef(new SkillDef()
+                {
+                    DefName = "skill_meditation",
+                    Id = 123,
+                })
+                .Create();
+
+            evaluator.EvaluateExpression("skill_meditation==123").Should().NotBe(0);
         }
     }
 }

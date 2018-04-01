@@ -70,7 +70,9 @@ namespace SphereSharp.Model
         public CharDef GetCharDef(string name) => GetValue(name, charDefs, "unknown char '{0}'");
         public GumpDef GetGumpDef(string name) => GetValue(name, gumpDefs, "unknown gump '{0}'");
         public NameDef GetDefName(string name) => GetValue(name, defNames, "unknown defname '{0}'");
+        public bool TryGetDefName(string name, out NameDef result) => defNames.TryGetValue(name, out result);
         public SkillDef GetSkillDef(string name) => GetValue(name, skillDefsByDefName, "unknown skill '{0}'");
+        public bool TryGetSkillDef(string name, out SkillDef result) => skillDefsByDefName.TryGetValue(name, out result);
         public SkillDef GetSkillDef(int id) => GetValue(id, skillDefsById, "unknown skill '{0}'");
         public EventsDef GetEventsDef(string name) => GetValue(name, eventsDefs, "unknown event '{0}'");
 

@@ -36,5 +36,10 @@ namespace SphereSharp.Interpreter
         {
             propertyBindinds.SetProperty(targetObject, name, value);
         }
+
+        public bool TryGetProperty(object sourceObject, string name, out object result)
+        {
+            return propertyBindinds.TryGetProperty(sourceObject, name, out result);
+        }
     }
 }

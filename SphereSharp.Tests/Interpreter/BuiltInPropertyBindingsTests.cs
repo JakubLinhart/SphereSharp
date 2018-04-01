@@ -66,6 +66,24 @@ namespace SphereSharp.Tests.Interpreter
 
             evaluator.EvaluateCodeBlock("color=0481");
             evaluator.TestChar.Color.Should().Be(0x481);
+
+            evaluator.EvaluateCodeBlock("skill=23");
+            evaluator.TestChar.Action.Should().Be(23); // sic! action is alias for skill
+            evaluator.EvaluateCodeBlock("action=32");
+            evaluator.TestChar.Action.Should().Be(32);
+        }
+
+        [TestMethod]
+        public void Can_read_char_properties()
+        {
+            var evaluator = new TestEvaluator();
+            evaluator
+                .SetDefault(evaluator.TestChar)
+                .Create();
+
+            evaluator.TestChar.Action = 42;
+            int result = evaluator.EvaluateExpression("<action>");
+            result.Should().Be(42);
         }
     }
 }

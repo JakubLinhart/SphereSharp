@@ -9,6 +9,11 @@ namespace SphereSharp.Interpreter
 {
     public class BuildInPropertyBindings : IPropertyBinder
     {
+        private Dictionary<string, Func<IChar, object>> charPropertyGetters = new Dictionary<string, Func<IChar, object>>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "action", (c) => c.Action }
+        };
+
         private Dictionary<string, Action<IChar, object>> charPropertySetters = new Dictionary<string, Action<IChar, object>>(StringComparer.OrdinalIgnoreCase)
         {
             { "fame", (c, v) => c.Fame = (int)v },
@@ -27,6 +32,9 @@ namespace SphereSharp.Interpreter
             { "SpiritSpeak", (c, v) => c.SpiritSpeak= (int)v },
             { "color", (c, v) => c.Color = (int)v },
             { "npc", (c, v) => c.Npc = (int)v },
+
+            { "skill", (c, v) => c.Skill((int)v) },
+            { "action", (c, v) => c.Action = (int)v }
         };
 
         private Dictionary<string, Action<IItem, object>> itemPropertySetters = new Dictionary<string, Action<IItem, object>>(StringComparer.OrdinalIgnoreCase)
@@ -56,6 +64,32 @@ namespace SphereSharp.Interpreter
                     break;
                 default:
                     throw new NotImplementedException($"Unknown target {targetObject.GetType().Name}");
+            }
+        }
+
+        private bool TryGetProperty<T>(T sourceObject, Dictionary<string, Func<T, object>> bindings, string name, out object result)
+        {
+            if (bindings.TryGetValue(name, out Func<T, object> func))
+            {
+                result = func(sourceObject);
+                return true;
+            }
+            else
+            {
+                result = null;
+                return false;
+            }
+        }
+
+        public bool TryGetProperty(object sourceObject, string name, out object result)
+        {
+            switch (sourceObject)
+            {
+                case IChar ch:
+                    return TryGetProperty(ch, charPropertyGetters, name, out result);
+                default:
+                    result = null;
+                    return false;
             }
         }
     }

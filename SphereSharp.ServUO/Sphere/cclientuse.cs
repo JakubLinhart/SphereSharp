@@ -32,7 +32,7 @@ namespace SphereSharp.ServUO.Sphere
         public CSphereUID m_TargPrv;		// Targeted bottle for alchemy or previous beg target.
         public CSphereUID m_Targ;			// Current combat/action target
         public CPointMap m_pt;          // Moving to this location. or location of forge we are working on.
-        public SKILL_TYPE m_SkillCurrent;       // Currently using a skill. Could be combat skill.
+        public SKILL_TYPE m_SkillCurrent = SKILL_TYPE.SKILL_NONE;       // Currently using a skill. Could be combat skill.
         public SKILL_LEVEL m_Difficulty;	// -1 = fail skill. (0-100) for skill advance calc.
     }
 

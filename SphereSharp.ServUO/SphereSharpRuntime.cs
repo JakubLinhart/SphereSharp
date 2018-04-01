@@ -61,16 +61,15 @@ namespace SphereSharp.ServUO
         {
             Protect(() =>
             {
-                var triggerHolder = e.Mobile as IHoldTriggers;
-                if (triggerHolder == null)
-                    triggerHolder = GetAdapter(e.Mobile);
+                var adapter = GetAdapter(e.Mobile);
+                var triggerHolder = e.Mobile as IHoldTriggers ?? adapter.SphereClient.m_pChar;
 
                 if (triggerHolder != null)
                 {
                     triggerHolder.RunTrigger("step", new EvaluationContext()
                     {
-                        Src = triggerHolder,
-                        Default = triggerHolder,
+                        Src = adapter.SphereClient.m_pChar,
+                        Default = adapter.SphereClient.m_pChar,
                     });
                 }
             });
@@ -161,8 +160,8 @@ namespace SphereSharp.ServUO
             if (skillDef.Triggers.TryGetValue(triggerName, out var trigger))
             {
                 var context = new EvaluationContext();
-                context.Default = adapter;
-                context.Src = adapter;
+                context.Default = adapter.SphereClient.m_pChar;
+                context.Src = adapter.SphereClient.m_pChar;
 
                 RunCodeBlock(trigger.CodeBlock, context);
             }

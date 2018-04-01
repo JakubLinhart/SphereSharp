@@ -36,6 +36,12 @@ namespace SphereSharp.Tests.Runtime
         public int Color { get; set; }
 
         public int Npc { get; set; }
+        public int Action { get; set; }
+        public void Skill(int skill)
+        {
+            output.AppendLine($"Start skill {skill}");
+            Action = skill;
+        }
 
         public TestChar(Func<string, TriggerDef> triggerSource, Func<CodeBlockSyntax, EvaluationContext, string> codeBlockRunner)
         {

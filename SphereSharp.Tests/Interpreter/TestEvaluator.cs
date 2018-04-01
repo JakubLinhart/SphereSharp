@@ -18,6 +18,7 @@ namespace SphereSharp.Tests.Interpreter
         private Dictionary<string, NameDef> nameDefs = new Dictionary<string, NameDef>();
         private Dictionary<string, FunctionDef> functions = new Dictionary<string, FunctionDef>();
         private Dictionary<string, EventsDef> events = new Dictionary<string, EventsDef>();
+        private Dictionary<string, SkillDef> skills = new Dictionary<string, SkillDef>();
 
         private object src;
         private object defaultTargetObject;
@@ -43,6 +44,14 @@ namespace SphereSharp.Tests.Interpreter
 
             return this;
         }
+
+        public TestEvaluator AddSkillDef(SkillDef skillDef)
+        {
+            skills.Add(skillDef.DefName, skillDef);
+
+            return this;
+        }
+
 
         internal TestEvaluator AddEvents(EventsSectionSyntax section)
         {
@@ -76,7 +85,7 @@ namespace SphereSharp.Tests.Interpreter
         public TestEvaluator Create()
         {
             CodeModel = new CodeModel(Enumerable.Empty<ItemDef>(), Enumerable.Empty<GumpDef>(),
-                nameDefs.Values, functions.Values, eventsDefs: events.Values);
+                nameDefs.Values, functions.Values, eventsDefs: events.Values, skillDefs: skills.Values);
 
             Context = new EvaluationContext();
             Context.ArgO = argo;

@@ -58,13 +58,13 @@ namespace SphereSharp.ServUO.Sphere
 
 
 
-            //if (Skill_GetActive() != SKILL_TYPE.SKILL_NONE)
+            if (Skill_GetActive() != SKILL_TYPE.SKILL_NONE)
 
-            //{
+            {
 
-            //    Skill_Fail(true);   // Fail previous skill unfinished. (with NO skill gain!)
+                Skill_Fail(true);   // Fail previous skill unfinished. (with NO skill gain!)
 
-            //}
+            }
 
 
 

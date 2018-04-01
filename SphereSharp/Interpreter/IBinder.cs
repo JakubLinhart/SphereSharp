@@ -18,5 +18,6 @@ namespace SphereSharp.Interpreter
     public interface IPropertyBinder
     {
         void SetProperty(object targetObject, string name, object value);
+        bool TryGetProperty(object sourceObject, string name, out object result);
     }
 }

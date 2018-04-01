@@ -1,9 +1,9 @@
 [events e_meditation]
 on=@step
-//if (action==skill_meditation)
+if (action==skill_meditation)
  sysmessage("Pohybem jsi ztratil soustredeni")
-// skill=-1
-//endif
+ skill=-1
+endif
 events=-e_meditation
 
 //the rest is momentally unused

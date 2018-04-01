@@ -26,5 +26,8 @@ namespace SphereSharp.Runtime
         int SpiritSpeak { get; set; }
 
         int Color { get; set; }
+
+        void Skill(int skill);
+        int Action { get; set; }
     }
 }

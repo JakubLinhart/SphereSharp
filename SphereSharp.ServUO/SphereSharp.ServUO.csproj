@@ -52,6 +52,7 @@
     <Compile Include="SphereTarget.cs" />
     <Compile Include="SphereSharpRuntime.cs" />
     <Compile Include="Sphere\caccount_h.cs" />
+    <Compile Include="Sphere\cchar.cs" />
     <Compile Include="Sphere\ccharact.cs" />
     <Compile Include="Sphere\ccharfight.cs" />
     <Compile Include="Sphere\ccharskill.cs" />

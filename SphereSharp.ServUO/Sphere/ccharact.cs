@@ -1,4 +1,8 @@
 ﻿using Server;
+using Server.Gumps;
+using SphereSharp.Interpreter;
+using SphereSharp.Model;
+using SphereSharp.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +12,24 @@ using static SphereSharp.ServUO.Sphere._Global;
 
 namespace SphereSharp.ServUO.Sphere
 {
-    public partial class CChar : CItem
+    public partial class CChar : CItem, IChar, IClient
     {
         public readonly Mobile mobile;
+
+        public int Fame { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Karma { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Npc { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int MaxHits { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int MaxStam { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int MaxMana { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Str { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Dex { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Int { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Parrying { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Tactics { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Wrestling { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int SpiritSpeak { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Color { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public CChar(Mobile mobile) : base(mobile.Serial.Value)
         {
@@ -191,5 +210,40 @@ namespace SphereSharp.ServUO.Sphere
 
         }
 
+        // TODO: cleanup, remove MobileAdapter, move IClient stuff to client
+        private readonly IHoldTags tagHolder = new StandardTagHolder();
+        private readonly IHoldTriggers triggerHolder = new StandardTriggerHolder(name => null, SphereSharpRuntime.Current.RunCodeBlock);
+
+        public void Tag(string key, string value) => tagHolder.Tag(key, value);
+        public string Tag(string key) => tagHolder.Tag(key);
+        public void RemoveTag(string key) => tagHolder.RemoveTag(key);
+
+        public void SubscribeEvents(EventsDef eventsDef) => triggerHolder.SubscribeEvents(eventsDef);
+        public void UnsubscribeEvents(EventsDef eventsDef) => triggerHolder.UnsubscribeEvents(eventsDef);
+        public string RunTrigger(string triggerName, EvaluationContext context) => triggerHolder.RunTrigger(triggerName, context);
+
+        public void Dialog(string defName, Arguments arguments)
+        {
+            var gumpDef = SphereSharpRuntime.Current.CodeModel.GetGumpDef(defName);
+            var gumpType = SphereSharpRuntime.Current.GetGumpType(defName);
+
+            var gump = (Gump)Activator.CreateInstance(gumpType);
+            SphereSharpRuntime.Current.InitializeDialog(gump, mobile, defName, arguments);
+
+            this.mobile.SendGump(gump);
+        }
+
+        public void CloseDialog(string defName, int buttonId)
+        {
+            var gumpDef = SphereSharpRuntime.Current.CodeModel.GetGumpDef(defName);
+            var gumpType = SphereSharpRuntime.Current.GetGumpType(defName);
+
+            mobile.CloseGump(gumpType);
+        }
+
+        public void SysMessage(string message)
+        {
+            this.mobile.SendMessage(message);
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace SphereSharp.Runtime
 
         public void SubscribeEvents(EventsDef eventsDef)
         {
-            eventsSubscriptions.Add(eventsDef.Name, eventsDef);
+            eventsSubscriptions[eventsDef.Name] = eventsDef;
         }
 
         public void UnsubscribeEvents(EventsDef eventsDef)

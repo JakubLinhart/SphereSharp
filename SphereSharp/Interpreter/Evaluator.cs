@@ -132,9 +132,17 @@ namespace SphereSharp.Interpreter
             {
                 string memberName = Evaluate(statement.MemberNameSyntax, context);
 
-                var function = Binder.GetFunction(null, memberName.ToLower());
+                var function = Binder.GetFunction(context.Default, memberName.ToLower());
                 if (function != null)
                     return function.Call(null, this, context.CreateSubContext());
+
+                if (Binder.TryGetProperty(context.Default, memberName, out object result))
+                    return result.ToString();
+
+                if (this.Model.TryGetSkillDef(memberName, out SkillDef skillDef))
+                {
+                    return skillDef.Id.ToString();
+                }
 
                 return this.Model.GetDefName(memberName).Value;
             }
