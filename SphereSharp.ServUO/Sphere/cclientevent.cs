@@ -206,10 +206,9 @@ namespace SphereSharp.ServUO.Sphere
             bool fContinue = false;
 
 
-            // TODO:
-            //if (m_pChar.Skill_Wait(skill))
+            if (m_pChar.Skill_Wait(skill))
 
-            //    return;
+                return;
 
 
 

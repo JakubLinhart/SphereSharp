@@ -10,6 +10,91 @@ namespace SphereSharp.ServUO.Sphere
 {
     public partial class CChar
     {
+        public bool Skill_Wait(SKILL_TYPE skilltry)
+
+        {
+
+            // Some sort of push button skill.
+
+            // We want to do some new skill. Can we ?
+
+            // If this is the same skill then tell them to wait.
+
+
+            // TODO:
+            //if (IsStatFlag(STATF_DEAD | STATF_Sleeping | STATF_Freeze | STATF_Stone))
+
+            //{
+
+            //    WriteString("You can't do much in your current state.");
+
+            //    return (true);
+
+            //}
+
+
+
+            SKILL_TYPE skill = Skill_GetActive();
+
+            if (skill == SKILL_TYPE.SKILL_NONE)    // not currently doing anything.
+
+            {
+                // TODO:
+                // Reveal();
+
+                return (false);
+
+            }
+
+
+
+            // What if we are in combat mode ?
+
+            // TODO:
+            //if (IsStatFlag(STATF_War))
+
+            //{
+
+            //    WriteString("You are preoccupied with thoughts of battle.");
+
+            //    return (true);
+
+            //}
+
+
+
+            // Passive skills just cancel.
+
+            // SKILL_SPIRITSPEAK ?
+
+            if (skilltry != skill)
+
+            {
+
+                if (skill == SKILL_TYPE.SKILL_MEDITATION ||
+
+                    skill == SKILL_TYPE.SKILL_HIDING ||
+
+                    skill == SKILL_TYPE.SKILL_Stealth)
+
+                {
+
+                    Skill_Fail(true);
+
+                    return (false);
+
+                }
+
+            }
+
+
+
+            WriteString("You must wait to perform another action");
+
+            return (true);
+
+        }
+
         public bool Skill_Start(SKILL_TYPE skill, int iDifficulty = 0)
 
         {
