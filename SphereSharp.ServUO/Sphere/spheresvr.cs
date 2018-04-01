@@ -8,13 +8,13 @@ namespace SphereSharp.ServUO.Sphere
 {
     public class CClientTargModeContext
     {
-        public CLIMODE_TYPE m_Mode; // Type of async operation under way.
+        public CLIMODE_TYPE m_Mode = CLIMODE_TYPE.CLIMODE_NORMAL; // Type of async operation under way.
 
         // CLIMODE_TARG_SKILL_MAGERY
 
         public class TmSkillTarg
         {
-            public SKILL_TYPE m_Skill;         // targeting what spell ?
+            public SKILL_TYPE m_Skill = SKILL_TYPE.SKILL_NONE;         // targeting what spell ?
         }
 
         public class TmSkillMagery
@@ -23,7 +23,7 @@ namespace SphereSharp.ServUO.Sphere
         {
 
 
-            public SPELL_TYPE m_Spell;         // targeting what spell ?
+            public SPELL_TYPE m_Spell = SPELL_TYPE.SPELL_NONE;         // targeting what spell ?
 
             public CREID_TYPE m_SummonID;
 
