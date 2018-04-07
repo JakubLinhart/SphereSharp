@@ -18,7 +18,7 @@ namespace Server.Sphere.<#= NameSpace #>
     {
 		public static void Initialize()
         {
-			SphereSharpRuntime.Current.RegisterGump<<#= ClassName #>>("<#= ClassName #>");
+			SphereSharpRuntime.Current.RegisterServUOType<<#= ClassName #>>("<#= ClassName #>");
         }
 
         public <#= ClassName #>() : base(0, 0)

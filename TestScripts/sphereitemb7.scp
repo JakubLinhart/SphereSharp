@@ -1,0 +1,22 @@
+//****************************************************************************
+//SPHERE by : Menasoft �1997-2000
+//www.sphereserver.com
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Friday, July 14, 2000
+//
+//VERSION=0.54
+
+[ITEMDEF 02007]
+// used as a memory object
+DEFNAME=i_memory
+TYPE=T_EQ_MEMORY_OBJ
+LAYER=layer_special
+
+CATEGORY=Miscellaneous
+SUBSECTION=Bad Tiles
+DESCRIPTION=NonGen (Memory) Object

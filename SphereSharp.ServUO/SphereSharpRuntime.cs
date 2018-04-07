@@ -23,7 +23,13 @@ namespace SphereSharp.ServUO
 
         public CodeModel CodeModel { get; private set; }
 
-        private static Dictionary<string, Type> gumpRegistry = new Dictionary<string, Type>();
+        public IItem CreateItem(string itemDefName)
+        {
+            var servUOType = servUOTypeRegistry[itemDefName];
+            return (IItem)Activator.CreateInstance(servUOType);
+        }
+
+        private static Dictionary<string, Type> servUOTypeRegistry = new Dictionary<string, Type>();
 
         public void HandleSkillRequest(object caller, SkillRequestedArgs args)
         {
@@ -80,9 +86,9 @@ namespace SphereSharp.ServUO
         private readonly Dictionary<string, GumpAdapter> gumpAdapters = new Dictionary<string, GumpAdapter>();
         private readonly Dictionary<Mobile, MobileAdapter> mobileAdapters = new Dictionary<Mobile, MobileAdapter>();
 
-        public void RegisterGump<TGump>(string defName) where TGump : Gump
+        public void RegisterServUOType<T>(string defName)
         {
-            gumpRegistry.Add(defName.ToLower(), typeof(TGump));
+            servUOTypeRegistry.Add(defName.ToLower(), typeof(T));
         }
 
         public MobileAdapter GetAdapter(Mobile mobile)
@@ -148,12 +154,12 @@ namespace SphereSharp.ServUO
             }
         }
 
-        public Type GetGumpType(string defName)
+        public Type GetServUOType(string defName)
         {
-            return gumpRegistry[defName.ToLower()];
+            return servUOTypeRegistry[defName.ToLower()];
         }
 
-        internal void RunSkillTrigger(CChar source, SKILL_TYPE skill, string triggerName)
+        internal bool RunSkillTrigger(CChar source, SKILL_TYPE skill, string triggerName, out string result)
         {
             var adapter = GetAdapter(source.mobile);
             var skillDef = CodeModel.GetSkillDef((int)skill);
@@ -163,8 +169,12 @@ namespace SphereSharp.ServUO
                 context.Default = adapter.SphereClient.m_pChar;
                 context.Src = adapter.SphereClient.m_pChar;
 
-                RunCodeBlock(trigger.CodeBlock, context);
+                result = RunCodeBlock(trigger.CodeBlock, context);
+                return true;
             }
+
+            result = string.Empty;
+            return false;
         }
 
         public void InitializeDialog(Gump gump, Mobile src, string gumpDefName, Arguments args)

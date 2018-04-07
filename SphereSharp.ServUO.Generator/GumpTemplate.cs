@@ -45,7 +45,7 @@ namespace SphereSharp.ServUO.Generator
             #line default
             #line hidden
             this.Write(" : Gump\r\n    {\r\n\t\tpublic static void Initialize()\r\n        {\r\n\t\t\tSphereSharpRunti" +
-                    "me.Current.RegisterGump<");
+                    "me.Current.RegisterServUOType<");
             
             #line 21 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\GumpTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));

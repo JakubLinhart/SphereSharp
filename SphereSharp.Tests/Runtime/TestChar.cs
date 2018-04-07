@@ -43,6 +43,11 @@ namespace SphereSharp.Tests.Runtime
             Action = skill;
         }
 
+        public void NewItem(string itemDefName)
+        {
+            output.AppendLine($"newitem {itemDefName}");
+        }
+
         public TestChar(Func<string, TriggerDef> triggerSource, Func<CodeBlockSyntax, EvaluationContext, string> codeBlockRunner)
         {
             triggerHolder = new StandardTriggerHolder(triggerSource, codeBlockRunner);

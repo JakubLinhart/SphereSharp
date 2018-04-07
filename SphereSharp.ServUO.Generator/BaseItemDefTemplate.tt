@@ -13,6 +13,11 @@ namespace Server.Sphere.<#= NameSpace #>
 {
     public class <#= ClassName #> : SphereItem
     {
+	    public static void Initialize()
+        {
+            SphereSharpRuntime.Current.RegisterServUOType<<#= ClassName #>>("<#= ClassName #>");
+        }
+
         [Constructable]
         public <#= ClassName #>() : base(<#= Id #>, "<#= ClassName #>")
         {

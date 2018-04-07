@@ -262,6 +262,20 @@ namespace SphereSharp.ServUO.Sphere
 
                 return -1;
 
+            // TODO:
+            //CSphereExpArgs execArgs(this, this, skill, 0, 0 );
+
+
+
+            //TRIGRET_TYPE iTrigRet = OnTrigger((CCharDef::T_TYPE_)(CCharDef::T_SkillAbort + (stage - CSkillDef::T_Abort)), execArgs);
+
+            //if (iTrigRet == TRIGRET_RET_VAL)
+
+            //{
+
+            //    return execArgs.m_vValRet;
+
+            //}
 
             var context = new EvaluationContext();
             context.Src = SphereSharpRuntime.Current.GetAdapter(this.mobile);
@@ -283,45 +297,17 @@ namespace SphereSharp.ServUO.Sphere
             }
 
             if (!string.IsNullOrEmpty(triggerName))
-                SphereSharpRuntime.Current.RunSkillTrigger(this, skill, triggerName);
-
-            // <TODO>
-            //if (iTrigRet == TRIGRET_RET_VAL)
-
-            //{
-
-            //    return execArgs.m_vValRet;
-
-            //}
-
-
-
-            //CSkillDefWPtr pSkillDef = g_Cfg.GetSkillDefW(skill);
-
-            //if (pSkillDef != null)
-
-            //{
-
-            //    // res_skill
-
-            //    //ccharactstate savestate = m_act;
-
-            //    itrigret = pskilldef->ontriggerscript(execargs, stage, cskilldef::sm_triggers[stage].m_pszname);
-
-            //    // m_act = savestate;
-
-            //    if (itrigret == trigret_ret_val)
-
-            //    {
-
-            //        // they handled success, just clean up, don't do skill experience
-
-            //        return execargs.m_vvalret;
-
-            //    }
-
-            //}
-            // </TODO>
+            {
+                if (SphereSharpRuntime.Current.RunSkillTrigger(this, skill, triggerName, out string triggerResult))
+                {
+                    if (int.TryParse(triggerResult, out int result))
+                    {
+                        return result;
+                    }
+                    else
+                        return 0;
+                }
+            }
 
 
             switch (skill)
@@ -410,9 +396,9 @@ namespace SphereSharp.ServUO.Sphere
 
                 //    return Skill_Herding(stage);
 
-                //case SKILL_TYPE.SKILL_HIDING:
+                case SKILL_TYPE.SKILL_HIDING:
 
-                //    return Skill_Hiding(stage);
+                    return Skill_Hiding(stage);
 
                 //case SKILL_TYPE.SKILL_PROVOCATION:
 
@@ -508,9 +494,9 @@ namespace SphereSharp.ServUO.Sphere
 
                     return Skill_Meditation(stage);
 
-                //case SKILL_TYPE.SKILL_Stealth:
+                case SKILL_TYPE.SKILL_Stealth:
 
-                //    return Skill_Hiding(stage);
+                    return Skill_Hiding(stage);
 
                 //case SKILL_TYPE.SKILL_RemoveTrap:
 
@@ -858,6 +844,137 @@ namespace SphereSharp.ServUO.Sphere
             //}
 
         }
+
+        public int Skill_Hiding(CSkillDef.T_TYPE_ stage)
+
+        {
+
+            // SKILL_Stealth = move while already hidden !
+
+            // SKILL_Hiding
+
+            // Skill required varies with terrain and situation ?
+
+            // if we are carrying a light source then this should not work.
+
+
+#if _0
+
+	// We shoud just stay in HIDING skill. ?
+
+#else
+
+            if (stage == CSkillDef.T_TYPE_.T_Stroke)
+
+            {
+
+                return 0;
+
+            }
+
+            if (stage == CSkillDef.T_TYPE_.T_Fail)
+
+            {
+
+                // TODO:
+                //Reveal(STATF_Hidden);
+
+                return 0;
+
+            }
+
+            throw new NotImplementedException();
+
+            //            if (stage == CSkillDef.T_TYPE_.T_Success)
+
+            //            {
+
+            //                if (IsStatFlag(STATF_Hidden))
+
+            //                {
+
+            //                    // I was already hidden ? so un-hide.
+
+            //                    Reveal(STATF_Hidden);
+
+            //                    return (-(int)CSkillDef.T_TYPE_.T_Abort);
+
+            //                }
+
+
+
+            //                ObjMessage("You have hidden yourself well", this);
+
+            //                StatFlag_Set(STATF_Hidden);
+
+            //                UpdateMode();
+
+            //                return (0);
+
+            //            }
+
+
+
+            //            if (stage == CSkillDef.T_TYPE_.T_Start)
+
+            //            {
+
+            //                // Make sure i am not carrying a light ?
+
+
+
+            //                CItemPtr pItem = GetHead();
+
+            //                for (; pItem; pItem = pItem->GetNext())
+
+            //                {
+
+            //                    LAYER_TYPE layer = pItem->GetEquipLayer();
+
+            //                    if (!CItemDef::IsVisibleLayer(layer))
+
+            //                        continue;
+
+            //                    if (pItem->IsType(IT_EQ_HORSE))
+
+            //                    {
+
+            //                        // Horses are hard to hide !
+
+            //                        WriteString("Your horse reveals you");
+
+            //                        return (-(int)CSkillDef.T_TYPE_.T_QTY);
+
+            //                    }
+
+            //                    if (pItem->Item_GetDef()->Can(CAN_I_LIGHT))
+
+            //                    {
+
+            //                        WriteString("You are too well lit to hide");
+
+            //                        return (-(int)CSkillDef.T_TYPE_.T_QTY);
+
+            //                    }
+
+            //                }
+
+
+
+            //                return Calc_GetRandVal(70);
+
+            //            }
+
+#endif
+
+
+
+            //            ASSERT(0);
+
+            //            return (-(int)CSkillDef.T_TYPE_.T_QTY);
+
+        }
+
 
         public int Skill_Meditation(CSkillDef.T_TYPE_ stage)
 

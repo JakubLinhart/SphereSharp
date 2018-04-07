@@ -244,5 +244,39 @@ src.sysmessage(<arg(seznamnations[0])>)
 ");
             evaluator.TestObjBase.GetOutput().Should().Contain("sysmessage asdf");
         }
+
+        [TestMethod]
+        public void Can_set_skill()
+        {
+            evaluator.SetDefault(evaluator.TestChar)
+                .SetSrc(evaluator.TestChar)
+                .Create();
+
+            evaluator.EvaluateCodeBlock(@"skill -123");
+            evaluator.TestChar.GetOutput().Should().Contain("-123");
+
+        }
+
+        [TestMethod]
+        public void Can_call_NewItem()
+        {
+            evaluator.SetDefault(evaluator.TestChar)
+                .SetSrc(evaluator.TestChar)
+                .Create();
+
+            evaluator.EvaluateCodeBlock(@"newitem i_my_item");
+            evaluator.TestChar.GetOutput().Should().Contain("newitem i_my_item");
+        }
+
+        [TestMethod]
+        public void Can_call_LastNew()
+        {
+            evaluator.SetDefault(evaluator.TestChar)
+                .SetSrc(evaluator.TestChar)
+                .Create();
+
+            evaluator.EvaluateCodeBlock(@"lastnew");
+            evaluator.TestChar.GetOutput().Should().Contain("lastnew");
+        }
     }
 }

@@ -359,6 +359,10 @@ namespace SphereSharp.ServUO.Sphere
             var meditation = new CSkillDefPtr();
             meditation.m_Delay = new CValueCurveDef() { m_aiValues = new int[] { 1000 } };
             skills[SKILL_TYPE.SKILL_MEDITATION] = meditation;
+
+            var hiding = new CSkillDefPtr();
+            hiding.m_Delay = new CValueCurveDef() { m_aiValues = new int[] { 3000, 1000 } };
+            skills[SKILL_TYPE.SKILL_HIDING] = hiding;
         }
 
         public static CSkillDefPtr GetSkillDef(SKILL_TYPE skill)

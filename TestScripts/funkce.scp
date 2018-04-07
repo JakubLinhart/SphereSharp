@@ -1,3 +1,16 @@
+[function newitemsafe]
+if (strlen("<args>")) //v argumentu neco je ?
+  //if (isItem)
+  //  var(nastaveni_guardian_uid).say(<serverTime> !!!!!! ERROR: neco se snazi delat item na objektu: <uid.name> !!!!!!)
+  //else
+//    arg(sfnact,<act>)
+    newitem(<hval argv(0)>)
+//    act=<arg(sfnact)>
+    return 1
+  //endif
+endif
+return 0
+
 [function dialogclose]//argument je cislo tlacitka co se jakoze zmackne, nebo defname dialogu a cislo tlacitka
 src.CloseDialog(<argv(0)>, <argv(1)>)
 

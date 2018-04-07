@@ -1,3 +1,22 @@
+[SKILL 21]
+DEFNAME=Skill_Hiding
+KEY=Hiding
+TITLE=Rogue
+PROMPTMSG=
+DELAY=3.0, 1.0
+STAT_STR=20
+STAT_INT=20
+STAT_DEX=20
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=0
+BONUSSTATS=0
+ADVRATE=0fffffff
+
+on=@start
+f_skillhide
+return 1
+
 [SKILL 25]
 DEFNAME=Skill_Magery
 KEY=Magery

@@ -29,5 +29,7 @@ namespace SphereSharp.Runtime
 
         void Skill(int skill);
         int Action { get; set; }
+
+        void NewItem(string itemDefName);
     }
 }

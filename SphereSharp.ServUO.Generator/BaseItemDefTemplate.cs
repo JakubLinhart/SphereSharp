@@ -43,44 +43,59 @@ namespace SphereSharp.ServUO.Generator
             
             #line default
             #line hidden
-            this.Write(" : SphereItem\r\n    {\r\n        [Constructable]\r\n        public ");
+            this.Write(" : SphereItem\r\n    {\r\n\t    public static void Initialize()\r\n        {\r\n          " +
+                    "  SphereSharpRuntime.Current.RegisterServUOType<");
             
-            #line 17 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            #line 18 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
+            
+            #line default
+            #line hidden
+            this.Write(">(\"");
+            
+            #line 18 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
+            
+            #line default
+            #line hidden
+            this.Write("\");\r\n        }\r\n\r\n        [Constructable]\r\n        public ");
+            
+            #line 22 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
             this.Write("() : base(");
             
-            #line 17 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            #line 22 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Id));
             
             #line default
             #line hidden
             this.Write(", \"");
             
-            #line 17 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            #line 22 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
             this.Write("\")\r\n        {\r\n        }\r\n\t\t\r\n\t\tprotected ");
             
-            #line 21 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            #line 26 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
             this.Write("(string defName) : base(");
             
-            #line 21 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            #line 26 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Id));
             
             #line default
             #line hidden
             this.Write(", defName)\r\n        {\r\n        }\r\n\r\n        [Constructable]\r\n        public ");
             
-            #line 26 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            #line 31 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -105,7 +120,7 @@ namespace SphereSharp.ServUO.Generator
         {
             SphereSharpRuntime.Current.RunItemEvent(from, item, """);
             
-            #line 44 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
+            #line 49 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\BaseItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default

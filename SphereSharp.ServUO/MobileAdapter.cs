@@ -29,7 +29,7 @@ namespace SphereSharp.ServUO
         public void CloseDialog(string defName, int buttonId)
         {
             var gumpDef = SphereSharpRuntime.Current.CodeModel.GetGumpDef(defName);
-            var gumpType = SphereSharpRuntime.Current.GetGumpType(defName);
+            var gumpType = SphereSharpRuntime.Current.GetServUOType(defName);
 
             mobile.CloseGump(gumpType);
         }
@@ -37,7 +37,7 @@ namespace SphereSharp.ServUO
         public void Dialog(string defName, Arguments arguments)
         {
             var gumpDef = SphereSharpRuntime.Current.CodeModel.GetGumpDef(defName);
-            var gumpType = SphereSharpRuntime.Current.GetGumpType(defName);
+            var gumpType = SphereSharpRuntime.Current.GetServUOType(defName);
 
             var gump = (Gump)Activator.CreateInstance(gumpType);
             SphereSharpRuntime.Current.InitializeDialog(gump, mobile, defName, arguments);

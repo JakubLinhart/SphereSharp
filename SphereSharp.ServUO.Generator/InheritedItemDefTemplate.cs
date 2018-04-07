@@ -51,23 +51,38 @@ namespace SphereSharp.ServUO.Generator
             
             #line default
             #line hidden
-            this.Write("\r\n    {\r\n        [Constructable]\r\n        public ");
+            this.Write("\r\n    {\r\n\t    public new static void Initialize()\r\n        {\r\n            SphereS" +
+                    "harpRuntime.Current.RegisterServUOType<");
             
-            #line 18 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
+            #line 19 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
+            
+            #line default
+            #line hidden
+            this.Write(">(\"");
+            
+            #line 19 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
+            
+            #line default
+            #line hidden
+            this.Write("\");\r\n        }\r\n\r\n        [Constructable]\r\n        public ");
+            
+            #line 23 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
             this.Write("() : base(\"");
             
-            #line 18 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
+            #line 23 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
             this.Write("\")\r\n        {\r\n        }\r\n\r\n\t\tprotected ");
             
-            #line 22 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
+            #line 27 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -75,7 +90,7 @@ namespace SphereSharp.ServUO.Generator
             this.Write("(string defName) : base(defName)\r\n        {\r\n        }\r\n\r\n        [Constructable]" +
                     "\r\n        public ");
             
-            #line 27 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
+            #line 32 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -100,7 +115,7 @@ namespace SphereSharp.ServUO.Generator
         {
             SphereSharpRuntime.Current.RunItemEvent(from, item, """);
             
-            #line 45 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
+            #line 50 "C:\Users\jakub\sources\ultima\SphereSharp\SphereSharp\SphereSharp.ServUO.Generator\InheritedItemDefTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default

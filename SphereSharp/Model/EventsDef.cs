@@ -12,5 +12,6 @@ namespace SphereSharp.Model
         public string Name { get; set; }
 
         public ImmutableDictionary<string, TriggerDef> Triggers { get; set; } = ImmutableDictionary<string, TriggerDef>.Empty;
+        public int Id { get; set; }
     }
 }

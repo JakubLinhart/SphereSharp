@@ -34,6 +34,9 @@ namespace SphereSharp.Interpreter
             Add("argtxt", ArgTxt);
             Add("strlen", Strlen);
             Add("strcmpi", Strcmpi);
+
+            Add("skill", Skill);
+            Add("newitem", NewItem);
         }
 
         private static void Add(string name, Func<object, EvaluationContext, string> impl) =>
@@ -135,6 +138,20 @@ namespace SphereSharp.Interpreter
             }
 
             ((IClient)targetObject).Dialog(context.Arguments.ArgS(0), dialogInitArgs);
+
+            return string.Empty;
+        }
+
+        private static string Skill(object targetObject, EvaluationContext context)
+        {
+            ((IChar)targetObject).Skill(context.Arguments.ArgInt(0));
+
+            return string.Empty;
+        }
+
+        private static string NewItem(object targetObject, EvaluationContext context)
+        {
+            ((IChar)targetObject).NewItem(context.Arguments.ArgS(0));
 
             return string.Empty;
         }
