@@ -97,11 +97,11 @@ namespace SphereSharp.Tests.Syntax
         [TestMethod]
         public void Can_parse_eval_macro_expression()
         {
-            var syntax = ExpressionSyntax.Parse("<eval tag.basestr>");
+            var syntax = ExpressionSyntax.Parse("<eval tag.basestr>").
+                Should().BeOfType<EvalMacroExpressionSyntax>().Which;
 
-            syntax.Should().BeOfType<EvalMacroExpressionSyntax>().Which
-                .Expression.Should().BeOfType<CallExpressionSyntax>().Which
-                .Call.MemberName.Should().Be("basestr");
+            syntax.Expression.Should().BeOfType<CallExpressionSyntax>().Which
+                .Call.MemberName.Should().Be("tag");
         }
 
         [TestMethod]

@@ -10,9 +10,8 @@ namespace SphereSharp.Syntax
             InnerCall.Except(Parse.String("on="));
 
         public static Parser<CallSyntax> InnerCall =>
-            from obj in DottedCall.Many()
-            from member in MemberCall
-            select obj.Any() ? new CallSyntax(obj.Aggregate((l, r) => new CallSyntax(l, r)), member) : member;
+            from call in ChainedCall.Or(MemberCall)
+            select call;
 
         public static Parser<StatementSyntax> CallStatement =
             from call in Call
@@ -24,12 +23,16 @@ namespace SphereSharp.Syntax
             from arguments in ArgumentListParser.ArgumentList.Optional()
             select new CallSyntax(funcName, arguments.IsDefined ? arguments.Get() : ArgumentListSyntax.Empty);
 
-        public static Parser<CallSyntax> DottedCall =>
-            from funcName in SymbolParser.Symbol
-            from arguments in ArgumentListParser.ArgumentListWithParenthesis.Optional()
+        public static Parser<CallSyntax> ChainedCall =>
+            from firstCall in MemberCall
+            from nextCalls in ChainedCallInner.Many()
+            select nextCalls.Count() > 0
+                ? new CallSyntax(firstCall, nextCalls.Reverse().Aggregate((l, r) => new CallSyntax(r, l)))
+                : firstCall;
+
+        public static Parser<CallSyntax> ChainedCallInner =>
             from _ in Parse.Char('.')
-            select new CallSyntax(funcName, arguments.IsDefined 
-                ? new ArgumentListSyntax(arguments.Get().ToImmutableArray())
-                : ArgumentListSyntax.Empty);
+            from call in MemberCall
+            select call;
     }
 }

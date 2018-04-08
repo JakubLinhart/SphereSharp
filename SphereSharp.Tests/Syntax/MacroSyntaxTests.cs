@@ -17,8 +17,8 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = MacroSyntax.Parse("<SRC.NAME>");
 
-            syntax.Call.MemberName.Should().Be("NAME");
-            syntax.Call.Object.MemberName.Should().Be("SRC");
+            syntax.Call.MemberName.Should().Be("SRC");
+            syntax.Call.ChainedCall.MemberName.Should().Be("NAME");
         }
 
         [TestMethod]
@@ -26,8 +26,8 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = MacroSyntax.Parse("<?SRC.NAME?>");
 
-            syntax.Call.MemberName.Should().Be("NAME");
-            syntax.Call.Object.MemberName.Should().Be("SRC");
+            syntax.Call.MemberName.Should().Be("SRC");
+            syntax.Call.ChainedCall.MemberName.Should().Be("NAME");
         }
 
         [TestMethod]

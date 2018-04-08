@@ -12,6 +12,6 @@ namespace SphereSharp.Interpreter
             Name = name;
         }
 
-        public abstract string Call(object targetObject, Evaluator evaluator, EvaluationContext context);
+        public abstract object Call(object targetObject, Evaluator evaluator, EvaluationContext context);
     }
 }

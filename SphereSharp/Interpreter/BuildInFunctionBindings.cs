@@ -7,7 +7,7 @@ namespace SphereSharp.Interpreter
 {
     public class BuildInFunctionBindings : IFunctionBinder
     {
-        private static Dictionary<string, Function> functions = new Dictionary<string, Function>();
+        private static Dictionary<string, Function> functions = new Dictionary<string, Function>(StringComparer.OrdinalIgnoreCase);
 
         static BuildInFunctionBindings()
         {
@@ -39,7 +39,7 @@ namespace SphereSharp.Interpreter
             Add("newitem", NewItem);
         }
 
-        private static void Add(string name, Func<object, EvaluationContext, string> impl) =>
+        private static void Add(string name, Func<object, EvaluationContext, object> impl) =>
             functions.Add(name, new BuiltInFunction(name, impl));
 
         public Function GetFunction(object targetObject, string name)
@@ -50,7 +50,7 @@ namespace SphereSharp.Interpreter
             return null;
         }
 
-        private static string Strlen(object obj, EvaluationContext context)
+        private static object Strlen(object obj, EvaluationContext context)
         {
             string arg = context.Arguments.ArgS(0);
             if (string.IsNullOrEmpty(arg))
@@ -59,7 +59,7 @@ namespace SphereSharp.Interpreter
             return arg.Length.ToString();
         }
 
-        private static string Strcmpi(object obj, EvaluationContext context)
+        private static object Strcmpi(object obj, EvaluationContext context)
         {
             string arg1 = context.Arguments.ArgS(0);
             string arg2 = context.Arguments.ArgS(1);
@@ -69,7 +69,7 @@ namespace SphereSharp.Interpreter
             return "1";
         }
 
-        public static string Arg(object obj, EvaluationContext context)
+        public static object Arg(object obj, EvaluationContext context)
         {
             if (context.Parent == null)
                 throw new NotImplementedException("Parent context not defined.");
@@ -85,7 +85,7 @@ namespace SphereSharp.Interpreter
                 throw new NotImplementedException($"Argument count mismatch, {context.Arguments.Count()} expected 2,");
         }
 
-        private static string ArgV(object obj, EvaluationContext context)
+        private static object ArgV(object obj, EvaluationContext context)
         {
             if (context.Parent != null)
             {
@@ -95,7 +95,7 @@ namespace SphereSharp.Interpreter
                 throw new NotImplementedException();
         }
 
-        private static string ArgN(object obj, EvaluationContext context)
+        private static object ArgN(object obj, EvaluationContext context)
         {
             if (context.Parent != null)
             {
@@ -105,7 +105,7 @@ namespace SphereSharp.Interpreter
                 throw new NotImplementedException();
         }
 
-        private static string ArgS(object obj, EvaluationContext context)
+        private static object ArgS(object obj, EvaluationContext context)
         {
             if (context.Parent != null)
             {
@@ -115,7 +115,7 @@ namespace SphereSharp.Interpreter
                 throw new NotImplementedException();
         }
 
-        private static string ArgTxt(object obj, EvaluationContext context)
+        private static object ArgTxt(object obj, EvaluationContext context)
         {
             if (context.Parent != null)
             {
@@ -125,7 +125,7 @@ namespace SphereSharp.Interpreter
                 throw new NotImplementedException();
         }
 
-        private static string Dialog(object targetObject, EvaluationContext context)
+        private static object Dialog(object targetObject, EvaluationContext context)
         {
             Arguments dialogInitArgs = new Arguments();
 
@@ -142,14 +142,14 @@ namespace SphereSharp.Interpreter
             return string.Empty;
         }
 
-        private static string Skill(object targetObject, EvaluationContext context)
+        private static object Skill(object targetObject, EvaluationContext context)
         {
             ((IChar)targetObject).Skill(context.Arguments.ArgInt(0));
 
             return string.Empty;
         }
 
-        private static string NewItem(object targetObject, EvaluationContext context)
+        private static object NewItem(object targetObject, EvaluationContext context)
         {
             ((IChar)targetObject).NewItem(context.Arguments.ArgS(0));
 
@@ -174,7 +174,7 @@ namespace SphereSharp.Interpreter
                 throw new NotImplementedException($"unhandled context.Src {context.Src.GetType().Name}");
         }
 
-        private static string Remove(object targetObject, EvaluationContext context)
+        private static object Remove(object targetObject, EvaluationContext context)
         {
             if (context.Src is IHoldTags tagHolder)
             {
@@ -185,68 +185,68 @@ namespace SphereSharp.Interpreter
                 throw new NotImplementedException($"unhandled context.Src {context.Src.GetType().Name}");
         }
 
-        private static string CloseDialog(object targetObject, EvaluationContext context)
+        private static object CloseDialog(object targetObject, EvaluationContext context)
         {
             ((IClient)targetObject).CloseDialog(context.Arguments.ArgS(0), context.Arguments.ArgInt(1));
             return string.Empty;
         }
 
-        private static string SysMessage(object targetObject, EvaluationContext context)
+        private static object SysMessage(object targetObject, EvaluationContext context)
         {
             ((IClient)targetObject).SysMessage(context.Arguments.ArgS(0));
 
             return string.Empty;
         }
 
-        private static string GumpPic(object targetObject, EvaluationContext context)
+        private static object GumpPic(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).GumpPic(context.Arguments.ArgInt(0), context.Arguments.ArgInt(1), context.Arguments.ArgInt(2));
             return string.Empty;
         }
 
-        private static string SetLocation(object targetObject, EvaluationContext context)
+        private static object SetLocation(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).SetLocation(context.Arguments.ArgInt(0), context.Arguments.ArgInt(1));
             return string.Empty;
         }
 
-        private static string ResizePic(object targetObject, EvaluationContext context)
+        private static object ResizePic(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).ResizePic(context.Arguments.ArgInt(0), context.Arguments.ArgInt(1), context.Arguments.ArgInt(2), context.Arguments.ArgInt(3), context.Arguments.ArgInt(4));
             return string.Empty;
         }
 
-        private static string HtmlGump(object targetObject, EvaluationContext context)
+        private static object HtmlGump(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).HtmlGump(context.Arguments.ArgInt(0), context.Arguments.ArgInt(1), context.Arguments.ArgInt(2), context.Arguments.ArgInt(3));
             return string.Empty;
         }
 
-        private static string HtmlGumpA(object targetObject, EvaluationContext context)
+        private static object HtmlGumpA(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).HtmlGumpA(context.Arguments.ArgInt(0), context.Arguments.ArgInt(1), context.Arguments.ArgInt(2), context.Arguments.ArgInt(3), context.Arguments.ArgS(4));
             return string.Empty;
         }
 
-        private static string Button(object targetObject, EvaluationContext context)
+        private static object Button(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).Button(context.Arguments.ArgInt(0), context.Arguments.ArgInt(1), context.Arguments.ArgInt(2), context.Arguments.ArgInt(3), context.Arguments.ArgInt(4), context.Arguments.ArgInt(5), context.Arguments.ArgInt(6));
             return string.Empty;
         }
 
-        private static string TextA(object targetObject, EvaluationContext context)
+        private static object TextA(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).TextA(context.Arguments.ArgInt(0), context.Arguments.ArgInt(1), context.Arguments.ArgInt(2), context.Arguments.ArgS(3));
             return string.Empty;
         }
 
-        private static string TextEntry(object targetObject, EvaluationContext context)
+        private static object TextEntry(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).TextEntry(context.Arguments.ArgInt(0), context.Arguments.ArgInt(1), context.Arguments.ArgInt(2), context.Arguments.ArgInt(3), context.Arguments.ArgInt(4), context.Arguments.ArgInt(5), context.Arguments.ArgInt(6));
             return string.Empty;
         }
 
-        private static string SetText(object targetObject, EvaluationContext context)
+        private static object SetText(object targetObject, EvaluationContext context)
         {
             ((IGump)targetObject).SetText(context.Arguments.ArgInt(0), context.Arguments.ArgS(1));
             return string.Empty;

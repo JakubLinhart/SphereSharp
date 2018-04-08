@@ -110,7 +110,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("(<tag.race>,<argv(u)>)");
 
-            syntax.Arguments[0].As<MacroArgumentSyntax>().Macro.Call.MemberName.Should().Be("race");
+            syntax.Arguments[0].As<MacroArgumentSyntax>().Macro.Call.MemberName.Should().Be("tag");
             syntax.Arguments[1].As<MacroArgumentSyntax>().Macro.Call.MemberName.Should().Be("argv");
         }
 

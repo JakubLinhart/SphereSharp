@@ -16,7 +16,7 @@ namespace SphereSharp.Interpreter
             this.functionDef = functionDef;
         }
 
-        public override string Call(object targetObject, Evaluator evaluator, EvaluationContext context)
+        public override object Call(object targetObject, Evaluator evaluator, EvaluationContext context)
         {
             return evaluator.Evaluate(functionDef.Body, context);
         }

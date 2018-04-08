@@ -4,15 +4,15 @@ namespace SphereSharp.Interpreter
 {
     public sealed class BuiltInFunction : Function
     {
-        public Func<object, EvaluationContext, string> Implementation { get; }
+        public Func<object, EvaluationContext, object> Implementation { get; }
 
-        public BuiltInFunction(string name, Func<object, EvaluationContext, string> implementation)
+        public BuiltInFunction(string name, Func<object, EvaluationContext, object> implementation)
             : base(name)
         {
             Implementation = implementation;
         }
 
-        public override string Call(object targetObject, Evaluator evaluator, EvaluationContext context)
+        public override object Call(object targetObject, Evaluator evaluator, EvaluationContext context)
         {
             return Implementation(targetObject, context);
         }

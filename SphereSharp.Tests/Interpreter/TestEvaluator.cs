@@ -105,7 +105,7 @@ namespace SphereSharp.Tests.Interpreter
         public string EvaluateCall(string src)
         {
             var syntax = CallSyntax.Parse(src);
-            return Evaluator.Evaluate(syntax, Context);
+            return Evaluator.Evaluate(syntax, Context).ToString();
         }
 
         public int EvaluateExpression(string src)

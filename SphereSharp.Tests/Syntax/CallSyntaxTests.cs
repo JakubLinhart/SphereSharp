@@ -44,9 +44,8 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = CallSyntax.Parse("src.DIALOG D_RACEclass_background");
 
-            syntax.MemberName.Should().Be("DIALOG");
-            syntax.Object.MemberName.Should().Be("src");
-            syntax.Object.Object.Should().Be(CallSyntax.GlobalObject);
+            syntax.MemberName.Should().Be("src");
+            syntax.ChainedCall.MemberName.Should().Be("DIALOG");
         }
 
         [TestMethod]
@@ -54,11 +53,9 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = CallSyntax.Parse("src.link.tag(tag1).dialog D_RACEclass_background");
 
-            syntax.MemberName.Should().Be("dialog");
-            syntax.Object.MemberName.Should().Be("tag");
-            syntax.Object.Object.MemberName.Should().Be("link");
-            syntax.Object.Object.Object.MemberName.Should().Be("src");
-            syntax.Object.Object.Object.Object.Should().Be(CallSyntax.GlobalObject);
+            syntax.MemberName.Should().Be("src");
+            syntax.ChainedCall.MemberName.Should().Be("link");
+            syntax.ChainedCall.ChainedCall.MemberName.Should().Be("tag");
         }
 
         [TestMethod]

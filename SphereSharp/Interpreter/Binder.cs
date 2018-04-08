@@ -11,7 +11,7 @@ namespace SphereSharp.Interpreter
     {
         private readonly CodeModel model;
         private BuildInFunctionBindings functionBindings = new BuildInFunctionBindings();
-        private BuildInPropertyBindings propertyBindinds = new BuildInPropertyBindings();
+        private BuildInPropertyBindings propertyBindings = new BuildInPropertyBindings();
 
         public Binder(CodeModel model)
         {
@@ -34,12 +34,12 @@ namespace SphereSharp.Interpreter
 
         public void SetProperty(object targetObject, string name, object value)
         {
-            propertyBindinds.SetProperty(targetObject, name, value);
+            propertyBindings.SetProperty(targetObject, name, value);
         }
 
         public bool TryGetProperty(object sourceObject, string name, out object result)
         {
-            return propertyBindinds.TryGetProperty(sourceObject, name, out result);
+            return propertyBindings.TryGetProperty(sourceObject, name, out result);
         }
     }
 }

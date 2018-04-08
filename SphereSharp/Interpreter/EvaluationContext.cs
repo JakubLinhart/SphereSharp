@@ -21,7 +21,7 @@ namespace SphereSharp.Interpreter
                 Src = Src,
                 ArgO = ArgO,
                 Default = Default,
-                Parent = this
+                Parent = this,
             };
         }
     }
