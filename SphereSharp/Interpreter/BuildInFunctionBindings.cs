@@ -37,6 +37,7 @@ namespace SphereSharp.Interpreter
 
             Add("skill", Skill);
             Add("newitem", NewItem);
+            Add("lastnew", LastNew);
         }
 
         private static void Add(string name, Func<object, EvaluationContext, object> impl) =>
@@ -152,6 +153,13 @@ namespace SphereSharp.Interpreter
         private static object NewItem(object targetObject, EvaluationContext context)
         {
             ((IChar)targetObject).NewItem(context.Arguments.ArgS(0));
+
+            return string.Empty;
+        }
+
+        private static object LastNew(object targetObject, EvaluationContext context)
+        {
+            ((IChar)targetObject).LastNew();
 
             return string.Empty;
         }

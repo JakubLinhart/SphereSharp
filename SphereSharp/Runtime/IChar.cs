@@ -31,5 +31,6 @@ namespace SphereSharp.Runtime
         int Action { get; set; }
 
         void NewItem(string itemDefName);
+        IItem LastNew();
     }
 }

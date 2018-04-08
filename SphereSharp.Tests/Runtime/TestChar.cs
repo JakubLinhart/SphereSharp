@@ -48,6 +48,13 @@ namespace SphereSharp.Tests.Runtime
             output.AppendLine($"newitem {itemDefName}");
         }
 
+        public IItem LastNew()
+        {
+            output.AppendLine("lastnew");
+
+            return null;
+        }
+
         public TestChar(Func<string, TriggerDef> triggerSource, Func<CodeBlockSyntax, EvaluationContext, string> codeBlockRunner)
         {
             triggerHolder = new StandardTriggerHolder(triggerSource, codeBlockRunner);

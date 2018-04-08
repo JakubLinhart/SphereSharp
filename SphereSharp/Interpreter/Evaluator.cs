@@ -159,7 +159,7 @@ namespace SphereSharp.Interpreter
             {
                 var function = Binder.GetFunction(context.Default, memberName);
                 if (function != null)
-                    result = function.Call(null, this, context.CreateSubContext());
+                    result = function.Call(context.Default, this, context.CreateSubContext());
                 else if (Binder.TryGetProperty(context.Default, memberName, out object propResult))
                     result = propResult;
                 else if (this.Model.TryGetSkillDef(memberName, out SkillDef skillDef))
