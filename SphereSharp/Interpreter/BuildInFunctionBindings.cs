@@ -159,9 +159,7 @@ namespace SphereSharp.Interpreter
 
         private static object LastNew(object targetObject, EvaluationContext context)
         {
-            ((IChar)targetObject).LastNew();
-
-            return string.Empty;
+            return ((IChar)targetObject).LastNew();
         }
 
         private static string Tag(object targetObject, EvaluationContext context)

@@ -17,7 +17,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = AssignmentSyntax.Parse("var1=1");
 
-            syntax.LValue.As<MemberAccessSyntax>().MemberName.Should().Be("var1");
+            syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
             syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
         }
 
@@ -26,7 +26,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = AssignmentSyntax.Parse("var1 = 1");
 
-            syntax.LValue.As<MemberAccessSyntax>().MemberName.Should().Be("var1");
+            syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
             syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
         }
 
@@ -35,18 +35,18 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = AssignmentSyntax.Parse("var1=1 // comment");
 
-            syntax.LValue.As<MemberAccessSyntax>().MemberName.Should().Be("var1");
+            syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
             syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
         }
 
         [TestMethod]
-        public void Can_parse_assignment_to_multipart_member_access()
+        public void Can_parse_assignment_to_chained_member_access_with_function_call()
         {
-            var syntax = AssignmentSyntax.Parse("var1.var2.var3=1");
+            var syntax = AssignmentSyntax.Parse("var1.fun2(i_something).var3=1");
 
-            syntax.LValue.As<MemberAccessSyntax>().MemberName.Should().Be("var3");
-            syntax.LValue.As<MemberAccessSyntax>().Object.MemberName.Should().Be("var2");
-            syntax.LValue.As<MemberAccessSyntax>().Object.Object.MemberName.Should().Be("var1");
+            syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
+            syntax.LValue.Should().BeOfType<CallSyntax>().Which.ChainedCall.MemberName.Should().Be("fun2");
+            syntax.LValue.Should().BeOfType<CallSyntax>().Which.ChainedCall.ChainedCall.MemberName.Should().Be("var3");
             syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
         }
 
@@ -55,7 +55,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = AssignmentSyntax.Parse("var1=((1+2)*(4+5))-6");
 
-            syntax.LValue.As<MemberAccessSyntax>().MemberName.Should().Be("var1");
+            syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
             syntax.RValue.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Subtract);
         }
 
@@ -64,7 +64,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = AssignmentSyntax.Parse("home=<tag(nation)>");
 
-            syntax.LValue.As<MemberAccessSyntax>().MemberName.Should().Be("home");
+            syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("home");
             syntax.RValue.As<MacroExpressionSyntax>().Macro.Call.MemberName.Should().Be("tag");
         }
 

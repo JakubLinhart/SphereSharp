@@ -7,10 +7,10 @@ namespace SphereSharp.Syntax
 {
     public sealed class AssignmentSyntax : StatementSyntax
     {
-        public MemberAccessSyntax LValue { get; }
+        public CallSyntax LValue { get; }
         public ExpressionSyntax RValue { get; }
 
-        public AssignmentSyntax(MemberAccessSyntax lValue, ExpressionSyntax rValue)
+        public AssignmentSyntax(CallSyntax lValue, ExpressionSyntax rValue)
         {
             RValue = rValue;
             LValue = lValue;

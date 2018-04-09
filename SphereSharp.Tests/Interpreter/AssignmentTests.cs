@@ -37,5 +37,19 @@ namespace SphereSharp.Tests.Interpreter
 
             evaluator.TestChar.Tag("experience").Should().Be("123");
         }
+
+        [TestMethod]
+        public void Can_assign_to_chained_lvalue()
+        {
+            var evaluator = new TestEvaluator();
+            evaluator
+                .SetDefault(evaluator.TestChar)
+                .Create();
+
+            evaluator.EvaluateCodeBlock(@"newitem i_some_item
+lastnew.color=123");
+
+            evaluator.TestChar.LastNew().Color.Should().Be(123);
+        }
     }
 }

@@ -155,5 +155,38 @@ src.sysmessage(<symbol[argv(0)]>)
             string output = evaluator.TestObjBase.GetOutput();
             output.Should().Contain("tag class, arg_argument1");
         }
+
+        [TestMethod]
+        public void Can_chain_call_on_function_result()
+        {
+            var evaluator = new TestEvaluator();
+            evaluator
+                .SetDefault(evaluator.TestChar)
+                .Create();
+
+            evaluator.EvaluateCodeBlock(@"newitem i_some_item
+lastnew.color=123");
+
+            evaluator.TestChar.LastNew().Color.Should().Be(123);
+        }
+
+        [TestMethod]
+        public void Can_chain_call_on_argo()
+        {
+            var evaluator = new TestEvaluator();
+            evaluator
+                .SetDefault(evaluator.TestObjBase)
+                .SetSrc(evaluator.TestObjBase)
+                .SetArgO(evaluator.TestGump)
+                .Create();
+
+            evaluator.EvaluateCodeBlock(@"
+tag(basestr, 200)
+argo.settext(10,<eval tag(basestr)>)");
+
+            var output = evaluator.TestGump.GetOutput();
+            output.Should().Contain("settext 10, 200");
+        }
     }
 }
+

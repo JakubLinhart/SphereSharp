@@ -82,31 +82,44 @@ namespace SphereSharp.Interpreter
             return subContext;
         }
 
-        public void Evaluate(AssignmentSyntax assignment, EvaluationContext context)
+        public void Evaluate(AssignmentSyntax assignment, EvaluationContext originalContext)
         {
-            var memberName = Evaluate(assignment.LValue.MemberNameSyntax, context);
-            var value = Evaluate(assignment.RValue, context);
+            var currentLValueCall = assignment.LValue;
+            var currentContext = originalContext;
 
-            if (assignment.LValue.Object.MemberName.Equals("tag", StringComparison.OrdinalIgnoreCase))
+            string currentMemberName = Evaluate(currentLValueCall.MemberNameSyntax, originalContext);
+            var value = Evaluate(assignment.RValue, originalContext);
+
+            while (currentLValueCall.ChainedCall != null)
             {
-                var function = Binder.GetFunction(context.Default, "tag");
-                if (function != null)
+                if (currentMemberName.Equals("tag", StringComparison.OrdinalIgnoreCase))
                 {
-                    var subContext = context.CreateSubContext();
-                    subContext.Arguments.Add(memberName);
-                    subContext.Arguments.Add(value.ToString());
-                    function.Call(context.Default, this, subContext);
+                    var function = Binder.GetFunction(currentContext.Default, "tag");
+                    if (function != null)
+                    {
+                        var subContext = currentContext.CreateSubContext();
+                        subContext.Arguments.Add(Evaluate(currentLValueCall.ChainedCall.MemberNameSyntax, originalContext));
+                        subContext.Arguments.Add(value.ToString());
+                        function.Call(currentContext.Default, this, subContext);
+                        return;
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
                 }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+
+                var result = EvaluateCall(currentLValueCall, currentContext);
+
+                currentContext = CreateChainedContext(currentContext, result);
+                currentLValueCall = currentLValueCall.ChainedCall;
+                currentMemberName = Evaluate(currentLValueCall.MemberNameSyntax, originalContext);
             }
-            else
-                Binder.SetProperty(context.Default, memberName.ToLower(), value);
+
+            Binder.SetProperty(currentContext.Default, currentMemberName, value);
         }
 
-        public object Evaluate(CallSyntax statement, EvaluationContext context)
+        private object EvaluateCall(CallSyntax statement, EvaluationContext context)
         {
             object result;
 
@@ -168,80 +181,32 @@ namespace SphereSharp.Interpreter
                     result = this.Model.GetDefName(memberName).Value;
             }
 
-            if (statement.ChainedCall != null)
-            {
-                var chainedContext = context.CreateSubContext();
-                chainedContext.Arguments = context.Arguments;
-                chainedContext.Variables = context.Variables;
-                chainedContext.Default = result;
+            return result;
+        }
 
-                return Evaluate(statement.ChainedCall, chainedContext);
+        public object Evaluate(CallSyntax statement, EvaluationContext context)
+        {
+            var result = EvaluateCall(statement, context);
+
+            var memberName = Evaluate(statement.MemberNameSyntax, context);
+
+            if (!memberName.Equals("tag", StringComparison.OrdinalIgnoreCase) && statement.ChainedCall != null)
+            {
+                var chainedContext = CreateChainedContext(context, result);
+                return EvaluateCall(statement.ChainedCall, chainedContext);
             }
             else
                 return result;
+        }
 
+        private EvaluationContext CreateChainedContext(EvaluationContext context, object prevCallResult)
+        {
+            var chainedContext = context.CreateSubContext();
+            chainedContext.Arguments = context.Arguments;
+            chainedContext.Variables = context.Variables;
+            chainedContext.Default = prevCallResult;
 
-            //if (statement.Arguments.Arguments.Any())
-            //{
-            //    var subContext = Evaluate(statement.Arguments, context);
-
-            //    object obj;
-            //    if (statement.MemberName.Equals("src", StringComparison.OrdinalIgnoreCase))
-            //        obj = subContext.Src;
-            //    else if (statement.MemberName.Equals("argo", StringComparison.OrdinalIgnoreCase))
-            //        obj = subContext.ArgO;
-            //    else
-            //        obj = subContext.Default;
-
-            //    var function = Binder.GetFunction(obj, statement.MemberName.ToLower());
-            //    if (function != null)
-            //    {
-            //        return function.Call(obj, this, subContext);
-            //    }
-            //    else
-            //        throw new InvalidOperationException($"Unknown function {statement.MemberName}");
-            //}
-            //else if (statement.ChainedCall != null)
-            //{
-            //    string memberName = Evaluate(statement.MemberNameSyntax, context);
-
-            //    var function = Binder.GetFunction(context.Default, memberName.ToLower());
-            //    if (function != null)
-            //        return function.Call(null, this, context.CreateSubContext());
-
-            //    if (Binder.TryGetProperty(context.Default, memberName, out object result))
-            //        return result.ToString();
-
-            //    if (this.Model.TryGetSkillDef(memberName, out SkillDef skillDef))
-            //    {
-            //        return skillDef.Id.ToString();
-            //    }
-
-            //    return this.Model.GetDefName(memberName).Value;
-            //}
-            //else
-            //{
-            //    if (statement.ChainedCall.MemberName.Equals("tag", StringComparison.OrdinalIgnoreCase))
-            //    {
-            //        var function = Binder.GetFunction(context.Src, "tag");
-            //        if (function != null)
-            //        {
-            //            string memberName = Evaluate(statement.MemberNameSyntax, context);
-
-            //            var subContext = context.CreateSubContext();
-            //            subContext.Arguments.Add(memberName);
-            //            return function.Call(context.Src, this, subContext);
-            //        }
-            //        else
-            //        {
-            //            throw new NotImplementedException();
-            //        }
-            //    }
-            //    else
-            //    {
-            //        throw new NotImplementedException();
-            //    }
-            //}
+            return chainedContext;
         }
 
         public string Evaluate(IEnumerable<SegmentSyntax> segments, EvaluationContext context)

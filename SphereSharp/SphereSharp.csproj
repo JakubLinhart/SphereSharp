@@ -134,8 +134,6 @@
     <Compile Include="Syntax\MacroStatementParser.cs" />
     <Compile Include="Syntax\MacroStatementSyntax.cs" />
     <Compile Include="Syntax\MacroSyntax.cs" />
-    <Compile Include="Syntax\MemberAccessParser.cs" />
-    <Compile Include="Syntax\MemberAccessSyntax.cs" />
     <Compile Include="Syntax\ProfessionSectionParser.cs" />
     <Compile Include="Syntax\ProfessionSectionSyntax.cs" />
     <Compile Include="Syntax\PropertyParser.cs" />
