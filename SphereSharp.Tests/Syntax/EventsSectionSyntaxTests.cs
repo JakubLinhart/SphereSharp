@@ -13,7 +13,7 @@ namespace SphereSharp.Tests.Syntax
     public class EventsSectionSyntaxTests
     {
         [TestMethod]
-        public void Can_parse_skill_with_multiple_triggers()
+        public void Can_parse_events_with_multiple_triggers()
         {
             var syntax = SectionSyntax.Parse(@"[events e_meditation]
 on=@triggA
@@ -21,6 +21,22 @@ call1
 
 on=@triggB
 call2
+").Should().BeOfType<EventsSectionSyntax>().Which;
+
+            syntax.Name.Should().Be("e_meditation");
+            syntax.Triggers.Should().HaveCount(2);
+            syntax.Triggers[0].Name.Should().Be("triggA");
+            syntax.Triggers[1].Name.Should().Be("triggB");
+        }
+
+        [TestMethod]
+        public void Can_parse_triggers_with_empty_bodies()
+        {
+            var syntax = SectionSyntax.Parse(@"[events e_meditation]
+on=@triggA
+
+on=@triggB
+
 ").Should().BeOfType<EventsSectionSyntax>().Which;
 
             syntax.Name.Should().Be("e_meditation");

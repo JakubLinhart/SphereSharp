@@ -39,7 +39,7 @@ namespace SphereSharp.Syntax
             from _1 in CommonParsers.Ignored.Many()
             from lValue in LValue.Once()
             from rValue in RValue.Once()
-            from _2 in CommonParsers.Eol.AtLeastOnce()
+            from _2 in CommonParsers.Ignored.Many()
             select new DefNameSyntax(lValue.First(), rValue.First());
 
         public static Parser<SectionSyntax> ParseDefNames(string sectionType, string sectionName) =>

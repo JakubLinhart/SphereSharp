@@ -102,5 +102,14 @@ argo.SetLocation(0,0) // comment 5
 
             syntax.Sections.Should().HaveCount(7);
         }
+
+        [TestMethod]
+        public void Fails_when_parsing_invalid_statement()
+        {
+            var testedAction = (Action)(() => FileSyntax.Parse("test", @"[FUNCTION dialogclose]
+@!#$bullshit"));
+
+            testedAction.Should().Throw<Exception>();
+        }
     }
 }

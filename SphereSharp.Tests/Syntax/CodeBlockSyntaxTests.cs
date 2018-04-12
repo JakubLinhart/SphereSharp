@@ -51,8 +51,9 @@ method_call3
             var syntax = CodeBlockSyntax.Parse(@"if (1==1)
     func1
 elseif (2==2)
-else
     func2
+else
+    func3
 endif
 ");
             syntax.Statements.Length.Should().Be(1);
@@ -181,6 +182,13 @@ call1");
             codeBlockSyntax.Statements.Should().HaveCount(2);
             codeBlockSyntax.Statements[0].Should().BeOfType<DoSwitchSyntax>();
             codeBlockSyntax.Statements[1].Should().BeOfType<CallSyntax>();
+        }
+
+        [TestMethod]
+        public void Fails_when_parsing_incorect_statement()
+        {
+            var testedAction = (Action)(() => CodeBlockSyntax.Parse(@"call1 @#$ some bulshit"));
+            testedAction.Should().Throw<Exception>();
         }
     }
 }

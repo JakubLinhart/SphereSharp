@@ -20,7 +20,7 @@ namespace SphereSharp.Syntax
             from _3 in Parse.Char('=').Once()
             from _4 in CommonParsers.OneLineWhiteSpace.Many()
             from rValue in RValue.Optional()
-            from _5 in CommonParsers.Eol
+            from _5 in CommonParsers.Ignored.Many()
             select new PropertySyntax(lValue.Single(), rValue.GetOrDefault() ?? string.Empty);
     }
 

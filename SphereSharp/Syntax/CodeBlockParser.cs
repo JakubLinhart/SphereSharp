@@ -8,13 +8,13 @@ namespace SphereSharp.Syntax
     {
         public static Parser<CodeBlockSyntax> CodeBlock =>
             from statements in Statement.Many()
-            select new CodeBlockSyntax(statements.Where(x => x != null).ToImmutableArray());
+            from _2 in CommonParsers.Eol.AtLeastOnce()
+            select new CodeBlockSyntax(statements.ToImmutableArray());
 
         public static Parser<StatementSyntax> Statement =>
-            from _1 in Parse.WhiteSpace.Optional()
-            from statement in Statements.Optional()
-            from _2 in CommonParsers.Eol.Optional()
-            select statement.GetOrDefault();
+            from _1 in CommonParsers.Ignored.Many()
+            from statement in Statements
+            select statement;
 
         public static Parser<StatementSyntax> Statements =>
             AssignmentParser.Assignment
