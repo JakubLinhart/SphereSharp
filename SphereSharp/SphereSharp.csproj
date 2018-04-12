@@ -87,6 +87,8 @@
     <Compile Include="Syntax\CallExpressionSyntax.cs" />
     <Compile Include="Syntax\CallParser.cs" />
     <Compile Include="Syntax\CallSyntax.cs" />
+    <Compile Include="Syntax\EvalKind.cs" />
+    <Compile Include="Syntax\EvalParser.cs" />
     <Compile Include="Syntax\EventsOperationKind.cs" />
     <Compile Include="Syntax\EventsSectionParser.cs" />
     <Compile Include="Syntax\EventsSectionSyntax.cs" />

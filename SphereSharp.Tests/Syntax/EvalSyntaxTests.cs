@@ -19,5 +19,14 @@ namespace SphereSharp.Tests.Syntax
 
             syntax.Expression.Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
         }
+
+        [TestMethod]
+        public void Can_parse_hval_with_call()
+        {
+            var syntax = EvalSyntax.Parse("hval tag(basestr)");
+
+            syntax.Kind.Should().Be(EvalKind.Hexadecimal);
+            syntax.Expression.Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
+        }
     }
 }
