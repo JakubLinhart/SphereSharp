@@ -5,8 +5,11 @@ namespace SphereSharp.Syntax
 {
     public static class ExpressionParser
     {
-        public static Parser<BinaryOperatorKind> BinaryOperator(string op, BinaryOperatorKind kind)
-            => Parse.String(op).Return(kind);
+        public static Parser<BinaryOperatorKind> BinaryOperator(string op, BinaryOperatorKind kind) =>
+            from _1 in CommonParsers.OneLineWhiteSpace.Optional()
+            from _2 in Parse.String(op)
+            from _3 in CommonParsers.OneLineWhiteSpace.Optional()
+            select kind;
 
         public static Parser<UnaryOperatorKind> UnaryOperator(string op, UnaryOperatorKind kind)
             => Parse.String(op).Return(kind);
@@ -15,6 +18,7 @@ namespace SphereSharp.Syntax
         public static Parser<BinaryOperatorKind> Add => BinaryOperator("+", BinaryOperatorKind.Add);
         public static Parser<BinaryOperatorKind> Subtract => BinaryOperator("-", BinaryOperatorKind.Subtract);
         public static Parser<BinaryOperatorKind> Multiply => BinaryOperator("*", BinaryOperatorKind.Multiply);
+        public static Parser<BinaryOperatorKind> LogicalAnd => BinaryOperator("&&", BinaryOperatorKind.LogicalAnd);
         public static Parser<BinaryOperatorKind> LogicalOr => BinaryOperator("||", BinaryOperatorKind.LogicalOr);
         public static Parser<BinaryOperatorKind> BinaryOr => BinaryOperator("|", BinaryOperatorKind.BinaryOr);
         public static Parser<BinaryOperatorKind> Equal => BinaryOperator("==", BinaryOperatorKind.Equal);
@@ -42,7 +46,7 @@ namespace SphereSharp.Syntax
         public static Parser<ExpressionSyntax> Term = Parse.ChainOperator(Multiply, Operand, CreateBinaryExpression);
         public static Parser<ExpressionSyntax> EqualityTerm = Parse.ChainOperator(Add.Or(Subtract), Term, CreateBinaryExpression);
         public static Parser<ExpressionSyntax> LogicalTerm = Parse.ChainOperator(Equal.Or(NotEqual).Or(MoreThan).Or(LessThan), EqualityTerm, CreateBinaryExpression);
-        public static Parser<ExpressionSyntax> Expr => Parse.ChainOperator(LogicalOr.Or(BinaryOr), LogicalTerm, CreateBinaryExpression);
+        public static Parser<ExpressionSyntax> Expr => Parse.ChainOperator(LogicalAnd.Or(LogicalOr).Or(BinaryOr), LogicalTerm, CreateBinaryExpression);
 
         private static ExpressionSyntax CreateBinaryExpression(BinaryOperatorKind kind, ExpressionSyntax arg1, ExpressionSyntax arg2)
             => new BinaryOperatorSyntax(kind, arg1, arg2);

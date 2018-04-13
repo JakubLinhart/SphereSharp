@@ -5,11 +5,12 @@
         Add,
         Subtract,
         Multiply,
+        LogicalAnd,
         LogicalOr,
+        BinaryOr,
         Equal,
         NotEqual,
         MoreThan,
         LessThan,
-        BinaryOr,
     }
 }

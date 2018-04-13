@@ -128,6 +128,20 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void CanParse_whitespace_between_binary_operators_and_operands()
+        {
+            var syntax = ExpressionSyntax.Parse("1 + 2 + 3").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Kind.Should().Be(BinaryOperatorKind.Add);
+            syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("3");
+
+            var operand1 = syntax.Operand1.Should().BeOfType<BinaryOperatorSyntax>().Which;
+            operand1.Kind.Should().Be(BinaryOperatorKind.Add);
+            operand1.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
+            operand1.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("2");
+        }
+
+        [TestMethod]
         public void Can_parse_minus_operator()
         {
             var syntax = ExpressionSyntax.Parse("1-2");
@@ -165,6 +179,16 @@ namespace SphereSharp.Tests.Syntax
             syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("0");
 
+        }
+
+        [TestMethod]
+        public void Can_parse_logical_and_operator()
+        {
+            var syntax = ExpressionSyntax.Parse("1&&0");
+
+            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.LogicalAnd);
+            syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
 
         [TestMethod]
