@@ -67,6 +67,8 @@ namespace SphereSharp.Syntax
                     return SkillSectionParser.ParseSkillDef(sectionType, sectionName);
                 case "spell":
                     return SpellSectionParser.ParseSpell(sectionType, sectionName);
+                case "template":
+                    return TemplateSectionParser.ParseTemplate(sectionType, sectionName);
                 case "events":
                     return EventsSectionParser.ParseEvents(sectionType, sectionName);
                 default:

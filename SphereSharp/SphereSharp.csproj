@@ -95,6 +95,8 @@
     <Compile Include="Syntax\EventsStatementParser.cs" />
     <Compile Include="Syntax\EventsStatementSyntax.cs" />
     <Compile Include="Syntax\FileParser.cs" />
+    <Compile Include="Syntax\TemplateSectionParser.cs" />
+    <Compile Include="Syntax\TemplateSectionSyntax.cs" />
     <Compile Include="Syntax\SkillSectionParser.cs" />
     <Compile Include="Syntax\CharDefSectionParser.cs" />
     <Compile Include="Syntax\SkillSectionSyntax.cs" />

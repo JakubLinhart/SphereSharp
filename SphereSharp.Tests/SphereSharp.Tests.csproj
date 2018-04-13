@@ -84,6 +84,7 @@
     <Compile Include="Syntax\CallSyntaxTests.cs" />
     <Compile Include="Syntax\EventsSectionSyntaxTests.cs" />
     <Compile Include="Syntax\EventsStatementSyntaxTests.cs" />
+    <Compile Include="Syntax\TemplateSectionSyntaxTests.cs" />
     <Compile Include="Syntax\PropertySyntaxTests.cs" />
     <Compile Include="Syntax\SkillSectionSyntaxTests.cs" />
     <Compile Include="Syntax\CodeBlockSyntaxTests.cs" />
