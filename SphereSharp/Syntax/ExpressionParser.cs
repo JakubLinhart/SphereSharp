@@ -33,7 +33,7 @@ namespace SphereSharp.Syntax
             select expr.Single();
 
         public static Parser<ExpressionSyntax> Factor =>
-            ExpressionInParentheses.Or(Constant).Or(IntegerInterval).Or(EvalMacroExpression).Or(MacroExpression).Or(CallExpression);
+            ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(IntegerInterval).Or(EvalMacroExpression).Or(MacroExpression).Or(CallExpression);
 
         public static Parser<ExpressionSyntax> LogicalNotExpression =>
             from op in LogicalNot
@@ -43,9 +43,9 @@ namespace SphereSharp.Syntax
         public static Parser<ExpressionSyntax> Operand =>
             LogicalNotExpression.Or(Factor);
 
-        public static Parser<ExpressionSyntax> Term = Parse.ChainOperator(Multiply, Operand, CreateBinaryExpression);
-        public static Parser<ExpressionSyntax> EqualityTerm = Parse.ChainOperator(Add.Or(Subtract), Term, CreateBinaryExpression);
-        public static Parser<ExpressionSyntax> LogicalTerm = Parse.ChainOperator(Equal.Or(NotEqual).Or(MoreThan).Or(LessThan), EqualityTerm, CreateBinaryExpression);
+        public static Parser<ExpressionSyntax> Term => Parse.ChainOperator(Multiply, Operand, CreateBinaryExpression);
+        public static Parser<ExpressionSyntax> EqualityTerm => Parse.ChainOperator(Add.Or(Subtract), Term, CreateBinaryExpression);
+        public static Parser<ExpressionSyntax> LogicalTerm => Parse.ChainOperator(Equal.Or(NotEqual).Or(MoreThan).Or(LessThan), EqualityTerm, CreateBinaryExpression);
         public static Parser<ExpressionSyntax> Expr => Parse.ChainOperator(LogicalAnd.Or(LogicalOr).Or(BinaryOr), LogicalTerm, CreateBinaryExpression);
 
         private static ExpressionSyntax CreateBinaryExpression(BinaryOperatorKind kind, ExpressionSyntax arg1, ExpressionSyntax arg2)
@@ -59,6 +59,11 @@ namespace SphereSharp.Syntax
             from _3 in Parse.String("}").Once()
             select new IntervalExpressionSyntax((ConstantExpressionSyntax)min.Single(),
                 (ConstantExpressionSyntax)max.Single());
+
+        public static Parser<ExpressionSyntax> MacroIntegerConstant =>
+            from firstDigits in Parse.Digit.AtLeastOnce().Text()
+            from macro in MacroExpression
+            select new MacroIntegerConstantExpressionSyntax(firstDigits, macro);
 
         public static Parser<ExpressionSyntax> IntegerDecadicConstant =>
             from number in CommonParsers.IntegerDecadicNumber

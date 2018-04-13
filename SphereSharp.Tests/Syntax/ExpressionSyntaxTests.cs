@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SphereSharp.Syntax;
+using Sprache;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,74 @@ namespace SphereSharp.Tests.Syntax
 
             syntax.Kind.Should().Be(ConstantExpressionSyntaxKind.Decadic);
             syntax.Value.Should().Be("-123");
+        }
+
+        [TestMethod]
+        public void Can_parse_decadic_integer_starting_with_single_digit_ending_with_macro()
+        {
+            var syntax = ExpressionSyntax.Parse("0<x>").Should().BeOfType<MacroIntegerConstantExpressionSyntax>().Which;
+            syntax.FirstDigits.Should().Be("0");
+            syntax.Macro.Macro.Call.MemberName.Should().Be("x");
+        }
+
+        [TestMethod]
+        public void Can_parse_more_than_operator_with_macro_integer_and_integer()
+        {
+            var syntax = ExpressionSyntax.Parse("0<x>>1").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operand1.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
+            syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>();
+        }
+
+        [TestMethod]
+        public void Can_parse_more_than_operator_with_integer_and_macro_integer()
+        {
+            var syntax = ExpressionSyntax.Parse("1>0<x>").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>();
+            syntax.Operand2.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
+        }
+
+        [TestMethod]
+        public void Can_parse_more_than_operator_with_macro_integer_and_macro_integer()
+        {
+            var syntax = ExpressionSyntax.Parse("0<x>>1<y>").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operand1.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
+            syntax.Operand2.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
+        }
+
+        [TestMethod]
+        public void Can_parse_less_than_operator_with_macro_integer_and_integer()
+        {
+            var syntax = ExpressionSyntax.Parse("0<x><1").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Kind.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operand1.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
+            syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>();
+        }
+
+        [TestMethod]
+        public void Can_parse_less_than_operator_with_integer_and_macro_integer()
+        {
+            var syntax = ExpressionSyntax.Parse("1<0<x>").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Kind.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>();
+            syntax.Operand2.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
+        }
+
+        [TestMethod]
+        public void Can_parse_less_than_operator_with_macro_integer_and_macro_integer()
+        {
+            var syntax = ExpressionSyntax.Parse("0<x><1<y>").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Kind.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operand1.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
+            syntax.Operand2.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
         }
 
         [TestMethod]
@@ -194,41 +263,42 @@ namespace SphereSharp.Tests.Syntax
         [TestMethod]
         public void Can_parse_equal_operator()
         {
-            var syntax = ExpressionSyntax.Parse("1==0");
+            var syntax = ExpressionSyntax.Parse("1==0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Equal);
-            syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
-            syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
+            syntax.Kind.Should().Be(BinaryOperatorKind.Equal);
+            syntax.Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
 
         [TestMethod]
         public void Can_parse_not_equal_operator()
         {
-            var syntax = ExpressionSyntax.Parse("1!=0");
+            var syntax = ExpressionSyntax.Parse("1!=0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.NotEqual);
-            syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
-            syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
+            syntax.Kind.Should().Be(BinaryOperatorKind.NotEqual);
+            syntax.Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
 
         [TestMethod]
         public void Can_parse_more_than_operator()
         {
-            var syntax = ExpressionSyntax.Parse("1>0");
+            var syntax = ExpressionSyntax.Parse("1>0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.MoreThan);
-            syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
-            syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
+            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
 
         [TestMethod]
         public void Can_parse_less_than_operator()
         {
-            var syntax = ExpressionSyntax.Parse("1<0");
+            //var syntax = ExpressionParser.NonMacroLogicalTerm.Parse("1<0");
+            var syntax = ExpressionSyntax.Parse("1<0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.LessThan);
-            syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
-            syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
+            syntax.Kind.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
 
         [TestMethod]

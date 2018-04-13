@@ -1,4 +1,6 @@
-﻿namespace SphereSharp.Syntax
+﻿using System.Collections.Generic;
+
+namespace SphereSharp.Syntax
 {
     public enum ConstantExpressionSyntaxKind
     {
@@ -22,6 +24,18 @@
         }
 
         public override string ToString() => Value;
+    }
+
+    public class MacroIntegerConstantExpressionSyntax : ExpressionSyntax
+    {
+        public string FirstDigits { get; }
+        public MacroExpressionSyntax Macro { get; }
+
+        public MacroIntegerConstantExpressionSyntax(string firstDigits, MacroExpressionSyntax macro)
+        {
+            FirstDigits = firstDigits;
+            Macro = macro;
+        }
     }
 
     public class DecimalConstantExpressionSyntax : ConstantExpressionSyntax
