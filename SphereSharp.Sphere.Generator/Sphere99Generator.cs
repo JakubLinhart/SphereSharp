@@ -207,11 +207,17 @@ namespace SphereSharp.Sphere.Generator
 
         public override void VisitBinaryOperator(BinaryOperatorSyntax binaryOperatorSyntax)
         {
+            if (binaryOperatorSyntax.Enclosed)
+                builder.Append('(');
+
             Visit(binaryOperatorSyntax.Operand1);
             builder.Append(' ');
             builder.Append(binaryOperatorSyntax.OperatorString);
             builder.Append(' ');
             Visit(binaryOperatorSyntax.Operand2);
+
+            if (binaryOperatorSyntax.Enclosed)
+                builder.Append(')');
         }
 
         public override void VisitIntegerConstantExpression(IntegerConstantExpressionSyntax integerConstantExpressionSyntax)

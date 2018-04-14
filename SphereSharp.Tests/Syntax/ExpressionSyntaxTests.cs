@@ -318,12 +318,26 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_recognize_binary_operator_in_parenthesis_as_enclosed()
+        {
+            var syntax = ExpressionSyntax.Parse("(1+2)");
+            syntax.Enclosed.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void Can_recognize_binary_operator_as_NOT_enclosed()
+        {
+            var syntax = ExpressionSyntax.Parse("1+2");
+            syntax.Enclosed.Should().BeFalse();
+        }
+
+        [TestMethod]
         public void Can_parse_expression_with_nested_subexpressions_in_parenthesis()
         {
             var syntax = ExpressionSyntax.Parse("(1+2)+(3+(4+5))");
 
-            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Add);
-            syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>()
+            syntax.Should().BeOfType<BinaryOperatorSyntax>().Which.Operator.Should().Be(BinaryOperatorKind.Add);
+            syntax.Should().BeOfType<BinaryOperatorSyntax>().Which.Operand1.As<BinaryOperatorSyntax>()
                 .Operator.Should().Be(BinaryOperatorKind.Add);
 
             syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>()

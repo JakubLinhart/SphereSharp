@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SphereSharp.Syntax
 {
-    public static class ExpressionParser
+    internal static class ExpressionParser
     {
         public static Parser<BinaryOperatorKind> BinaryOperator(string op, BinaryOperatorKind kind) =>
             from _1 in CommonParsers.OneLineWhiteSpace.Optional()
@@ -30,7 +30,7 @@ namespace SphereSharp.Syntax
             from _1 in Parse.Char('(')
             from expr in Expr.Once()
             from _2 in Parse.Char(')')
-            select expr.Single();
+            select expr.Single().Enclose();
 
         public static Parser<ExpressionSyntax> Factor =>
             ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(IntegerInterval).Or(EvalMacroExpression).Or(MacroExpression).Or(CallExpression);
