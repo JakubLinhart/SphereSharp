@@ -18,7 +18,6 @@ namespace SphereSharp.Syntax
         public override IEnumerable<SyntaxNode> GetChildNodes()
         {
             yield return Macro;
-            yield return Expression;
         }
     }
 }

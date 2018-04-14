@@ -116,6 +116,19 @@ namespace SphereSharp.Sphere.Generator
             builder.Append('>');
         }
 
+        public override void VisitEval(EvalSyntax evalSyntax)
+        {
+            builder.Append("eval ");
+            base.VisitEval(evalSyntax);
+        }
+
+        public override void VisitEvalMacro(EvalMacroSyntax evalMacroSyntax)
+        {
+            builder.Append('<');
+            base.VisitEvalMacro(evalMacroSyntax);
+            builder.Append('>');
+        }
+
         public override void VisitIf(IfSyntax ifSyntax)
         {
             builder.Append("if (");
