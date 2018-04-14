@@ -1173,11 +1173,11 @@ Veterinary=00
 Wrestling=1000
 
 on=@login
-//events e_character
-//events e_allplayers
-//if !(<tag(hypno_mystik)>) //neni v hypnoze
-//  events e_mystik
-//endif
+events e_character
+events e_allplayers
+if !(<tag(hypno_mystik)>) //neni v hypnoze
+  events e_mystik
+endif
 
 [profession 10]
 DEFNAME=class_Druid
@@ -1320,12 +1320,12 @@ return 1
 id=i_rune_marker
 name=Newbie rune
 
-//on=@create
-//color=5
-//attr=attr_move_never|attr_newbie
+on=@create
+color=5
+attr=attr_move_never|attr_newbie
 
-//on=@spelleffect
-//more1=0ff//nefadne
+on=@spelleffect
+more1=0ff//nefadne
 
 [defnames startdialogtext]
 seznamras[0]	Clovek<br>+++++++<br>Elf<br>+++++++<br>Hobit<br>+++++++<br>
@@ -1398,7 +1398,7 @@ HTMLGUMP(20,20,600,200,0,0,0)
 <BASEFONT SIZE="+5" COLOR="#000080"><CENTER>Vitej na Morii!<br><br>Vesel jsi do tohoto sveta,<br>je cas Volby. Tvuj osud Te ocekava.<br>Vybirej moudre, a mozna se na tebe usmeje stesti.<br><br>Toto je kniha Pravdy.<br>Vyber si zde na jake strane zacnes,<br>kde skoncis je na Tobe.</CENTER></BASEFONT>
 
 [DIALOG D_RACEclass_background Button]
-//on=0
+on=0
 
 [DIALOG D_RACEclass_info]
 gumppic(140,200,2200)

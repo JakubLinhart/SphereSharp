@@ -216,6 +216,17 @@ namespace SphereSharp.Sphere.Generator
 
         public override void VisitIntegerConstantExpression(IntegerConstantExpressionSyntax integerConstantExpressionSyntax)
         {
+            switch (integerConstantExpressionSyntax.Kind)
+            {
+                case ConstantExpressionSyntaxKind.Hex:
+                    builder.Append('0');
+                    break;
+                case ConstantExpressionSyntaxKind.Decadic:
+                    break;
+                default:
+                    throw new NotImplementedException($"Integer constant expression kind {integerConstantExpressionSyntax.Kind}");
+            }
+
             builder.Append(integerConstantExpressionSyntax.Value);
         }
 
