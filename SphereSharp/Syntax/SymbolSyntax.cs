@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SphereSharp.Syntax
 {
-    public class SymbolSyntax
+    public class SymbolSyntax : SyntaxNode
     {
         public ImmutableArray<SegmentSyntax> Segments { get; }
 
@@ -30,5 +30,8 @@ namespace SphereSharp.Syntax
 
             throw new NotImplementedException();
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitSymbol(this);
+        public override IEnumerable<SyntaxNode> GetChildNodes() => Segments;
     }
 }

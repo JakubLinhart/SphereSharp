@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SphereSharp.Syntax
 {
-    public class FileSyntax
+    public class FileSyntax : SyntaxNode
     {
         public ImmutableArray<SectionSyntax> Sections { get; }
         public string FileName { get; }
@@ -19,5 +19,9 @@ namespace SphereSharp.Syntax
 
         public static FileSyntax Parse(string fileName, string src) 
             => FileParser.File(fileName).Parse(src);
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitFile(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes() => Sections;
     }
 }

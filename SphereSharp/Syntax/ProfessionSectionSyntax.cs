@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
@@ -23,6 +24,16 @@ namespace SphereSharp.Syntax
         public string GetSinglePropertyValue(string propertyName)
         {
             return Properties.SingleOrDefault(x => x.LValue.Equals(propertyName, StringComparison.OrdinalIgnoreCase))?.RValue;
+        }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitProfessionSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            foreach (var property in Properties)
+                yield return property;
+            foreach (var trigger in Triggers)
+                yield return trigger;
         }
     }
 }

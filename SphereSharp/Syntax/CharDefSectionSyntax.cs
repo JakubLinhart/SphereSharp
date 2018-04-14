@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
@@ -29,6 +30,16 @@ namespace SphereSharp.Syntax
                 return 0;
 
             return numberValue;
+        }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitCharDefSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            foreach (var property in Properties)
+                yield return property;
+            foreach (var trigger in Triggers)
+                yield return trigger;
         }
     }
 }

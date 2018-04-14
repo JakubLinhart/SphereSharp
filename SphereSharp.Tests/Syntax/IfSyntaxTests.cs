@@ -19,7 +19,7 @@ namespace SphereSharp.Tests.Syntax
     func1
 endif
 ");
-            syntax.Condition.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Equal);
+            syntax.Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Equal);
             syntax.ThenBlock.Statements.Length.Should().Be(1);
             syntax.ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func1");
             syntax.ElseBlock.Should().Be(CodeBlockSyntax.Empty);
@@ -34,7 +34,7 @@ else
     func2
 endif
 ");
-            syntax.Condition.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Equal);
+            syntax.Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Equal);
             syntax.ThenBlock.Statements.Length.Should().Be(1);
             syntax.ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func1");
             syntax.ElseBlock.Statements.Length.Should().Be(1);
@@ -53,7 +53,7 @@ endif
 
             syntax.ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func1");
             syntax.ElseIfs.Length.Should().Be(1);
-            syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Equal);
+            syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Equal);
             syntax.ElseIfs[0].ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func2");
             syntax.ElseBlock.Should().Be(CodeBlockSyntax.Empty);
         }
@@ -74,11 +74,11 @@ endif
 
             syntax.ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func1");
             syntax.ElseIfs.Length.Should().Be(3);
-            syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Equal);
-            syntax.ElseIfs[0].ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func2"); syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Equal);
-            syntax.ElseIfs[1].Condition.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.NotEqual);
+            syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Equal);
+            syntax.ElseIfs[0].ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func2"); syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Equal);
+            syntax.ElseIfs[1].Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.NotEqual);
             syntax.ElseIfs[1].ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func3");
-            syntax.ElseIfs[2].Condition.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.LogicalOr);
+            syntax.ElseIfs[2].Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.LogicalOr);
             syntax.ElseIfs[2].ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func4");
             syntax.ElseBlock.Should().Be(CodeBlockSyntax.Empty);
         }
@@ -97,7 +97,7 @@ endif
 
             syntax.ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func1");
             syntax.ElseIfs.Length.Should().Be(1);
-            syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Equal);
+            syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Equal);
             syntax.ElseIfs[0].ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func2");
             syntax.ElseBlock.Statements.Length.Should().Be(1);
             syntax.ElseBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func3");

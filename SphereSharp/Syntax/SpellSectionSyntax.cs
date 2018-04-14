@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
@@ -21,5 +22,9 @@ namespace SphereSharp.Syntax
         {
             return Properties.SingleOrDefault(x => x.LValue.Equals(propertyName, StringComparison.OrdinalIgnoreCase))?.RValue;
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitSpellSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes() => Properties;
     }
 }

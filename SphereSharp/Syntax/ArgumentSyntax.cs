@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SphereSharp.Syntax
 {
-    public abstract class ArgumentSyntax
+    public abstract class ArgumentSyntax : SyntaxNode
     {
     }
 }

@@ -18,5 +18,13 @@ namespace SphereSharp.Syntax
 
         public static AssignmentSyntax Parse(string src) 
             => AssignmentParser.Assignment.Parse(src);
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitAssignment(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield return LValue;
+            yield return RValue;
+        }
     }
 }

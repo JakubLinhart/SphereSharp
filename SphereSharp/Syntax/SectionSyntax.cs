@@ -3,7 +3,7 @@ using System.Text;
 
 namespace SphereSharp.Syntax
 {
-    public abstract class SectionSyntax
+    public abstract class SectionSyntax : SyntaxNode
     {
         public string Type { get; }
         public string Name { get; }

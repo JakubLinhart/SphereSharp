@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SphereSharp.Syntax
 {
@@ -10,6 +11,13 @@ namespace SphereSharp.Syntax
             : base(type, name, null)
         {
             Triggers = triggers;
+        }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitEventsSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            return Triggers;
         }
     }
 }

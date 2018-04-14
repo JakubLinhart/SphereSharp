@@ -56,7 +56,7 @@ namespace SphereSharp.Tests.Syntax
             var syntax = AssignmentSyntax.Parse("var1=((1+2)*(4+5))-6");
 
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
-            syntax.RValue.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Subtract);
+            syntax.RValue.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Subtract);
         }
 
         [TestMethod]

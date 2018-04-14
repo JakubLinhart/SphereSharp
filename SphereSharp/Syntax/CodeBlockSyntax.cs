@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SphereSharp.Syntax
 {
-    public class CodeBlockSyntax
+    public class CodeBlockSyntax : SyntaxNode
     {
         public static CodeBlockSyntax Empty { get; }
             = new CodeBlockSyntax(ImmutableArray<StatementSyntax>.Empty);
@@ -20,6 +20,13 @@ namespace SphereSharp.Syntax
         public static CodeBlockSyntax Parse(string src)
         {
             return CodeBlockParser.CodeBlock.Parse(src);
+        }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitCodeBlock(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            return Statements;
         }
     }
 }

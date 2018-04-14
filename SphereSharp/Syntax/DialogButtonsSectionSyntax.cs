@@ -14,5 +14,9 @@ namespace SphereSharp.Syntax
         {
             Triggers = triggers;
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitDialogButtonsSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes() => Triggers;
     }
 }

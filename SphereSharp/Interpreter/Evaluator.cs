@@ -266,7 +266,7 @@ namespace SphereSharp.Interpreter
             var operand1 = Evaluate(op.Operand1, context);
             var operand2 = Evaluate(op.Operand2, context);
 
-            switch (op.Kind)
+            switch (op.Operator)
             {
                 case BinaryOperatorKind.Add:
                     return operand1 + operand2;
@@ -287,7 +287,7 @@ namespace SphereSharp.Interpreter
                 case BinaryOperatorKind.LessThan:
                     return operand1 < operand2 ? 1 : 0;
                 default:
-                    throw new NotImplementedException($"Binary operator kind {op.Kind}");
+                    throw new NotImplementedException($"Binary operator kind {op.Operator}");
             }
         }
 

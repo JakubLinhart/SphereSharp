@@ -14,5 +14,12 @@ namespace SphereSharp.Syntax
         {
             Macro = macro;
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitMacroStatement(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield return Macro;
+        }
     }
 }

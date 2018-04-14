@@ -1,8 +1,9 @@
-﻿using Sprache;
+﻿using System.Collections.Generic;
+using Sprache;
 
 namespace SphereSharp.Syntax
 {
-    public class PropertySyntax
+    public class PropertySyntax : SyntaxNode
     {
         public string LValue { get; }
         public string RValue { get; }
@@ -15,5 +16,12 @@ namespace SphereSharp.Syntax
 
         public static PropertySyntax Parse(string src) =>
             PropertyParser.Property.Parse(src);
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitProperty(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield break;
+        }
     }
 }

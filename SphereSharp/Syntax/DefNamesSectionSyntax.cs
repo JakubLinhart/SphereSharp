@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SphereSharp.Syntax
 {
@@ -11,5 +12,9 @@ namespace SphereSharp.Syntax
         {
             this.DefNames = defNames;
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitDefNamesSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes() => DefNames;
     }
 }

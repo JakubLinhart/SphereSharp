@@ -24,6 +24,13 @@ namespace SphereSharp.Syntax
         }
 
         public override string ToString() => Value;
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitIntegerConstantExpression(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield break;
+        }
     }
 
     public class MacroIntegerConstantExpressionSyntax : ExpressionSyntax
@@ -35,6 +42,13 @@ namespace SphereSharp.Syntax
         {
             FirstDigits = firstDigits;
             Macro = macro;
+        }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitMacroIntegerConstantExpression(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield return Macro;
         }
     }
 
@@ -49,6 +63,13 @@ namespace SphereSharp.Syntax
         }
 
         public override string ToString() => Value;
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitDecimalConstantExpression(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield break;
+        }
     }
 
     public class IntervalExpressionSyntax : ExpressionSyntax
@@ -60,6 +81,14 @@ namespace SphereSharp.Syntax
         {
             MinValue = minValue;
             MaxValue = maxValue;
+        }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitIntervalExpression(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield return MinValue;
+            yield return MaxValue;
         }
     }
 }

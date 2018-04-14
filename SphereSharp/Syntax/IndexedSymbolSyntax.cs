@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace SphereSharp.Syntax
 {
@@ -14,5 +16,8 @@ namespace SphereSharp.Syntax
 
         public override string ToString() =>
             $"{base.ToString()}[{Index.ToString()}]";
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitIndexedSymbol(this);
+        public override IEnumerable<SyntaxNode> GetChildNodes() => base.GetChildNodes().Concat(Index.GetChildNodes());
     }
 }

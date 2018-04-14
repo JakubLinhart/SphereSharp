@@ -1,6 +1,6 @@
 ﻿namespace SphereSharp.Syntax
 {
-    public abstract class SegmentSyntax
+    public abstract class SegmentSyntax : SyntaxNode
     {
     }
 }

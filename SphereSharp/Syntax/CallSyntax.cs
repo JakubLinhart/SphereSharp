@@ -31,5 +31,15 @@ namespace SphereSharp.Syntax
         }
 
         public static CallSyntax Parse(string src) => CallParser.Call.Parse(src);
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitCall(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield return MemberNameSyntax;
+            yield return Arguments;
+            if (ChainedCall != null)
+                yield return ChainedCall;
+        }
     }
 }

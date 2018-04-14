@@ -20,5 +20,9 @@ namespace SphereSharp.Syntax
         {
             return Properties.FirstOrDefault(x => x.LValue.Equals(propertyName, StringComparison.OrdinalIgnoreCase))?.RValue;
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitTemplateSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes() => Properties;
     }
 }

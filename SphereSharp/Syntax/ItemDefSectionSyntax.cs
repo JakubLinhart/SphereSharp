@@ -23,5 +23,15 @@ namespace SphereSharp.Syntax
         {
             return Properties.FirstOrDefault(x => x.LValue.Equals(propertyName, StringComparison.OrdinalIgnoreCase))?.RValue;
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitItemDefSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            foreach (var property in Properties)
+                yield return property;
+            foreach (var trigger in Triggers)
+                yield return trigger;
+        }
     }
 }

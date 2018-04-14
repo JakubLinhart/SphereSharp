@@ -1,4 +1,6 @@
-﻿namespace SphereSharp.Syntax
+﻿using System.Collections.Generic;
+
+namespace SphereSharp.Syntax
 {
     public class EvalMacroExpressionSyntax : ExpressionSyntax
     {
@@ -9,6 +11,14 @@
         {
             Macro = macro;
             Expression = macro.Eval.Expression;
+        }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.AcceptEvalMacroExpression(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield return Macro;
+            yield return Expression;
         }
     }
 }

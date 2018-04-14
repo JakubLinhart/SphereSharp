@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 
 namespace SphereSharp.Syntax
 {
-    public class LiteralSyntax
+    public class LiteralSyntax : SyntaxNode
     {
         public ImmutableArray<SegmentSyntax> Segments { get; }
 
@@ -28,5 +28,9 @@ namespace SphereSharp.Syntax
 
         public static LiteralSyntax Parse(string src)
             => LiteralParser.Literal.Parse(src);
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitLiteral(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes() => Segments;
     }
 }

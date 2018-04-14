@@ -13,5 +13,12 @@ namespace SphereSharp.Syntax
         {
             Body = body;
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitFunctionSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield return Body;
+        }
     }
 }

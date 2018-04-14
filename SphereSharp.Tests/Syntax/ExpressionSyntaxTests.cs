@@ -44,7 +44,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("0<x>>1").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.MoreThan);
             syntax.Operand1.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>();
         }
@@ -54,7 +54,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1>0<x>").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.MoreThan);
             syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>();
             syntax.Operand2.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
         }
@@ -64,7 +64,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("0<x>>1<y>").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.MoreThan);
             syntax.Operand1.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
             syntax.Operand2.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
         }
@@ -74,7 +74,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("0<x><1").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.LessThan);
             syntax.Operand1.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>();
         }
@@ -84,7 +84,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1<0<x>").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.LessThan);
             syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>();
             syntax.Operand2.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
         }
@@ -94,7 +94,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("0<x><1<y>").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.LessThan);
             syntax.Operand1.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
             syntax.Operand2.Should().BeOfType<MacroIntegerConstantExpressionSyntax>();
         }
@@ -177,7 +177,7 @@ namespace SphereSharp.Tests.Syntax
         public void Can_parse_add_operator()
         {
             var syntax = ExpressionSyntax.Parse("1+2");
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Add);
+            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("2");
         }
@@ -187,11 +187,11 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1+2+3").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.Add);
+            syntax.Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("3");
 
             var operand1 = syntax.Operand1.Should().BeOfType<BinaryOperatorSyntax>().Which;
-            operand1.Kind.Should().Be(BinaryOperatorKind.Add);
+            operand1.Operator.Should().Be(BinaryOperatorKind.Add);
             operand1.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
             operand1.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("2");
         }
@@ -201,11 +201,11 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1 + 2 + 3").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.Add);
+            syntax.Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("3");
 
             var operand1 = syntax.Operand1.Should().BeOfType<BinaryOperatorSyntax>().Which;
-            operand1.Kind.Should().Be(BinaryOperatorKind.Add);
+            operand1.Operator.Should().Be(BinaryOperatorKind.Add);
             operand1.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
             operand1.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("2");
         }
@@ -214,7 +214,7 @@ namespace SphereSharp.Tests.Syntax
         public void Can_parse_minus_operator()
         {
             var syntax = ExpressionSyntax.Parse("1-2");
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Subtract);
+            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Subtract);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("2");
         }
@@ -224,7 +224,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1*2");
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Multiply);
+            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Multiply);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("2");
         }
@@ -234,7 +234,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1||0");
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.LogicalOr);
+            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.LogicalOr);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
@@ -244,7 +244,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1|0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.BinaryOr);
+            syntax.Operator.Should().Be(BinaryOperatorKind.BinaryOr);
             syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("0");
 
@@ -255,7 +255,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1&&0");
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.LogicalAnd);
+            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.LogicalAnd);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
@@ -265,7 +265,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1==0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.Equal);
+            syntax.Operator.Should().Be(BinaryOperatorKind.Equal);
             syntax.Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
@@ -275,7 +275,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1!=0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.NotEqual);
+            syntax.Operator.Should().Be(BinaryOperatorKind.NotEqual);
             syntax.Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
@@ -285,7 +285,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1>0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.MoreThan);
             syntax.Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
@@ -296,7 +296,7 @@ namespace SphereSharp.Tests.Syntax
             //var syntax = ExpressionParser.NonMacroLogicalTerm.Parse("1<0");
             var syntax = ExpressionSyntax.Parse("1<0").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.LessThan);
             syntax.Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
         }
@@ -306,9 +306,9 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("1+2+3");
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Add);
+            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>()
-                .Kind.Should().Be(BinaryOperatorKind.Add);
+                .Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>()
                 .Value.Should().Be("1");
             syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>()
@@ -322,24 +322,24 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("(1+2)+(3+(4+5))");
 
-            syntax.As<BinaryOperatorSyntax>().Kind.Should().Be(BinaryOperatorKind.Add);
+            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>()
-                .Kind.Should().Be(BinaryOperatorKind.Add);
+                .Operator.Should().Be(BinaryOperatorKind.Add);
 
             syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>()
-                .Kind.Should().Be(BinaryOperatorKind.Add);
+                .Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>()
                 .Value.Should().Be("1");
             syntax.As<BinaryOperatorSyntax>().Operand1.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>()
                 .Value.Should().Be("2");
 
             syntax.As<BinaryOperatorSyntax>().Operand2.As<BinaryOperatorSyntax>()
-                .Kind.Should().Be(BinaryOperatorKind.Add);
+                .Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.As<BinaryOperatorSyntax>().Operand2.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>()
                 .Value.Should().Be("3");
 
             syntax.As<BinaryOperatorSyntax>().Operand2.As<BinaryOperatorSyntax>().Operand2.As<BinaryOperatorSyntax>()
-                .Kind.Should().Be(BinaryOperatorKind.Add);
+                .Operator.Should().Be(BinaryOperatorKind.Add);
             syntax.As<BinaryOperatorSyntax>().Operand2.As<BinaryOperatorSyntax>().Operand2.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>()
                 .Value.Should().Be("4");
             syntax.As<BinaryOperatorSyntax>().Operand2.As<BinaryOperatorSyntax>().Operand2.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>()
@@ -360,7 +360,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("strlen(<?classinfo?>)>5").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Kind.Should().Be(BinaryOperatorKind.MoreThan);
+            syntax.Operator.Should().Be(BinaryOperatorKind.MoreThan);
             syntax.Operand1.Should().BeOfType<CallExpressionSyntax>();
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("5");
         }

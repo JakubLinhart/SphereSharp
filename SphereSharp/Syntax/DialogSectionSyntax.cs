@@ -13,5 +13,12 @@ namespace SphereSharp.Syntax
         {
             InitCodeBlock = initCodeBlock;
         }
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitDialogSection(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield return InitCodeBlock;
+        }
     }
 }

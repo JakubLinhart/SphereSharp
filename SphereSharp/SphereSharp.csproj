@@ -87,6 +87,8 @@
     <Compile Include="Syntax\CallExpressionSyntax.cs" />
     <Compile Include="Syntax\CallParser.cs" />
     <Compile Include="Syntax\CallSyntax.cs" />
+    <Compile Include="Syntax\DialogTextsSectionParser.cs" />
+    <Compile Include="Syntax\DoSwitchParser.cs" />
     <Compile Include="Syntax\EvalKind.cs" />
     <Compile Include="Syntax\EvalParser.cs" />
     <Compile Include="Syntax\EventsOperationKind.cs" />
@@ -95,6 +97,10 @@
     <Compile Include="Syntax\EventsStatementParser.cs" />
     <Compile Include="Syntax\EventsStatementSyntax.cs" />
     <Compile Include="Syntax\FileParser.cs" />
+    <Compile Include="Syntax\IfSyntaxParser.cs" />
+    <Compile Include="Syntax\SyntaxNode.cs" />
+    <Compile Include="Syntax\SyntaxVisitor.cs" />
+    <Compile Include="Syntax\SyntaxWalker.cs" />
     <Compile Include="Syntax\TemplateSectionParser.cs" />
     <Compile Include="Syntax\TemplateSectionSyntax.cs" />
     <Compile Include="Syntax\SkillSectionParser.cs" />

@@ -17,5 +17,12 @@ namespace SphereSharp.Syntax
         public EventsOperationKind Kind { get; }
 
         public static EventsStatementSyntax Parse(string src) => EventsStatementParser.Events.Parse(src);
+
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitEventsStatement(this);
+
+        public override IEnumerable<SyntaxNode> GetChildNodes()
+        {
+            yield break;
+        }
     }
 }
