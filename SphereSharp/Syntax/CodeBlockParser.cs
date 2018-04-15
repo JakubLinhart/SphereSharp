@@ -22,6 +22,7 @@ namespace SphereSharp.Syntax
                 .Or(DoSwitchParser.DoSwitchStatement)
                 .Or(MacroStatementParser.Statement)
                 .Or(IfSyntaxParser.IfStatement)
+                .Or(WhileStatementParser.While)
                 .Or(ReturnParser.Return)
                 .Or(CallParser.CallStatement);
     }

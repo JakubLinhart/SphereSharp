@@ -147,6 +147,8 @@
     <Compile Include="Syntax\TriggerSyntax.cs" />
     <Compile Include="Syntax\UnaryOperatorKind.cs" />
     <Compile Include="Syntax\UnaryOperatorSyntax.cs" />
+    <Compile Include="Syntax\WhileStatementParser.cs" />
+    <Compile Include="Syntax\WhileStatementSyntax.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

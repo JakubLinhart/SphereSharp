@@ -106,7 +106,7 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
-        public void Can_parse_call_expression_as_argument_for_specific_methods()
+        public void Can_parse_call_expression_as_argument_for_argv()
         {
             var syntax = CallSyntax.Parse("argv(arg(u))");
 

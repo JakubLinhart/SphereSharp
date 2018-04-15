@@ -23,6 +23,7 @@ namespace SphereSharp.Syntax
 
         public static Parser<string> Keyword =>
             from keyword in IfKeyword.Or(ElseKeyword).Or(ElseIfKeyword).Or(EndifKeyword).Or(DoSwitchKeyword).Or(EndDoKeyword)
+                .Or(WhileKeyword).Or(EndWhileKeyword)
             select new string(keyword.ToArray());
 
         internal static Parser<IEnumerable<char>> EmptyLine =>
@@ -46,6 +47,8 @@ namespace SphereSharp.Syntax
         public static Parser<IEnumerable<char>> EndifKeyword => Parse.IgnoreCase("endif");
         public static Parser<IEnumerable<char>> DoSwitchKeyword => Parse.IgnoreCase("doswitch");
         public static Parser<IEnumerable<char>> EndDoKeyword => Parse.IgnoreCase("enddo");
+        public static Parser<IEnumerable<char>> WhileKeyword => Parse.IgnoreCase("while");
+        public static Parser<IEnumerable<char>> EndWhileKeyword => Parse.IgnoreCase("endwhile");
 
         public static Parser<string> IntegerDecadicNumber =>
             from sign in Parse.Char('-').Optional()

@@ -92,6 +92,7 @@
     <Compile Include="Syntax\SpellSectionSyntaxTests.cs" />
     <Compile Include="Syntax\SymbolSyntaxTests.cs" />
     <Compile Include="Syntax\TriggerSyntaxTests.cs" />
+    <Compile Include="Syntax\WhileStatementSyntaxTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

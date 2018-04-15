@@ -151,6 +151,17 @@ namespace SphereSharp.Sphere.Generator
             builder.Append("endif");
         }
 
+        public override void VisitWhileStatement(WhileStatementSyntax whileStatementSyntax)
+        {
+            builder.Append("while (");
+            Visit(whileStatementSyntax.Condition);
+            builder.AppendLine(")");
+
+            Visit(whileStatementSyntax.Body);
+
+            builder.Append("endwhile");
+        }
+
         public override void VisitElseIf(ElseIfSyntax elseIfSyntax)
         {
             builder.Append("elseif (");

@@ -57,7 +57,18 @@ else
 endif
 ");
             syntax.Statements.Length.Should().Be(1);
-            syntax.Statements[0].As<IfSyntax>().Should().NotBeNull();
+            syntax.Statements[0].Should().BeOfType<IfSyntax>();
+        }
+
+        [TestMethod]
+        public void Can_parse_while()
+        {
+            var syntax = CodeBlockSyntax.Parse(@"while (1==1)
+    call1
+endwhile
+");
+            syntax.Statements.Length.Should().Be(1);
+            syntax.Statements[0].Should().BeOfType<WhileStatementSyntax>();
         }
 
         [TestMethod]
@@ -94,12 +105,17 @@ if (1==1)
 endif
 var1=1
 events +e_something
+
+while (1==1)
+    call1
+endwhile
 ");
 
             syntax.Statements[0].Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("call1");
             syntax.Statements[1].Should().BeOfType<IfSyntax>();
             syntax.Statements[2].Should().BeOfType<AssignmentSyntax>();
             syntax.Statements[3].Should().BeOfType<EventsStatementSyntax>();
+            syntax.Statements[4].Should().BeOfType<WhileStatementSyntax>();
         }
 
         [TestMethod]
