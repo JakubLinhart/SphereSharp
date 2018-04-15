@@ -10,12 +10,20 @@ namespace SphereSharp.Syntax
             InnerCall.Except(Parse.String("on="));
 
         public static Parser<CallSyntax> InnerCall =>
-            from call in ChainedCall.Or(MemberCall)
+            from call in ArgvCall.Or(ChainedCall).Or(MemberCall)
             select call;
 
         public static Parser<StatementSyntax> CallStatement =
             from call in Call
             select call;
+
+        public static Parser<CallSyntax> ArgvCall =>
+            from name in Parse.IgnoreCase("argv").Text()
+            from _2 in Parse.String("(")
+            from expr in ExpressionParser.Expr
+            from _3 in Parse.String(")")
+            select new CallSyntax(new SymbolSyntax(name), 
+                new ArgumentListSyntax(new ArgumentSyntax[] { new ExpressionArgumentSyntax(expr) }.ToImmutableArray()));
 
         public static Parser<CallSyntax> MemberCall =>
             from funcName in SymbolParser.Symbol

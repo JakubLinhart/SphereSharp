@@ -104,5 +104,14 @@ namespace SphereSharp.Tests.Syntax
 
             Assert.Inconclusive();
         }
+
+        [TestMethod]
+        public void Can_parse_call_expression_as_argument_for_specific_methods()
+        {
+            var syntax = CallSyntax.Parse("argv(arg(u))");
+
+            syntax.Arguments.Arguments.Should().HaveCount(1);
+            var argument = syntax.Arguments.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
+        }
     }
 }
