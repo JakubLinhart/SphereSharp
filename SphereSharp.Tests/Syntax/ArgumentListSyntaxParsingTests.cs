@@ -56,7 +56,7 @@ namespace SphereSharp.Tests.Syntax
             var syntax = ArgumentListSyntax.Parse("(123)");
 
             syntax.Arguments.Length.Should().Be(1);
-            syntax.Arguments[0].As<TextArgumentSyntax>().Text.Should().Be("123");
+            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
         }
 
         [TestMethod]
@@ -64,9 +64,9 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("(123,456,789)");
 
-            syntax.Arguments[0].As<TextArgumentSyntax>().Text.Should().Be("123");
-            syntax.Arguments[1].As<TextArgumentSyntax>().Text.Should().Be("456");
-            syntax.Arguments[2].As<TextArgumentSyntax>().Text.Should().Be("789");
+            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
+            syntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>();
+            syntax.Arguments[2].Should().BeOfType<ExpressionArgumentSyntax>();
         }
 
         [TestMethod]
@@ -74,9 +74,9 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("(123, 456,    789)");
 
-            syntax.Arguments[0].As<TextArgumentSyntax>().Text.Should().Be("123");
-            syntax.Arguments[1].As<TextArgumentSyntax>().Text.Should().Be("456");
-            syntax.Arguments[2].As<TextArgumentSyntax>().Text.Should().Be("789");
+            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
+            syntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>();
+            syntax.Arguments[2].Should().BeOfType<ExpressionArgumentSyntax>();
         }
 
         [TestMethod]
@@ -102,7 +102,8 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("(<tag(race)>)");
 
-            syntax.Arguments[0].As<MacroArgumentSyntax>().Macro.Call.MemberName.Should().Be("tag");
+            var argumentExpressionSyntax = syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression.Should().BeOfType<MacroExpressionSyntax>().Which;
+            argumentExpressionSyntax.Macro.Call.MemberName.Should().Be("tag");
         }
 
         [TestMethod]
@@ -110,8 +111,8 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("(<tag.race>,<argv(u)>)");
 
-            syntax.Arguments[0].As<MacroArgumentSyntax>().Macro.Call.MemberName.Should().Be("tag");
-            syntax.Arguments[1].As<MacroArgumentSyntax>().Macro.Call.MemberName.Should().Be("argv");
+            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
+            syntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>();
         }
 
         [TestMethod]
@@ -119,9 +120,9 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("(123,<?safe?><BASEFONT SIZE=\"+5\" COLOR=\"#000080\"><?seznamclass?></BASEFONT>,456)");
 
-            syntax.Arguments[0].As<TextArgumentSyntax>().Text.Should().Be("123");
+            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
             syntax.Arguments[1].As<LiteralArgumentSyntax>().Literal.Segments.Length.Should().Be(3);
-            syntax.Arguments[2].As<TextArgumentSyntax>().Text.Should().Be("456");
+            syntax.Arguments[2].Should().BeOfType<ExpressionArgumentSyntax>();
         }
 
         [TestMethod]
@@ -185,8 +186,29 @@ namespace SphereSharp.Tests.Syntax
         {
             var argumentSyntax = ArgumentListSyntax.Parse("(<eval tag(basestr)>)");
             argumentSyntax.Arguments.Should().HaveCount(1);
-            var evalArgument = argumentSyntax.Arguments[0].Should().BeOfType<EvalMacroArgumentSyntax>().Which;
-            evalArgument.Expression.Should().BeOfType<CallExpressionSyntax>();
+            var evalArgument = argumentSyntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which;
+            evalArgument.Expression.Should().BeOfType<EvalMacroExpressionSyntax>();
+        }
+
+        [TestMethod]
+        public void Can_parse_expression()
+        {
+            var listSyntax = ArgumentListSyntax.Parse("(1+1)");
+
+            listSyntax.Arguments.Should().HaveCount(1);
+            var argumentSyntax = listSyntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which;
+            var expression = argumentSyntax.Expression.Should().BeOfType<BinaryOperatorSyntax>().Which;
+            expression.Operator.Should().Be(BinaryOperatorKind.Add);
+        }
+
+        [TestMethod]
+        public void Can_parse_multiple_expressions()
+        {
+            var listSyntax = ArgumentListSyntax.Parse("(1+1, 2*2)");
+
+            listSyntax.Arguments.Should().HaveCount(2);
+            listSyntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
+            listSyntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>();
         }
     }
 }

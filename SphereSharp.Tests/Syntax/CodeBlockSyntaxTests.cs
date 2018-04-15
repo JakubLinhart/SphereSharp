@@ -72,7 +72,7 @@ endif
         {
             var syntax = CodeBlockSyntax.Parse(@"return 1");
             var argument = syntax.Statements[0].Should().BeOfType<ReturnSyntax>().Which.Argument;
-            argument.Should().BeOfType<TextArgumentSyntax>().Which.Text.Should().Be("1");
+            argument.Should().BeOfType<ExpressionArgumentSyntax>();
         }
 
         [TestMethod]

@@ -72,8 +72,9 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = CallSyntax.Parse("strlen(<def_class[argn]>)");
 
-            var argument = syntax.Arguments.Arguments[0].Should().BeOfType<MacroArgumentSyntax>().Which;
-            var indexedSymbol = argument.Macro.Call.MemberNameSyntax.Should().BeOfType<IndexedSymbolSyntax>().Which;
+            var argumentExpressionMacro = syntax.Arguments.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression
+                .Should().BeOfType<MacroExpressionSyntax>().Which.Macro;
+            var indexedSymbol = argumentExpressionMacro.Call.MemberNameSyntax.Should().BeOfType<IndexedSymbolSyntax>().Which;
             var indexCall = indexedSymbol.Index.Should().BeOfType<CallExpressionSyntax>().Which.Call;
             indexCall.MemberName.Should().Be("argn");
         }

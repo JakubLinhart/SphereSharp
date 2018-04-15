@@ -64,22 +64,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter\ArgumentTests.cs" />
-    <Compile Include="Interpreter\AssignmentTests.cs" />
-    <Compile Include="Interpreter\BuiltInFuntionCallsTests.cs" />
-    <Compile Include="Interpreter\BuiltInPropertyBindingsTests.cs" />
-    <Compile Include="Interpreter\CallTests.cs" />
-    <Compile Include="Interpreter\CodeBlockTests.cs" />
-    <Compile Include="Interpreter\DoSwitchTests.cs" />
-    <Compile Include="Interpreter\ExpressionTests.cs" />
-    <Compile Include="Interpreter\IfTests.cs" />
-    <Compile Include="Interpreter\SymbolTests.cs" />
-    <Compile Include="Interpreter\TestEvaluator.cs" />
-    <Compile Include="Runtime\RuntimeTestObject.cs" />
-    <Compile Include="Runtime\TestChar.cs" />
-    <Compile Include="Runtime\TestGump.cs" />
-    <Compile Include="Runtime\TestClient.cs" />
-    <Compile Include="Runtime\TestItem.cs" />
     <Compile Include="Syntax\ArgumentListSyntaxParsingTests.cs" />
     <Compile Include="Syntax\CallSyntaxTests.cs" />
     <Compile Include="Syntax\EventsSectionSyntaxTests.cs" />

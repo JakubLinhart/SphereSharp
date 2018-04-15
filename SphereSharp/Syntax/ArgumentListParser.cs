@@ -8,19 +8,15 @@ namespace SphereSharp.Syntax
     internal static class ArgumentListParser
     {
         public static Parser<ArgumentSyntax> Argument =>
-            EvalMacroArgument.Or(MacroArgument).Or(LiteralArgument).Or(TextArgument);
+            ExpressionArgument.Or(LiteralArgument).Or(TextArgument);
+
+        public static Parser<ArgumentSyntax> ExpressionArgument =>
+            from expr in ArgumentExpressionParser.Expr
+            select new ExpressionArgumentSyntax(expr);
 
         public static Parser<ArgumentSyntax> LiteralArgument =>
             from argument in LiteralParser.Literal
             select new LiteralArgumentSyntax(argument);
-
-        public static Parser<ArgumentSyntax> MacroArgument =>
-            from argument in MacroParser.Macro
-            select new MacroArgumentSyntax(argument);
-
-        public static Parser<ArgumentSyntax> EvalMacroArgument =>
-            from argument in EvalMacroParser.Macro
-            select new EvalMacroArgumentSyntax(argument);
 
         public static Parser<string> IndexedSymbolArgument =>
             from symbol in SymbolParser.IndexedSymbol

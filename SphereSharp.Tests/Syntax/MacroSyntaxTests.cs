@@ -36,7 +36,7 @@ namespace SphereSharp.Tests.Syntax
             var syntax = MacroSyntax.Parse("<argv(0)>");
 
             syntax.Call.MemberName.Should().Be("argv");
-            syntax.Call.Arguments.Arguments[0].As<TextArgumentSyntax>().Text.Should().Be("0");
+            syntax.Call.Arguments.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace SphereSharp.Tests.Syntax
             var syntax = MacroSyntax.Parse("<strlen(<tag(nation)>)>");
 
             syntax.Call.MemberName.Should().Be("strlen");
-            syntax.Call.Arguments.Arguments[0].As<MacroArgumentSyntax>().Macro.Call.MemberName.Should().Be("tag");
+            syntax.Call.Arguments.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
         }
     }
 }

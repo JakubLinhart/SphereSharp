@@ -13,7 +13,7 @@ namespace SphereSharp.Syntax
             Macro = macro;
         }
 
-        public override void Accept(SyntaxVisitor visitor) => visitor.AcceptEvalMacroExpression(this);
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitEvalMacroExpression(this);
 
         public override IEnumerable<SyntaxNode> GetChildNodes()
         {

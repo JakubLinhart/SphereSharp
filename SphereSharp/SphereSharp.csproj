@@ -46,16 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter\Arguments.cs" />
-    <Compile Include="Interpreter\BuildInFunctionBindings.cs" />
-    <Compile Include="Interpreter\BuildInPropertyBindings.cs" />
-    <Compile Include="Interpreter\BuiltInFunction.cs" />
-    <Compile Include="Interpreter\EvaluationContext.cs" />
-    <Compile Include="Interpreter\Evaluator.cs" />
-    <Compile Include="Interpreter\Function.cs" />
-    <Compile Include="Interpreter\Binder.cs" />
-    <Compile Include="Interpreter\IBinder.cs" />
-    <Compile Include="Interpreter\UserDefinedFunction.cs" />
     <Compile Include="Model\CharDef.cs" />
     <Compile Include="Model\CodeModel.cs" />
     <Compile Include="Model\CodeModelBuilder.cs" />
@@ -69,14 +59,7 @@
     <Compile Include="Model\SpellDef.cs" />
     <Compile Include="Model\TriggerDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runtime\IChar.cs" />
-    <Compile Include="Runtime\IGump.cs" />
-    <Compile Include="Runtime\IHoldTriggers.cs" />
-    <Compile Include="Runtime\IClient.cs" />
-    <Compile Include="Runtime\IHoldTags.cs" />
-    <Compile Include="Runtime\IItem.cs" />
-    <Compile Include="Runtime\StandardTagHolder.cs" />
-    <Compile Include="Runtime\StandardTriggerHolder.cs" />
+    <Compile Include="Syntax\ArgumentExpressionParser.cs" />
     <Compile Include="Syntax\ArgumentListParser.cs" />
     <Compile Include="Syntax\ArgumentListSyntax.cs" />
     <Compile Include="Syntax\ArgumentSyntax.cs" />
@@ -96,6 +79,7 @@
     <Compile Include="Syntax\EventsSectionSyntax.cs" />
     <Compile Include="Syntax\EventsStatementParser.cs" />
     <Compile Include="Syntax\EventsStatementSyntax.cs" />
+    <Compile Include="Syntax\ExpressionArgumentSyntax.cs" />
     <Compile Include="Syntax\FileParser.cs" />
     <Compile Include="Syntax\IfSyntaxParser.cs" />
     <Compile Include="Syntax\SyntaxNode.cs" />
@@ -119,7 +103,6 @@
     <Compile Include="Syntax\DialogSectionSyntax.cs" />
     <Compile Include="Syntax\DialogTextsSectionSyntax.cs" />
     <Compile Include="Syntax\DoSwitchSyntax.cs" />
-    <Compile Include="Syntax\EvalMacroArgumentSyntax.cs" />
     <Compile Include="Syntax\EvalMacroExpressionSyntax.cs" />
     <Compile Include="Syntax\EvalMacroParser.cs" />
     <Compile Include="Syntax\EvalMacroSegmentSyntax.cs" />
@@ -138,7 +121,6 @@
     <Compile Include="Syntax\LiteralArgumentSyntax.cs" />
     <Compile Include="Syntax\LiteralParser.cs" />
     <Compile Include="Syntax\LiteralSyntax.cs" />
-    <Compile Include="Syntax\MacroArgumentSyntax.cs" />
     <Compile Include="Syntax\MacroExpressionSyntax.cs" />
     <Compile Include="Syntax\MacroParser.cs" />
     <Compile Include="Syntax\MacroSegmentSyntax.cs" />

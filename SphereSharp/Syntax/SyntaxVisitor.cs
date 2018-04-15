@@ -11,9 +11,8 @@ namespace SphereSharp.Syntax
         public virtual void VisitArgumentList(ArgumentListSyntax argumentList) => DefaultVisit(argumentList);
         public virtual void VisitEventsStatement(EventsStatementSyntax syntaxNode) => DefaultVisit(syntaxNode);
         public virtual void VisitTextArgument(TextArgumentSyntax textArgumentSyntax) => DefaultVisit(textArgumentSyntax);
-        public virtual void VisitMacroArgument(MacroArgumentSyntax macroArgumentSyntax) => DefaultVisit(macroArgumentSyntax);
         public virtual void VisitLiteralArgument(LiteralArgumentSyntax literalArgumentSyntax) => DefaultVisit(literalArgumentSyntax);
-        public virtual void VisitEvalMacroArgument(EvalMacroArgumentSyntax evalMacroArgumentSyntax) => DefaultVisit(evalMacroArgumentSyntax);
+        public virtual void VisitExpressionArgument(ExpressionArgumentSyntax expressionArgumentSyntax) => DefaultVisit(expressionArgumentSyntax);
         public virtual void VisitLiteral(LiteralSyntax literalSyntax) => DefaultVisit(literalSyntax);
         public virtual void VisitDefName(DefNameSyntax defNameSyntax) => DefaultVisit(defNameSyntax);
         public virtual void VisitEvalMacroSegment(EvalMacroSegmentSyntax evalMacroSegmentSyntax) => DefaultVisit(evalMacroSegmentSyntax);
@@ -23,7 +22,7 @@ namespace SphereSharp.Syntax
         public virtual void VisitTextSegment(TextSegmentSyntax textSegmentSyntax) => DefaultVisit(textSegmentSyntax);
         public virtual void VisitMacroSegment(MacroSegmentSyntax macroSegmentSyntax) => DefaultVisit(macroSegmentSyntax);
         public virtual void VisitEvalMacro(EvalMacroSyntax evalMacroSyntax) => DefaultVisit(evalMacroSyntax);
-        public virtual void AcceptEvalMacroExpression(MacroExpressionSyntax macroExpressionSyntax) => DefaultVisit(macroExpressionSyntax);
+        public virtual void VisitEvalMacroExpression(MacroExpressionSyntax macroExpressionSyntax) => DefaultVisit(macroExpressionSyntax);
         public virtual void VisitCodeBlock(CodeBlockSyntax codeBlockSyntax) => DefaultVisit(codeBlockSyntax);
         public virtual void VisitMacro(MacroSyntax macroSyntax) => DefaultVisit(macroSyntax);
         public virtual void VisitEval(EvalSyntax evalSyntax) => DefaultVisit(evalSyntax);
