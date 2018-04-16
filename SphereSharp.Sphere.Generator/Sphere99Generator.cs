@@ -171,6 +171,22 @@ namespace SphereSharp.Sphere.Generator
             builder.Append("endwhile");
         }
 
+        public override void VisitDoSwitch(DoSwitchSyntax doSwitchSyntax)
+        {
+            builder.Append("doswitch ");
+            Visit(doSwitchSyntax.Condition);
+            builder.AppendLine();
+            builder.Indent();
+            foreach (var @case in doSwitchSyntax.Cases)
+            {
+                Visit(@case);
+                builder.AppendLine();
+            }
+
+            builder.Unindent();
+            builder.Append("enddo");
+        }
+
         public override void VisitReturn(ReturnSyntax returnSyntax)
         {
             builder.Append("return ");
