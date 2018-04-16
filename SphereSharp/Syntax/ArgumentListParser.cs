@@ -25,7 +25,6 @@ namespace SphereSharp.Syntax
         public static Parser<ArgumentSyntax> TextArgument =>
             from argument in IndexedSymbolArgument
                 .Or(CommonParsers.Symbol)
-                .Or(CommonParsers.IntegerDecadicNumber)
             select new TextArgumentSyntax(argument);
 
         public static Parser<IEnumerable<ArgumentSyntax>> StringArgument =>

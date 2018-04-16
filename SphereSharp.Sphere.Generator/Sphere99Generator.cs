@@ -131,9 +131,9 @@ namespace SphereSharp.Sphere.Generator
 
         public override void VisitIf(IfSyntax ifSyntax)
         {
-            builder.Append("if (");
+            builder.Append("if ");
             Visit(ifSyntax.Condition);
-            builder.AppendLine(")");
+            builder.AppendLine();
 
             Visit(ifSyntax.ThenBlock);
 
@@ -151,24 +151,24 @@ namespace SphereSharp.Sphere.Generator
             builder.Append("endif");
         }
 
+        public override void VisitElseIf(ElseIfSyntax elseIfSyntax)
+        {
+            builder.Append("elseif ");
+            Visit(elseIfSyntax.Condition);
+            builder.AppendLine();
+
+            Visit(elseIfSyntax.ThenBlock);
+        }
+
         public override void VisitWhileStatement(WhileStatementSyntax whileStatementSyntax)
         {
-            builder.Append("while (");
+            builder.Append("while ");
             Visit(whileStatementSyntax.Condition);
-            builder.AppendLine(")");
+            builder.AppendLine();
 
             Visit(whileStatementSyntax.Body);
 
             builder.Append("endwhile");
-        }
-
-        public override void VisitElseIf(ElseIfSyntax elseIfSyntax)
-        {
-            builder.Append("elseif (");
-            Visit(elseIfSyntax.Condition);
-            builder.AppendLine(")");
-
-            Visit(elseIfSyntax.ThenBlock);
         }
 
         public override void VisitReturn(ReturnSyntax returnSyntax)
@@ -193,6 +193,17 @@ namespace SphereSharp.Sphere.Generator
                 builder.Append('.');
                 Visit(syntaxNode.ChainedCall);
             }
+        }
+
+        public override void VisitCallExpression(CallExpressionSyntax callExpressionSyntax)
+        {
+            if (callExpressionSyntax.Enclosed)
+                builder.Append('(');
+
+            base.VisitCallExpression(callExpressionSyntax);
+
+            if (callExpressionSyntax.Enclosed)
+                builder.Append(')');
         }
 
         public override void VisitCodeBlock(CodeBlockSyntax codeBlockSyntax)
