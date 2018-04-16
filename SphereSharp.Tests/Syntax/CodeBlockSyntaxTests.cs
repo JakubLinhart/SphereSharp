@@ -206,5 +206,29 @@ call1");
             var testedAction = (Action)(() => CodeBlockSyntax.Parse(@"call1 @#$ some bulshit"));
             testedAction.Should().Throw<Exception>();
         }
+
+        [TestMethod]
+        public void Can_parse_statement_with_whitespace_at_the_end_of_line()
+        {
+            var syntax = CodeBlockSyntax.Parse("call(asdf) ");
+
+            syntax.Statements.Should().HaveCount(1);
+        }
+
+        [TestMethod]
+        public void Can_parse_statement_with_comment_at_the_end_of_line()
+        {
+            var syntax = CodeBlockSyntax.Parse("call(asdf)//some comment");
+
+            syntax.Statements.Should().HaveCount(1);
+        }
+
+        [TestMethod]
+        public void Can_parse_statement_with_whitespace_and_comment_at_the_end_of_line()
+        {
+            var syntax = CodeBlockSyntax.Parse("call(asdf) //some comment");
+
+            syntax.Statements.Should().HaveCount(1);
+        }
     }
 }
