@@ -12,7 +12,7 @@ namespace SphereSharp.Sphere.Generator
     {
         static void Main(string[] args)
         {
-            var syntax = FileSyntax.Parse("asdf", File.ReadAllText(@"c:\Users\jakub\sources\ultima\erebor\sphere\scripts\newbie_portals.scp"));
+            var syntax = FileSyntax.Parse("asdf", File.ReadAllText(@"c:\Users\jakub\sources\ultima\erebor\sphere\scripts\funkce.scp"));
             var generator = new Sphere99Generator();
             generator.Visit(syntax);
 

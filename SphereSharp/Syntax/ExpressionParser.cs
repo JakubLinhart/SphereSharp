@@ -47,8 +47,8 @@ namespace SphereSharp.Syntax
 
         public static Parser<ExpressionSyntax> Term => Parse.ChainOperator(Multiply, Operand, CreateBinaryExpression);
         public static Parser<ExpressionSyntax> EqualityTerm => Parse.ChainOperator(Add.Or(Subtract), Term, CreateBinaryExpression);
-        public static Parser<ExpressionSyntax> LogicalTerm => Parse.ChainOperator(Equal.Or(NotEqual).Or(MoreThanOrEqual).Or(MoreThan).Or(LessThanOrEqual).Or(LessThan), EqualityTerm, CreateBinaryExpression);
-        public static Parser<ExpressionSyntax> Expr => Parse.ChainOperator(LogicalAnd.Or(LogicalOr).Or(BinaryOr), LogicalTerm, CreateBinaryExpression);
+        public static Parser<ExpressionSyntax> LogicalTerm => Parse.ChainOperator(LogicalAnd.Or(LogicalOr).Or(BinaryOr), EqualityTerm, CreateBinaryExpression); 
+        public static Parser<ExpressionSyntax> Expr => Parse.ChainOperator(Equal.Or(NotEqual).Or(MoreThanOrEqual).Or(MoreThan).Or(LessThanOrEqual).Or(LessThan), LogicalTerm, CreateBinaryExpression);
 
         private static ExpressionSyntax CreateBinaryExpression(BinaryOperatorKind kind, ExpressionSyntax arg1, ExpressionSyntax arg2)
             => new BinaryOperatorSyntax(kind, arg1, arg2);

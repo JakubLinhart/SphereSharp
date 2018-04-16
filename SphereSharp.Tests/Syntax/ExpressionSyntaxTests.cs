@@ -174,6 +174,15 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_parse_eval_macro_expression_with_BinaryOr_operator()
+        {
+            var syntax = ExpressionSyntax.Parse("<eval 1|2>").
+                Should().BeOfType<EvalMacroExpressionSyntax>().Which;
+
+            syntax.Expression.Should().BeOfType<BinaryOperatorSyntax>().Which.OperatorString.Should().Be("|");
+        }
+
+        [TestMethod]
         public void Can_parse_add_operator()
         {
             var syntax = ExpressionSyntax.Parse("1+2");

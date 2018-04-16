@@ -235,5 +235,14 @@ namespace SphereSharp.Tests.Syntax
             listSyntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
             listSyntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>();
         }
+
+        [TestMethod]
+        public void Can_parse_eval_as_argument()
+        {
+            var listSyntax = ArgumentListSyntax.Parse("(<eval 1>)");
+
+            listSyntax.Arguments.Should().HaveCount(1);
+            listSyntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression.Should().BeOfType<EvalMacroExpressionSyntax>();
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace SphereSharp.Syntax
         public static Parser<EvalSyntax> Eval =>
             from evalKindStr in Parse.IgnoreCase("eval").Or(Parse.IgnoreCase("hval")).Text()
             from _2 in CommonParsers.OneLineWhiteSpace.AtLeastOnce()
-            from expr in ExpressionParser.EqualityTerm
+            from expr in ExpressionParser.LogicalTerm
             select new EvalSyntax(expr, ToKind(evalKindStr));
     }
 }
