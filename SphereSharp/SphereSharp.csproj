@@ -72,6 +72,7 @@
     <Compile Include="Syntax\CallSyntax.cs" />
     <Compile Include="Syntax\DialogTextsSectionParser.cs" />
     <Compile Include="Syntax\DoSwitchParser.cs" />
+    <Compile Include="Syntax\EofSectionSyntax.cs" />
     <Compile Include="Syntax\EvalKind.cs" />
     <Compile Include="Syntax\EvalParser.cs" />
     <Compile Include="Syntax\EventsOperationKind.cs" />

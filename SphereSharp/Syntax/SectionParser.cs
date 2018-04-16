@@ -25,6 +25,11 @@ namespace SphereSharp.Syntax
             from _7 in CommonParsers.Ignored.Many()
             select (sectionType, sectionName);
 
+        public static Parser<SectionSyntax> EofSection =>
+            from _1 in CommonParsers.Ignored.Many()
+            from _2 in Parse.LineTerminator
+            select new EofSectionSyntax();
+
         public static Parser<SectionSyntax> Section =>
             from header in SectionHeader
             from section in ParseSection(header.type, header.name)
@@ -71,6 +76,8 @@ namespace SphereSharp.Syntax
                     return TemplateSectionParser.ParseTemplate(sectionType, sectionName);
                 case "events":
                     return EventsSectionParser.ParseEvents(sectionType, sectionName);
+                case "eof":
+                    return EofSection;
                 default:
                     throw new NotImplementedException($"sectionType {sectionType}");
             }

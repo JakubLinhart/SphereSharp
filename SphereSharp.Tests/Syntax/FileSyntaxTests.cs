@@ -98,9 +98,11 @@ argo.SetLocation(0,0) // comment 5
 
 [DIALOG D_RACEclass_backgroundB TEXT]
 <BASEFONT SIZE=""+5"" COLOR=""#000080""><CENTER>Vitej na Morii!<br><br>Vesel jsi do tohoto sveta,<br>je cas Volby. Tvuj osud Te ocekava.<br>Vybirej moudre, a mozna se na tebe usmeje stesti.<br><br>Toto je kniha Pravdy.<br>Vyber si zde na jake strane zacnes,<br>kde skoncis je na Tobe.</CENTER></BASEFONT>
+
+[EOF]
 ");
 
-            syntax.Sections.Should().HaveCount(7);
+            syntax.Sections.Should().HaveCount(8);
         }
 
         [TestMethod]

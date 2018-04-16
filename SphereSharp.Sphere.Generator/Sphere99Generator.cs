@@ -68,7 +68,6 @@ namespace SphereSharp.Sphere.Generator
             switch (syntaxNode.Kind)
             {
                 case EventsOperationKind.Subscribe:
-                    builder.Append('+');
                     break;
                 case EventsOperationKind.Unsubscribe:
                     builder.Append('-');
@@ -96,7 +95,7 @@ namespace SphereSharp.Sphere.Generator
                     Visit(argumentList.Arguments.First());
                     foreach (var argument in argumentList.Arguments.Skip(1))
                     {
-                        builder.Append(", ");
+                        builder.Append(",");
                         Visit(argument);
                     }
                     builder.Append(')');
@@ -135,7 +134,7 @@ namespace SphereSharp.Sphere.Generator
             Visit(ifSyntax.Condition);
             builder.AppendLine();
 
-            Visit(ifSyntax.ThenBlock);
+            VisitIndetedCodeBlock(ifSyntax.ThenBlock);
 
             foreach (var elseIf in ifSyntax.ElseIfs)
                 Visit(elseIf);
@@ -144,7 +143,7 @@ namespace SphereSharp.Sphere.Generator
             {
                 builder.AppendLine("else");
                 builder.Indent();
-                Visit(ifSyntax.ElseBlock);
+                VisitIndetedCodeBlock(ifSyntax.ElseBlock);
                 builder.Unindent();
             }
 
@@ -157,7 +156,7 @@ namespace SphereSharp.Sphere.Generator
             Visit(elseIfSyntax.Condition);
             builder.AppendLine();
 
-            Visit(elseIfSyntax.ThenBlock);
+            VisitIndetedCodeBlock(elseIfSyntax.ThenBlock);
         }
 
         public override void VisitWhileStatement(WhileStatementSyntax whileStatementSyntax)
@@ -166,9 +165,19 @@ namespace SphereSharp.Sphere.Generator
             Visit(whileStatementSyntax.Condition);
             builder.AppendLine();
 
-            Visit(whileStatementSyntax.Body);
+            VisitIndetedCodeBlock(whileStatementSyntax.Body);
 
             builder.Append("endwhile");
+        }
+
+        private void VisitIndetedCodeBlock(CodeBlockSyntax codeBlock)
+        {
+            if (!codeBlock.IsEmpty)
+            {
+                builder.Indent();
+                Visit(codeBlock);
+                builder.Unindent();
+            }
         }
 
         public override void VisitDoSwitch(DoSwitchSyntax doSwitchSyntax)
@@ -227,13 +236,11 @@ namespace SphereSharp.Sphere.Generator
             var children = codeBlockSyntax.GetChildNodes();
             if (children.Any())
             {
-                builder.Indent();
                 foreach (var statement in children)
                 {
                     Visit(statement);
                     builder.AppendLine();
                 }
-                builder.Unindent();
             }
         }
 
@@ -249,9 +256,7 @@ namespace SphereSharp.Sphere.Generator
                 builder.Append('(');
 
             Visit(binaryOperatorSyntax.Operand1);
-            builder.Append(' ');
             builder.Append(binaryOperatorSyntax.OperatorString);
-            builder.Append(' ');
             Visit(binaryOperatorSyntax.Operand2);
 
             if (binaryOperatorSyntax.Enclosed)
@@ -272,6 +277,11 @@ namespace SphereSharp.Sphere.Generator
             }
 
             builder.Append(integerConstantExpressionSyntax.Value);
+        }
+
+        public override void VisitEofSection(EofSectionSyntax eofSectionSyntax)
+        {
+            builder.AppendLine("[EOF]");
         }
 
         public override string ToString() => builder.ToString();

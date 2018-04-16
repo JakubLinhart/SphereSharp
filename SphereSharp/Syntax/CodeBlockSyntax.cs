@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
 
 namespace SphereSharp.Syntax
@@ -11,6 +12,7 @@ namespace SphereSharp.Syntax
         public static CodeBlockSyntax Empty { get; }
             = new CodeBlockSyntax(ImmutableArray<StatementSyntax>.Empty);
         public ImmutableArray<StatementSyntax> Statements { get; }
+        public bool IsEmpty => !Statements.Any();
 
         public CodeBlockSyntax(ImmutableArray<StatementSyntax> statements)
         {
