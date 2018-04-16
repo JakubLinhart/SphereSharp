@@ -104,7 +104,19 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = CallSyntax.Parse("sysmessage(Pohybem jsi ztratil soustredeni)");
 
-            Assert.Inconclusive();
+            syntax.Arguments.Arguments.Should().HaveCount(1);
+            var argumentSyntax = syntax.Arguments.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which;
+            argumentSyntax.Literal.Text.Should().Be("Pohybem jsi ztratil soustredeni");
+        }
+
+        [TestMethod]
+        public void Can_parse_call_with_literal_with_macro_inside_parentheses_without_doublequotes()
+        {
+            var syntax = CallSyntax.Parse("sysmessage(Pohybem jsi <topobje.p> ztratil soustredeni)");
+
+            syntax.Arguments.Arguments.Should().HaveCount(1);
+            var argumentSyntax = syntax.Arguments.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which;
+            argumentSyntax.Literal.Segments.Should().HaveCount(3);
         }
 
         [TestMethod]
