@@ -6,6 +6,7 @@
         Subtract,
         Multiply,
         LogicalAnd,
+        BinaryAnd,
         LogicalOr,
         BinaryOr,
         Equal,

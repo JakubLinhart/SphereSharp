@@ -256,7 +256,6 @@ namespace SphereSharp.Tests.Syntax
             syntax.Operator.Should().Be(BinaryOperatorKind.BinaryOr);
             syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("0");
-
         }
 
         [TestMethod]
@@ -267,6 +266,16 @@ namespace SphereSharp.Tests.Syntax
             syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.LogicalAnd);
             syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
             syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("0");
+        }
+
+        [TestMethod]
+        public void Can_parse_binary_and_operator()
+        {
+            var syntax = ExpressionSyntax.Parse("1&0").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Operator.Should().Be(BinaryOperatorKind.BinaryAnd);
+            syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
+            syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("0");
         }
 
         [TestMethod]

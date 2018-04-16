@@ -43,6 +43,8 @@ namespace SphereSharp.Syntax
                         return "<=";
                     case BinaryOperatorKind.LogicalAnd:
                         return "&&";
+                    case BinaryOperatorKind.BinaryAnd:
+                        return "&";
                     case BinaryOperatorKind.LogicalOr:
                         return "||";
                     case BinaryOperatorKind.MoreThan:
