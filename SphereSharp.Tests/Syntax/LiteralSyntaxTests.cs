@@ -94,7 +94,16 @@ namespace SphereSharp.Tests.Syntax
             syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberName.Should().Be("seznamclass");
             syntax.Segments[2].As<TextSegmentSyntax>().Text.Should().Be("</BASEFONT>");
             syntax.Segments.Should().HaveCount(3);
+        }
 
+        [TestMethod]
+        public void Can_parse_literal_without_doublequotes_with_macro()
+        {
+            var syntax = LiteralSyntax.Parse("i_crystal<tag.class>");
+
+            syntax.Segments.Should().HaveCount(2);
+            syntax.Segments[0].Should().BeOfType<TextSegmentSyntax>().Which.Text.Should().Be("i_crystal");
+            syntax.Segments[1].Should().BeOfType<MacroSegmentSyntax>();
         }
     }
 }

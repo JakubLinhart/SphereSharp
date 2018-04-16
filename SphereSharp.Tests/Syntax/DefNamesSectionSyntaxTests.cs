@@ -140,5 +140,25 @@ name   value               ").Should().BeOfType<DefNamesSectionSyntax>().Which;
             syntax.DefNames[0].LValue.Should().Be("name");
             syntax.DefNames[0].RValue.Should().Be("value");
         }
+
+        [TestMethod]
+        public void Can_parse_defname_with_indexed_lvalue()
+        {
+            var syntax = SectionSyntax.Parse(@"[DEFNAMES test]
+def_class[1]	Mag").Should().BeOfType<DefNamesSectionSyntax>().Which;
+
+            syntax.DefNames.Should().HaveCount(1);
+            syntax.DefNames[0].LValue.Should().Be("def_class[1]");
+            syntax.DefNames[0].RValue.Should().Be("Mag");
+        }
+
+        [TestMethod]
+        public void Can_parse_defname_with_spaces_in_section_name()
+        {
+            var syntax = SectionSyntax.Parse(@"[DEFNAMES classes to take]
+lvalue	rvalue").Should().BeOfType<DefNamesSectionSyntax>().Which;
+
+            syntax.Name.Should().Be("classes to take");
+        }
     }
 }

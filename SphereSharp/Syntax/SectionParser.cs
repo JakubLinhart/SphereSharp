@@ -10,29 +10,27 @@ namespace SphereSharp.Syntax
             NumericSectionName.Or(TextSectionName);
 
         public static Parser<IEnumerable<char>> TextSectionName =>
-            Parse.Letter.Or(Parse.Char('_')).Many();
+            Parse.AnyChar.Except(Parse.Char(']')).Many();
 
         public static Parser<IEnumerable<char>> NumericSectionName =>
             CommonParsers.IntegerHexNumber.Or(CommonParsers.IntegerDecadicNumber);
 
-        public static Parser<(string type, string name, string subType)> SectionHeader =>
+        public static Parser<(string type, string name)> SectionHeader =>
             from _1 in CommonParsers.Ignored.Many()
             from _2 in Parse.String("[")
             from sectionType in Parse.Letter.Many().Text()
             from _3 in CommonParsers.OneLineWhiteSpace.Many()
             from sectionName in SectionName.Text()
-            from _4 in CommonParsers.OneLineWhiteSpace.Many()
-            from subSection in SectionName.Text().Optional()
-            from _5 in Parse.String("]")
-            from _6 in CommonParsers.Ignored.Many()
-            select (sectionType, sectionName, subSection.GetOrDefault());
+            from _6 in Parse.String("]")
+            from _7 in CommonParsers.Ignored.Many()
+            select (sectionType, sectionName);
 
         public static Parser<SectionSyntax> Section =>
             from header in SectionHeader
-            from section in ParseSection(header.type, header.name, header.subType)
+            from section in ParseSection(header.type, header.name)
             select section;
 
-        public static Parser<SectionSyntax> ParseSection(string sectionType, string sectionName, string sectionSubType)
+        public static Parser<SectionSyntax> ParseSection(string sectionType, string sectionName)
         {
             switch (sectionType.ToLower())
             {
@@ -45,21 +43,23 @@ namespace SphereSharp.Syntax
                 case "chardef":
                     return CharDefSectionParser.ParseCharDef(sectionType, sectionName);
                 case "dialog":
-                    if (string.IsNullOrEmpty(sectionSubType))
+                    var sectionNameParts = sectionName.Split(' ');
+                    sectionName = sectionNameParts[0];
+                    if (sectionNameParts.Length == 1)
                     {
                         return DialogSectionParser.ParseDialog(sectionType, sectionName);
                     }
-                    else if (sectionSubType.Equals("button", StringComparison.OrdinalIgnoreCase))
+                    else if (sectionNameParts[1].Equals("button", StringComparison.OrdinalIgnoreCase))
                     {
-                        return DialogButtonsSectionParser.ParseButtonSection(sectionType, sectionName, sectionSubType);
+                        return DialogButtonsSectionParser.ParseButtonSection(sectionType, sectionName, sectionNameParts[1]);
                     }
-                    else if (sectionSubType.Equals("text", StringComparison.OrdinalIgnoreCase))
+                    else if (sectionNameParts[1].Equals("text", StringComparison.OrdinalIgnoreCase))
                     {
-                        return DialogTextsSectionParser.ParseTexts(sectionType, sectionName, sectionSubType);
+                        return DialogTextsSectionParser.ParseTexts(sectionType, sectionName, sectionNameParts[1]);
                     }
                     else
                     {
-                        throw new NotImplementedException($"subSectionName {sectionSubType}");
+                        throw new NotImplementedException($"subSectionName {sectionNameParts[1]}");
                     }
                 case "profession":
                     return ProfessionSectionParser.ParseProfession(sectionType, sectionName);

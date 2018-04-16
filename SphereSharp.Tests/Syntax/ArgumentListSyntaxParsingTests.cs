@@ -28,7 +28,7 @@ namespace SphereSharp.Tests.Syntax
             var syntax = ArgumentListSyntax.Parse("(seznamnations[0])");
 
             syntax.Arguments.Length.Should().Be(1);
-            syntax.Arguments[0].Should().BeOfType<TextArgumentSyntax>().Which.Text.Should().Be("seznamnations[0]");
+            syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("seznamnations[0]");
         }
 
         [TestMethod]
@@ -37,7 +37,7 @@ namespace SphereSharp.Tests.Syntax
             var syntax = ArgumentListSyntax.Parse("(D_RACE_class_races)");
 
             syntax.Arguments.Length.Should().Be(1);
-            syntax.Arguments[0].As<TextArgumentSyntax>().Text.Should().Be("D_RACE_class_races");
+            syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races");
         }
 
         [TestMethod]
@@ -45,9 +45,9 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("(D_RACE_class_races1,D_RACE_class_races2,D_RACE_class_races3)");
 
-            syntax.Arguments[0].As<TextArgumentSyntax>().Text.Should().Be("D_RACE_class_races1");
-            syntax.Arguments[1].As<TextArgumentSyntax>().Text.Should().Be("D_RACE_class_races2");
-            syntax.Arguments[2].As<TextArgumentSyntax>().Text.Should().Be("D_RACE_class_races3");
+            syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races1");
+            syntax.Arguments[1].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races2");
+            syntax.Arguments[2].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races3");
         }
 
         [TestMethod]
@@ -104,6 +104,19 @@ namespace SphereSharp.Tests.Syntax
 
             var argumentExpressionSyntax = syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression.Should().BeOfType<MacroExpressionSyntax>().Which;
             argumentExpressionSyntax.Macro.Call.MemberName.Should().Be("tag");
+        }
+
+        [TestMethod]
+        public void Can_parse_literal_without_doublequotes_containing_macro()
+        {
+            var syntax = ArgumentListSyntax.Parse("(i_crystal_<tag.class>)");
+
+            syntax.Arguments.Should().HaveCount(1);
+            var literalSyntax = syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal;
+
+            literalSyntax.Segments.Should().HaveCount(2);
+            literalSyntax.Segments[0].Should().BeOfType<TextSegmentSyntax>().Which.Text.Should().Be("i_crystal_");
+            literalSyntax.Segments[1].Should().BeOfType<MacroSegmentSyntax>();
         }
 
         [TestMethod]

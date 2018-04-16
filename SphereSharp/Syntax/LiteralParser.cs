@@ -31,6 +31,12 @@ namespace SphereSharp.Syntax
                 .Many()
             select new TextSegmentSyntax(new string(chars.ToArray()));
 
+        public static Parser<TextSegmentSyntax> TextSegmentWithoutDoubleQuotes =>
+            from chars in Parse.AnyChar.Except(
+                Parse.Chars(new[] { '<', '"', ',', ')' }))
+                .AtLeastOnce()
+            select new TextSegmentSyntax(new string(chars.ToArray()));
+
         public static Parser<SegmentSyntax> MacroSegment =>
             from macro in MacroParser.Macro
             select new MacroSegmentSyntax(macro);
@@ -41,6 +47,9 @@ namespace SphereSharp.Syntax
 
         public static Parser<SegmentSyntax> Segment =>
             TextSegment.Or(EvalMacroSegment).Or(MacroSegment);
+
+        public static Parser<SegmentSyntax> SegmentWithoutDoubleQuotes =>
+            TextSegmentWithoutDoubleQuotes.Or(MacroSegment);
 
         public static Parser<LiteralSyntax> SafeLiteralWithDoubleQuotes =>
             from _1 in Parse.Char('"').Once()
@@ -79,8 +88,12 @@ namespace SphereSharp.Syntax
             from _2 in Parse.String("\"")
             select new LiteralSyntax(segments.ToImmutableArray());
 
+        public static Parser<LiteralSyntax> LiteralWithoutDoubleQuotes =>
+            from segments in SegmentWithoutDoubleQuotes.AtLeastOnce()
+            select new LiteralSyntax(segments.ToImmutableArray());
+
         public static Parser<LiteralSyntax> Literal =>
-            from literal in SafeLiteralWithDoubleQuotes.Or(SafeLiteralWithoutDoubleQuotes).Or(LiteralWithDoubleQuotes)
+            from literal in SafeLiteralWithDoubleQuotes.Or(SafeLiteralWithoutDoubleQuotes).Or(LiteralWithDoubleQuotes).Or(LiteralWithoutDoubleQuotes)
             select literal;
     }
 }
