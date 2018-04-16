@@ -222,5 +222,18 @@ endif // comment");
             syntax.ThenBlock.Statements.Should().HaveCount(1);
             syntax.ElseBlock.Statements.Should().HaveCount(1);
         }
+
+        [TestMethod]
+        public void Can_parse_nested_if_with_whitespace_and_comment_at_the_end_of_endif_line()
+        {
+            var syntax = IfSyntax.Parse(@"if (1)
+    if (2==2)
+        call2
+    endif  
+endif");
+
+            syntax.ThenBlock.Statements.Should().HaveCount(1);
+            syntax.ThenBlock.Statements[0].Should().BeOfType<IfSyntax>();
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace SphereSharp.Syntax
         public static Parser<StatementSyntax> Statement =>
             from _1 in CommonParsers.Ignored.Many()
             from statement in Statements
-            from _2 in CommonParsers.OneLineWhiteSpace.Optional()
+            from _2 in CommonParsers.OneLineWhiteSpace.Many()
             select statement;
 
         public static Parser<StatementSyntax> Statements =>
