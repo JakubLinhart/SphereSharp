@@ -11,12 +11,12 @@ namespace SphereSharp.Syntax
             from _2 in CommonParsers.OneLineWhiteSpace.Many()
             from condition in ExpressionParser.Expr
             from _3 in CommonParsers.Ignored
-            from thenBlock in CodeBlockParser.CodeBlock
+            from thenBlock in CodeBlockParser.CodeBlock.Optional()
             from elseIfs in ElseIf.Many()
             from elseBlock in Else.Optional()
             from _4 in CommonParsers.OneLineWhiteSpace.Many()
             from endifKeyword in CommonParsers.EndifKeyword
-            select new IfSyntax(condition, thenBlock,
+            select new IfSyntax(condition, thenBlock.IsDefined ? thenBlock.Get() : CodeBlockSyntax.Empty,
                 elseBlock.IsDefined ? elseBlock.Get() : CodeBlockSyntax.Empty,
                 elseIfs.ToImmutableArray());
 

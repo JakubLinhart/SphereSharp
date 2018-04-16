@@ -75,6 +75,16 @@ endif
         }
 
         [TestMethod]
+        public void Can_parse_if_with_empty_then()
+        {
+            var syntax = IfSyntax.Parse(@"if (1==1)
+endif
+");
+
+            syntax.ThenBlock.Statements.Should().HaveCount(0);
+        }
+
+        [TestMethod]
         public void Can_parse_if_with_multiple_elseifs()
         {
             var syntax = IfSyntax.Parse(@"if (1==1)
