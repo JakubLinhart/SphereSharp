@@ -59,6 +59,22 @@ endif
         }
 
         [TestMethod]
+        public void Can_parse_if_with_empty_elseif()
+        {
+            var syntax = IfSyntax.Parse(@"if (1==1)
+    func1
+elseif (1==1)
+endif
+");
+
+            syntax.ThenBlock.Statements[0].As<CallSyntax>().MemberName.Should().Be("func1");
+            syntax.ElseIfs.Length.Should().Be(1);
+            syntax.ElseIfs[0].Condition.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Equal);
+            syntax.ElseIfs[0].ThenBlock.Statements.Should().HaveCount(0);
+            syntax.ElseBlock.Should().Be(CodeBlockSyntax.Empty);
+        }
+
+        [TestMethod]
         public void Can_parse_if_with_multiple_elseifs()
         {
             var syntax = IfSyntax.Parse(@"if (1==1)

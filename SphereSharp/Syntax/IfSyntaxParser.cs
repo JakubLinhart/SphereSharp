@@ -33,8 +33,8 @@ namespace SphereSharp.Syntax
             from _2 in CommonParsers.OneLineWhiteSpace.Many()
             from condition in ExpressionParser.Expr
             from _3 in CommonParsers.Ignored
-            from thenBlock in CodeBlockParser.CodeBlock
-            select new ElseIfSyntax(condition, thenBlock);
+            from thenBlock in CodeBlockParser.CodeBlock.Optional()
+            select new ElseIfSyntax(condition, thenBlock.IsDefined ? thenBlock.GetOrDefault() : CodeBlockSyntax.Empty);
 
         internal static Parser<StatementSyntax> IfStatement =>
             from ifStatement in If
