@@ -128,6 +128,20 @@ namespace SphereSharp.Sphere.Generator
             builder.Append('>');
         }
 
+        public override void VisitProperty(PropertySyntax propertySyntax)
+        {
+            builder.Append(propertySyntax.LValue);
+            builder.Append("=");
+            builder.AppendLine(propertySyntax.RValue);
+        }
+
+        public override void VisitDefName(DefNameSyntax defNameSyntax)
+        {
+            builder.Append(defNameSyntax.LValue);
+            builder.Append('\t');
+            builder.AppendLine(defNameSyntax.RValue);
+        }
+
         public override void VisitIf(IfSyntax ifSyntax)
         {
             builder.Append("if ");
