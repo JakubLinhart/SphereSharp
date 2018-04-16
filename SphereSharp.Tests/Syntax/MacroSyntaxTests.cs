@@ -65,7 +65,7 @@ namespace SphereSharp.Tests.Syntax
             var syntax = MacroSyntax.Parse("<strlen(<tag(nation)>)>");
 
             syntax.Call.MemberName.Should().Be("strlen");
-            syntax.Call.Arguments.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
+            syntax.Call.Arguments.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>();
         }
     }
 }

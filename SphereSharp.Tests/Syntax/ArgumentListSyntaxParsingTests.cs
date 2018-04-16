@@ -102,8 +102,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("(<tag(race)>)");
 
-            var argumentExpressionSyntax = syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression.Should().BeOfType<MacroExpressionSyntax>().Which;
-            argumentExpressionSyntax.Macro.Call.MemberName.Should().Be("tag");
+            var argumentExpressionSyntax = syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>();
         }
 
         [TestMethod]
@@ -120,12 +119,25 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_parse_literal_without_doublequotes_containing_macro_at_beginning()
+        {
+            var syntax = ArgumentListSyntax.Parse("(<tag.class>i_crystal_)");
+
+            syntax.Arguments.Should().HaveCount(1);
+            var literalSyntax = syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal;
+
+            literalSyntax.Segments.Should().HaveCount(2);
+            literalSyntax.Segments[0].Should().BeOfType<MacroSegmentSyntax>();
+            literalSyntax.Segments[1].Should().BeOfType<TextSegmentSyntax>().Which.Text.Should().Be("i_crystal_");
+        }
+
+        [TestMethod]
         public void Can_parse_two_macro_arguments()
         {
             var syntax = ArgumentListSyntax.Parse("(<tag.race>,<argv(u)>)");
 
-            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
-            syntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>();
+            syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>();
+            syntax.Arguments[1].Should().BeOfType<LiteralArgumentSyntax>();
         }
 
         [TestMethod]

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SphereSharp.Syntax
 {
-    internal static class ArgumentExpressionParser
+    public static class ArgumentExpressionParser
     {
         public static Parser<BinaryOperatorKind> BinaryOperator(string op, BinaryOperatorKind kind) =>
             from _1 in CommonParsers.OneLineWhiteSpace.Optional()
@@ -33,7 +33,7 @@ namespace SphereSharp.Syntax
             select expr.Single().Enclose();
 
         public static Parser<ExpressionSyntax> Factor =>
-            ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(IntegerInterval).Or(EvalMacroExpression).Or(MacroExpression);
+            ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(IntegerInterval).Or(EvalMacroExpression);
 
         public static Parser<ExpressionSyntax> LogicalNotExpression =>
             from op in LogicalNot
