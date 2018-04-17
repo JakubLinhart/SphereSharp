@@ -8,7 +8,7 @@ namespace SphereSharp.Syntax
     internal static class ArgumentListParser
     {
         public static Parser<ArgumentSyntax> Argument =>
-            ExpressionArgument.Or(LiteralArgument);
+            ResourceArgument.Or(ExpressionArgument).Or(LiteralArgument);
 
         public static Parser<ArgumentSyntax> ExpressionArgument =>
             from expr in ArgumentExpressionParser.Expr
@@ -17,6 +17,13 @@ namespace SphereSharp.Syntax
         public static Parser<ArgumentSyntax> LiteralArgument =>
             from argument in LiteralParser.Literal
             select new LiteralArgumentSyntax(argument);
+
+        public static Parser<ArgumentSyntax> ResourceArgument =>
+            from amount in ExpressionParser.Expr
+            from _1 in CommonParsers.OneLineWhiteSpace
+            from name in SymbolParser.NonIndexedSymbol
+            select new ResourceArgumentSyntax(amount, name);
+
 
         public static Parser<IEnumerable<ArgumentSyntax>> StringArgument =>
             from firstLetter in Parse.Letter.Once()

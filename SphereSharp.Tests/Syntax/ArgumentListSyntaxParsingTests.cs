@@ -244,5 +244,11 @@ namespace SphereSharp.Tests.Syntax
             listSyntax.Arguments.Should().HaveCount(1);
             listSyntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression.Should().BeOfType<EvalMacroExpressionSyntax>();
         }
+
+        [TestMethod]
+        public void Can_parse_resource_argument_in_parentheses()
+        {
+            var listSyntax = ArgumentListSyntax.Parse("(1000 t_custom_spell)");
+        }
     }
 }

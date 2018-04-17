@@ -87,6 +87,15 @@ endwhile
         }
 
         [TestMethod]
+        public void Can_parse_return_statement_with_macro()
+        {
+            var syntax = CodeBlockSyntax.Parse(@"return <args>");
+
+            var argument = syntax.Statements[0].Should().BeOfType<ReturnSyntax>().Which.Argument;
+            argument.Should().BeOfType<LiteralArgumentSyntax>();
+        }
+
+        [TestMethod]
         public void Can_parse_events_statment()
         {
             var syntax = CodeBlockSyntax.Parse(@"events +e_something");

@@ -108,6 +108,13 @@ namespace SphereSharp.Sphere.Generator
             builder.Append(textArgumentSyntax.Text);
         }
 
+        public override void VisitResourceArgument(ResourceArgumentSyntax resourceArgumentSyntax)
+        {
+            Visit(resourceArgumentSyntax.Amount);
+            builder.Append(' ');
+            Visit(resourceArgumentSyntax.Name);
+        }
+
         public override void VisitMacro(MacroSyntax macroSyntax)
         {
             builder.Append('<');
