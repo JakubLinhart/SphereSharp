@@ -7,11 +7,11 @@ namespace SphereSharp.Syntax
 {
     public sealed class MacroSyntax : SyntaxNode
     {
-        public CallSyntax Call { get; }
+        public ExpressionSyntax Expression { get; }
 
-        public MacroSyntax(CallSyntax call)
+        public MacroSyntax(ExpressionSyntax expression)
         {
-            this.Call = call;
+            this.Expression = expression;
         }
 
         public static MacroSyntax Parse(string src)
@@ -23,7 +23,7 @@ namespace SphereSharp.Syntax
 
         public override IEnumerable<SyntaxNode> GetChildNodes()
         {
-            yield return Call;
+            yield return Expression;
         }
     }
 }

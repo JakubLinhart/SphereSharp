@@ -204,7 +204,8 @@ namespace SphereSharp.Tests.Syntax
 
             literal.Segments.Should().HaveCount(2);
             literal.Segments[0].Should().BeOfType<TextSegmentSyntax>().Which.Text.Should().Be("raceinfo_");
-            literal.Segments[1].Should().BeOfType<MacroSegmentSyntax>().Which.Macro.Call.MemberName.Should().Be("TAG");
+            literal.Segments[1].Should().BeOfType<MacroSegmentSyntax>().Which.Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("TAG");
         }
 
         [TestMethod]
@@ -215,7 +216,8 @@ namespace SphereSharp.Tests.Syntax
             var literal = argumentSyntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal;
 
             literal.Segments.Should().HaveCount(1);
-            literal.Segments[0].Should().BeOfType<MacroSegmentSyntax>().Which.Macro.Call.MemberName.Should().Be("TAG");
+            literal.Segments[0].Should().BeOfType<MacroSegmentSyntax>().Which.Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("TAG");
         }
 
         [TestMethod]

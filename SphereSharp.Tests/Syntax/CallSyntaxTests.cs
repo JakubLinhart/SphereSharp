@@ -64,7 +64,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = CallSyntax.Parse("func_<tag(test)>");
 
             syntax.MemberNameSyntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("func_");
-            syntax.MemberNameSyntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberNameSyntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("tag");
+            syntax.MemberNameSyntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberNameSyntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("tag");
         }
 
         [TestMethod]
@@ -76,7 +77,8 @@ namespace SphereSharp.Tests.Syntax
 
             argumentLiteral.Segments.Should().HaveCount(1);
             var macro = argumentLiteral.Segments[0].Should().BeOfType<MacroSegmentSyntax>().Which.Macro;
-            var indexedSymbol = macro.Call.MemberNameSyntax.Should().BeOfType<IndexedSymbolSyntax>().Which;
+            var indexedSymbol = macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberNameSyntax.Should().BeOfType<IndexedSymbolSyntax>().Which;
             var indexCall = indexedSymbol.Index.Should().BeOfType<CallExpressionSyntax>().Which.Call;
             indexCall.MemberName.Should().Be("argn");
         }

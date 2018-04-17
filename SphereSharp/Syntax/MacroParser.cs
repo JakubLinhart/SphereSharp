@@ -5,8 +5,8 @@ namespace SphereSharp.Syntax
     internal static class MacroParser
     {
         public static Parser<MacroSyntax> InnerMacro =>
-            from call in CallParser.Call
-            select new MacroSyntax(call);
+            from expr in ExpressionParser.EqualityTerm
+            select new MacroSyntax(expr);
 
         public static Parser<MacroSyntax> Macro =>
             NonLiteralMacro.Or(LiteralMacro.Except(Parse.String("<?safe?>")));

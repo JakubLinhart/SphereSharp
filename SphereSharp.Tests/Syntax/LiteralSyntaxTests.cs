@@ -59,7 +59,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = LiteralSyntax.Parse("<?safe?><BASEFONT SIZE=\"+5\" COLOR=\"#000080\"><?seznamclass?></BASEFONT>");
 
             syntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("<BASEFONT SIZE=\"+5\" COLOR=\"#000080\">");
-            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberName.Should().Be("seznamclass");
+            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("seznamclass");
             syntax.Segments[2].As<TextSegmentSyntax>().Text.Should().Be("</BASEFONT>");
             syntax.Segments.Should().HaveCount(3);
         }
@@ -91,7 +92,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = LiteralSyntax.Parse("\"<?safe?><BASEFONT SIZE=\"+5\" COLOR=\"#000080\"><?seznamclass?></BASEFONT>\"");
 
             syntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("<BASEFONT SIZE=\"+5\" COLOR=\"#000080\">");
-            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberName.Should().Be("seznamclass");
+            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("seznamclass");
             syntax.Segments[2].As<TextSegmentSyntax>().Text.Should().Be("</BASEFONT>");
             syntax.Segments.Should().HaveCount(3);
         }

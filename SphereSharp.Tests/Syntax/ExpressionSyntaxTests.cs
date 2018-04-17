@@ -36,7 +36,7 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("0<x>").Should().BeOfType<MacroIntegerConstantExpressionSyntax>().Which;
             syntax.FirstDigits.Should().Be("0");
-            syntax.Macro.Macro.Call.MemberName.Should().Be("x");
+            syntax.Macro.Macro.Expression.Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("x");
         }
 
         [TestMethod]
@@ -160,7 +160,8 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("<strlen(nation)>");
 
-            syntax.Should().BeOfType<MacroExpressionSyntax>().Which.Macro.Call.MemberName.Should().Be("strlen");
+            syntax.Should().BeOfType<MacroExpressionSyntax>().Which.Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("strlen");
         }
 
         [TestMethod]

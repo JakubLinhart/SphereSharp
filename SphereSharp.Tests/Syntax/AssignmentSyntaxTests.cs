@@ -65,7 +65,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = AssignmentSyntax.Parse("home=<tag(nation)>");
 
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("home");
-            syntax.RValue.As<MacroExpressionSyntax>().Macro.Call.MemberName.Should().Be("tag");
+            syntax.RValue.As<MacroExpressionSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
         }
 
         [TestMethod]

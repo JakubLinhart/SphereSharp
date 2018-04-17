@@ -26,7 +26,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = SymbolSyntax.Parse("basestats_<tag.class>_str_min");
 
             syntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("basestats_");
-            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberName.Should().Be("tag");
+            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
             syntax.Segments[2].As<TextSegmentSyntax>().Text.Should().Be("_str_min");
             syntax.Segments.Length.Should().Be(3);
         }
@@ -37,7 +38,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = SymbolSyntax.Parse("basestats_<tag.class>");
 
             syntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("basestats_");
-            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberName.Should().Be("tag");
+            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
             syntax.Segments.Length.Should().Be(2);
         }
 
@@ -47,9 +49,11 @@ namespace SphereSharp.Tests.Syntax
             var syntax = SymbolSyntax.Parse("basestats_<tag.class>_<tag.race>");
 
             syntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("basestats_");
-            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberName.Should().Be("tag");
+            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
             syntax.Segments[2].As<TextSegmentSyntax>().Text.Should().Be("_");
-            syntax.Segments[3].As<MacroSegmentSyntax>().Macro.Call.MemberName.Should().Be("tag");
+            syntax.Segments[3].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
             syntax.Segments.Length.Should().Be(4);
         }
 
@@ -59,8 +63,11 @@ namespace SphereSharp.Tests.Syntax
             var syntax = SymbolSyntax.Parse("test_<realm_<tag(nation)>>");
 
             syntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("test_");
-            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberNameSyntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("realm_");
-            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberNameSyntax.Segments[1].As<MacroSegmentSyntax>().Macro.Call.MemberName.Should().Be("tag");
+            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberNameSyntax.Segments[0].As<TextSegmentSyntax>().Text.Should().Be("realm_");
+            syntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberNameSyntax.Segments[1].As<MacroSegmentSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
         }
 
         [TestMethod]

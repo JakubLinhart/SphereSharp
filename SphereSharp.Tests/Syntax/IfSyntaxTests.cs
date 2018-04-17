@@ -186,7 +186,8 @@ endif
     call1
 endif");
 
-            syntax.Condition.As<MacroExpressionSyntax>().Macro.Call.MemberName.Should().Be("strlen");
+            syntax.Condition.As<MacroExpressionSyntax>().Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("strlen");
         }
 
         [TestMethod]
