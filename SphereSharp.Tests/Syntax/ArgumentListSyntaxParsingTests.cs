@@ -263,6 +263,11 @@ namespace SphereSharp.Tests.Syntax
         public void Can_parse_resource_argument_in_parentheses()
         {
             var listSyntax = ArgumentListSyntax.Parse("(1000 t_custom_spell)");
+
+            listSyntax.Arguments.Should().HaveCount(1);
+            var argument = listSyntax.Arguments[0].Should().BeOfType<ResourceArgumentSyntax>().Which;
+            argument.Name.Should().Be("t_custom_spell");
+            argument.Amount.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1000");
         }
     }
 }
