@@ -356,7 +356,11 @@ namespace SphereSharp.Sphere.Generator
         {
             EncloseExpression(intervalExpressionSyntax, () =>
             {
-                base.VisitIntervalExpression(intervalExpressionSyntax);
+                builder.Append('{');
+                Visit(intervalExpressionSyntax.MinValue);
+                builder.Append(' ');
+                Visit(intervalExpressionSyntax.MaxValue);
+                builder.Append('}');
             });
         }
 
