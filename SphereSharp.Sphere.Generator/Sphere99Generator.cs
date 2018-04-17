@@ -124,7 +124,17 @@ namespace SphereSharp.Sphere.Generator
 
         public override void VisitEval(EvalSyntax evalSyntax)
         {
-            builder.Append("eval ");
+            switch (evalSyntax.Kind)
+            {
+                case EvalKind.Decadic:
+                    builder.Append("eval");
+                    break;
+                case EvalKind.Hexadecimal:
+                    builder.Append("hval");
+                    break;
+            }
+            builder.Append(" ");
+
             base.VisitEval(evalSyntax);
         }
 
@@ -163,9 +173,7 @@ namespace SphereSharp.Sphere.Generator
             if (ifSyntax.ElseBlock.Statements.Any())
             {
                 builder.AppendLine("else");
-                builder.Indent();
                 VisitIndetedCodeBlock(ifSyntax.ElseBlock);
-                builder.Unindent();
             }
 
             builder.Append("endif");
@@ -241,15 +249,23 @@ namespace SphereSharp.Sphere.Generator
             }
         }
 
-        public override void VisitCallExpression(CallExpressionSyntax callExpressionSyntax)
+        private void EncloseExpression(ExpressionSyntax expression, Action action)
         {
-            if (callExpressionSyntax.Enclosed)
+            if (expression.Enclosed)
                 builder.Append('(');
 
-            base.VisitCallExpression(callExpressionSyntax);
+            action();
 
-            if (callExpressionSyntax.Enclosed)
+            if (expression.Enclosed)
                 builder.Append(')');
+        }
+
+        public override void VisitCallExpression(CallExpressionSyntax callExpressionSyntax)
+        {
+            EncloseExpression(callExpressionSyntax, () =>
+            {
+                base.VisitCallExpression(callExpressionSyntax);
+            });
         }
 
         public override void VisitCodeBlock(CodeBlockSyntax codeBlockSyntax)
@@ -267,37 +283,80 @@ namespace SphereSharp.Sphere.Generator
 
         public override void VisitUnaryOperator(UnaryOperatorSyntax unaryOperatorSyntax)
         {
-            builder.Append(unaryOperatorSyntax.OperatorString);
-            Visit(unaryOperatorSyntax.Operand);
+            EncloseExpression(unaryOperatorSyntax, () =>
+            {
+                builder.Append(unaryOperatorSyntax.OperatorString);
+                Visit(unaryOperatorSyntax.Operand);
+            });
         }
 
         public override void VisitBinaryOperator(BinaryOperatorSyntax binaryOperatorSyntax)
         {
-            if (binaryOperatorSyntax.Enclosed)
-                builder.Append('(');
-
-            Visit(binaryOperatorSyntax.Operand1);
-            builder.Append(binaryOperatorSyntax.OperatorString);
-            Visit(binaryOperatorSyntax.Operand2);
-
-            if (binaryOperatorSyntax.Enclosed)
-                builder.Append(')');
+            EncloseExpression(binaryOperatorSyntax, () =>
+            {
+                Visit(binaryOperatorSyntax.Operand1);
+                builder.Append(binaryOperatorSyntax.OperatorString);
+                Visit(binaryOperatorSyntax.Operand2);
+            });
         }
 
         public override void VisitIntegerConstantExpression(IntegerConstantExpressionSyntax integerConstantExpressionSyntax)
         {
-            switch (integerConstantExpressionSyntax.Kind)
+            EncloseExpression(integerConstantExpressionSyntax, () =>
             {
-                case ConstantExpressionSyntaxKind.Hex:
-                    builder.Append('0');
-                    break;
-                case ConstantExpressionSyntaxKind.Decadic:
-                    break;
-                default:
-                    throw new NotImplementedException($"Integer constant expression kind {integerConstantExpressionSyntax.Kind}");
-            }
+                switch (integerConstantExpressionSyntax.Kind)
+                {
+                    case ConstantExpressionSyntaxKind.Hex:
+                        builder.Append('0');
+                        break;
+                    case ConstantExpressionSyntaxKind.Decadic:
+                        break;
+                    default:
+                        throw new NotImplementedException($"Integer constant expression kind {integerConstantExpressionSyntax.Kind}");
+                }
 
-            builder.Append(integerConstantExpressionSyntax.Value);
+                builder.Append(integerConstantExpressionSyntax.Value);
+            });
+        }
+
+        public override void AcceptEvalMacroExpression(EvalMacroExpressionSyntax evalMacroExpressionSyntax)
+        {
+            EncloseExpression(evalMacroExpressionSyntax, () =>
+            {
+                base.AcceptEvalMacroExpression(evalMacroExpressionSyntax);
+            });
+        }
+
+        public override void VisitEvalMacroExpression(MacroExpressionSyntax macroExpressionSyntax)
+        {
+            EncloseExpression(macroExpressionSyntax, () =>
+            {
+                base.VisitEvalMacroExpression(macroExpressionSyntax);
+            });
+        }
+
+        public override void VisitMacroIntegerConstantExpression(MacroIntegerConstantExpressionSyntax macroIntegerConstantExpressionSyntax)
+        {
+            EncloseExpression(macroIntegerConstantExpressionSyntax, () =>
+            {
+                base.VisitMacroIntegerConstantExpression(macroIntegerConstantExpressionSyntax);
+            });
+        }
+
+        public override void VisitDecimalConstantExpression(DecimalConstantExpressionSyntax decimalConstantExpressionSyntax)
+        {
+            EncloseExpression(decimalConstantExpressionSyntax, () =>
+            {
+                base.VisitDecimalConstantExpression(decimalConstantExpressionSyntax);
+            });
+        }
+
+        public override void VisitIntervalExpression(IntervalExpressionSyntax intervalExpressionSyntax)
+        {
+            EncloseExpression(intervalExpressionSyntax, () =>
+            {
+                base.VisitIntervalExpression(intervalExpressionSyntax);
+            });
         }
 
         public override void VisitEofSection(EofSectionSyntax eofSectionSyntax)
