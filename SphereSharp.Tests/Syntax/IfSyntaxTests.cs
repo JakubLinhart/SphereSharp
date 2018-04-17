@@ -235,5 +235,20 @@ endif");
             syntax.ThenBlock.Statements.Should().HaveCount(1);
             syntax.ThenBlock.Statements[0].Should().BeOfType<IfSyntax>();
         }
+
+        [TestMethod]
+        public void Can_parse_return_statement_with_macro_inside_then_and_else_blocks()
+        {
+            var syntax = IfSyntax.Parse(@"if 1==1
+    return <args>
+else
+    return <args>
+endif");
+
+            syntax.ThenBlock.Statements.Should().HaveCount(1);
+            syntax.ThenBlock.Statements[0].Should().BeOfType<ReturnSyntax>();
+            syntax.ElseBlock.Statements.Should().HaveCount(1);
+            syntax.ElseBlock.Statements[0].Should().BeOfType<ReturnSyntax>();
+        }
     }
 }

@@ -119,6 +119,15 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Ignores_comment_at_the_end_of_literal_without_doublequotes()
+        {
+            var syntax = ArgumentListSyntax.Parse("i_crystal//comment");
+
+            syntax.Arguments.Should().HaveCount(1);
+            syntax.Arguments[0].Should().BeOfType<TextArgumentSyntax>().Which.Text.Should().Be("i_crystal");
+        }
+
+        [TestMethod]
         public void Can_parse_literal_without_doublequotes_containing_macro_at_beginning()
         {
             var syntax = ArgumentListSyntax.Parse("(<tag.class>i_crystal_)");

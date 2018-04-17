@@ -27,7 +27,7 @@ namespace SphereSharp.Syntax
 
         public static Parser<IEnumerable<ArgumentSyntax>> StringArgument =>
             from firstLetter in Parse.Letter.Once()
-            from nextLetters in Parse.AnyChar.Except(Parse.LineEnd).Many()
+            from nextLetters in Parse.AnyChar.Except(Parse.LineTerminator.Or(CommonParsers.Comment)).Many()
             select new[] { new TextArgumentSyntax(new string(firstLetter.Concat(nextLetters).ToArray())) };
 
         public static Parser<IEnumerable<ArgumentSyntax>> InnerArgumentList =>
