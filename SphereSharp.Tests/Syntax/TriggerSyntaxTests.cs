@@ -33,5 +33,40 @@ FAME = 20
 
             syntax.Name.Should().Be("Create");
         }
+
+        [TestMethod]
+        public void Can_parse_trigger_name_with_underscore()
+        {
+            var syntax = TriggerSyntax.Parse(@"ON=@targon_item
+NPC = brain_undead
+FAME = 20
+");
+
+            syntax.Name.Should().Be("targon_item");
+        }
+
+        [TestMethod]
+        public void Fail_to_parse_invalid_trigger_name()
+        {
+            var testedAction = (Action)(() =>
+            {
+                TriggerSyntax.Parse(@"ON=@targQ#$%#$n_item
+NPC = brain_undead
+");
+            });
+
+            testedAction.Should().Throw<Exception>();
+        }
+
+        [TestMethod]
+        public void Can_parse_comments_after_trigger_name()
+        {
+            var syntax = TriggerSyntax.Parse(@"ON=@walk // comment
+NPC = brain_undead
+");
+
+            syntax.Name.Should().Be("walk");
+
+        }
     }
 }

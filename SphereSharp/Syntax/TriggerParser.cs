@@ -10,7 +10,8 @@ namespace SphereSharp.Syntax
             Parse.IgnoreCase("on=");
 
         public static Parser<string> Name =>
-            from name in Parse.Letter.Many().Text()
+            from name in Parse.Letter.Or(Parse.Char('_')).Many().Text()
+            from _1 in CommonParsers.LineEnd
             select name;
 
         public static Parser<TriggerSyntax> NumberedTrigger =>

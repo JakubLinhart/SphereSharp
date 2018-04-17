@@ -67,6 +67,11 @@ namespace SphereSharp.Syntax
         public static Parser<IEnumerable<char>> Ignored =>
             Parse.WhiteSpace.Many().Or(Parse.LineTerminator).Or(Comment);
 
+        public static Parser<IEnumerable<char>> LineEnd =>
+            from wh in OneLineWhiteSpace.Many()
+            from lineEnd in Parse.LineTerminator.Or(Comment)
+            select wh.Concat(lineEnd);
+
         public static Parser<IEnumerable<char>> LeftMacroParenthesis =>
             from paren in Parse.String("<")
             select paren;
