@@ -34,7 +34,7 @@ namespace SphereSharp.Syntax
             select expr.Single().Enclose();
 
         public static Parser<ExpressionSyntax> Factor =>
-            ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(IntegerInterval).Or(EvalMacroExpression);
+            ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(Interval).Or(EvalMacroExpression);
 
         public static Parser<ExpressionSyntax> LogicalNotExpression =>
             from op in LogicalNot
@@ -52,14 +52,16 @@ namespace SphereSharp.Syntax
         private static ExpressionSyntax CreateBinaryExpression(BinaryOperatorKind kind, ExpressionSyntax arg1, ExpressionSyntax arg2)
             => new BinaryOperatorSyntax(kind, arg1, arg2);
 
-        public static Parser<ExpressionSyntax> IntegerInterval =>
+        public static Parser<ExpressionSyntax> IntervalBoundary =>
+            ExpressionInParentheses.Or(DecimalDecadicConstant).Or(IntegerDecadicConstant).Or(IntegerHexConstant);
+
+        public static Parser<ExpressionSyntax> Interval =>
             from _1 in Parse.String("{").Once()
-            from min in Constant.Once()
+            from min in IntervalBoundary.Once()
             from _2 in CommonParsers.OneLineWhiteSpace
-            from max in Constant.Once()
+            from max in IntervalBoundary.Once()
             from _3 in Parse.String("}").Once()
-            select new IntervalExpressionSyntax((ConstantExpressionSyntax)min.Single(),
-                (ConstantExpressionSyntax)max.Single());
+            select new IntervalExpressionSyntax(min.Single(), max.Single());
 
         public static Parser<ExpressionSyntax> MacroIntegerConstant =>
             from firstDigits in Parse.Digit.AtLeastOnce().Text()

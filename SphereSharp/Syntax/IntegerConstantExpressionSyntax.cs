@@ -74,10 +74,10 @@ namespace SphereSharp.Syntax
 
     public class IntervalExpressionSyntax : ExpressionSyntax
     {
-        public ConstantExpressionSyntax MinValue { get; }
-        public ConstantExpressionSyntax MaxValue { get; }
+        public ExpressionSyntax MinValue { get; }
+        public ExpressionSyntax MaxValue { get; }
 
-        public IntervalExpressionSyntax(ConstantExpressionSyntax minValue, ConstantExpressionSyntax maxValue)
+        public IntervalExpressionSyntax(ExpressionSyntax minValue, ExpressionSyntax maxValue)
         {
             MinValue = minValue;
             MaxValue = maxValue;

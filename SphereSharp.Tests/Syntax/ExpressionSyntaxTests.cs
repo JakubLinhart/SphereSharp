@@ -113,19 +113,29 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ExpressionSyntax.Parse("{-2000 -3999}").Should().BeOfType<IntervalExpressionSyntax>().Which;
 
-            syntax.MinValue.Value.Should().Be("-2000");
-            syntax.MaxValue.Value.Should().Be("-3999");
+            syntax.MinValue.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("-2000");
+            syntax.MaxValue.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("-3999");
         }
+
+
 
         [TestMethod]
         public void Can_parse_decimal_interval()
         {
             var syntax = ExpressionSyntax.Parse("{3.0 4.0}").Should().BeOfType<IntervalExpressionSyntax>().Which;
 
-            syntax.MinValue.Value.Should().Be("3.0");
-            syntax.MaxValue.Value.Should().Be("4.0");
+            syntax.MinValue.Should().BeOfType<DecimalConstantExpressionSyntax>().Which.Value.Should().Be("3.0");
+            syntax.MaxValue.Should().BeOfType<DecimalConstantExpressionSyntax>().Which.Value.Should().Be("4.0");
         }
 
+        [TestMethod]
+        public void Can_parse_expression_interval()
+        {
+            var syntax = ExpressionSyntax.Parse("{(1+1) (2-2)}").Should().BeOfType<IntervalExpressionSyntax>().Which;
+
+            syntax.MinValue.Should().BeOfType<BinaryOperatorSyntax>().Which.Operator.Should().Be(BinaryOperatorKind.Add);
+            syntax.MaxValue.Should().BeOfType<BinaryOperatorSyntax>().Which.Operator.Should().Be(BinaryOperatorKind.Subtract);
+        }
 
         [TestMethod]
         public void Can_parse_hex_integer()
@@ -207,17 +217,13 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
-        public void CanParse_whitespace_between_binary_operators_and_operands()
+        public void CanParse_whitespace_between_comparison_operators_and_operands()
         {
-            var syntax = ExpressionSyntax.Parse("1 + 2 + 3").Should().BeOfType<BinaryOperatorSyntax>().Which;
+            var syntax = ExpressionSyntax.Parse("1 < 2").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
-            syntax.Operator.Should().Be(BinaryOperatorKind.Add);
-            syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("3");
-
-            var operand1 = syntax.Operand1.Should().BeOfType<BinaryOperatorSyntax>().Which;
-            operand1.Operator.Should().Be(BinaryOperatorKind.Add);
-            operand1.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
-            operand1.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("2");
+            syntax.Operator.Should().Be(BinaryOperatorKind.LessThan);
+            syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
+            syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("2");
         }
 
         [TestMethod]
