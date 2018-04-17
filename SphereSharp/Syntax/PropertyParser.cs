@@ -10,7 +10,7 @@ namespace SphereSharp.Syntax
             select name;
 
         public static Parser<string> RValue =>
-            from text in Parse.AnyChar.Except(CommonParsers.Eol).AtLeastOnce().Text()
+            from text in Parse.AnyChar.Except(CommonParsers.Eol.Or(CommonParsers.Comment)).AtLeastOnce().Text()
             select text;
 
         public static Parser<PropertySyntax> Property =>
@@ -20,7 +20,7 @@ namespace SphereSharp.Syntax
             from _3 in Parse.Char('=').Once()
             from _4 in CommonParsers.OneLineWhiteSpace.Many()
             from rValue in RValue.Optional()
-            from _5 in CommonParsers.Ignored.Many()
+            from _5 in CommonParsers.Eol.AtLeastOnce()
             select new PropertySyntax(lValue.Single(), rValue.GetOrDefault() ?? string.Empty);
     }
 

@@ -32,9 +32,8 @@ namespace SphereSharp.Syntax
             select new TextSegmentSyntax(new string(chars.ToArray()));
 
         public static Parser<TextSegmentSyntax> TextSegmentWithoutDoubleQuotes =>
-            from chars in Parse.AnyChar.Except(Parse.Chars(new[] { '<', '"', ',', ')' }))
+            from chars in Parse.AnyChar.Except(Parse.Chars(new[] { '<', '"', ',', ')' })).Except(CommonParsers.Eol)
                 .AtLeastOnce()
-                .Except(Parse.LineEnd.Or(CommonParsers.Comment))
             select new TextSegmentSyntax(new string(chars.ToArray()));
 
         public static Parser<SegmentSyntax> MacroSegment =>

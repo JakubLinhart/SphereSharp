@@ -230,5 +230,16 @@ call1");
 
             syntax.Statements.Should().HaveCount(1);
         }
+
+        [TestMethod]
+        public void Can_parse_two_assignments()
+        {
+            var syntax = CodeBlockSyntax.Parse(@"NPC=brain_undead
+FAME=20");
+
+            syntax.Statements.Should().HaveCount(2);
+            syntax.Statements[0].Should().BeOfType<AssignmentSyntax>();
+            syntax.Statements[1].Should().BeOfType<AssignmentSyntax>();
+        }
     }
 }

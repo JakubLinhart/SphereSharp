@@ -10,7 +10,7 @@ namespace SphereSharp.Syntax
             from _1 in CommonParsers.OneLineWhiteSpace.Many()
             from _2 in Parse.String("=")
             from _3 in CommonParsers.OneLineWhiteSpace.Many()
-            from rValue in ExpressionParser.Expr
+            from rValue in ArgumentListParser.Argument
             select new AssignmentSyntax(lValue, rValue);
     }
 }

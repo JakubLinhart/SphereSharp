@@ -8,9 +8,9 @@ namespace SphereSharp.Syntax
     public sealed class AssignmentSyntax : StatementSyntax
     {
         public CallSyntax LValue { get; }
-        public ExpressionSyntax RValue { get; }
+        public ArgumentSyntax RValue { get; }
 
-        public AssignmentSyntax(CallSyntax lValue, ExpressionSyntax rValue)
+        public AssignmentSyntax(CallSyntax lValue, ArgumentSyntax rValue)
         {
             RValue = rValue;
             LValue = lValue;

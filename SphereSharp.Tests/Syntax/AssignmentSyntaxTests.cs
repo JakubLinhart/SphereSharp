@@ -18,7 +18,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = AssignmentSyntax.Parse("var1=1");
 
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
-            syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.RValue.Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression
+                .Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
         }
 
         [TestMethod]
@@ -27,7 +28,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = AssignmentSyntax.Parse("var1 = 1");
 
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
-            syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.RValue.Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression
+                .Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
         }
 
         [TestMethod]
@@ -36,7 +38,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = AssignmentSyntax.Parse("var1=1 // comment");
 
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
-            syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.RValue.Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression
+                .Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
         }
 
         [TestMethod]
@@ -47,7 +50,8 @@ namespace SphereSharp.Tests.Syntax
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.ChainedCall.MemberName.Should().Be("fun2");
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.ChainedCall.ChainedCall.MemberName.Should().Be("var3");
-            syntax.RValue.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.RValue.Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression
+                .Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
         }
 
         [TestMethod]
@@ -56,7 +60,8 @@ namespace SphereSharp.Tests.Syntax
             var syntax = AssignmentSyntax.Parse("var1=((1+2)*(4+5))-6");
 
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("var1");
-            syntax.RValue.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Subtract);
+            syntax.RValue.Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression
+                .Should().BeOfType<BinaryOperatorSyntax>().Which.Operator.Should().Be(BinaryOperatorKind.Subtract);
         }
 
         [TestMethod]
@@ -65,8 +70,7 @@ namespace SphereSharp.Tests.Syntax
             var syntax = AssignmentSyntax.Parse("home=<tag(nation)>");
 
             syntax.LValue.Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("home");
-            syntax.RValue.As<MacroExpressionSyntax>().Macro.Expression
-                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("tag");
+            syntax.RValue.Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Segments.Should().HaveCount(1);
         }
 
         [TestMethod]
@@ -77,6 +81,24 @@ namespace SphereSharp.Tests.Syntax
             syntax.LValue.MemberNameSyntax.Should().BeOfType<IndexedSymbolSyntax>()
                 .Which.Index.Should().BeOfType<IntegerConstantExpressionSyntax>()
                 .Which.Value.Should().Be("0");
+        }
+
+        [TestMethod]
+        public void Can_parse_string_assignment()
+        {
+            var syntax = AssignmentSyntax.Parse("deed=\"Sbalena lod bez klice\"");
+
+            syntax.LValue.MemberName.Should().Be("deed");
+            syntax.RValue.Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("Sbalena lod bez klice");
+        }
+
+        [TestMethod]
+        public void Can_parse_string_without_doublequotes_assignment()
+        {
+            var syntax = AssignmentSyntax.Parse("NPC=brain_undead");
+
+            syntax.LValue.MemberName.Should().Be("NPC");
+            syntax.RValue.Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("brain_undead");
         }
     }
 }
