@@ -27,6 +27,7 @@ namespace SphereSharp.Sphere.Generator
         public override void VisitCharDefSection(CharDefSectionSyntax charDefSectionSyntax) => Generate(charDefSectionSyntax);
         public override void VisitDialogButtonsSection(DialogButtonsSectionSyntax dialogButtonsSectionSyntax) => Generate(dialogButtonsSectionSyntax);
         public override void VisitDialogTextsSection(DialogTextsSectionSyntax dialogTextsSectionSyntax) => Generate(dialogTextsSectionSyntax);
+        public override void VisitTypeDefSection(TypeDefSectionSyntax typeDefSectionSyntax) => Generate(typeDefSectionSyntax);
 
         public override void VisitFunctionSection(FunctionSectionSyntax functionSectionSyntax)
         {

@@ -87,7 +87,9 @@
     <Compile Include="Syntax\SyntaxNode.cs" />
     <Compile Include="Syntax\SyntaxVisitor.cs" />
     <Compile Include="Syntax\SyntaxWalker.cs" />
+    <Compile Include="Syntax\TypeDefSectionParser.cs" />
     <Compile Include="Syntax\TemplateSectionParser.cs" />
+    <Compile Include="Syntax\TypeDefSectionSyntax.cs" />
     <Compile Include="Syntax\TemplateSectionSyntax.cs" />
     <Compile Include="Syntax\SkillSectionParser.cs" />
     <Compile Include="Syntax\CharDefSectionParser.cs" />
