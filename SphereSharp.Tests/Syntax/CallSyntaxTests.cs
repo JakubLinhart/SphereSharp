@@ -127,5 +127,14 @@ namespace SphereSharp.Tests.Syntax
             syntax.Arguments.Arguments.Should().HaveCount(1);
             var argument = syntax.Arguments.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
         }
+
+        [TestMethod]
+        public void Can_call_function_with_resource_argument_without_doublequotes()
+        {
+            var syntax = CallSyntax.Parse("restest 1 i_scroll_blank");
+
+            syntax.Arguments.Arguments.Should().HaveCount(1);
+            syntax.Arguments.Arguments[0].Should().BeOfType<ResourceArgumentSyntax>();
+        }
     }
 }

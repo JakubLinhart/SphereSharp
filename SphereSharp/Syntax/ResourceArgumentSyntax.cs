@@ -5,9 +5,9 @@ namespace SphereSharp.Syntax
     public sealed class ResourceArgumentSyntax : ArgumentSyntax
     {
         public ExpressionSyntax Amount { get; }
-        public SymbolSyntax Name { get; }
+        public string Name { get; }
 
-        public ResourceArgumentSyntax(ExpressionSyntax amount, SymbolSyntax name)
+        public ResourceArgumentSyntax(ExpressionSyntax amount, string name)
         {
             Amount = amount;
             Name = name;
@@ -18,7 +18,6 @@ namespace SphereSharp.Syntax
         public override IEnumerable<SyntaxNode> GetChildNodes()
         {
             yield return Amount;
-            yield return Name;
         }
     }
 }

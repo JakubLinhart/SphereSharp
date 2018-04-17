@@ -112,7 +112,7 @@ namespace SphereSharp.Sphere.Generator
         {
             Visit(resourceArgumentSyntax.Amount);
             builder.Append(' ');
-            Visit(resourceArgumentSyntax.Name);
+            builder.Append(resourceArgumentSyntax.Name);
         }
 
         public override void VisitMacro(MacroSyntax macroSyntax)

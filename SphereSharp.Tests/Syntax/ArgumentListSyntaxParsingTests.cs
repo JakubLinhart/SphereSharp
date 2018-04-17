@@ -84,9 +84,12 @@ namespace SphereSharp.Tests.Syntax
         {
             var syntax = ArgumentListSyntax.Parse("123 456 789");
 
-            syntax.Arguments[0].As<TextArgumentSyntax>().Text.Should().Be("123");
-            syntax.Arguments[1].As<TextArgumentSyntax>().Text.Should().Be("456");
-            syntax.Arguments[2].As<TextArgumentSyntax>().Text.Should().Be("789");
+            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression.Should()
+                .BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("123");
+            syntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression.Should()
+                .BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("456");
+            syntax.Arguments[2].Should().BeOfType<ExpressionArgumentSyntax>().Which.Expression.Should()
+                .BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("789");
         }
 
         [TestMethod]

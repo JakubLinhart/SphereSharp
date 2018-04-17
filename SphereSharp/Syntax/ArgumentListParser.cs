@@ -18,10 +18,15 @@ namespace SphereSharp.Syntax
             from argument in LiteralParser.Literal
             select new LiteralArgumentSyntax(argument);
 
+        public static Parser<string> ResourceName =>
+            from firstLetter in Parse.Letter
+            from nextLetters in Parse.LetterOrDigit.Or(Parse.Char('_')).Many().Text()
+            select firstLetter + nextLetters;
+
         public static Parser<ArgumentSyntax> ResourceArgument =>
             from amount in ExpressionParser.Expr
             from _1 in CommonParsers.OneLineWhiteSpace
-            from name in SymbolParser.NonIndexedSymbol
+            from name in ResourceName
             select new ResourceArgumentSyntax(amount, name);
 
 
@@ -46,14 +51,18 @@ namespace SphereSharp.Syntax
                 .Or(ArgumentListWithoutParenthesis)
             select new ArgumentListSyntax(args.ToImmutableArray());
 
+        public static Parser<ArgumentSyntax> ArgumentWithoutParenthesis =>
+            from argument in ResourceArgument.Or(ExpressionArgument)
+            select argument;
+
         public static Parser<IEnumerable<ArgumentSyntax>> ArgumentListWithoutParenthesis =>
-            from firstNumber in CommonParsers.IntegerDecadicNumber.Once()
-            from nextNumbers in (
+            from firstArgument in ArgumentWithoutParenthesis
+            from nextArguments in (
                 from _ in CommonParsers.OneLineWhiteSpace.AtLeastOnce()
-                from arg in CommonParsers.IntegerDecadicNumber
+                from arg in ArgumentWithoutParenthesis
                 select arg
             ).Many()
-            select firstNumber.Concat(nextNumbers).Select(x => new TextArgumentSyntax(x));
+            select new ArgumentSyntax[] { firstArgument }.Concat(nextArguments);
 
         public static Parser<IEnumerable<ArgumentSyntax>> ArgumentListWithParenthesis =>
             from leftParen in Parse.Char('(')
