@@ -53,6 +53,8 @@ namespace SphereSharp.Syntax
                         return ">=";
                     case BinaryOperatorKind.Multiply:
                         return "*";
+                    case BinaryOperatorKind.Divide:
+                        return "/";
                     case BinaryOperatorKind.NotEqual:
                         return "!=";
                     case BinaryOperatorKind.Subtract:

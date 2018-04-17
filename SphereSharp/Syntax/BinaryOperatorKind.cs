@@ -5,6 +5,7 @@
         Add,
         Subtract,
         Multiply,
+        Divide,
         LogicalAnd,
         BinaryAnd,
         LogicalOr,

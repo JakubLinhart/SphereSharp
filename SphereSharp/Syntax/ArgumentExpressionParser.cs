@@ -18,6 +18,7 @@ namespace SphereSharp.Syntax
         public static Parser<BinaryOperatorKind> Add => BinaryOperator("+", BinaryOperatorKind.Add);
         public static Parser<BinaryOperatorKind> Subtract => BinaryOperator("-", BinaryOperatorKind.Subtract);
         public static Parser<BinaryOperatorKind> Multiply => BinaryOperator("*", BinaryOperatorKind.Multiply);
+        public static Parser<BinaryOperatorKind> Divide => BinaryOperator("/", BinaryOperatorKind.Divide);
         public static Parser<BinaryOperatorKind> LogicalAnd => BinaryOperator("&&", BinaryOperatorKind.LogicalAnd);
         public static Parser<BinaryOperatorKind> LogicalOr => BinaryOperator("||", BinaryOperatorKind.LogicalOr);
         public static Parser<BinaryOperatorKind> BinaryOr => BinaryOperator("|", BinaryOperatorKind.BinaryOr);
@@ -43,7 +44,7 @@ namespace SphereSharp.Syntax
         public static Parser<ExpressionSyntax> Operand =>
             LogicalNotExpression.Or(Factor);
 
-        public static Parser<ExpressionSyntax> Term => Parse.ChainOperator(Multiply, Operand, CreateBinaryExpression);
+        public static Parser<ExpressionSyntax> Term => Parse.ChainOperator(Multiply.Or(Divide), Operand, CreateBinaryExpression);
         public static Parser<ExpressionSyntax> EqualityTerm => Parse.ChainOperator(Add.Or(Subtract), Term, CreateBinaryExpression);
         public static Parser<ExpressionSyntax> LogicalTerm => Parse.ChainOperator(Equal.Or(NotEqual).Or(MoreThan).Or(LessThan), EqualityTerm, CreateBinaryExpression);
         public static Parser<ExpressionSyntax> Expr => Parse.ChainOperator(LogicalAnd.Or(LogicalOr).Or(BinaryOr), LogicalTerm, CreateBinaryExpression);

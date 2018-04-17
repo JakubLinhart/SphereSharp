@@ -239,6 +239,16 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_parse_divide_operator()
+        {
+            var syntax = ExpressionSyntax.Parse("1/2");
+
+            syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Divide);
+            syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("2");
+        }
+
+        [TestMethod]
         public void Can_parse_logical_or_operator()
         {
             var syntax = ExpressionSyntax.Parse("1||0");
