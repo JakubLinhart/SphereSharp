@@ -13,6 +13,7 @@ namespace SphereSharp.Syntax
         public virtual void VisitEventsStatement(EventsStatementSyntax syntaxNode) => DefaultVisit(syntaxNode);
         public virtual void VisitTextArgument(TextArgumentSyntax textArgumentSyntax) => DefaultVisit(textArgumentSyntax);
         public virtual void VisitTypeDefSection(TypeDefSectionSyntax typeDefSectionSyntax) => DefaultVisit(typeDefSectionSyntax);
+        public virtual void VisitSymbolArgument(SymbolArgumentSyntax symbolArgumentSyntax) => DefaultVisit(symbolArgumentSyntax);
         public virtual void VisitResourceArgument(ResourceArgumentSyntax resourceArgumentSyntax) => DefaultVisit(resourceArgumentSyntax);
         public virtual void VisitLiteralArgument(LiteralArgumentSyntax literalArgumentSyntax) => DefaultVisit(literalArgumentSyntax);
         public virtual void VisitWhileStatement(WhileStatementSyntax whileStatementSyntax) => DefaultVisit(whileStatementSyntax);

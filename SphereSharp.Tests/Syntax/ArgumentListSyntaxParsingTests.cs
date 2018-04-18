@@ -23,21 +23,23 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
-        public void Can_parse_indexed_symbol()
-        {
-            var syntax = ArgumentListSyntax.Parse("(seznamnations[0])");
-
-            syntax.Arguments.Length.Should().Be(1);
-            syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("seznamnations[0]");
-        }
-
-        [TestMethod]
         public void Can_parse_one_symbol_argument()
         {
             var syntax = ArgumentListSyntax.Parse("(D_RACE_class_races)");
 
             syntax.Arguments.Length.Should().Be(1);
             syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races");
+        }
+
+        [TestMethod]
+        public void Can_parse_indexed_symbol_argument()
+        {
+            var syntax = ArgumentListSyntax.Parse("(D_RACE_class_races[arg(i)])");
+
+            syntax.Arguments.Length.Should().Be(1);
+            syntax.Arguments[0].Should().BeOfType<SymbolArgumentSyntax>().Which
+                .Symbol.Should().BeOfType<IndexedSymbolSyntax>().Which
+                .Index.Should().BeOfType<CallExpressionSyntax>();
         }
 
         [TestMethod]

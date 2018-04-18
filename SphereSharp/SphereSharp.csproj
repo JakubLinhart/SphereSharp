@@ -84,6 +84,7 @@
     <Compile Include="Syntax\FileParser.cs" />
     <Compile Include="Syntax\IfSyntaxParser.cs" />
     <Compile Include="Syntax\ResourceArgumentSyntax.cs" />
+    <Compile Include="Syntax\SymbolArgumentSyntax.cs" />
     <Compile Include="Syntax\SyntaxNode.cs" />
     <Compile Include="Syntax\SyntaxVisitor.cs" />
     <Compile Include="Syntax\SyntaxWalker.cs" />
