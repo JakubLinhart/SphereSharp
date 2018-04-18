@@ -15,6 +15,8 @@ namespace SphereSharp.Syntax
                 {
                     case UnaryOperatorKind.LogicalNot:
                         return "!";
+                    case UnaryOperatorKind.BitComplement:
+                        return "~";
                     default:
                         throw new NotImplementedException($"Unary operator kind {Kind}.");
                 }

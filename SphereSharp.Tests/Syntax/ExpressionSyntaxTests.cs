@@ -158,6 +158,17 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_parse_bit_complement_operator()
+        {
+            var syntax = ExpressionSyntax.Parse("~123");
+
+            syntax.As<UnaryOperatorSyntax>()
+                .Kind.Should().Be(UnaryOperatorKind.BitComplement);
+            syntax.As<UnaryOperatorSyntax>()
+                .Operand.As<IntegerConstantExpressionSyntax>().Value.Should().Be("123");
+        }
+
+        [TestMethod]
         public void Can_parse_logical_not_operator_on_expression_with_parenthesis()
         {
             var syntax = ExpressionSyntax.Parse("!(1==2)");

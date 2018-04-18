@@ -15,6 +15,7 @@ namespace SphereSharp.Syntax
             => Parse.String(op).Return(kind);
 
         public static Parser<UnaryOperatorKind> LogicalNot => UnaryOperator("!", UnaryOperatorKind.LogicalNot);
+        public static Parser<UnaryOperatorKind> BitComplement => UnaryOperator("~", UnaryOperatorKind.BitComplement);
         public static Parser<BinaryOperatorKind> Add => BinaryOperator("+", BinaryOperatorKind.Add);
         public static Parser<BinaryOperatorKind> Subtract => BinaryOperator("-", BinaryOperatorKind.Subtract);
         public static Parser<BinaryOperatorKind> Multiply => BinaryOperator("*", BinaryOperatorKind.Multiply);
@@ -36,13 +37,13 @@ namespace SphereSharp.Syntax
         public static Parser<ExpressionSyntax> Factor =>
             ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(Interval).Or(EvalMacroExpression);
 
-        public static Parser<ExpressionSyntax> LogicalNotExpression =>
-            from op in LogicalNot
+        public static Parser<ExpressionSyntax> UnaryOperatorExpression =>
+            from op in LogicalNot.Or(BitComplement)
             from factor in Factor
             select new UnaryOperatorSyntax(op, factor);
 
         public static Parser<ExpressionSyntax> Operand =>
-            LogicalNotExpression.Or(Factor);
+            UnaryOperatorExpression.Or(Factor);
 
         public static Parser<ExpressionSyntax> Term => Parse.ChainOperator(Multiply.Or(Divide), Operand, CreateBinaryExpression);
         public static Parser<ExpressionSyntax> EqualityTerm => Parse.ChainOperator(Add.Or(Subtract), Term, CreateBinaryExpression);
