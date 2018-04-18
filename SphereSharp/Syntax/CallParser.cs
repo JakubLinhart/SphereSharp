@@ -25,11 +25,33 @@ namespace SphereSharp.Syntax
             select new CallSyntax(new SymbolSyntax(name), 
                 new ArgumentListSyntax(new ArgumentSyntax[] { new ExpressionArgumentSyntax(expr) }.ToImmutableArray()));
 
-        public static Parser<CallSyntax> MemberCall =>
+        public static Parser<CallSyntax> ParenthesesMemberCall =>
             from funcName in SymbolParser.Symbol
             from _ in CommonParsers.OneLineWhiteSpace.Many()
-            from arguments in ArgumentListParser.ArgumentList.Optional()
-            select new CallSyntax(funcName, arguments.IsDefined ? arguments.Get() : ArgumentListSyntax.Empty);
+            from arguments in ArgumentListParser.ArgumentListWithParenthesis.Optional()
+            select new CallSyntax(funcName,
+                arguments.IsDefined ? arguments.Get() : ArgumentListSyntax.Empty);
+
+        public static Parser<string> MembersWithoutParentheses =>
+            from funcName in Parse.IgnoreCase("resizepic")
+                .Or(Parse.IgnoreCase("dialog"))
+                .Or(Parse.IgnoreCase("gumppic"))
+                .Or(Parse.IgnoreCase("restest"))
+                .Text()
+            select funcName;
+
+        public static Parser<ArgumentListSyntax> ArgumentListWithoutParenthesis =>
+            from _ in CommonParsers.OneLineWhiteSpace.AtLeastOnce()
+            from args in ArgumentListParser.ArgumentListWithoutParenthesis
+            select args;
+
+
+        public static Parser<CallSyntax> WithoutParenthesesMemberCall =>
+            from funcName in MembersWithoutParentheses
+            from arguments in ArgumentListParser.ArgumentListWithParenthesis.Or(ArgumentListWithoutParenthesis)
+            select new CallSyntax(new SymbolSyntax(funcName), arguments);
+
+        public static Parser<CallSyntax> MemberCall => WithoutParenthesesMemberCall.Or(ParenthesesMemberCall);
 
         public static Parser<CallSyntax> ChainedCall =>
             from firstCall in MemberCall

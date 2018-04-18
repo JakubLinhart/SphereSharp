@@ -31,31 +31,16 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
-        public void Can_call_function_with_blob_argument()
-        {
-            var syntax = CallSyntax.Parse("dialog d_raceclass_nations");
-
-            syntax.MemberName.Should().Be("dialog");
-            syntax.Arguments.IsEmpty.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void Can_call_member_function_with_blob_argument()
-        {
-            var syntax = CallSyntax.Parse("src.DIALOG D_RACEclass_background");
-
-            syntax.MemberName.Should().Be("src");
-            syntax.ChainedCall.MemberName.Should().Be("DIALOG");
-        }
-
-        [TestMethod]
         public void Can_access_nested_members()
         {
             var syntax = CallSyntax.Parse("src.link.tag(tag1).dialog D_RACEclass_background");
 
             syntax.MemberName.Should().Be("src");
+            syntax.Arguments.Arguments.Should().HaveCount(0);
             syntax.ChainedCall.MemberName.Should().Be("link");
+            syntax.ChainedCall.Arguments.Arguments.Should().HaveCount(0);
             syntax.ChainedCall.ChainedCall.MemberName.Should().Be("tag");
+            syntax.ChainedCall.ChainedCall.Arguments.Arguments.Should().HaveCount(1);
         }
 
         [TestMethod]
@@ -131,12 +116,28 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
-        public void Can_call_function_with_resource_argument_without_doublequotes()
+        public void Can_call_restest_with_resource_argument_without_doublequotes()
         {
             var syntax = CallSyntax.Parse("restest 1 i_scroll_blank");
 
             syntax.Arguments.Arguments.Should().HaveCount(1);
             syntax.Arguments.Arguments[0].Should().BeOfType<ResourceArgumentSyntax>();
+        }
+
+        [TestMethod]
+        public void Can_parse_call_to_specific_builtin_functions_without_argument_parentheses()
+        {
+            CallSyntax.Parse("dialog d_raceclass_nations").Should().BeOfType<CallSyntax>().Which.Arguments.Arguments.Should().HaveCount(1);
+            CallSyntax.Parse("resizepic 0 0 2600 640 480").Should().BeOfType<CallSyntax>().Which.Arguments.Arguments.Should().HaveCount(5);
+            CallSyntax.Parse("gumppic 510 110 5536").Should().BeOfType<CallSyntax>().Which.Arguments.Arguments.Should().HaveCount(3);
+        }
+
+        [TestMethod]
+        public void Can_parse_call_to_specific_builtin_functions_with_argument_parentheses()
+        {
+            CallSyntax.Parse("dialog(d_raceclass_nations)").Should().BeOfType<CallSyntax>().Which.Arguments.Arguments.Should().HaveCount(1);
+            CallSyntax.Parse("resizepic(0, 0, 2600, 640, 480)").Should().BeOfType<CallSyntax>().Which.Arguments.Arguments.Should().HaveCount(5);
+            CallSyntax.Parse("gumppic(510, 110, 5536)").Should().BeOfType<CallSyntax>().Which.Arguments.Arguments.Should().HaveCount(3);
         }
     }
 }

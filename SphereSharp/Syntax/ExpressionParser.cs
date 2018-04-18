@@ -32,9 +32,9 @@ namespace SphereSharp.Syntax
 
         public static Parser<ExpressionSyntax> ExpressionInParentheses =>
             from _1 in Parse.Char('(')
-            from expr in Expr.Once()
+            from expr in Expr
             from _2 in Parse.Char(')')
-            select expr.Single().Enclose();
+            select expr.Enclose();
 
         public static Parser<ExpressionSyntax> Factor =>
             ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(Interval).Or(EvalMacroExpression).Or(MacroExpression).Or(CallExpression);

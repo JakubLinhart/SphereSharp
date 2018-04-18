@@ -432,5 +432,13 @@ namespace SphereSharp.Tests.Syntax
             syntax.Operand1.Should().BeOfType<CallExpressionSyntax>();
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("5");
         }
+
+        [TestMethod]
+        public void Can_parse_call_as_first_argument_of_subtract_operator_in_parentheses()
+        {
+            var syntax = ExpressionSyntax.Parse("(p_x-10)").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Operator.Should().Be(BinaryOperatorKind.Subtract);
+        }
     }
 }

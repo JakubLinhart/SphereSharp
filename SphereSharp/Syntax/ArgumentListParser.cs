@@ -45,17 +45,13 @@ namespace SphereSharp.Syntax
             ).Many()
             select firstArg.Concat(nextArgs);
 
-        public static Parser<ArgumentListSyntax> ArgumentList =>
-            from args in StringArgument
-                .Or(ArgumentListWithParenthesis)
-                .Or(ArgumentListWithoutParenthesis)
-            select new ArgumentListSyntax(args.ToImmutableArray());
+        public static Parser<ArgumentListSyntax> ArgumentList => ArgumentListWithParenthesis.Or(ArgumentListWithoutParenthesis);
 
         public static Parser<ArgumentSyntax> ArgumentWithoutParenthesis =>
             from argument in ResourceArgument.Or(ExpressionArgument)
             select argument;
 
-        public static Parser<IEnumerable<ArgumentSyntax>> ArgumentListWithoutParenthesis =>
+        public static Parser<IEnumerable<ArgumentSyntax>> ArgumentsWithoutParenthesis =>
             from firstArgument in ArgumentWithoutParenthesis
             from nextArguments in (
                 from _ in CommonParsers.OneLineWhiteSpace.AtLeastOnce()
@@ -64,10 +60,15 @@ namespace SphereSharp.Syntax
             ).Many()
             select new ArgumentSyntax[] { firstArgument }.Concat(nextArguments);
 
-        public static Parser<IEnumerable<ArgumentSyntax>> ArgumentListWithParenthesis =>
+        public static Parser<ArgumentListSyntax> ArgumentListWithoutParenthesis =>
+            from args in StringArgument
+                .Or(ArgumentsWithoutParenthesis)
+            select new ArgumentListSyntax(args.ToImmutableArray());
+
+        public static Parser<ArgumentListSyntax> ArgumentListWithParenthesis =>
             from leftParen in Parse.Char('(')
             from arguments in InnerArgumentList
             from rightParen in Parse.Char(')')
-            select arguments;
+            select new ArgumentListSyntax(arguments.ToImmutableArray());
     }
 }
