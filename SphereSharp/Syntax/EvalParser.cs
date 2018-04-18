@@ -8,7 +8,7 @@ namespace SphereSharp.Syntax
     {
         public static EvalKind ToKind(string str)
         {
-            switch (str)
+            switch (str.ToLower())
             {
                 case "eval":
                     return EvalKind.Decadic;
