@@ -38,7 +38,7 @@ namespace SphereSharp.Syntax
             select expr.Enclose();
 
         public static Parser<ExpressionSyntax> Factor =>
-            ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(Interval).Or(EvalMacroExpression).Or(MacroExpression).Or(CallExpression);
+            ExpressionInParentheses.Or(MacroIntegerConstant).Or(Constant).Or(Interval).Or(EvalMacroExpression).Or(ChainedCallExpression).Or(MacroExpression).Or(CallExpression);
 
         public static Parser<ExpressionSyntax> UnaryOperatorExpression =>
             from op in LogicalNot.Or(BitComplement)
@@ -99,6 +99,10 @@ namespace SphereSharp.Syntax
 
         public static Parser<CallExpressionSyntax> CallExpression =>
             from call in CallParser.Call
+            select new CallExpressionSyntax(call);
+
+        public static Parser<CallExpressionSyntax> ChainedCallExpression =>
+            from call in CallParser.ChainedCallForced
             select new CallExpressionSyntax(call);
     }
 }

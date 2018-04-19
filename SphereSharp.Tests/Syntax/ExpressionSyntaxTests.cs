@@ -186,6 +186,15 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_parse_escaped_macro_expression()
+        {
+            var syntax = ExpressionSyntax.Parse("<?strlen(nation)?>");
+
+            syntax.Should().BeOfType<MacroExpressionSyntax>().Which.Macro.Expression
+                .Should().BeOfType<CallExpressionSyntax>().Which.Call.MemberName.Should().Be("strlen");
+        }
+
+        [TestMethod]
         public void Can_parse_eval_macro_expression()
         {
             var syntax = ExpressionSyntax.Parse("<eval tag.basestr>").

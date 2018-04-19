@@ -74,9 +74,12 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
-        public void MyTestMethod()
+        public void Can_parse_nested_chained_call_macro()
         {
-            var syntax = MacroSyntax.Parse("<arg(dni)/10>");
+            var syntax = MacroSyntax.Parse("<<arg(d)>.icon>");
+
+            var callExpressionSyntax = syntax.Expression.Should().BeOfType<CallExpressionSyntax>().Which.Call;
+            callExpressionSyntax.MemberNameSyntax.Segments.Should().HaveCount(1);
         }
     }
 }

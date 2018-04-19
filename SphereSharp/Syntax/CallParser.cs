@@ -60,6 +60,13 @@ namespace SphereSharp.Syntax
                 ? new CallSyntax(firstCall, nextCalls.Reverse().Aggregate((l, r) => new CallSyntax(r, l)))
                 : firstCall;
 
+        public static Parser<CallSyntax> ChainedCallForced =
+            from firstCall in MemberCall
+            from nextCalls in ChainedCallInner.AtLeastOnce()
+            select nextCalls.Count() > 0
+                ? new CallSyntax(firstCall, nextCalls.Reverse().Aggregate((l, r) => new CallSyntax(r, l)))
+                : firstCall;
+
         public static Parser<CallSyntax> ChainedCallInner =>
             from _ in Parse.Char('.')
             from call in MemberCall

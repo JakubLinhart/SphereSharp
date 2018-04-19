@@ -155,6 +155,14 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_parse_escaped_macro_arguments()
+        {
+            var syntax = ArgumentListSyntax.Parse("(<?tag.race?>)");
+
+            syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>();
+        }
+
+        [TestMethod]
         public void Can_parse_safe_literal_with_macro()
         {
             var syntax = ArgumentListSyntax.Parse("(123,<?safe?><BASEFONT SIZE=\"+5\" COLOR=\"#000080\"><?seznamclass?></BASEFONT>,456)");

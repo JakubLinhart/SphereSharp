@@ -49,6 +49,16 @@ namespace SphereSharp.Syntax
             ).Many()
             select firstArg.Concat(nextArgs);
 
+        public static Parser<IEnumerable<ArgumentSyntax>> InnerArgumentListForced =>
+            from firstArg in Argument.Once()
+            from nextArgs in (
+                from _1 in Parse.Char(',')
+                from _2 in CommonParsers.OneLineWhiteSpace.Many()
+                from arg in Argument
+                select arg
+            ).AtLeastOnce()
+            select firstArg.Concat(nextArgs);
+
         public static Parser<ArgumentListSyntax> ArgumentList => ArgumentListWithParenthesis.Or(ArgumentListWithoutParenthesis);
 
         public static Parser<ArgumentSyntax> ArgumentWithoutParenthesis =>

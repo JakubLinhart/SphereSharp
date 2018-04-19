@@ -109,5 +109,14 @@ namespace SphereSharp.Tests.Syntax
             syntax.LValue.MemberName.Should().Be("NPC");
             syntax.RValue.Should().BeOfType<EmptyArgumentSyntax>();
         }
+
+        [TestMethod]
+        public void Can_parse_two_items_list_assignment()
+        {
+            var syntax = AssignmentSyntax.Parse("MOREP=0,0");
+
+            syntax.LValue.MemberName.Should().Be("MOREP");
+            syntax.RValue.Should().BeOfType<ListArgumentSyntax>().Which.List.Arguments.Should().HaveCount(2);
+        }
     }
 }
