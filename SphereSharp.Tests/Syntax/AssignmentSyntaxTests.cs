@@ -100,5 +100,14 @@ namespace SphereSharp.Tests.Syntax
             syntax.LValue.MemberName.Should().Be("NPC");
             syntax.RValue.Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("brain_undead");
         }
+
+        [TestMethod]
+        public void Can_parse_empty_assignment()
+        {
+            var syntax = AssignmentSyntax.Parse("NPC=");
+
+            syntax.LValue.MemberName.Should().Be("NPC");
+            syntax.RValue.Should().BeOfType<EmptyArgumentSyntax>();
+        }
     }
 }

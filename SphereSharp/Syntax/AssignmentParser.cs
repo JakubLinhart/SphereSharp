@@ -10,7 +10,12 @@ namespace SphereSharp.Syntax
             from _1 in CommonParsers.OneLineWhiteSpace.Many()
             from _2 in Parse.String("=")
             from _3 in CommonParsers.OneLineWhiteSpace.Many()
-            from rValue in ArgumentListParser.Argument
+            from rValue in ArgumentListParser.Argument.Or(EmptyRValue)
             select new AssignmentSyntax(lValue, rValue);
+
+        public static Parser<ArgumentSyntax> EmptyRValue =>
+            from _1 in CommonParsers.OneLineWhiteSpace.Many()
+            from _2 in CommonParsers.LineEnd
+            select new EmptyArgumentSyntax();
     }
 }
