@@ -237,13 +237,22 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
-        public void CanParse_whitespace_between_comparison_operators_and_operands()
+        public void Can_parse_whitespace_between_comparison_operators_and_operands()
         {
             var syntax = ExpressionSyntax.Parse("1 < 2").Should().BeOfType<BinaryOperatorSyntax>().Which;
 
             syntax.Operator.Should().Be(BinaryOperatorKind.LessThan);
             syntax.Operand1.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("1");
             syntax.Operand2.Should().BeOfType<IntegerConstantExpressionSyntax>().Which.Value.Should().Be("2");
+        }
+
+        [TestMethod]
+        public void Can_parse_whitespace_after_and_before_parentheses()
+        {
+            var syntax = ExpressionSyntax.Parse("( 1+1 )").Should().BeOfType<BinaryOperatorSyntax>().Which;
+
+            syntax.Enclosed.Should().BeTrue();
+            syntax.Operator.Should().Be(BinaryOperatorKind.Add);
         }
 
         [TestMethod]

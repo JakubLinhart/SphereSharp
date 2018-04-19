@@ -11,10 +11,7 @@ namespace SphereSharp.Syntax
 
         public ArgumentListSyntax List { get; }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.VisitListArgument(this);
-        }
+        public override void Accept(SyntaxVisitor visitor) => visitor.VisitListArgument(this);
 
         public override IEnumerable<SyntaxNode> GetChildNodes()
         {

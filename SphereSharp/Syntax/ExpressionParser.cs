@@ -33,8 +33,10 @@ namespace SphereSharp.Syntax
 
         public static Parser<ExpressionSyntax> ExpressionInParentheses =>
             from _1 in Parse.Char('(')
+            from _2 in CommonParsers.OneLineWhiteSpace.Many()
             from expr in Expr
-            from _2 in Parse.Char(')')
+            from _3 in CommonParsers.OneLineWhiteSpace.Many()
+            from _4 in Parse.Char(')')
             select expr.Enclose();
 
         public static Parser<ExpressionSyntax> Factor =>
