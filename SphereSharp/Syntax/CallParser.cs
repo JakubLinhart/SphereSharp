@@ -1,9 +1,37 @@
 ﻿using Sprache;
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 
 namespace SphereSharp.Syntax
 {
+
+    internal static class EventsArgumentParser
+    {
+        public static Parser<EventsArgumentSyntax> EventsArgument =>
+            from sign in Parse.Char('+').Or(Parse.Char('-')).Optional()
+            from name in SymbolParser.TextSegment
+            select new EventsArgumentSyntax(name.Text, ToKind(sign));
+
+        private static EventsOperationKind ToKind(IOption<char> sign)
+        {
+            if (sign.IsDefined)
+            {
+                switch (sign.Get())
+                {
+                    case '+':
+                        return EventsOperationKind.Subscribe;
+                    case '-':
+                        return EventsOperationKind.Unsubscribe;
+                    default:
+                        throw new NotImplementedException($"Unknown {sign}");
+                }
+            }
+
+            return EventsOperationKind.Subscribe;
+        }
+    }
+
     internal static class CallParser
     {
         public static Parser<CallSyntax> Call =>
@@ -16,6 +44,31 @@ namespace SphereSharp.Syntax
         public static Parser<StatementSyntax> CallStatement =
             from call in Call
             select call;
+
+        public static Parser<CallSyntax> EventsCall =>
+            from name in Parse.IgnoreCase("events").Text()
+            from _1 in CommonParsers.OneLineWhiteSpace.AtLeastOnce()
+            from argument in EventsArgumentParser.EventsArgument
+            select new CallSyntax(new SymbolSyntax(name), new ArgumentListSyntax(new ArgumentSyntax[] { argument }.ToImmutableArray()));
+
+        private static EventsOperationKind ToKind(IOption<char> sign)
+        {
+            if (sign.IsDefined)
+            {
+                switch (sign.Get())
+                {
+                    case '+':
+                        return EventsOperationKind.Subscribe;
+                    case '-':
+                        return EventsOperationKind.Unsubscribe;
+                    default:
+                        throw new NotImplementedException($"Unknown {sign}");
+                }
+            }
+
+            return EventsOperationKind.Subscribe;
+        }
+
 
         public static Parser<CallSyntax> ArgvCall =>
             from name in Parse.IgnoreCase("argv").Text()
@@ -51,7 +104,7 @@ namespace SphereSharp.Syntax
             from arguments in ArgumentListParser.ArgumentListWithParenthesis.Or(ArgumentListWithoutParenthesis)
             select new CallSyntax(new SymbolSyntax(funcName), arguments);
 
-        public static Parser<CallSyntax> MemberCall => WithoutParenthesesMemberCall.Or(ParenthesesMemberCall);
+        public static Parser<CallSyntax> MemberCall => EventsCall.Or(WithoutParenthesesMemberCall).Or(ParenthesesMemberCall);
 
         public static Parser<CallSyntax> ChainedCall =>
             from firstCall in MemberCall

@@ -92,8 +92,8 @@ endwhile
             var syntax = CodeBlockSyntax.Parse(@"events +e_something");
             syntax.Statements.Should().HaveCount(1);
 
-            syntax.Statements[0].Should().BeOfType<EventsStatementSyntax>().Which
-                .EventName.Should().Be("e_something");
+            syntax.Statements[0].Should().BeOfType<CallSyntax>().Which
+                .MemberName.Should().Be("events");
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ endwhile
             syntax.Statements[0].Should().BeOfType<CallSyntax>().Which.MemberName.Should().Be("call1");
             syntax.Statements[1].Should().BeOfType<IfSyntax>();
             syntax.Statements[2].Should().BeOfType<AssignmentSyntax>();
-            syntax.Statements[3].Should().BeOfType<EventsStatementSyntax>();
+            syntax.Statements[3].Should().BeOfType<CallSyntax>();
             syntax.Statements[4].Should().BeOfType<WhileStatementSyntax>();
         }
 

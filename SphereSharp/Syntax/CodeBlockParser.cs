@@ -19,7 +19,6 @@ namespace SphereSharp.Syntax
 
         public static Parser<StatementSyntax> Statements =>
             AssignmentParser.Assignment
-                .Or(EventsStatementParser.EventsStatement)
                 .Or(DoSwitchParser.DoSwitchStatement)
                 .Or(MacroStatementParser.Statement)
                 .Or(IfSyntaxParser.IfStatement)

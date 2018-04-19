@@ -63,10 +63,9 @@ namespace SphereSharp.Sphere.Generator
             builder.AppendLine();
         }
 
-        public override void VisitEventsStatement(EventsStatementSyntax syntaxNode)
+        public override void VisitEventsArgument(EventsArgumentSyntax eventsArgumentSyntax)
         {
-            builder.Append("events ");
-            switch (syntaxNode.Kind)
+            switch (eventsArgumentSyntax.Kind)
             {
                 case EventsOperationKind.Subscribe:
                     break;
@@ -74,10 +73,10 @@ namespace SphereSharp.Sphere.Generator
                     builder.Append('-');
                     break;
                 default:
-                    throw new NotImplementedException($"Events statement kind {syntaxNode.Kind}");
+                    throw new NotImplementedException($"Events statement kind {eventsArgumentSyntax.Kind}");
             }
 
-            builder.Append(syntaxNode.EventName);
+            builder.Append(eventsArgumentSyntax.EventName);
         }
 
         public override void VisitTextSegment(TextSegmentSyntax textSegmentSyntax)

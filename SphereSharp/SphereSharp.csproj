@@ -76,11 +76,10 @@
     <Compile Include="Syntax\EofSectionSyntax.cs" />
     <Compile Include="Syntax\EvalKind.cs" />
     <Compile Include="Syntax\EvalParser.cs" />
+    <Compile Include="Syntax\EventsArgumentSyntax.cs" />
     <Compile Include="Syntax\EventsOperationKind.cs" />
     <Compile Include="Syntax\EventsSectionParser.cs" />
     <Compile Include="Syntax\EventsSectionSyntax.cs" />
-    <Compile Include="Syntax\EventsStatementParser.cs" />
-    <Compile Include="Syntax\EventsStatementSyntax.cs" />
     <Compile Include="Syntax\ExpressionArgumentSyntax.cs" />
     <Compile Include="Syntax\FileParser.cs" />
     <Compile Include="Syntax\IfSyntaxParser.cs" />
