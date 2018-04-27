@@ -155,6 +155,7 @@
     <Compile Include="Syntax\UnaryOperatorSyntax.cs" />
     <Compile Include="Syntax\WhileStatementParser.cs" />
     <Compile Include="Syntax\WhileStatementSyntax.cs" />
+    <Compile Include="Syntax\_Argument.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

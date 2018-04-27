@@ -265,6 +265,15 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
+        public void Can_parse_modulo_operator()
+        {
+            var syntax = ExpressionSyntax.Parse("1%2").Should().BeOfType<BinaryOperatorSyntax>().Which;
+            //syntax.As<BinaryOperatorSyntax>().Operator.Should().Be(BinaryOperatorKind.Subtract);
+            //syntax.As<BinaryOperatorSyntax>().Operand1.As<IntegerConstantExpressionSyntax>().Value.Should().Be("1");
+            //syntax.As<BinaryOperatorSyntax>().Operand2.As<IntegerConstantExpressionSyntax>().Value.Should().Be("2");
+        }
+
+        [TestMethod]
         public void Can_parse_multiply_operator()
         {
             var syntax = ExpressionSyntax.Parse("1*2");

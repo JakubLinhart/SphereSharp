@@ -31,6 +31,7 @@ namespace SphereSharp.Syntax
         }
 
         public static CallSyntax Parse(string src) => CallParser.Call.Parse(src);
+        public static CallSyntax ParseCustom(string src) => CallParser.CustomCall.Parse(src);
 
         public override void Accept(SyntaxVisitor visitor) => visitor.VisitCall(this);
 

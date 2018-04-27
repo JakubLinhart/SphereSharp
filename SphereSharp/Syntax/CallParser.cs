@@ -34,6 +34,11 @@ namespace SphereSharp.Syntax
 
     internal static class CallParser
     {
+        public static Parser<CallSyntax> CustomCall =>
+            from funcName in SymbolParser.Symbol
+            from arguments in ArgumentListParser._ArgumentList
+            select new CallSyntax(funcName, arguments);
+
         public static Parser<CallSyntax> Call =>
             InnerCall.Except(Parse.String("on="));
 

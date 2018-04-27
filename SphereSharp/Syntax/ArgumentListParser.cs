@@ -84,5 +84,21 @@ namespace SphereSharp.Syntax
             from arguments in InnerArgumentList
             from rightParen in Parse.Char(')')
             select new ArgumentListSyntax(arguments.ToImmutableArray());
+
+        public static Parser<IEnumerable<_ArgumentSyntax>> InnerCustomArgumentList =>
+            from firstArg in _ArgumentParser.Argument
+            from nextArgs in (
+                from _1 in Parse.Char(',')
+                from _2 in CommonParsers.OneLineWhiteSpace.Many()
+                from arg in _ArgumentParser.Argument
+                select arg
+            ).Many()
+            select new[] { firstArg }.Concat(nextArgs);
+
+        public static Parser<ArgumentListSyntax> _ArgumentList =>
+            from leftParen in Parse.Char('(')
+            from arguments in InnerCustomArgumentList
+            from rightParen in Parse.Char(')')
+            select new ArgumentListSyntax(arguments);
     }
 }

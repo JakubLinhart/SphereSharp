@@ -23,65 +23,6 @@ namespace SphereSharp.Tests.Syntax
         }
 
         [TestMethod]
-        public void Can_parse_one_symbol_argument()
-        {
-            var syntax = ArgumentListSyntax.Parse("(D_RACE_class_races)");
-
-            syntax.Arguments.Length.Should().Be(1);
-            syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races");
-        }
-
-        [TestMethod]
-        public void Can_parse_indexed_symbol_argument()
-        {
-            var syntax = ArgumentListSyntax.Parse("(D_RACE_class_races[arg(i)])");
-
-            syntax.Arguments.Length.Should().Be(1);
-            syntax.Arguments[0].Should().BeOfType<SymbolArgumentSyntax>().Which
-                .Symbol.Should().BeOfType<IndexedSymbolSyntax>().Which
-                .Index.Should().BeOfType<CallExpressionSyntax>();
-        }
-
-        [TestMethod]
-        public void Can_parse_comma_separated_list_of_symbols()
-        {
-            var syntax = ArgumentListSyntax.Parse("(D_RACE_class_races1,D_RACE_class_races2,D_RACE_class_races3)");
-
-            syntax.Arguments[0].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races1");
-            syntax.Arguments[1].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races2");
-            syntax.Arguments[2].Should().BeOfType<LiteralArgumentSyntax>().Which.Literal.Text.Should().Be("D_RACE_class_races3");
-        }
-
-        [TestMethod]
-        public void Can_parse_one_number_argument()
-        {
-            var syntax = ArgumentListSyntax.Parse("(123)");
-
-            syntax.Arguments.Length.Should().Be(1);
-            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
-        }
-
-        [TestMethod]
-        public void Can_parse_comma_separated_list_of_numbers()
-        {
-            var syntax = ArgumentListSyntax.Parse("(123,456,789)");
-
-            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
-            syntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>();
-            syntax.Arguments[2].Should().BeOfType<ExpressionArgumentSyntax>();
-        }
-
-        [TestMethod]
-        public void Whitespace_can_be_after_comma()
-        {
-            var syntax = ArgumentListSyntax.Parse("(123, 456,    789)");
-
-            syntax.Arguments[0].Should().BeOfType<ExpressionArgumentSyntax>();
-            syntax.Arguments[1].Should().BeOfType<ExpressionArgumentSyntax>();
-            syntax.Arguments[2].Should().BeOfType<ExpressionArgumentSyntax>();
-        }
-
-        [TestMethod]
         public void Can_parse_space_separated_list_of_numbers()
         {
             var syntax = ArgumentListSyntax.Parse("123 456 789");

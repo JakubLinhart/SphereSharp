@@ -241,5 +241,17 @@ FAME=20");
             syntax.Statements[0].Should().BeOfType<AssignmentSyntax>();
             syntax.Statements[1].Should().BeOfType<AssignmentSyntax>();
         }
+
+        [TestMethod]
+        public void Can_parse_trigger_call()
+        {
+            var syntax = CodeBlockSyntax.Parse("trigger @userclick");
+        }
+
+        [TestMethod]
+        public void Can_parse_operator_with_eval_macro_and_macro_as_assignment_with_expression()
+        {
+            var syntax = CodeBlockSyntax.Parse("src.tag.asdf=<eval arg(i)>+<arg(j)>");
+        }
     }
 }

@@ -65,9 +65,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Syntax\ArgumentListSyntaxParsingTests.cs" />
+    <Compile Include="Syntax\TestExtensions.cs" />
+    <Compile Include="Syntax\_ArgumentTests.cs" />
     <Compile Include="Syntax\CallSyntaxTests.cs" />
+    <Compile Include="Syntax\CustomFunctionArgumentListTests.cs" />
     <Compile Include="Syntax\EventsSectionSyntaxTests.cs" />
     <Compile Include="Syntax\EventsTests.cs" />
+    <Compile Include="Syntax\Tests.cs" />
     <Compile Include="Syntax\TypeDefSectionSyntaxTests.cs" />
     <Compile Include="Syntax\TemplateSectionSyntaxTests.cs" />
     <Compile Include="Syntax\PropertySyntaxTests.cs" />

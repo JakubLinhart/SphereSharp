@@ -10,6 +10,19 @@ using System.Threading.Tasks;
 namespace SphereSharp.Tests.Syntax
 {
     [TestClass]
+    public class CustomFunctionCallTests
+    {
+        [TestMethod]
+        public void Can_call_function_with_one_number_argument()
+        {
+            var syntax = CallSyntax.ParseCustom("fun1(123)");
+
+            syntax.Arguments._Arguments.Should().HaveCount(1);
+            var argument1 = syntax.Arguments._Arguments[0].Should().BeOfType<_ExpressionArgumentSyntax>();
+        }
+    }
+
+    [TestClass]
     public class CallSyntaxTests
     {
         [TestMethod]
