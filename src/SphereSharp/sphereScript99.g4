@@ -5,11 +5,12 @@ call : SYMBOL LPAREN argumentList RPAREN ;
 
 argumentList : argument (',' argument)* ;
 argument : expressionArgument | unquotedLiteralArgument;
-expressionArgument : operand binaryOperation* ;
+expressionArgument : signedOperand binaryOperation* ;
 unquotedLiteralArgument: (call | SYMBOL | macro | operator | NUMBER | ' ' | '[' | ']')+? ;
 
-operand: (constantExpression | subExpression | macroExpression) ;
-binaryOperation : operator operand ;
+signedOperand: (MINUS | PLUS) signedOperand | operand ;
+operand: constantExpression | subExpression | macroExpression ;
+binaryOperation : operator signedOperand ;
 operator: constantOperator | macroOperator ;
 
 constantExpression : NUMBER ;
@@ -17,15 +18,14 @@ macroExpression : macro ;
 subExpression : '(' expressionArgument ')' ;
 
 macroOperator : macro ;
-constantOperator : BINARY_OPERATOR ;
+constantOperator : PLUS | MINUS | '*' ;
 
 SYMBOL : VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
 
 NUMBER : DIGIT+ ;
 
-BINARY_OPERATOR : '+'|'-'|'*' ;
-
-LITERAL : '"' .*? '"' ;
+PLUS: '+' ;
+MINUS: '-' ;
 
 fragment VALID_SYMBOL_START
    : ('a' .. 'z') | ('A' .. 'Z') | '_'

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /mnt/c/Users/jakub/sources/ultima/SphereSharp/SphereSharp/src/SphereSharp/Parser/sphereScript99.g4 by ANTLR 4.7
+// Generated from /mnt/c/Users/jakub/sources/ultima/SphereSharp/SphereSharp/src/SphereSharp/sphereScript99.g4 by ANTLR 4.7
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -67,6 +67,12 @@ public interface IsphereScript99Visitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitUnquotedLiteralArgument([NotNull] sphereScript99Parser.UnquotedLiteralArgumentContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.signedOperand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSignedOperand([NotNull] sphereScript99Parser.SignedOperandContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="sphereScript99Parser.operand"/>.
 	/// </summary>

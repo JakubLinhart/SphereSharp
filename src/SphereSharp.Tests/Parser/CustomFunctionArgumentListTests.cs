@@ -44,15 +44,21 @@ namespace SphereSharp.Tests.Parser
         }
 
         [TestMethod]
-        public void Can_parse_expression_arguments_with_negative_numbers()
+        public void Can_parse_signed_expression_arguments()
         {
-            Assert.Inconclusive();
-
             ShouldSucceed("-321", "expr: -321");
             ShouldSucceed("-(1)", "expr: -(1)");
             ShouldSucceed("1+-2", "expr: 1+-2");
             ShouldSucceed("1+-(2)", "expr: 1+-(2)");
             ShouldSucceed("1-(2)", "expr: 1-(2)");
+
+            ShouldSucceed("+321", "expr: +321");
+            ShouldSucceed("+(1)", "expr: +(1)");
+            ShouldSucceed("1++2", "expr: 1++2");
+            ShouldSucceed("1++(2)", "expr: 1++(2)");
+            ShouldSucceed("1+(2)", "expr: 1+(2)");
+
+            ShouldSucceed("1+++1,1---1", new[] { "expr: 1+++1", "expr: 1---1" });
         }
 
         [TestMethod]

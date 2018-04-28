@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /mnt/c/Users/jakub/sources/ultima/SphereSharp/SphereSharp/src/SphereSharp/Parser/sphereScript99.g4 by ANTLR 4.7
+// Generated from /mnt/c/Users/jakub/sources/ultima/SphereSharp/SphereSharp/src/SphereSharp/sphereScript99.g4 by ANTLR 4.7
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -106,6 +106,18 @@ public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitUnquotedLiteralArgument([NotNull] sphereScript99Parser.UnquotedLiteralArgumentContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.signedOperand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterSignedOperand([NotNull] sphereScript99Parser.SignedOperandContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.signedOperand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitSignedOperand([NotNull] sphereScript99Parser.SignedOperandContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.operand"/>.
 	/// <para>The default implementation does nothing.</para>
