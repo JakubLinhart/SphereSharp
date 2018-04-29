@@ -171,6 +171,46 @@ public interface IsphereScript99Listener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.evalCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEvalCall([NotNull] sphereScript99Parser.EvalCallContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.evalCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEvalCall([NotNull] sphereScript99Parser.EvalCallContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.nativeMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.nativeMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.nativeArgumentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterNativeArgumentList([NotNull] sphereScript99Parser.NativeArgumentListContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.nativeArgumentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitNativeArgumentList([NotNull] sphereScript99Parser.NativeArgumentListContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.customMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.customMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.chainedMemberAccess"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -230,6 +270,16 @@ public interface IsphereScript99Listener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitExpressionArgument([NotNull] sphereScript99Parser.ExpressionArgumentContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.quotedLiteralArgument"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.quotedLiteralArgument"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.unquotedLiteralArgument"/>.
 	/// </summary>

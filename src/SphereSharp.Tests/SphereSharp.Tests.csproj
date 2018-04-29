@@ -65,8 +65,10 @@
     <Compile Include="Parser\FailTestErrorListener.cs" />
     <Compile Include="Parser\Sphere99\EvalExpressionTests.cs" />
     <Compile Include="Parser\Sphere99\FileTests.cs" />
+    <Compile Include="Parser\Sphere99\FirstLevelArgumentExtractor.cs" />
     <Compile Include="Parser\Sphere99\FunctionSectionTests.cs" />
     <Compile Include="Parser\Sphere99\IfTests.cs" />
+    <Compile Include="Parser\Sphere99\NativeFunctionCallTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

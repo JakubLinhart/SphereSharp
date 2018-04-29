@@ -10,15 +10,19 @@ codeBlock: statement+;
 
 statement: WS* (call | assignment | ifStatement) (NEWLINE | EOF);
 
-ifStatement: IF WS+ evalExpression (NEWLINE | EOF) codeBlock (elseIfStatement)* elseStatement? ENDIF ;
-elseIfStatement: ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock;
-elseStatement: ELSE (NEWLINE | EOF) codeBlock;
+ifStatement: IF WS+ evalExpression (NEWLINE | EOF) codeBlock (elseIfStatement)* elseStatement? WS* ENDIF ;
+elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock;
+elseStatement: WS* ELSE (NEWLINE | EOF) codeBlock;
 
 macro: LESS_THAN memberAccess MORE_THAN ;
 call: memberAccess;
 assignment: memberAccess ASSIGN argumentList;
 
-memberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
+memberAccess: evalCall | nativeMemberAccess | customMemberAccess;
+evalCall: EVAL_FUNCTIONS WS* evalExpression; 
+nativeMemberAccess: NATIVE_FUNCTIONS nativeArgumentList? chainedMemberAccess?;
+nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
+customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
 memberName: (SYMBOL | macro)+;
@@ -26,8 +30,9 @@ memberName: (SYMBOL | macro)+;
 // argument, argument expression
 enclosedArgumentList: LPAREN argumentList? RPAREN;
 argumentList: argument (',' argument)*;
-argument: expressionArgument | unquotedLiteralArgument;
+argument: expressionArgument | quotedLiteralArgument | unquotedLiteralArgument;
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
+quotedLiteralArgument: '"' unquotedLiteralArgument '"';
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | NUMBER | WS | '[' | ']')+? ;
 
 signedArgumentOperand: (MINUS | PLUS) signedArgumentOperand | argumentOperand ;
@@ -62,8 +67,18 @@ ELSEIF: [eE][lL][sS][eE][iI][fF];
 ELSE: [eE][lL][sS][eE];
 ENDIF: [eE][nN][dD][iI][fF];
 
-SYMBOL : VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
+NATIVE_FUNCTIONS: SYSMESSAGE | RETURN | TIMER | CONSUME;
+SYSMESSAGE: [sS][yY][sS][mM][eE][sS][sS][aA][gG][eE];
+RETURN: [rR][eE][tT][uU][rR][nN];
+TIMER: [tT][iI][mM][eE][rR];
+CONSUME: [cC][oO][nN][sS][uU][mM][eE];
 
+EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
+EVAL: [eE][vV][aA][lL];
+HVAL: [hH][vV][aA][lL];
+SAFE: [sS][aA][fF][eE];
+
+SYMBOL : VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
 NUMBER : DIGIT+ ;
 
 EQUAL: '==';

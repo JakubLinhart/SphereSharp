@@ -116,6 +116,30 @@ public interface IsphereScript99Visitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.evalCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEvalCall([NotNull] sphereScript99Parser.EvalCallContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.nativeMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.nativeArgumentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNativeArgumentList([NotNull] sphereScript99Parser.NativeArgumentListContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.customMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="sphereScript99Parser.chainedMemberAccess"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -151,6 +175,12 @@ public interface IsphereScript99Visitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitExpressionArgument([NotNull] sphereScript99Parser.ExpressionArgumentContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.quotedLiteralArgument"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="sphereScript99Parser.unquotedLiteralArgument"/>.
 	/// </summary>

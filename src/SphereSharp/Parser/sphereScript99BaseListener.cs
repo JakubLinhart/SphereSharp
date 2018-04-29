@@ -203,6 +203,54 @@ public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.evalCall"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEvalCall([NotNull] sphereScript99Parser.EvalCallContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.evalCall"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEvalCall([NotNull] sphereScript99Parser.EvalCallContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.nativeMemberAccess"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.nativeMemberAccess"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.nativeArgumentList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterNativeArgumentList([NotNull] sphereScript99Parser.NativeArgumentListContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.nativeArgumentList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitNativeArgumentList([NotNull] sphereScript99Parser.NativeArgumentListContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.customMemberAccess"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.customMemberAccess"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.chainedMemberAccess"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -274,6 +322,18 @@ public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitExpressionArgument([NotNull] sphereScript99Parser.ExpressionArgumentContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.quotedLiteralArgument"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.quotedLiteralArgument"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.unquotedLiteralArgument"/>.
 	/// <para>The default implementation does nothing.</para>

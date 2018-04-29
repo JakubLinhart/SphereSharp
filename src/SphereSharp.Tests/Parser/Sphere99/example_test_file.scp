@@ -6,3 +6,33 @@ myDclicker.p=<p>
 myDclicker.dclick
 myDclicker.remove
 
+[function isDefined]
+if (safe(<eval (<args>)>))
+  return 1
+else
+  return 0
+endif
+
+[function hasStaff]//args - material z nehoz ma hul bejt (nebo z lepsiho)
+if (isgm)
+  return 1
+endif
+if (findlayer(layer_hand2))
+  if (staff_<findlayer(layer_hand2).baseid> >= material_<args>)
+    return 1
+  endif
+endif
+return 0
+
+[function hasCrook]//args - material z nehoz ma hul bejt (nebo z lepsiho)
+if (isgm)
+  return 1
+endif
+if (findlayer(layer_hand2))
+  if (findlayer(layer_hand2).iscrook)
+    if (crook_<findlayer(layer_hand2).baseid> >= material_<args>)
+      return 1
+    endif
+  endif
+endif
+return 0

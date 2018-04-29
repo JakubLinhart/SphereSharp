@@ -1,10 +1,7 @@
 ﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,6 +78,16 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
+        public void Can_parse_quoted_arguments()
+        {
+            ShouldSucceed("(\"some text\")", "quoted: some text");
+            ShouldSucceed("(1,\"some text\")", new[] { "expr: 1", "quoted: some text" });
+            ShouldSucceed("(\"some text\",1)", new[] { "quoted: some text", "expr: 1" });
+            ShouldSucceed("(1,\"some text\",2)", new[] { "expr: 1", "quoted: some text", "expr: 2" });
+            ShouldSucceed("(\"some text\",\"other text\")", new[] { "quoted: some text", "quoted: other text" });
+        }
+
+        [TestMethod]
         public void Can_parse_real_life_unquoted_arguments()
         {
             ShouldSucceed("(<arg(pattern)>[-0123456789])", "unq: <arg(pattern)>[-0123456789]");
@@ -107,33 +114,6 @@ namespace SphereSharp.Tests.Parser.Sphere99
                 extractor.Visit(argumentList);
                 extractor.Arguments.Should().BeEquivalentTo(expectedResults);
             });
-        }
-
-        private class FirstLevelArgumentExtractor : sphereScript99BaseVisitor<bool>
-        {
-            private List<string> arguments = new List<string>();
-
-            public string[] Arguments => arguments.ToArray();
-
-            public override bool VisitExpressionArgument([NotNull] sphereScript99Parser.ExpressionArgumentContext context)
-            {
-                if (context.exception != null)
-                    throw new InvalidOperationException($"Cannot visit invalid node: {context.GetText()}");
-
-                arguments.Add($"expr: {context.GetText()}");
-
-                return true;
-            }
-
-            public override bool VisitUnquotedLiteralArgument([NotNull] sphereScript99Parser.UnquotedLiteralArgumentContext context)
-            {
-                if (context.exception != null)
-                    throw new InvalidOperationException($"Cannot visit invalid node: {context.GetText()}");
-
-                arguments.Add($"unq: {context.GetText()}");
-
-                return true;
-            }
         }
     }
 }
