@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /mnt/c/Users/jakub/sources/ultima/SphereSharp/SphereSharp/src/SphereSharp/sphereScript99.g4 by ANTLR 4.7
+// Generated from /work/sphereScript99.g4 by ANTLR 4.7
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -31,6 +31,76 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IsphereScript99Listener : IParseTreeListener {
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.file"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFile([NotNull] sphereScript99Parser.FileContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.file"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFile([NotNull] sphereScript99Parser.FileContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.section"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterSection([NotNull] sphereScript99Parser.SectionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.section"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitSection([NotNull] sphereScript99Parser.SectionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.eofSection"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEofSection([NotNull] sphereScript99Parser.EofSectionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.eofSection"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEofSection([NotNull] sphereScript99Parser.EofSectionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.functionSection"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.functionSection"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.functionSectionHeader"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFunctionSectionHeader([NotNull] sphereScript99Parser.FunctionSectionHeaderContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.functionSectionHeader"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFunctionSectionHeader([NotNull] sphereScript99Parser.FunctionSectionHeaderContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.codeBlock"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterCodeBlock([NotNull] sphereScript99Parser.CodeBlockContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.codeBlock"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitCodeBlock([NotNull] sphereScript99Parser.CodeBlockContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.statement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterStatement([NotNull] sphereScript99Parser.StatementContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.statement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitStatement([NotNull] sphereScript99Parser.StatementContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.macro"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -50,6 +120,56 @@ public interface IsphereScript99Listener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitCall([NotNull] sphereScript99Parser.CallContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.assignment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAssignment([NotNull] sphereScript99Parser.AssignmentContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.assignment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAssignment([NotNull] sphereScript99Parser.AssignmentContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.memberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.memberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.chainedMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterChainedMemberAccess([NotNull] sphereScript99Parser.ChainedMemberAccessContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.chainedMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitChainedMemberAccess([NotNull] sphereScript99Parser.ChainedMemberAccessContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.memberName"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterMemberName([NotNull] sphereScript99Parser.MemberNameContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.memberName"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitMemberName([NotNull] sphereScript99Parser.MemberNameContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.enclosedArgumentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.enclosedArgumentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.argumentList"/>.
 	/// </summary>

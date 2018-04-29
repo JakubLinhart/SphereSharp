@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /mnt/c/Users/jakub/sources/ultima/SphereSharp/SphereSharp/src/SphereSharp/sphereScript99.g4 by ANTLR 4.7
+// Generated from /work/sphereScript99.g4 by ANTLR 4.7
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -35,6 +35,90 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CLSCompliant(false)]
 public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.file"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFile([NotNull] sphereScript99Parser.FileContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.file"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFile([NotNull] sphereScript99Parser.FileContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.section"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterSection([NotNull] sphereScript99Parser.SectionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.section"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitSection([NotNull] sphereScript99Parser.SectionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.eofSection"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEofSection([NotNull] sphereScript99Parser.EofSectionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.eofSection"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEofSection([NotNull] sphereScript99Parser.EofSectionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.functionSection"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.functionSection"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.functionSectionHeader"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFunctionSectionHeader([NotNull] sphereScript99Parser.FunctionSectionHeaderContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.functionSectionHeader"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFunctionSectionHeader([NotNull] sphereScript99Parser.FunctionSectionHeaderContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.codeBlock"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterCodeBlock([NotNull] sphereScript99Parser.CodeBlockContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.codeBlock"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitCodeBlock([NotNull] sphereScript99Parser.CodeBlockContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.statement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterStatement([NotNull] sphereScript99Parser.StatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.statement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitStatement([NotNull] sphereScript99Parser.StatementContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.macro"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -58,6 +142,66 @@ public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitCall([NotNull] sphereScript99Parser.CallContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.assignment"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterAssignment([NotNull] sphereScript99Parser.AssignmentContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.assignment"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitAssignment([NotNull] sphereScript99Parser.AssignmentContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.memberAccess"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.memberAccess"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.chainedMemberAccess"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterChainedMemberAccess([NotNull] sphereScript99Parser.ChainedMemberAccessContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.chainedMemberAccess"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitChainedMemberAccess([NotNull] sphereScript99Parser.ChainedMemberAccessContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.memberName"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterMemberName([NotNull] sphereScript99Parser.MemberNameContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.memberName"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitMemberName([NotNull] sphereScript99Parser.MemberNameContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.enclosedArgumentList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.enclosedArgumentList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.argumentList"/>.
 	/// <para>The default implementation does nothing.</para>

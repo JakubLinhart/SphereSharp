@@ -57,20 +57,26 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parser\CustomFunctionArgumentListTests.cs" />
+    <Compile Include="Parser\Sphere99\AssignmentTests.cs" />
+    <Compile Include="Parser\Sphere99\CustomFunctionArgumentListTests.cs" />
+    <Compile Include="Parser\ParsingTestBase.cs" />
+    <Compile Include="Parser\Sphere99\CustomFunctionCallTests.cs" />
+    <Compile Include="Parser\FailTestErrorListener.cs" />
+    <Compile Include="Parser\Sphere99\FileTests.cs" />
+    <Compile Include="Parser\Sphere99\FunctionSectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Parser\Sphere99\example_test_file.scp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SphereSharp\SphereSharp.csproj">
       <Project>{88cf5fbd-4e99-4fdb-81b7-658169dbf4d0}</Project>
       <Name>SphereSharp</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\packages\FluentAssertions.Analyzers.0.10.0\analyzers\dotnet\cs\FluentAssertions.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

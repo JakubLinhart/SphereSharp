@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /mnt/c/Users/jakub/sources/ultima/SphereSharp/SphereSharp/src/SphereSharp/sphereScript99.g4 by ANTLR 4.7
+// Generated from /work/sphereScript99.g4 by ANTLR 4.7
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -32,6 +32,48 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IsphereScript99Visitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.file"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFile([NotNull] sphereScript99Parser.FileContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.section"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSection([NotNull] sphereScript99Parser.SectionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.eofSection"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEofSection([NotNull] sphereScript99Parser.EofSectionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.functionSection"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.functionSectionHeader"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFunctionSectionHeader([NotNull] sphereScript99Parser.FunctionSectionHeaderContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.codeBlock"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCodeBlock([NotNull] sphereScript99Parser.CodeBlockContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.statement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitStatement([NotNull] sphereScript99Parser.StatementContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="sphereScript99Parser.macro"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -43,6 +85,36 @@ public interface IsphereScript99Visitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitCall([NotNull] sphereScript99Parser.CallContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.assignment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAssignment([NotNull] sphereScript99Parser.AssignmentContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.memberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.chainedMemberAccess"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitChainedMemberAccess([NotNull] sphereScript99Parser.ChainedMemberAccessContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.memberName"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMemberName([NotNull] sphereScript99Parser.MemberNameContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.enclosedArgumentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="sphereScript99Parser.argumentList"/>.
 	/// </summary>

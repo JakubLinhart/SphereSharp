@@ -1,0 +1,8 @@
+[function dclickMe]
+consume(i_dclickMe)
+newitemsafe(i_dclickMe)
+arg(myDclicker,<lastnew>)
+myDclicker.p=<p>
+myDclicker.dclick
+myDclicker.remove
+
