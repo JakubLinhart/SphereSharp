@@ -23,24 +23,38 @@ call2
         }
 
         [TestMethod]
+        public void Can_parse_statement_with_leading_whitespace()
+        {
+            string expectedResult = "call:call1;call:call2;call:leadingtab;call:call3;";
+            CheckStatements(expectedResult, @"call1
+    call2
+	leadingtab
+call3");
+        }
+
+        [TestMethod]
         public void Can_parse_all_statement_types()
         {
-            string expectedResult = "call:call1;assignment:x=y;";
+            string expectedResult = "call:call1;assignment:x=y;if:(1);";
             CheckStatements(expectedResult, @"call1
-x=y");
+x=y
+if (1)
+    call2
+endif");
         }
 
         public void CheckStatements(string expectedResult, string src)
         {
+            var extractor = new StatementExtractor();
+
             Parse(src, parser =>
             {
                 var block = parser.codeBlock();
 
-                var extractor = new StatementExtractor();
                 extractor.Visit(block);
-
-                extractor.Result.Should().Be(expectedResult);
             });
+
+            extractor.Result.Should().Be(expectedResult);
         }
 
         private class StatementExtractor : sphereScript99BaseVisitor<bool>
@@ -49,23 +63,24 @@ x=y");
 
             public string Result => result.ToString();
 
-            public override bool VisitCall([NotNull] sphereScript99Parser.CallContext context)
+            private bool Process(string name, string text)
             {
-                result.Append("call:");
-                result.Append(context.GetText());
+                result.Append(name);
+                result.Append(":");
+                result.Append(text);
                 result.Append(";");
 
                 return true;
             }
+
+            public override bool VisitIfStatement([NotNull] sphereScript99Parser.IfStatementContext context)
+                => Process("if", context.evalExpression().GetText().Trim());
+
+            public override bool VisitCall([NotNull] sphereScript99Parser.CallContext context)
+                => Process("call", context.GetText());
 
             public override bool VisitAssignment([NotNull] sphereScript99Parser.AssignmentContext context)
-            {
-                result.Append("assignment:");
-                result.Append(context.GetText());
-                result.Append(";");
-
-                return true;
-            }
+                => Process("assignment", context.GetText());
         }
     }
 }

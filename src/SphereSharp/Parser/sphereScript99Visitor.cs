@@ -74,6 +74,24 @@ public interface IsphereScript99Visitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitStatement([NotNull] sphereScript99Parser.StatementContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.ifStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIfStatement([NotNull] sphereScript99Parser.IfStatementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.elseIfStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitElseIfStatement([NotNull] sphereScript99Parser.ElseIfStatementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.elseStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitElseStatement([NotNull] sphereScript99Parser.ElseStatementContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="sphereScript99Parser.macro"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -140,29 +158,83 @@ public interface IsphereScript99Visitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitUnquotedLiteralArgument([NotNull] sphereScript99Parser.UnquotedLiteralArgumentContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="sphereScript99Parser.signedOperand"/>.
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.signedArgumentOperand"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitSignedOperand([NotNull] sphereScript99Parser.SignedOperandContext context);
+	Result VisitSignedArgumentOperand([NotNull] sphereScript99Parser.SignedArgumentOperandContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="sphereScript99Parser.operand"/>.
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.argumentOperand"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitOperand([NotNull] sphereScript99Parser.OperandContext context);
+	Result VisitArgumentOperand([NotNull] sphereScript99Parser.ArgumentOperandContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="sphereScript99Parser.binaryOperation"/>.
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.argumentBinaryOperation"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitBinaryOperation([NotNull] sphereScript99Parser.BinaryOperationContext context);
+	Result VisitArgumentBinaryOperation([NotNull] sphereScript99Parser.ArgumentBinaryOperationContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="sphereScript99Parser.operator"/>.
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.argumentOperator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitOperator([NotNull] sphereScript99Parser.OperatorContext context);
+	Result VisitArgumentOperator([NotNull] sphereScript99Parser.ArgumentOperatorContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.argumentSubExpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArgumentSubExpression([NotNull] sphereScript99Parser.ArgumentSubExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.argumentBinaryOperator"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArgumentBinaryOperator([NotNull] sphereScript99Parser.ArgumentBinaryOperatorContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.evalExpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEvalExpression([NotNull] sphereScript99Parser.EvalExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.signedEvalOperand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSignedEvalOperand([NotNull] sphereScript99Parser.SignedEvalOperandContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.evalOperand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEvalOperand([NotNull] sphereScript99Parser.EvalOperandContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.evalBinaryOperation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEvalBinaryOperation([NotNull] sphereScript99Parser.EvalBinaryOperationContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.evalOperator"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEvalOperator([NotNull] sphereScript99Parser.EvalOperatorContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.evalSubExpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEvalSubExpression([NotNull] sphereScript99Parser.EvalSubExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.evalBinaryOperator"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEvalBinaryOperator([NotNull] sphereScript99Parser.EvalBinaryOperatorContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="sphereScript99Parser.constantExpression"/>.
 	/// </summary>
@@ -176,21 +248,15 @@ public interface IsphereScript99Visitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitMacroExpression([NotNull] sphereScript99Parser.MacroExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="sphereScript99Parser.subExpression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSubExpression([NotNull] sphereScript99Parser.SubExpressionContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="sphereScript99Parser.macroOperator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitMacroOperator([NotNull] sphereScript99Parser.MacroOperatorContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="sphereScript99Parser.constantOperator"/>.
+	/// Visit a parse tree produced by <see cref="sphereScript99Parser.unaryOperator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitConstantOperator([NotNull] sphereScript99Parser.ConstantOperatorContext context);
+	Result VisitUnaryOperator([NotNull] sphereScript99Parser.UnaryOperatorContext context);
 }

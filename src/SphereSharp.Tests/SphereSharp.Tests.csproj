@@ -63,8 +63,10 @@
     <Compile Include="Parser\ParsingTestBase.cs" />
     <Compile Include="Parser\Sphere99\CustomFunctionCallTests.cs" />
     <Compile Include="Parser\FailTestErrorListener.cs" />
+    <Compile Include="Parser\Sphere99\EvalExpressionTests.cs" />
     <Compile Include="Parser\Sphere99\FileTests.cs" />
     <Compile Include="Parser\Sphere99\FunctionSectionTests.cs" />
+    <Compile Include="Parser\Sphere99\IfTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

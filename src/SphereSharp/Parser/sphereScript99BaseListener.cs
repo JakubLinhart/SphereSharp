@@ -119,6 +119,42 @@ public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitStatement([NotNull] sphereScript99Parser.StatementContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.ifStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterIfStatement([NotNull] sphereScript99Parser.IfStatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.ifStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitIfStatement([NotNull] sphereScript99Parser.IfStatementContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.elseIfStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterElseIfStatement([NotNull] sphereScript99Parser.ElseIfStatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.elseIfStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitElseIfStatement([NotNull] sphereScript99Parser.ElseIfStatementContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.elseStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterElseStatement([NotNull] sphereScript99Parser.ElseStatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.elseStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitElseStatement([NotNull] sphereScript99Parser.ElseStatementContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.macro"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -251,53 +287,161 @@ public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitUnquotedLiteralArgument([NotNull] sphereScript99Parser.UnquotedLiteralArgumentContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="sphereScript99Parser.signedOperand"/>.
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.signedArgumentOperand"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterSignedOperand([NotNull] sphereScript99Parser.SignedOperandContext context) { }
+	public virtual void EnterSignedArgumentOperand([NotNull] sphereScript99Parser.SignedArgumentOperandContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="sphereScript99Parser.signedOperand"/>.
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.signedArgumentOperand"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitSignedOperand([NotNull] sphereScript99Parser.SignedOperandContext context) { }
+	public virtual void ExitSignedArgumentOperand([NotNull] sphereScript99Parser.SignedArgumentOperandContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="sphereScript99Parser.operand"/>.
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.argumentOperand"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterOperand([NotNull] sphereScript99Parser.OperandContext context) { }
+	public virtual void EnterArgumentOperand([NotNull] sphereScript99Parser.ArgumentOperandContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="sphereScript99Parser.operand"/>.
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.argumentOperand"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitOperand([NotNull] sphereScript99Parser.OperandContext context) { }
+	public virtual void ExitArgumentOperand([NotNull] sphereScript99Parser.ArgumentOperandContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="sphereScript99Parser.binaryOperation"/>.
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.argumentBinaryOperation"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterBinaryOperation([NotNull] sphereScript99Parser.BinaryOperationContext context) { }
+	public virtual void EnterArgumentBinaryOperation([NotNull] sphereScript99Parser.ArgumentBinaryOperationContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="sphereScript99Parser.binaryOperation"/>.
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.argumentBinaryOperation"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitBinaryOperation([NotNull] sphereScript99Parser.BinaryOperationContext context) { }
+	public virtual void ExitArgumentBinaryOperation([NotNull] sphereScript99Parser.ArgumentBinaryOperationContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="sphereScript99Parser.operator"/>.
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.argumentOperator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterOperator([NotNull] sphereScript99Parser.OperatorContext context) { }
+	public virtual void EnterArgumentOperator([NotNull] sphereScript99Parser.ArgumentOperatorContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="sphereScript99Parser.operator"/>.
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.argumentOperator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitOperator([NotNull] sphereScript99Parser.OperatorContext context) { }
+	public virtual void ExitArgumentOperator([NotNull] sphereScript99Parser.ArgumentOperatorContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.argumentSubExpression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterArgumentSubExpression([NotNull] sphereScript99Parser.ArgumentSubExpressionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.argumentSubExpression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitArgumentSubExpression([NotNull] sphereScript99Parser.ArgumentSubExpressionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.argumentBinaryOperator"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterArgumentBinaryOperator([NotNull] sphereScript99Parser.ArgumentBinaryOperatorContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.argumentBinaryOperator"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitArgumentBinaryOperator([NotNull] sphereScript99Parser.ArgumentBinaryOperatorContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.evalExpression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEvalExpression([NotNull] sphereScript99Parser.EvalExpressionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.evalExpression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEvalExpression([NotNull] sphereScript99Parser.EvalExpressionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.signedEvalOperand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterSignedEvalOperand([NotNull] sphereScript99Parser.SignedEvalOperandContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.signedEvalOperand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitSignedEvalOperand([NotNull] sphereScript99Parser.SignedEvalOperandContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.evalOperand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEvalOperand([NotNull] sphereScript99Parser.EvalOperandContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.evalOperand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEvalOperand([NotNull] sphereScript99Parser.EvalOperandContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.evalBinaryOperation"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEvalBinaryOperation([NotNull] sphereScript99Parser.EvalBinaryOperationContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.evalBinaryOperation"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEvalBinaryOperation([NotNull] sphereScript99Parser.EvalBinaryOperationContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.evalOperator"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEvalOperator([NotNull] sphereScript99Parser.EvalOperatorContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.evalOperator"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEvalOperator([NotNull] sphereScript99Parser.EvalOperatorContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.evalSubExpression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEvalSubExpression([NotNull] sphereScript99Parser.EvalSubExpressionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.evalSubExpression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEvalSubExpression([NotNull] sphereScript99Parser.EvalSubExpressionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.evalBinaryOperator"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEvalBinaryOperator([NotNull] sphereScript99Parser.EvalBinaryOperatorContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.evalBinaryOperator"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEvalBinaryOperator([NotNull] sphereScript99Parser.EvalBinaryOperatorContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.constantExpression"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -323,18 +467,6 @@ public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitMacroExpression([NotNull] sphereScript99Parser.MacroExpressionContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="sphereScript99Parser.subExpression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterSubExpression([NotNull] sphereScript99Parser.SubExpressionContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="sphereScript99Parser.subExpression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitSubExpression([NotNull] sphereScript99Parser.SubExpressionContext context) { }
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="sphereScript99Parser.macroOperator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -347,17 +479,17 @@ public partial class sphereScript99BaseListener : IsphereScript99Listener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitMacroOperator([NotNull] sphereScript99Parser.MacroOperatorContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="sphereScript99Parser.constantOperator"/>.
+	/// Enter a parse tree produced by <see cref="sphereScript99Parser.unaryOperator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterConstantOperator([NotNull] sphereScript99Parser.ConstantOperatorContext context) { }
+	public virtual void EnterUnaryOperator([NotNull] sphereScript99Parser.UnaryOperatorContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="sphereScript99Parser.constantOperator"/>.
+	/// Exit a parse tree produced by <see cref="sphereScript99Parser.unaryOperator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitConstantOperator([NotNull] sphereScript99Parser.ConstantOperatorContext context) { }
+	public virtual void ExitUnaryOperator([NotNull] sphereScript99Parser.UnaryOperatorContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>
