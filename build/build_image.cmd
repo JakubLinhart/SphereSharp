@@ -1,0 +1,1 @@
+docker build docker\antlr\. -t spheresharp/antlr:4.7
