@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Antlr4.Runtime.Misc;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +16,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         [TestMethod]
         public void Can_parse_file_with_all_section_types_and_eof_section()
         {
-            ShouldSucceed(@"[function fun1]
+            CheckStructure("function fun1;eof;", @"[function fun1]
 call1
 
 [eof]");
@@ -23,7 +25,7 @@ call1
         [TestMethod]
         public void Can_parse_file_with_some_section_without_eof_section()
         {
-            ShouldSucceed(@"[function fun1]
+            CheckStructure("function fun1;", @"[function fun1]
 call1");
         }
 
@@ -38,5 +40,36 @@ call1");
         {
             var x = parser.file();
         });
+
+        private void CheckStructure(string expectedResult, string src)
+        {
+            Parse(src, parser =>
+            {
+                var file = parser.file();
+                var extractor = new SectionExtractor();
+                extractor.Visit(file);
+                extractor.Outpout.Should().Be(expectedResult);
+            });
+        }
+
+        private class SectionExtractor : sphereScript99BaseVisitor<bool>
+        {
+            private StringBuilder output = new StringBuilder();
+            public string Outpout => output.ToString();
+
+            public override bool VisitEofSection([NotNull] sphereScript99Parser.EofSectionContext context)
+            {
+                output.Append("eof;");
+
+                return true;
+            }
+
+            public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
+            {
+                output.Append($"function {context.functionSectionHeader().SYMBOL()};");
+
+                return true;
+            }
+        }
     }
 }

@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Parser\Sphere99\AssignmentTests.cs" />
+    <Compile Include="Parser\Sphere99\BlockTests.cs" />
     <Compile Include="Parser\Sphere99\CustomFunctionArgumentListTests.cs" />
     <Compile Include="Parser\ParsingTestBase.cs" />
     <Compile Include="Parser\Sphere99\CustomFunctionCallTests.cs" />
