@@ -1,14 +1,14 @@
 ﻿grammar sphereScript99;
 
-file: functionSection+ eofSection? EOF;
+file: NEWLINE? section+ eofSection? NEWLINE? EOF;
 
 section: functionSection;
-eofSection: EOF_SECTION_HEADER (NEWLINE+ | EOF);
+eofSection: EOF_SECTION_HEADER (NEWLINE | EOF);
 functionSection: functionSectionHeader codeBlock;
 functionSectionHeader: FUNCTION_SECTION_HEADER_START SYMBOL ']' (NEWLINE | EOF);
 codeBlock: statement+;
 
-statement: WS* (call | assignment | ifStatement) (NEWLINE | EOF);
+statement: WS*? (call | assignment | ifStatement) (NEWLINE | EOF);
 
 ifStatement: IF WS+ evalExpression (NEWLINE | EOF) codeBlock (elseIfStatement)* elseStatement? WS* ENDIF ;
 elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock;
@@ -57,9 +57,8 @@ macroExpression: macro ;
 macroOperator: macro ;
 unaryOperator: PLUS | MINUS;
 
-NEWLINE: ('\r'? '\n')+;
+NEWLINE: ([ \t]*? ('//' (~( '\r' | '\n' ))*?)? ('\r'? '\n') )+;
 WS: [ \t];
-
 EOF_SECTION_HEADER: '[' [eE] [oO] [fF] ']';
 FUNCTION_SECTION_HEADER_START: '[function' WS+;
 IF: [iI][fF];

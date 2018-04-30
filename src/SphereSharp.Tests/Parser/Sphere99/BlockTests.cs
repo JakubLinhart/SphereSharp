@@ -23,12 +23,33 @@ call2
         }
 
         [TestMethod]
+        public void Can_parse_with_comment_on_empty_lines()
+        {
+            string expectedResult = "call:call1;call:call2;";
+            CheckStatements(expectedResult, @"call1
+// comment 1
+// comment 2
+call2
+");
+        }
+
+        [TestMethod]
         public void Can_parse_statement_with_leading_whitespace()
         {
             string expectedResult = "call:call1;call:call2;call:leadingtab;call:call3;";
             CheckStatements(expectedResult, @"call1
     call2
 	leadingtab
+call3");
+        }
+
+        [TestMethod]
+        public void Can_parse_statement_with_leading_whitespace_ending_with_remarks()
+        {
+            string expectedResult = "call:call1;call:call2;call:leadingtab;call:call3;";
+            CheckStatements(expectedResult, @"call1 // remark1
+    call2//remark2
+	leadingtab           //remark3
 call3");
         }
 
