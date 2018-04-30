@@ -23,6 +23,42 @@ call1
         }
 
         [TestMethod]
+        public void Can_parse_file_with_all_section_types_and_eof_section_ending_with_remarks()
+        {
+            CheckStructure("function fun1;eof;", @"[function fun1]//remark1
+call1
+
+[eof]//remark2");
+        }
+
+        [TestMethod]
+        public void Can_parse_file_with_comments_at_beginning_and_end()
+        {
+            CheckStructure("function fun1;eof;", @"//remark1
+//remark2
+[function fun1]
+call1
+
+[eof]
+//remark3
+//remark4");
+        }
+
+        [TestMethod]
+        public void Can_parse_file_with_empty_lines_at_beginning_and_end()
+        {
+            CheckStructure("function fun1;eof;", @"
+
+[function fun1]
+call1
+
+[eof]
+
+
+");
+        }
+
+        [TestMethod]
         public void Can_parse_file_with_some_section_without_eof_section()
         {
             CheckStructure("function fun1;", @"[function fun1]
