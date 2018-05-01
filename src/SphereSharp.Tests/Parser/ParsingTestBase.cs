@@ -30,7 +30,7 @@ namespace SphereSharp.Tests.Parser
             }
             catch (Exception ex)
             {
-                Assert.Fail($"Testing '{src}'\n\nMessage: {ex.Message}\n\n{ex}");
+                Assert.Fail($"Testing '{src.Substring(0, Math.Min(src.Length, 40))}'\n\nMessage: {ex.Message}\n\n{ex}");
             }
         }
     }

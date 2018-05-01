@@ -70,10 +70,12 @@
     <Compile Include="Parser\Sphere99\ItemDefSectionTests.cs" />
     <Compile Include="Parser\Sphere99\ItemDefSectionTests.PropertyAndTriggerExtractor.cs" />
     <Compile Include="Parser\Sphere99\NativeFunctionCallTests.cs" />
+    <Compile Include="Parser\Sphere99\StatementExtractor.cs" />
     <Compile Include="Parser\Sphere99\TriggerCodeBlockExtractor.cs" />
     <Compile Include="Parser\Sphere99\TriggerTests.cs" />
     <Compile Include="Parser\Sphere99\TemplateSectionTests.cs" />
     <Compile Include="Parser\Sphere99\TypeDefSectionTests.cs" />
+    <Compile Include="Parser\Sphere99\WhileTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

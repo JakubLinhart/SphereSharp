@@ -21,6 +21,15 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("(1+1)", "expr: 1+1");
             ShouldSucceed("(1-1)", "expr: 1-1");
             ShouldSucceed("(1*1)", "expr: 1*1");
+            ShouldSucceed("(1/1)", "expr: 1/1");
+            ShouldSucceed("(1&1)", "expr: 1&1");
+            ShouldSucceed("(1|1)", "expr: 1|1");
+            ShouldSucceed("(1%1)", "expr: 1%1");
+
+            ShouldSucceed("(-1)", "expr: -1");
+            ShouldSucceed("(+1)", "expr: +1");
+            ShouldSucceed("(~1)", "expr: ~1");
+            ShouldSucceed("!1", "expr: !1");
 
             ShouldSucceed("(1+1+1)", "expr: 1+1+1");
 
@@ -38,6 +47,18 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("(<fun1(1)>,123)", new[] { "expr: <fun1(1)>", "expr: 123" });
             ShouldSucceed("(123,<fun1(1)>,123)", new[] { "expr: 123", "expr: <fun1(1)>", "expr: 123" });
             ShouldSucceed("(<tag(realm)>*(-1))", "expr: <tag(realm)>*(-1)");
+        }
+
+        [TestMethod]
+        public void Can_parse_range_expression()
+        {
+            ShouldSucceed("({1 2})", "expr: {1 2}");
+            ShouldSucceed("({-2 -1})", "expr: {-2 -1}");
+            ShouldSucceed("({(1) (2)})", "expr: {(1) (2)}");
+            ShouldSucceed("({-(1) +(2)})", "expr: {-(1) +(2)}");
+            ShouldSucceed("({(1+1) (2+2)})", "expr: {(1+1) (2+2)}");
+            ShouldSucceed("({-<argv(0)> <argv(0)>})", "expr: {-<argv(0)> <argv(0)>}");
+            ShouldSucceed("({1 2} + {3 4})", "expr: {1 2} + {3 4}");
         }
 
         [TestMethod]
@@ -85,6 +106,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("(\"some text\",1)", new[] { "quoted: some text", "expr: 1" });
             ShouldSucceed("(1,\"some text\",2)", new[] { "expr: 1", "quoted: some text", "expr: 2" });
             ShouldSucceed("(\"some text\",\"other text\")", new[] { "quoted: some text", "quoted: other text" });
+            ShouldSucceed("(\"<hours>:<mins>:<seconds>\")", "quoted: <hours>:<mins>:<seconds>");
         }
 
         [TestMethod]

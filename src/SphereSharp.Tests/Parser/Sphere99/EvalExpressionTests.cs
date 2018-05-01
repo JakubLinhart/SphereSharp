@@ -26,21 +26,40 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
+        public void Can_parse_hex_numbers()
+        {
+            RoundtripCheck("0dead");
+            RoundtripCheck("0dead-0beef");
+        }
+
+        [TestMethod]
         public void Can_parse_basic_expression()
         {
             RoundtripCheck("1");
-            RoundtripCheck("-1");
             RoundtripCheck("1+1");
-            RoundtripCheck("1+-1");
-            RoundtripCheck("1+-+-+-+1");
             RoundtripCheck("1-1");
             RoundtripCheck("1*1");
+            RoundtripCheck("1/1");
             RoundtripCheck("1==1");
             RoundtripCheck("1!=1");
             RoundtripCheck("1>1");
             RoundtripCheck("1<1");
             RoundtripCheck("1>=1");
             RoundtripCheck("1<=1");
+            RoundtripCheck("1&&1");
+            RoundtripCheck("1||1");
+            RoundtripCheck("1&1");
+            RoundtripCheck("1|1");
+            RoundtripCheck("1%1");
+
+            RoundtripCheck("-1");
+            RoundtripCheck("+1");
+            RoundtripCheck("~1");
+            RoundtripCheck("!1");
+
+            RoundtripCheck("1+-1");
+            RoundtripCheck("1+-+-+-+1");
+
             RoundtripCheck("1+1+1");
 
             RoundtripCheck("(1)");
@@ -66,6 +85,18 @@ namespace SphereSharp.Tests.Parser.Sphere99
             RoundtripCheck("<fun1(1)>+<fun2(2)>+<fun3(3)>");
             RoundtripCheck("(<fun1(1)>+<fun2(2)>)+<fun3(3)>");
             RoundtripCheck("<fun1(1)>+(<fun2(2)>+<fun3(3)>)");
+        }
+
+        [TestMethod]
+        public void Can_parse_range_expression()
+        {
+            RoundtripCheck("({1 2})");
+            RoundtripCheck("({-2 -1})");
+            RoundtripCheck("({(1) (2)})");
+            RoundtripCheck("({-(1) +(2)})");
+            RoundtripCheck("({(1+1) (2+2)})");
+            RoundtripCheck("({-<argv(0)> <argv(0)>})");
+            RoundtripCheck("({1 2} + {3 4})");
         }
 
         [TestMethod]

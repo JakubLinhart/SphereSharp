@@ -24,6 +24,25 @@ namespace SphereSharp.Tests.Parser.Sphere99
             CheckStructure("return 1", "expr: 1");
             CheckStructure("timer 100", "expr: 100");
             CheckStructure("consume 123", "expr: 123");
+            CheckStructure("consume(1000 t_custom_spell)", "unq: 1000 t_custom_spell");
+        }
+
+        [TestMethod]
+        public void Can_parse_events_calls()
+        {
+            CheckStructure("events(-e_spelleffect)", "unq: -e_spelleffect");
+            CheckStructure("events(+e_spelleffect)", "unq: +e_spelleffect");
+            CheckStructure("events(e_spelleffect)", "unq: e_spelleffect");
+            CheckStructure("events -e_spelleffect", "unq: -e_spelleffect");
+            CheckStructure("events +e_spelleffect", "unq: +e_spelleffect");
+            CheckStructure("events e_spelleffect", "unq: e_spelleffect");
+        }
+
+        [TestMethod]
+        public void Can_parse_trigger_calls()
+        {
+            CheckStructure("trigger @userclick", "unq: userclick");
+            CheckStructure("trigger(@dropon_ground)", "unq: dropon_ground");
         }
 
         [TestMethod]
@@ -34,6 +53,12 @@ namespace SphereSharp.Tests.Parser.Sphere99
             CheckStructure("safe fun1(1)", "eval: fun1(1)");
             CheckStructure("safe(fun1(1))", "eval: (fun1(1))");
             CheckStructure("hval fun1(1)+fun2(2)", "eval: fun1(1)+fun2(2)");
+        }
+
+        [TestMethod]
+        public void Can_parse_arg_calls()
+        {
+            CheckStructure("arg(u,#+1)", new[] { "unq: u", "unq: #+1" });
         }
 
         private void ShouldSucceed(string src) => Parse(src, parser => parser.call());

@@ -14,7 +14,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         [TestMethod]
         public void Can_parse_TypeDef_section_with_triggers()
         {
-            StructureCheck("triggers:2;", @"[typedef t_port_randomvicinty]
+            CheckStructure("triggers:2;", @"[typedef t_port_randomvicinty]
 on=@step
   call1
 
@@ -23,7 +23,7 @@ on=@timer
 ");
         }
 
-        private void StructureCheck(string expectedResult, string src)
+        private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.TypeDefSectionContext itemDef = null;
 

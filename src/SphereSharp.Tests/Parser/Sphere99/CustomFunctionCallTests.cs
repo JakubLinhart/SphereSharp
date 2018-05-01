@@ -36,6 +36,13 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
+        public void Can_parse_parameters_as_chained_calls()
+        {
+            ShouldSucceed("findlayer.2.uid");
+            ShouldSucceed("lastnew.tag.myfood");
+        }
+
+        [TestMethod]
         public void Can_parse_functions_with_parametrized_names()
         {
             ShouldSucceed("fun1<param1>");

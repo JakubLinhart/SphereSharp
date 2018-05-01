@@ -13,7 +13,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         [TestMethod]
         public void Can_parse_ItemDef_section_with_properties_and_triggers()
         {
-            StructureCheck("props:3;triggers:3;", @"[itemdef i_dclickME]
+            CheckStructure("props:3;triggers:3;", @"[itemdef i_dclickME]
 name=vain dclicker
 id=i_memory
 type=t_script
@@ -32,7 +32,7 @@ remove");
         [TestMethod]
         public void Can_parse_ItemDef_without_triggers()
         {
-            StructureCheck("props:3;triggers:0;", @"[itemdef i_dclickME]
+            CheckStructure("props:3;triggers:0;", @"[itemdef i_dclickME]
 name=vain dclicker
 id=i_memory
 type=t_script");
@@ -41,7 +41,7 @@ type=t_script");
         [TestMethod]
         public void Can_parse_ItemDef_with_comments_and_empty_lines_in_property_list()
         {
-            StructureCheck("props:3;triggers:0;", @"[itemdef i_dclickME] // comment after header
+            CheckStructure("props:3;triggers:0;", @"[itemdef i_dclickME] // comment after header
 // comment as the first property line
 name=vain dclicker // comment after property
 
@@ -50,7 +50,7 @@ id=i_memory
 type=t_script");
         }
 
-        private void StructureCheck(string expectedResult, string src)
+        private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.ItemDefSectionContext itemDef = null;
 

@@ -14,12 +14,12 @@ namespace SphereSharp.Tests.Parser.Sphere99
         [TestMethod]
         public void Can_parse_Template_section_with_property()
         {
-            StructureCheck("props:1;", @"[template tmp_ingots]
+            CheckStructure("props:1;", @"[template tmp_ingots]
 container=i_pouch
 ");
         }
 
-        private void StructureCheck(string expectedResult, string src)
+        private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.TemplateSectionContext itemDef = null;
 

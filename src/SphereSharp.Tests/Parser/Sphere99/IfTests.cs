@@ -1,9 +1,7 @@
-﻿using Antlr4.Runtime.Misc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SphereSharp.Tests.Parser.Sphere99
@@ -149,48 +147,9 @@ endif");
             Parse(src, parser =>
             {
                 var block = parser.ifStatement();
-                var extractor = new IfExtractor();
+                var extractor = new StatementExtractor();
                 extractor.Visit(block);
             });
-        }
-
-        private class IfExtractor : sphereScript99BaseVisitor<bool>
-        {
-            private StringBuilder result = new StringBuilder();
-            public string Result => result.ToString();
-
-            public override bool VisitIfStatement([NotNull] sphereScript99Parser.IfStatementContext context)
-            {
-                if (context.codeBlock() != null)
-                    result.Append($"if({context.codeBlock().statement().Length});");
-                else
-                    result.Append($"if(0);");
-
-                base.VisitIfStatement(context);
-                result.Append("endif;");
-
-                return false;
-            }
-
-            public override bool VisitElseStatement([NotNull] sphereScript99Parser.ElseStatementContext context)
-            {
-                if (context.codeBlock() != null)
-                    result.Append($"else({context.codeBlock().statement().Length});");
-                else
-                    result.Append($"else(0);");
-
-                return false;
-            }
-
-            public override bool VisitElseIfStatement([NotNull] sphereScript99Parser.ElseIfStatementContext context)
-            {
-                if (context.codeBlock() != null)
-                    result.Append($"elseif({context.codeBlock().statement().Length});");
-                else
-                    result.Append($"elseif(0);");
-
-                return false;
-            }
         }
     }
 }
