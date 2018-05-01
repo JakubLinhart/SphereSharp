@@ -53,7 +53,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\SphereSharp\SphereSharp.csproj">
+    <ProjectReference Include="..\SphereSharp\SphereSharp.csproj">
       <Project>{88cf5fbd-4e99-4fdb-81b7-658169dbf4d0}</Project>
       <Name>SphereSharp</Name>
     </ProjectReference>
