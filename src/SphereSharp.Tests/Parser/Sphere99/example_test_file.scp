@@ -6,7 +6,22 @@ myDclicker.p=<p>
 myDclicker.dclick
 myDclicker.remove
 
-[function isDefined]
+[itemdef i_dclickME]
+name=vain dclicker
+id=i_memory
+type=t_script
+
+on=@create
+attr=010
+timer=1
+
+on=@UserDClick
+return 1
+
+on=@timer
+remove
+
+[function isDefined]//arg - hodnota promìnné
 if (safe(<eval (<args>)>))
   return 1
 else

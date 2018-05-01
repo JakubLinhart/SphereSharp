@@ -28,6 +28,21 @@ call1
             CheckStructure("function fun1;eof;", @"[function fun1]//remark1
 call1
 
+[itemdef i_dclickME]
+name=vain dclicker
+id=i_memory
+type=t_script
+
+on=@create
+attr=010
+
+[typedef t_port_randomvicinty]
+on=@step
+    call1
+
+[template tmp_ingots]
+container=i_pouch
+
 [eof]//remark2");
         }
 

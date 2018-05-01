@@ -67,7 +67,13 @@
     <Compile Include="Parser\Sphere99\FirstLevelArgumentExtractor.cs" />
     <Compile Include="Parser\Sphere99\FunctionSectionTests.cs" />
     <Compile Include="Parser\Sphere99\IfTests.cs" />
+    <Compile Include="Parser\Sphere99\ItemDefSectionTests.cs" />
+    <Compile Include="Parser\Sphere99\ItemDefSectionTests.PropertyAndTriggerExtractor.cs" />
     <Compile Include="Parser\Sphere99\NativeFunctionCallTests.cs" />
+    <Compile Include="Parser\Sphere99\TriggerCodeBlockExtractor.cs" />
+    <Compile Include="Parser\Sphere99\TriggerTests.cs" />
+    <Compile Include="Parser\Sphere99\TemplateSectionTests.cs" />
+    <Compile Include="Parser\Sphere99\TypeDefSectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
