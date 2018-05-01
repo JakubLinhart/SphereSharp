@@ -35,7 +35,7 @@ expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 quotedLiteralArgument: '"' unquotedLiteralArgument '"';
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | NUMBER | WS | '[' | ']')+? ;
 
-signedArgumentOperand: (MINUS | PLUS) signedArgumentOperand | argumentOperand ;
+signedArgumentOperand: unaryOperator signedArgumentOperand | argumentOperand ;
 argumentOperand: constantExpression | argumentSubExpression | macroExpression ;
 argumentBinaryOperation: argumentOperator signedArgumentOperand ;
 argumentOperator: argumentBinaryOperator | macroOperator ;
@@ -57,7 +57,7 @@ macroExpression: macro ;
 macroOperator: macro ;
 unaryOperator: PLUS | MINUS;
 
-NEWLINE: ([ \t]*? ('//' (~( '\r' | '\n' ))*?)? ('\r'? '\n') )+;
+NEWLINE: ([ \t]* ('//' (~( '\r' | '\n' ))*)? ('\r'? '\n') )+;
 WS: [ \t];
 EOF_SECTION_HEADER: '[' [eE] [oO] [fF] ']';
 FUNCTION_SECTION_HEADER_START: '[function' WS+;

@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{88CF5FBD-4E99-4FDB-81B7-658169DBF4D0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SphereSharp</RootNamespace>
-    <AssemblyName>SphereSharp</AssemblyName>
+    <ProjectGuid>{086DAEF7-FF78-4359-B217-0895B0AB8102}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SphereSharp.Transpiler</RootNamespace>
+    <AssemblyName>SphereSharp.Transpiler</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,9 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr4.Runtime.Standard, Version=4.7.0.0, Culture=neutral, PublicKeyToken=e78b2c5abd1fcb3f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\libs\Antlr4.Runtime.Standard.dll</HintPath>
+    <Reference Include="Antlr4.Runtime.Standard">
+      <HintPath>..\libs\Antlr4.Runtime.Standard.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,19 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleErrorListener.cs" />
-    <Compile Include="Parser\sphereScript99BaseListener.cs" />
-    <Compile Include="Parser\sphereScript99BaseVisitor.cs" />
-    <Compile Include="Parser\sphereScript99Lexer.cs" />
-    <Compile Include="Parser\sphereScript99Listener.cs" />
-    <Compile Include="Parser\sphereScript99Parser.cs" />
-    <Compile Include="Parser\sphereScript99Visitor.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SourceCodeBuilder.cs" />
-    <Compile Include="Sphere99RoundtripGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="sphereScript99.g4" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\SphereSharp\SphereSharp.csproj">
+      <Project>{88cf5fbd-4e99-4fdb-81b7-658169dbf4d0}</Project>
+      <Name>SphereSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

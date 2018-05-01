@@ -69,13 +69,27 @@ call1");
         [DeploymentItem(@"Parser\Sphere99\example_test_file.scp", @"Parser\Sphere99")]
         public void Can_parse_example_script_file()
         {
-            ShouldSucceed(File.ReadAllText(@"Parser\Sphere99\example_test_file.scp"));
+            RoundtripCheck(File.ReadAllText(@"Parser\Sphere99\example_test_file.scp"));
         }
 
         private void ShouldSucceed(string src) => Parse(src, parser =>
         {
             var x = parser.file();
         });
+
+        private void RoundtripCheck(string src)
+        {
+            sphereScript99Parser.FileContext file = null;
+            Parse(src, parser =>
+            {
+                file = parser.file();
+            });
+
+            var roundtripGenerator = new Sphere99RoundtripGenerator();
+            roundtripGenerator.Visit(file);
+
+            roundtripGenerator.Output.Should().Be(src);
+        }
 
         private void CheckStructure(string expectedResult, string src)
         {
