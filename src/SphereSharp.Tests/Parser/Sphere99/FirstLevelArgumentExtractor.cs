@@ -37,5 +37,19 @@ namespace SphereSharp.Tests.Parser.Sphere99
 
             return true;
         }
+
+        public override bool VisitEventArgument([NotNull] sphereScript99Parser.EventArgumentContext context)
+        {
+            arguments.Add($"event: {context.GetText()}");
+
+            return true;
+        }
+
+        public override bool VisitTriggerArgument([NotNull] sphereScript99Parser.TriggerArgumentContext context)
+        {
+            arguments.Add($"trigger: {context.SYMBOL().GetText()}");
+
+            return true;
+        }
     }
 }

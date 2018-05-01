@@ -30,19 +30,19 @@ namespace SphereSharp.Tests.Parser.Sphere99
         [TestMethod]
         public void Can_parse_events_calls()
         {
-            CheckStructure("events(-e_spelleffect)", "unq: -e_spelleffect");
-            CheckStructure("events(+e_spelleffect)", "unq: +e_spelleffect");
+            CheckStructure("events(-e_spelleffect)", "event: -e_spelleffect");
+            CheckStructure("events(+e_spelleffect)", "event: +e_spelleffect");
             CheckStructure("events(e_spelleffect)", "unq: e_spelleffect");
-            CheckStructure("events -e_spelleffect", "unq: -e_spelleffect");
-            CheckStructure("events +e_spelleffect", "unq: +e_spelleffect");
+            CheckStructure("events -e_spelleffect", "event: -e_spelleffect");
+            CheckStructure("events +e_spelleffect", "event: +e_spelleffect");
             CheckStructure("events e_spelleffect", "unq: e_spelleffect");
         }
 
         [TestMethod]
         public void Can_parse_trigger_calls()
         {
-            CheckStructure("trigger @userclick", "unq: userclick");
-            CheckStructure("trigger(@dropon_ground)", "unq: dropon_ground");
+            CheckStructure("trigger @userclick", "trigger: userclick");
+            CheckStructure("trigger(@dropon_ground)", "trigger: dropon_ground");
         }
 
         [TestMethod]

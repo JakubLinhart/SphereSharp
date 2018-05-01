@@ -38,7 +38,7 @@ nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
-nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME;
+nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER;
 memberName: (SYMBOL | macro)+;
 
 // properties
@@ -56,10 +56,12 @@ triggerBody: codeBlock;
 // argument, argument expression
 enclosedArgumentList: LPAREN argumentList? RPAREN;
 argumentList: argument (',' argument)*;
-argument: expressionArgument | quotedLiteralArgument | unquotedLiteralArgument;
+argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | unquotedLiteralArgument;
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 quotedLiteralArgument: '"' unquotedLiteralArgument '"';
-unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | NUMBER | WS | '[' | ']')+? ;
+unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | NUMBER | WS | '[' | ']' | '#' | ':')+? ;
+triggerArgument: '@' SYMBOL;
+eventArgument: (PLUS | MINUS) SYMBOL;
 
 signedArgumentOperand: unaryOperator signedArgumentOperand | argumentOperand ;
 argumentOperand: constantExpression | argumentSubExpression | macroExpression ;
@@ -102,6 +104,8 @@ SYSMESSAGE: [sS][yY][sS][mM][eE][sS][sS][aA][gG][eE];
 RETURN: [rR][eE][tT][uU][rR][nN];
 TIMER: [tT][iI][mM][eE][rR];
 CONSUME: [cC][oO][nN][sS][uU][mM][eE];
+EVENTS: [eE][vV][eE][nN][tT][sS];
+TRIGGER: [tT][rR][iI][gG][gG][eE][rR];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];

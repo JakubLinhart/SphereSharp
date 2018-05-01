@@ -96,6 +96,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("(many words separated by space,and other words as second argument)",
                 new[] { "unq: many words separated by space", "unq: and other words as second argument" });
             ShouldSucceed("(fun1,fun2,fun3)", new[] { "unq: fun1", "unq: fun2", "unq: fun3" });
+            ShouldSucceed("(#+1)", "unq: #+1");
         }
 
         [TestMethod]
