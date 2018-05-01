@@ -1,9 +1,9 @@
 ﻿grammar sphereScript99;
 
-file: NEWLINE? section+ eofSection? NEWLINE? EOF;
+file: NEWLINE? section+ (eofSection | EOF);
 
 section: functionSection | itemDefSection | typeDefSection | templateSection;
-eofSection: EOF_SECTION_HEADER (NEWLINE | EOF);
+eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
 functionSectionHeader: FUNCTION_SECTION_HEADER_START SYMBOL ']' NEWLINE;
@@ -21,9 +21,9 @@ codeBlock: statement+;
 
 statement: WS*? (call | assignment | ifStatement) (NEWLINE | EOF);
 
-ifStatement: IF WS+ evalExpression (NEWLINE | EOF) codeBlock (elseIfStatement)* elseStatement? WS* ENDIF ;
-elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock;
-elseStatement: WS* ELSE (NEWLINE | EOF) codeBlock;
+ifStatement: IF WS+ evalExpression (NEWLINE | EOF) codeBlock? (elseIfStatement)* elseStatement? WS* ENDIF ;
+elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock?;
+elseStatement: WS* ELSE (NEWLINE | EOF) codeBlock?;
 
 macro: LESS_THAN memberAccess MORE_THAN ;
 call: memberAccess;

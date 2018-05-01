@@ -103,7 +103,8 @@ call1");
             var roundtripGenerator = new Sphere99RoundtripGenerator();
             roundtripGenerator.Visit(file);
 
-            roundtripGenerator.Output.Should().Be(src);
+            var srcWithoutEofTail = src.Substring(0, src.IndexOf("[eof]") + 5);
+            roundtripGenerator.Output.Should().Be(srcWithoutEofTail);
         }
 
         private void CheckStructure(string expectedResult, string src)
