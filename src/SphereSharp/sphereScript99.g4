@@ -64,7 +64,7 @@ argumentOperand: constantExpression | argumentSubExpression | macroExpression ;
 argumentBinaryOperation: argumentOperator signedArgumentOperand ;
 argumentOperator: argumentBinaryOperator | macroOperator ;
 argumentSubExpression: '(' expressionArgument ')' ;
-argumentBinaryOperator: PLUS | MINUS | MULTIPLY ;
+argumentBinaryOperator: binaryOperator;
 
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;
@@ -73,13 +73,14 @@ evalOperand: constantExpression | evalSubExpression | macro | memberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
 evalSubExpression: '(' evalExpression ')' ;
-evalBinaryOperator: PLUS | MINUS | MULTIPLY | EQUAL | NOT_EQUAL | MORE_THAN_EQUAL | LESS_THAN_EQUAL | MORE_THAN | LESS_THAN;
+evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | MORE_THAN_EQUAL | LESS_THAN_EQUAL | MORE_THAN | LESS_THAN;
+binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICAL_OR | BITWISE_AND | BITWISE_OR;
 
 constantExpression: NUMBER ;
 macroExpression: macro ;
 
 macroOperator: macro ;
-unaryOperator: PLUS | MINUS;
+unaryOperator: PLUS | MINUS | LOGICAL_NOT | BITWISE_COMPLEMENT;
 
 NEWLINE: ([ \t]* ('//' (~( '\r' | '\n' ))*)? ('\r'? '\n') )+;
 WS: [ \t];
@@ -115,6 +116,14 @@ LESS_THAN: '<';
 PLUS: '+' ;
 MINUS: '-' ;
 MULTIPLY: '*';
+DIVIDE: '/';
+BITWISE_AND: '&';
+BITWISE_OR: '|';
+BITWISE_COMPLEMENT: '~';
+MODULO: '%';
+LOGICAL_AND: '&&';
+LOGICAL_OR: '||';
+LOGICAL_NOT: '!';
 
 MORE_THAN_EQUAL: MORE_THAN ASSIGN;
 LESS_THAN_EQUAL: LESS_THAN ASSIGN;

@@ -29,7 +29,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("(-1)", "expr: -1");
             ShouldSucceed("(+1)", "expr: +1");
             ShouldSucceed("(~1)", "expr: ~1");
-            ShouldSucceed("!1", "expr: !1");
+            ShouldSucceed("(!1)", "expr: !1");
 
             ShouldSucceed("(1+1+1)", "expr: 1+1+1");
 
