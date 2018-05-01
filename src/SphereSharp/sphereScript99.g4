@@ -19,11 +19,13 @@ templateSectionHeader: TEMPLATE_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 codeBlock: statement+;
 
-statement: WS*? (call | assignment | ifStatement) (NEWLINE | EOF);
+statement: WS*? (call | assignment | ifStatement | whileStatement) (NEWLINE | EOF);
 
-ifStatement: IF WS+ evalExpression (NEWLINE | EOF) codeBlock? (elseIfStatement)* elseStatement? WS* ENDIF ;
+ifStatement: IF WS+ evalExpression NEWLINE codeBlock? (elseIfStatement)* elseStatement? WS* ENDIF ;
 elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock?;
-elseStatement: WS* ELSE (NEWLINE | EOF) codeBlock?;
+elseStatement: WS* ELSE NEWLINE codeBlock?;
+
+whileStatement: WHILE WS+ evalExpression NEWLINE codeBlock? WS* ENDWHILE;
 
 macro: LESS_THAN memberAccess MORE_THAN ;
 call: memberAccess;
@@ -93,6 +95,8 @@ IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE][iI][fF]; 
 ELSE: [eE][lL][sS][eE];
 ENDIF: [eE][nN][dD][iI][fF];
+WHILE: [wW][hH][iI][lL][eE];
+ENDWHILE: [eE][nN][dD][wW][hH][iI][lL][eE];
 
 SYSMESSAGE: [sS][yY][sS][mM][eE][sS][sS][aA][gG][eE];
 RETURN: [rR][eE][tT][uU][rR][nN];

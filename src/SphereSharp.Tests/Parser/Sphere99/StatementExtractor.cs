@@ -40,6 +40,16 @@ namespace SphereSharp.Tests.Parser.Sphere99
 
             return false;
         }
+
+        public override bool VisitWhileStatement([NotNull] sphereScript99Parser.WhileStatementContext context)
+        {
+            if (context.codeBlock() != null)
+                result.Append($"while({context.codeBlock().statement().Length});endwhile");
+            else
+                result.Append($"while(0);endwhile");
+
+            return false;
+        }
     }
 
 }
