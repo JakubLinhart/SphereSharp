@@ -2,10 +2,21 @@
 
 file: NEWLINE? section+ (eofSection | EOF);
 
-section: functionSection;
+section: functionSection | itemDefSection | typeDefSection | templateSection;
 eofSection: EOF_SECTION_HEADER;
+
 functionSection: functionSectionHeader codeBlock;
-functionSectionHeader: FUNCTION_SECTION_HEADER_START SYMBOL ']' (NEWLINE | EOF);
+functionSectionHeader: FUNCTION_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+
+itemDefSection: itemDefSectionHeader propertyList triggerList ;
+itemDefSectionHeader: ITEMDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+
+typeDefSection: typeDefSectionHeader triggerList ;
+typeDefSectionHeader: TYPEDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+
+templateSection: templateSectionHeader propertyList ;
+templateSectionHeader: TEMPLATE_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+
 codeBlock: statement+;
 
 statement: WS*? (call | assignment | ifStatement) (NEWLINE | EOF);
@@ -20,12 +31,25 @@ assignment: memberAccess ASSIGN argumentList;
 
 memberAccess: evalCall | nativeMemberAccess | customMemberAccess;
 evalCall: EVAL_FUNCTIONS WS* evalExpression; 
-nativeMemberAccess: NATIVE_FUNCTIONS nativeArgumentList? chainedMemberAccess?;
+nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
+nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME;
 memberName: (SYMBOL | macro)+;
+
+// properties
+propertyList: propertyAssignment*;
+propertyAssignment: propertyName ASSIGN propertyValue (NEWLINE | EOF);
+propertyName: SYMBOL;
+propertyValue: (SYMBOL | NUMBER | WS)+;
+
+// trigger
+triggerList: trigger*;
+trigger: TRIGGER_HEADER triggerName (NEWLINE | EOF) triggerBody?;
+triggerName: TIMER | SYMBOL;
+triggerBody: codeBlock;
 
 // argument, argument expression
 enclosedArgumentList: LPAREN argumentList? RPAREN;
@@ -60,13 +84,15 @@ unaryOperator: PLUS | MINUS;
 NEWLINE: ([ \t]* ('//' (~( '\r' | '\n' ))*)? ('\r'? '\n') )+;
 WS: [ \t];
 EOF_SECTION_HEADER: '[' [eE] [oO] [fF] ']';
-FUNCTION_SECTION_HEADER_START: '[function' WS+;
+FUNCTION_SECTION_HEADER_START: '[' [fF][uU][nN][cC][tT][iI][oO][nN] WS+;
+ITEMDEF_SECTION_HEADER_START: '[' [iI][tT][eE][mM][dD][eE][fF] WS+;
+TYPEDEF_SECTION_HEADER_START: '[' [tT][yY][pP][eE][dD][eE][fF] WS+;
+TEMPLATE_SECTION_HEADER_START: '[' [tT][eE][mM][pP][lL][aA][tT][eE] WS+;
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE][iI][fF]; 
 ELSE: [eE][lL][sS][eE];
 ENDIF: [eE][nN][dD][iI][fF];
 
-NATIVE_FUNCTIONS: SYSMESSAGE | RETURN | TIMER | CONSUME;
 SYSMESSAGE: [sS][yY][sS][mM][eE][sS][sS][aA][gG][eE];
 RETURN: [rR][eE][tT][uU][rR][nN];
 TIMER: [tT][iI][mM][eE][rR];
@@ -77,6 +103,7 @@ EVAL: [eE][vV][aA][lL];
 HVAL: [hH][vV][aA][lL];
 SAFE: [sS][aA][fF][eE];
 
+TRIGGER_HEADER: [oO][nN] '=@';
 SYMBOL : VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
 NUMBER : DIGIT+ ;
 
