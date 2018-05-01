@@ -58,7 +58,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("({-(1) +(2)})", "expr: {-(1) +(2)}");
             ShouldSucceed("({(1+1) (2+2)})", "expr: {(1+1) (2+2)}");
             ShouldSucceed("({-<argv(0)> <argv(0)>})", "expr: {-<argv(0)> <argv(0)>}");
-            ShouldSucceed("({1 2} + {3 4})", "expr: {1 2} + {3 4}");
+            ShouldSucceed("({1 2}+{3 4})", "expr: {1 2}+{3 4}");
         }
 
         [TestMethod]

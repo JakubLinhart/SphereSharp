@@ -45,7 +45,7 @@ memberName: (SYMBOL | macro)+;
 propertyList: propertyAssignment*;
 propertyAssignment: propertyName ASSIGN propertyValue (NEWLINE | EOF);
 propertyName: SYMBOL;
-propertyValue: (SYMBOL | NUMBER | WS)+;
+propertyValue: (SYMBOL | DEC_NUMBER | WS)+;
 
 // trigger
 triggerList: trigger*;
@@ -59,12 +59,12 @@ argumentList: argument (',' argument)*;
 argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | unquotedLiteralArgument;
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 quotedLiteralArgument: '"' unquotedLiteralArgument '"';
-unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | NUMBER | WS | '[' | ']' | '#' | ':')+? ;
+unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':')+? ;
 triggerArgument: '@' SYMBOL;
 eventArgument: (PLUS | MINUS) SYMBOL;
 
 signedArgumentOperand: unaryOperator signedArgumentOperand | argumentOperand ;
-argumentOperand: constantExpression | argumentSubExpression | macroExpression ;
+argumentOperand: rangeExpression | constantExpression | argumentSubExpression | macroExpression ;
 argumentBinaryOperation: argumentOperator signedArgumentOperand ;
 argumentOperator: argumentBinaryOperator | macroOperator ;
 argumentSubExpression: '(' expressionArgument ')' ;
@@ -73,14 +73,15 @@ argumentBinaryOperator: binaryOperator;
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
-evalOperand: constantExpression | evalSubExpression | macro | memberAccess;
+evalOperand: rangeExpression | constantExpression | evalSubExpression | macro | memberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
 evalSubExpression: '(' evalExpression ')' ;
 evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | MORE_THAN_EQUAL | LESS_THAN_EQUAL | MORE_THAN | LESS_THAN;
 binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICAL_OR | BITWISE_AND | BITWISE_OR;
 
-constantExpression: NUMBER ;
+constantExpression: DEC_NUMBER | HEX_NUMBER;
+rangeExpression: '{' evalExpression WS+ evalExpression '}';
 macroExpression: macro ;
 
 macroOperator: macro ;
@@ -113,8 +114,9 @@ HVAL: [hH][vV][aA][lL];
 SAFE: [sS][aA][fF][eE];
 
 TRIGGER_HEADER: [oO][nN] '=@';
-SYMBOL : VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
-NUMBER : DIGIT+ ;
+SYMBOL: VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
+DEC_NUMBER: ('1' .. '9') DEC_DIGIT* ;
+HEX_NUMBER: '0' HEX_DIGIT* ;
 
 EQUAL: '==';
 ASSIGN: '=';
@@ -141,12 +143,12 @@ fragment VALID_SYMBOL_START
    ;
 
 fragment VALID_SYMBOL_CHAR
-   : VALID_SYMBOL_START | DIGIT
+   : VALID_SYMBOL_START | DEC_DIGIT
    ;
 
-fragment DIGIT
-   : ('0' .. '9')
-   ;
+fragment DEC_DIGIT : ('0' .. '9');
+
+fragment HEX_DIGIT : DEC_DIGIT | ('a' .. 'f') | ('A' .. 'F');
 
 LPAREN
    : '('

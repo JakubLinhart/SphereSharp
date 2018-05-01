@@ -90,13 +90,13 @@ namespace SphereSharp.Tests.Parser.Sphere99
         [TestMethod]
         public void Can_parse_range_expression()
         {
-            RoundtripCheck("({1 2})");
-            RoundtripCheck("({-2 -1})");
-            RoundtripCheck("({(1) (2)})");
-            RoundtripCheck("({-(1) +(2)})");
-            RoundtripCheck("({(1+1) (2+2)})");
-            RoundtripCheck("({-<argv(0)> <argv(0)>})");
-            RoundtripCheck("({1 2} + {3 4})");
+            RoundtripCheck("{1 2}");
+            RoundtripCheck("{-2 -1}");
+            RoundtripCheck("{(1) (2)}");
+            RoundtripCheck("{-(1) +(2)}");
+            RoundtripCheck("{(1+1) (2+2)}");
+            RoundtripCheck("{-<argv(0)> <argv(0)>}");
+            RoundtripCheck("{1 2} + {3 4}");
         }
 
         [TestMethod]
@@ -184,6 +184,17 @@ namespace SphereSharp.Tests.Parser.Sphere99
                 result.Append(context.unaryOperator()?.GetText() ?? string.Empty);
 
                 return base.VisitSignedEvalOperand(context);
+            }
+
+            public override bool VisitRangeExpression([NotNull] sphereScript99Parser.RangeExpressionContext context)
+            {
+                result.Append('{');
+                Visit(context.evalExpression()[0]);
+                result.Append(' ');
+                Visit(context.evalExpression()[1]);
+                result.Append('}');
+
+                return false;
             }
         }
     }
