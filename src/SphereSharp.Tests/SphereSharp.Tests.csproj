@@ -70,6 +70,7 @@
     <Compile Include="Parser\Sphere99\ItemDefSectionTests.cs" />
     <Compile Include="Parser\Sphere99\ItemDefSectionTests.PropertyAndTriggerExtractor.cs" />
     <Compile Include="Parser\Sphere99\NativeFunctionCallTests.cs" />
+    <Compile Include="Parser\Sphere99\PropertyListTests.cs" />
     <Compile Include="Parser\Sphere99\StatementExtractor.cs" />
     <Compile Include="Parser\Sphere99\TriggerCodeBlockExtractor.cs" />
     <Compile Include="Parser\Sphere99\TriggerTests.cs" />

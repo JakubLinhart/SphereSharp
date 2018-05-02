@@ -46,10 +46,10 @@ nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROW
 memberName: (SYMBOL | macro)+;
 
 // properties
-propertyList: propertyAssignment*;
-propertyAssignment: propertyName ASSIGN propertyValue (NEWLINE | EOF);
+propertyList: NEWLINE? propertyAssignment*;
+propertyAssignment: WS* propertyName WS* ASSIGN WS* propertyValue (NEWLINE | EOF);
 propertyName: SYMBOL;
-propertyValue: (SYMBOL | DEC_NUMBER | WS)+;
+propertyValue: unquotedLiteralArgument;
 
 // trigger
 triggerList: trigger*;
