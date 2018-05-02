@@ -42,7 +42,7 @@ unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NU
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
-nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST;
+nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG;
 memberName: (SYMBOL | macro)+;
 
 // properties
@@ -113,6 +113,7 @@ CONSUME: [cC][oO][nN][sS][uU][mM][eE];
 EVENTS: [eE][vV][eE][nN][tT][sS];
 TRIGGER: [tT][rR][iI][gG][gG][eE][rR];
 ARROWQUEST: [aA][rR][rR][oO][wW][qQ][uU][eE][sS][tT];
+DIALOG: [dD][iI][aA][lL][oO][gG];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];
