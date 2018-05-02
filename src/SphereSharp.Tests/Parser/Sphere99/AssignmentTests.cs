@@ -34,6 +34,12 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("x = 1");
         }
 
+        [TestMethod]
+        public void Can_parse_empty_assignment()
+        {
+            ShouldSucceed("x=");
+        }
+
         private void ShouldSucceed(string src)
         {
             Parse(src, parser =>

@@ -29,16 +29,16 @@ whileStatement: WHILE WS* evalExpression NEWLINE codeBlock? WS* ENDWHILE;
 
 macro: LESS_THAN (firstMemberAccess | indexedMemberName) MORE_THAN ;
 call: firstMemberAccess;
-assignment: firstMemberAccess WS* ASSIGN WS* argumentList;
+assignment: firstMemberAccess WS* ASSIGN WS* argumentList?;
 
 memberAccess: firstMemberAccess | argumentAccess;
 firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
-unquotedMemberAccessLiteral: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '?' | '!' |  EQUAL)+?;
+unquotedMemberAccessLiteral: (SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' | '?' | '!' |  EQUAL)+?;
 evalCall: EVAL_FUNCTIONS WS* evalExpression; 
 nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
 argumentAccess: (expressionArgument | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
-unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '.'|  ',' | '?' | '!' | EQUAL)+? ;
+unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' | '.'|  ',' | '?' | '!' | EQUAL)+? ;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
@@ -65,7 +65,7 @@ argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventAr
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' unquotedLiteralArgument? '"';
-unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
+unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
 eventArgument: (PLUS | MINUS) SYMBOL;
 
@@ -79,7 +79,7 @@ argumentBinaryOperator: binaryOperator;
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
-evalOperand: rangeExpression | constantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess;
+evalOperand: rangeExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
 evalSubExpression: '(' evalExpression ')' ;
@@ -88,6 +88,7 @@ binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICA
 moreThanEqual: MORE_THAN ASSIGN;
 lessThanEqual: LESS_THAN ASSIGN;
 
+macroConstantExpression: constantExpression macro;
 constantExpression: DEC_NUMBER | HEX_NUMBER;
 rangeExpression: '{' evalExpression WS+ evalExpression '}';
 macroExpression: macro ;

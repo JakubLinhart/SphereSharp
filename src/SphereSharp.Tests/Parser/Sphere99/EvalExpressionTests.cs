@@ -33,6 +33,13 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
+        public void Can_parse_constant_macro()
+        {
+            RoundtripCheck("0<fun1>");
+            RoundtripCheck("123<fun1>");
+        }
+
+        [TestMethod]
         public void Can_parse_basic_expression()
         {
             RoundtripCheck("1");
