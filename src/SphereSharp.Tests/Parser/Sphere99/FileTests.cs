@@ -85,12 +85,11 @@ call1");
         {
             // the issue showed up only when both showbowtype_<src.tag(clienttype)> and [eof] were present
             // otherwise parsing was ok
-            CheckStructure("function fun1;function fun2;eof;", @"[function fun1]
+            // the same problem with arg(x,<y>)
+            CheckStructure("function fun1;eof;", @"[function fun1]
 showbowtype_<src.tag(clienttype)>//important!!!
-return 1
-
-[function fun2]
-return 0
+arg(x,<y>)//important!!!
+x=<y>
 
 [eof]//important!!!
 ");
