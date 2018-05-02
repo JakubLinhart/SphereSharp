@@ -38,7 +38,11 @@ namespace SphereSharp.Tests.Parser.Sphere99
         [TestMethod]
         public void Can_parse_parameters_as_chained_calls()
         {
+            ShouldSucceed("findlayer.2");
             ShouldSucceed("findlayer.2.uid");
+            ShouldSucceed("findlayer.2+2.uid");
+            ShouldSucceed("findlayer.some unquoted literal.uid");
+            ShouldSucceed("findlayer.\"some quoted literal\".uid");
             ShouldSucceed("lastnew.tag.myfood");
         }
 
@@ -85,7 +89,10 @@ namespace SphereSharp.Tests.Parser.Sphere99
 
         protected void ShouldSucceed(string src)
         {
-            Parse(src, parser => parser.statement());
+            Parse(src, parser =>
+            {
+                var statement = parser.statement();
+            });
         }
     }
 }

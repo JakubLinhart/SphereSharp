@@ -163,6 +163,13 @@ namespace SphereSharp.Tests.Parser.Sphere99
                 return ret;
             }
 
+            public override bool VisitFirstMemberAccess([NotNull] sphereScript99Parser.FirstMemberAccessContext context)
+            {
+                result.Append(context.GetText());
+
+                return true;
+            }
+
             public override bool VisitMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context)
             {
                 result.Append(context.GetText());

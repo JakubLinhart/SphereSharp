@@ -27,14 +27,18 @@ elseStatement: WS* ELSE NEWLINE codeBlock?;
 
 whileStatement: WHILE WS+ evalExpression NEWLINE codeBlock? WS* ENDWHILE;
 
-macro: LESS_THAN memberAccess MORE_THAN ;
-call: memberAccess;
-assignment: memberAccess ASSIGN argumentList;
+macro: LESS_THAN firstMemberAccess MORE_THAN ;
+call: firstMemberAccess;
+assignment: firstMemberAccess ASSIGN argumentList;
 
-memberAccess: evalCall | nativeMemberAccess | customMemberAccess;
+memberAccess: firstMemberAccess | argumentAccess;
+firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
+unquotedMemberAccessLiteral: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':')+?;
 evalCall: EVAL_FUNCTIONS WS* evalExpression; 
 nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
+argumentAccess: (expressionArgument | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
+unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':')+? ;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
@@ -73,7 +77,7 @@ argumentBinaryOperator: binaryOperator;
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
-evalOperand: rangeExpression | constantExpression | evalSubExpression | macro | memberAccess;
+evalOperand: rangeExpression | constantExpression | evalSubExpression | macro | firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
 evalSubExpression: '(' evalExpression ')' ;
