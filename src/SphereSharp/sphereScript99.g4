@@ -38,7 +38,7 @@ evalCall: EVAL_FUNCTIONS WS* evalExpression;
 nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
 argumentAccess: (expressionArgument | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
-unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':')+? ;
+unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '.')+? ;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
