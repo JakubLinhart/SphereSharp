@@ -27,6 +27,13 @@ endwhile");
 endwhile");
         }
 
+        [TestMethod]
+        public void Can_parse_while_without_space_before_condition()
+        {
+            CheckStructure("while(0);endwhile", @"while(1==1)
+endwhile");
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             Parse(src, parser =>

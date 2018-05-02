@@ -25,7 +25,7 @@ ifStatement: IF WS+ evalExpression NEWLINE codeBlock? (elseIfStatement)* elseSta
 elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock?;
 elseStatement: WS* ELSE NEWLINE codeBlock?;
 
-whileStatement: WHILE WS+ evalExpression NEWLINE codeBlock? WS* ENDWHILE;
+whileStatement: WHILE WS* evalExpression NEWLINE codeBlock? WS* ENDWHILE;
 
 macro: LESS_THAN firstMemberAccess MORE_THAN ;
 call: firstMemberAccess;
