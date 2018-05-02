@@ -29,16 +29,16 @@ whileStatement: WHILE WS* evalExpression NEWLINE codeBlock? WS* ENDWHILE;
 
 macro: LESS_THAN firstMemberAccess MORE_THAN ;
 call: firstMemberAccess;
-assignment: firstMemberAccess ASSIGN argumentList;
+assignment: firstMemberAccess WS* ASSIGN WS* argumentList;
 
 memberAccess: firstMemberAccess | argumentAccess;
 firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
-unquotedMemberAccessLiteral: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':')+?;
+unquotedMemberAccessLiteral: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '?' | '!')+?;
 evalCall: EVAL_FUNCTIONS WS* evalExpression; 
 nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
 argumentAccess: (expressionArgument | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
-unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '.')+? ;
+unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '.' | '?' | '!')+? ;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 

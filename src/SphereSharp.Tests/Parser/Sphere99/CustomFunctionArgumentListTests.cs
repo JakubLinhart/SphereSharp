@@ -97,6 +97,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
                 new[] { "unq: many words separated by space", "unq: and other words as second argument" });
             CheckStructure("(fun1,fun2,fun3)", new[] { "unq: fun1", "unq: fun2", "unq: fun3" });
             CheckStructure("(#+1)", "unq: #+1");
+            CheckStructure("(?!)", "unq: ?!");
         }
 
         [TestMethod]
@@ -110,6 +111,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             CheckStructure("(\"<hours>:<mins>:<seconds>\")", "quoted: <hours>:<mins>:<seconds>");
             CheckStructure("(\"some text with dot.\")", "quoted: some text with dot.");
             CheckStructure("(\"\")", "quoted: ");
+            CheckStructure("(\"?!\")", "quoted: ?!");
         }
 
         [TestMethod]

@@ -28,6 +28,12 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("src.fun1(something).fun2(1+1).link=src.fun1(something).fun3(2)");
         }
 
+        [TestMethod]
+        public void Can_parse_assignment_with_whitespace_around_assign_operator()
+        {
+            ShouldSucceed("x = 1");
+        }
+
         private void ShouldSucceed(string src)
         {
             Parse(src, parser =>
