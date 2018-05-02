@@ -104,6 +104,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         {
             RoundtripCheck("1<2>3");
             RoundtripCheck("<fun1><2><fun2>");
+            RoundtripCheck("<dispid>==1");
         }
 
         [TestMethod]

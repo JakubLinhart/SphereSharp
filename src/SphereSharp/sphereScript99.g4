@@ -82,8 +82,10 @@ evalOperand: rangeExpression | constantExpression | evalSubExpression | macro | 
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
 evalSubExpression: '(' evalExpression ')' ;
-evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | MORE_THAN_EQUAL | LESS_THAN_EQUAL | MORE_THAN | LESS_THAN;
+evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | moreThanEqual | lessThanEqual | MORE_THAN | LESS_THAN;
 binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICAL_OR | BITWISE_AND | BITWISE_OR;
+moreThanEqual: MORE_THAN ASSIGN;
+lessThanEqual: LESS_THAN ASSIGN;
 
 constantExpression: DEC_NUMBER | HEX_NUMBER;
 rangeExpression: '{' evalExpression WS+ evalExpression '}';
@@ -126,10 +128,10 @@ DEC_NUMBER: ('1' .. '9') DEC_DIGIT* ;
 HEX_NUMBER: '0' HEX_DIGIT* ;
 
 EQUAL: '==';
-ASSIGN: '=';
 NOT_EQUAL: '!=';
 MORE_THAN: '>';
 LESS_THAN: '<';
+ASSIGN: '=';
 PLUS: '+' ;
 MINUS: '-' ;
 MULTIPLY: '*';
@@ -141,9 +143,6 @@ MODULO: '%';
 LOGICAL_AND: '&&';
 LOGICAL_OR: '||';
 LOGICAL_NOT: '!';
-
-MORE_THAN_EQUAL: MORE_THAN ASSIGN;
-LESS_THAN_EQUAL: LESS_THAN ASSIGN;
 
 fragment VALID_SYMBOL_START
    : ('a' .. 'z') | ('A' .. 'Z') | '_'
