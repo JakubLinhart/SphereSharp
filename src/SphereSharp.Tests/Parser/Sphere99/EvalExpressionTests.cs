@@ -70,6 +70,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             RoundtripCheck("1+1+1");
 
             RoundtripCheck("(1)");
+            RoundtripCheck("( 1 )");
             RoundtripCheck("(-1)");
             RoundtripCheck("-(1)");
             RoundtripCheck("(1+1)");
@@ -188,9 +189,11 @@ namespace SphereSharp.Tests.Parser.Sphere99
             public override bool VisitEvalSubExpression([NotNull] sphereScript99Parser.EvalSubExpressionContext context)
             {
                 result.Append('(');
+                result.Append(context.WS(0));
 
                 var ret = base.VisitEvalSubExpression(context);
 
+                result.Append(context.WS(1));
                 result.Append(')');
 
                 return ret;

@@ -66,6 +66,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         {
             CheckStructure("(-321)", "expr: -321");
             CheckStructure("(-(1))", "expr: -(1)");
+            CheckStructure("(-( 1 ))", "expr: -( 1 )");
             CheckStructure("(1+-2)", "expr: 1+-2");
             CheckStructure("(1+-(2))", "expr: 1+-(2)");
             CheckStructure("(1-(2))", "expr: 1-(2)");

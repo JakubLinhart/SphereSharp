@@ -46,7 +46,7 @@ customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
 nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS;
-memberName: (SYMBOL | macro)+;
+memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' evalExpression ']';
 
 // properties
@@ -67,7 +67,7 @@ argumentList: argument (',' argument)*;
 argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | assignmentArgument | unquotedLiteralArgument;
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 assignmentArgument: assignment;
-quotedLiteralArgument: '"' innerQuotedLiteralArgument? '"';
+quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
 innerQuotedLiteralArgument: (macro | ~'"')*?;
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
@@ -77,7 +77,7 @@ signedArgumentOperand: unaryOperator signedArgumentOperand | argumentOperand ;
 argumentOperand: rangeExpression | constantExpression | argumentSubExpression | macroExpression ;
 argumentBinaryOperation: argumentOperator signedArgumentOperand ;
 argumentOperator: argumentBinaryOperator | macroOperator ;
-argumentSubExpression: '(' expressionArgument ')' ;
+argumentSubExpression: '(' WS* expressionArgument WS* ')' ;
 argumentBinaryOperator: binaryOperator;
 
 // eval expression
@@ -86,7 +86,7 @@ signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
 evalOperand: rangeExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
-evalSubExpression: '(' evalExpression ')' ;
+evalSubExpression: '(' WS* evalExpression WS* ')' ;
 evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | moreThanEqual | lessThanEqual | MORE_THAN | LESS_THAN;
 binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICAL_OR | BITWISE_AND | BITWISE_OR;
 moreThanEqual: MORE_THAN ASSIGN;

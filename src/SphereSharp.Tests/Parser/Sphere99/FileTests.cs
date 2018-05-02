@@ -25,7 +25,7 @@ call1
         [TestMethod]
         public void Can_parse_file_with_all_section_types_and_eof_section_ending_with_remarks()
         {
-            CheckStructure("function fun1;eof;", @"[function fun1]//remark1
+            CheckStructure("function fun1;typedef t_port_randomvicinty;eof;", @"[function fun1]//remark1
 call1
 
 [itemdef i_dclickME]
@@ -81,6 +81,22 @@ call1");
         }
 
         [TestMethod]
+        public void Can_handle_weird_problem_with_greedy_macro_grammer()
+        {
+            // the issue showed up only when both showbowtype_<src.tag(clienttype)> and [eof] were present
+            // otherwise parsing was ok
+            CheckStructure("function fun1;function fun2;eof;", @"[function fun1]
+showbowtype_<src.tag(clienttype)>//important!!!
+return 1
+
+[function fun2]
+return 0
+
+[eof]//important!!!
+");
+        }
+
+        [TestMethod]
         [DeploymentItem(@"Parser\Sphere99\example_test_file.scp", @"Parser\Sphere99")]
         public void Can_parse_example_script_file()
         {
@@ -133,6 +149,13 @@ call1");
             public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
             {
                 output.Append($"function {context.functionSectionHeader().SYMBOL()};");
+
+                return true;
+            }
+
+            public override bool VisitTypeDefSection([NotNull] sphereScript99Parser.TypeDefSectionContext context)
+            {
+                output.Append($"typedef {context.typeDefSectionHeader().SYMBOL()};");
 
                 return true;
             }
