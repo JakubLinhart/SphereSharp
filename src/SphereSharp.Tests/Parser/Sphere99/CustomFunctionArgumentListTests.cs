@@ -109,6 +109,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             CheckStructure("(\"some text\",\"other text\")", new[] { "quoted: some text", "quoted: other text" });
             CheckStructure("(\"<hours>:<mins>:<seconds>\")", "quoted: <hours>:<mins>:<seconds>");
             CheckStructure("(\"some text with dot.\")", "quoted: some text with dot.");
+            CheckStructure("(\"\")", "quoted: ");
         }
 
         [TestMethod]

@@ -63,7 +63,7 @@ argumentList: argument (',' argument)*;
 argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | assignmentArgument | unquotedLiteralArgument;
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 assignmentArgument: assignment;
-quotedLiteralArgument: '"' unquotedLiteralArgument '"';
+quotedLiteralArgument: '"' unquotedLiteralArgument? '"';
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':')+? ;
 triggerArgument: '@' SYMBOL;
 eventArgument: (PLUS | MINUS) SYMBOL;
