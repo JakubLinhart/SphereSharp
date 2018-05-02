@@ -30,6 +30,13 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
+        public void Can_parse_calls_with_chained_parameters()
+        {
+            CheckStructure("safe.tag.HASTEUID");
+            CheckStructure("eval.1+1", "expr: 1+1");
+        }
+
+        [TestMethod]
         public void Can_parse_events_calls()
         {
             CheckStructure("events(-e_spelleffect)", "event: -e_spelleffect");

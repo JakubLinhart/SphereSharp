@@ -33,16 +33,16 @@ assignment: firstMemberAccess WS* ASSIGN WS* argumentList;
 
 memberAccess: firstMemberAccess | argumentAccess;
 firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
-unquotedMemberAccessLiteral: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '?' | '!')+?;
+unquotedMemberAccessLiteral: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '?' | '!' |  EQUAL)+?;
 evalCall: EVAL_FUNCTIONS WS* evalExpression; 
 nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
 argumentAccess: (expressionArgument | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
-unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '.' | '?' | '!')+? ;
+unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' | '.'|  ',' | '?' | '!' | EQUAL)+? ;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
-nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG;
+nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS;
 memberName: (SYMBOL | macro)+;
 indexedMemberName: memberName '[' evalExpression ']';
 
@@ -65,7 +65,7 @@ argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventAr
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' unquotedLiteralArgument? '"';
-unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':')+? ;
+unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
 eventArgument: (PLUS | MINUS) SYMBOL;
 

@@ -109,7 +109,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             CheckStructure("(1,\"some text\",2)", new[] { "expr: 1", "quoted: some text", "expr: 2" });
             CheckStructure("(\"some text\",\"other text\")", new[] { "quoted: some text", "quoted: other text" });
             CheckStructure("(\"<hours>:<mins>:<seconds>\")", "quoted: <hours>:<mins>:<seconds>");
-            CheckStructure("(\"some text with dot.\")", "quoted: some text with dot.");
+            CheckStructure("(\"some text with dot. and comma,\")", "quoted: some text with dot. and comma,");
             CheckStructure("(\"\")", "quoted: ");
             CheckStructure("(\"?!\")", "quoted: ?!");
         }
@@ -119,6 +119,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         {
             CheckStructure("(<arg(pattern)>[-0123456789])", "unq: <arg(pattern)>[-0123456789]");
             CheckStructure("(f_statistikapovolani(<arg(dny)>))", "unq: f_statistikapovolani(<arg(dny)>)");
+            CheckStructure("(\"veteran=vic jak 10. level\")", "quoted: veteran=vic jak 10. level");
         }
 
         [TestMethod]
