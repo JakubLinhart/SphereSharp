@@ -27,7 +27,7 @@ elseStatement: WS* ELSE NEWLINE codeBlock?;
 
 whileStatement: WHILE WS* evalExpression NEWLINE codeBlock? WS* ENDWHILE;
 
-macro: LESS_THAN firstMemberAccess MORE_THAN ;
+macro: LESS_THAN (firstMemberAccess | indexedMemberName) MORE_THAN ;
 call: firstMemberAccess;
 assignment: firstMemberAccess WS* ASSIGN WS* argumentList;
 
@@ -44,6 +44,7 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG;
 memberName: (SYMBOL | macro)+;
+indexedMemberName: memberName '[' evalExpression ']';
 
 // properties
 propertyList: NEWLINE? propertyAssignment*;
@@ -78,7 +79,7 @@ argumentBinaryOperator: binaryOperator;
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
-evalOperand: rangeExpression | constantExpression | evalSubExpression | macro | firstMemberAccess;
+evalOperand: rangeExpression | constantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
 evalSubExpression: '(' evalExpression ')' ;

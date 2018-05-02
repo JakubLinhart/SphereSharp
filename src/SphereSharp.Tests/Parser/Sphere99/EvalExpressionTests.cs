@@ -100,6 +100,25 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
+        public void Can_parse_indexed_symbol()
+        {
+            RoundtripCheck("symbol[1]");
+            RoundtripCheck("symbol[1+1]");
+            RoundtripCheck("symbol[(1+1)]");
+            RoundtripCheck("symbol[<fun1>]");
+            RoundtripCheck("symbol[1+<fun1>]");
+            RoundtripCheck("symbol[<fun1>+1]");
+            RoundtripCheck("symbol[1+<fun1>+1]");
+            RoundtripCheck("symbol[1+fun1]");
+            RoundtripCheck("symbol[fun1+1]");
+            RoundtripCheck("symbol[1+<fun1>+1]");
+            RoundtripCheck("symbol[1+fun1(1)]");
+            RoundtripCheck("symbol[fun1(1)+1]");
+            RoundtripCheck("symbol[1+fun1(1)+1]");
+            RoundtripCheck("<symbol[1]>");
+        }
+
+        [TestMethod]
         public void Can_parse_less_than_more_than_madness()
         {
             RoundtripCheck("1<2>3");
@@ -172,6 +191,13 @@ namespace SphereSharp.Tests.Parser.Sphere99
             }
 
             public override bool VisitMemberAccess([NotNull] sphereScript99Parser.MemberAccessContext context)
+            {
+                result.Append(context.GetText());
+
+                return true;
+            }
+
+            public override bool VisitIndexedMemberName([NotNull] sphereScript99Parser.IndexedMemberNameContext context)
             {
                 result.Append(context.GetText());
 
