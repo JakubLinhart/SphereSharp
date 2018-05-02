@@ -51,5 +51,12 @@ namespace SphereSharp.Tests.Parser.Sphere99
 
             return true;
         }
+
+        public override bool VisitAssignmentArgument([NotNull] sphereScript99Parser.AssignmentArgumentContext context)
+        {
+            arguments.Add($"assignment: {context.GetText()}");
+
+            return true;
+        }
     }
 }

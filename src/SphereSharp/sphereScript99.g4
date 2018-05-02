@@ -42,7 +42,7 @@ unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NU
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
-nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER;
+nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST;
 memberName: (SYMBOL | macro)+;
 
 // properties
@@ -60,8 +60,9 @@ triggerBody: codeBlock;
 // argument, argument expression
 enclosedArgumentList: LPAREN argumentList? RPAREN;
 argumentList: argument (',' argument)*;
-argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | unquotedLiteralArgument;
+argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | assignmentArgument | unquotedLiteralArgument;
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
+assignmentArgument: assignment;
 quotedLiteralArgument: '"' unquotedLiteralArgument '"';
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | DEC_NUMBER | HEX_NUMBER | WS | '[' | ']' | '#' | ':')+? ;
 triggerArgument: '@' SYMBOL;
@@ -111,6 +112,7 @@ TIMER: [tT][iI][mM][eE][rR];
 CONSUME: [cC][oO][nN][sS][uU][mM][eE];
 EVENTS: [eE][vV][eE][nN][tT][sS];
 TRIGGER: [tT][rR][iI][gG][gG][eE][rR];
+ARROWQUEST: [aA][rR][rR][oO][wW][qQ][uU][eE][sS][tT];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];

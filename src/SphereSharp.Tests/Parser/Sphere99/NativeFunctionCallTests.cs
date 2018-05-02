@@ -22,6 +22,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             CheckStructure("src.sysmessage(1+1)", "expr: 1+1");
 
             CheckStructure("return 1", "expr: 1");
+            CheckStructure("arrowquest 0", "expr: 0");
             CheckStructure("timer 100", "expr: 100");
             CheckStructure("consume 123", "expr: 123");
             CheckStructure("consume(1000 t_custom_spell)", "unq: 1000 t_custom_spell");
