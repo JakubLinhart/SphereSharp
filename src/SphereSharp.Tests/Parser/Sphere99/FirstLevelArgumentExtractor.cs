@@ -19,7 +19,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
 
         public override bool VisitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context)
         {
-            arguments.Add($"quoted: {context.unquotedLiteralArgument()?.GetText() ?? string.Empty}");
+            arguments.Add($"quoted: {context.innerQuotedLiteralArgument()?.GetText() ?? string.Empty}");
 
             return true;
         }

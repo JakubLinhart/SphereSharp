@@ -85,6 +85,12 @@ namespace SphereSharp.Tests.Parser.Sphere99
             RoundtripCheck("<fun1>+<fun2>");
             RoundtripCheck("(<fun1>+<fun2>)+<fun3>");
 
+            RoundtripCheck("<?fun1?>");
+            RoundtripCheck("<?fun1?>+1");
+            RoundtripCheck("1+<?fun1?>");
+            RoundtripCheck("<?fun1?>+<?fun2?>");
+            RoundtripCheck("(<?fun1?>+<?fun2?>)+<?fun3?>");
+
             RoundtripCheck("<fun1(1)>");
             RoundtripCheck("<fun1(1)>+1");
             RoundtripCheck("1+<fun1(1)>");
@@ -211,10 +217,19 @@ namespace SphereSharp.Tests.Parser.Sphere99
                 return true;
             }
 
-            public override bool VisitMacro([NotNull] sphereScript99Parser.MacroContext context)
+            public override bool VisitEscapedMacro([NotNull] sphereScript99Parser.EscapedMacroContext context)
+            {
+                result.Append("<?");
+                var ret = base.VisitEscapedMacro(context);
+                result.Append("?>");
+
+                return ret;
+            }
+
+            public override bool VisitNonEscapedMacro([NotNull] sphereScript99Parser.NonEscapedMacroContext context)
             {
                 result.Append('<');
-                var ret = base.VisitMacro(context);
+                var ret = base.VisitNonEscapedMacro(context);
                 result.Append('>');
 
                 return ret;

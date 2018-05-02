@@ -27,7 +27,10 @@ elseStatement: WS* ELSE NEWLINE codeBlock?;
 
 whileStatement: WHILE WS* evalExpression NEWLINE codeBlock? WS* ENDWHILE;
 
-macro: LESS_THAN (firstMemberAccess | indexedMemberName) MORE_THAN ;
+macro: escapedMacro | nonEscapedMacro;
+escapedMacro: LESS_THAN '?' macroBody '?' MORE_THAN ;
+nonEscapedMacro: LESS_THAN macroBody  MORE_THAN ;
+macroBody: (firstMemberAccess | indexedMemberName);
 call: firstMemberAccess;
 assignment: firstMemberAccess WS* ASSIGN WS* argumentList?;
 
@@ -64,7 +67,8 @@ argumentList: argument (',' argument)*;
 argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | assignmentArgument | unquotedLiteralArgument;
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 assignmentArgument: assignment;
-quotedLiteralArgument: '"' unquotedLiteralArgument? '"';
+quotedLiteralArgument: '"' innerQuotedLiteralArgument? '"';
+innerQuotedLiteralArgument: (macro | ~'"')*?;
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
 eventArgument: (PLUS | MINUS) SYMBOL;
