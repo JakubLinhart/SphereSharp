@@ -21,7 +21,7 @@ codeBlock: statement+;
 
 statement: WS*? (call | assignment | ifStatement | whileStatement) (NEWLINE | EOF);
 
-ifStatement: IF WS+ evalExpression NEWLINE codeBlock? (elseIfStatement)* elseStatement? WS* ENDIF ;
+ifStatement: IF WS* evalExpression NEWLINE codeBlock? (elseIfStatement)* elseStatement? WS* ENDIF ;
 elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock?;
 elseStatement: WS* ELSE NEWLINE codeBlock?;
 

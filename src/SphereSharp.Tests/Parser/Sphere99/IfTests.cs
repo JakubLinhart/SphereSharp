@@ -18,6 +18,14 @@ endif");
         }
 
         [TestMethod]
+        public void Can_parse_if_without_whitespace_between_if_and_condition()
+        {
+            CheckStructure("if(1);endif", @"if(1)
+    call1
+endif");
+        }
+
+        [TestMethod]
         public void Can_parse_if_with_else()
         {
             CheckStructure("if(1);else(1);endif;", @"if 1
