@@ -45,7 +45,8 @@ unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | constantExpression 
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
-nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS;
+nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP
+                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' evalExpression ']';
 
@@ -58,7 +59,7 @@ propertyValue: unquotedLiteralArgument;
 // trigger
 triggerList: trigger*;
 trigger: TRIGGER_HEADER triggerName (NEWLINE | EOF) triggerBody?;
-triggerName: TIMER | SYMBOL;
+triggerName: nativeFunction | SYMBOL;
 triggerBody: codeBlock;
 
 // argument, argument expression
@@ -122,6 +123,19 @@ EVENTS: [eE][vV][eE][nN][tT][sS];
 TRIGGER: [tT][rR][iI][gG][gG][eE][rR];
 ARROWQUEST: [aA][rR][rR][oO][wW][qQ][uU][eE][sS][tT];
 DIALOG: [dD][iI][aA][lL][oO][gG];
+SOUND: [sS][oO][uU][nN][dD];
+TRY: [tT][rR][yY];
+X: [xX];
+XXC: [xX][xX][cC];
+XXI: [xX][xX][iI];
+NEWITEM: [nN][eE][wW][iI][tT][eE][mM];
+EQUIP: [eE][qQ][uU][iI][pP];
+MENU: [mM][eE][nN][uU];
+GO: [gG][oO];
+INVIS: [iI][nN][vV][iI][sS];
+SHOW: [sS][hH][oO][wW];
+DAMAGE: [dD][aA][mM][aA][gG][eE];
+ECHO: [eE][cC][hH][oO];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];

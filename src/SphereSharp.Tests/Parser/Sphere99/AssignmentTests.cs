@@ -26,6 +26,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("myDclicker.p=<p>");
             ShouldSucceed("type=t_potion_bomba");
             ShouldSucceed("src.fun1(something).fun2(1+1).link=src.fun1(something).fun3(2)");
+            ShouldSucceed("flags=<eval <asdf>&~2>");
         }
 
         [TestMethod]
