@@ -68,7 +68,7 @@ argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventAr
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
-innerQuotedLiteralArgument: (macro | ~'"')*?;
+innerQuotedLiteralArgument: (macro | ~('"' | NEWLINE))*?;
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
 eventArgument: (PLUS | MINUS) SYMBOL;

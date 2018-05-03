@@ -113,7 +113,8 @@ namespace SphereSharp.Tests.Parser.Sphere99
             CheckStructure("(\"some text with dot. and comma,\")", "quoted: some text with dot. and comma,");
             CheckStructure("(\"\")", "quoted: ");
             CheckStructure("(\"?!\")", "quoted: ?!");
-            CheckStructure("(\"Natocil <?arg(u)?> <?<findres(itemdef,<tag(id)>).name?> z uid=<?uid?>  (<?amount?> <?name?>) umisten <?p?> (<?region.name?>)\")", "quoted: Natocil <?arg(u)?> <?<findres(itemdef,<tag(id)>).name?> z uid=<?uid?>  (<?amount?> <?name?>) umisten <?p?> (<?region.name?>)");
+            CheckStructure("(\"Natocil <?arg(u)?> <?<findres(itemdef,<tag(id)>)>.name?> z uid=<?uid?>  (<?amount?> <?name?>) umisten <?p?> (<?region.name?>)\")", "quoted: Natocil <?arg(u)?> <?<findres(itemdef,<tag(id)>)>.name?> z uid=<?uid?>  (<?amount?> <?name?>) umisten <?p?> (<?region.name?>)");
+            CheckStructure("(\"<fun1(\"something\")>\")", "quoted: <fun1(\"something\")>");
         }
 
         [TestMethod]
