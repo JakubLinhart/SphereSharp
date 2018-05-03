@@ -30,6 +30,13 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
+        public void Can_parse_call_without_whitespace_between_function_name_and_argument_list()
+        {
+            CheckStructure("return\"some text\"", "quoted: some text");
+            CheckStructure("return<argv(1)>", "expr: <argv(1)>");
+        }
+
+        [TestMethod]
         public void Can_parse_calls_with_chained_parameters()
         {
             CheckStructure("safe.tag.HASTEUID");

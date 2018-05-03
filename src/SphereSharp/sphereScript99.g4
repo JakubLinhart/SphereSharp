@@ -36,10 +36,9 @@ assignment: firstMemberAccess WS* ASSIGN WS* argumentList?;
 
 memberAccess: firstMemberAccess | argumentAccess;
 firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
-unquotedMemberAccessLiteral: (SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' | '?' | '!' |  EQUAL)+?;
 evalCall: EVAL_FUNCTIONS WS* evalExpression; 
 nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
-nativeArgumentList: enclosedArgumentList | (WS+ argumentList);
+nativeArgumentList: enclosedArgumentList | freeArgumentList;
 argumentAccess: (expressionArgument | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
 unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' | '.'|  ',' | '?' | '!' | EQUAL)+? ;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
@@ -64,6 +63,10 @@ triggerBody: codeBlock;
 
 // argument, argument expression
 enclosedArgumentList: LPAREN argumentList? RPAREN;
+freeArgumentList: firstFreeArgument (',' argument)*;
+firstFreeArgument: firstFreeArgumentOptionalWhiteSpace | firstFreeArgumentMandatoryWhiteSpace;
+firstFreeArgumentOptionalWhiteSpace: WS* (triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument);
+firstFreeArgumentMandatoryWhiteSpace: WS+ (assignmentArgument | unquotedLiteralArgument);
 argumentList: argument (',' argument)*;
 argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | assignmentArgument | unquotedLiteralArgument;
 expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
