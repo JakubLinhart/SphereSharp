@@ -25,13 +25,15 @@ eventsSectionHeader: EVENTS_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 codeBlock: statement+;
 
-statement: WS*? (call | assignment | ifStatement | whileStatement) (NEWLINE | EOF);
+statement: WS*? (call | assignment | ifStatement | whileStatement | doswitchStatement) (NEWLINE | EOF);
 
 ifStatement: IF WS* evalExpression NEWLINE codeBlock? (elseIfStatement)* elseStatement? WS* ENDIF ;
 elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock?;
 elseStatement: WS* ELSE NEWLINE codeBlock?;
 
 whileStatement: WHILE WS* evalExpression NEWLINE codeBlock? WS* ENDWHILE;
+
+doswitchStatement: DOSWITCH WS* evalExpression NEWLINE codeBlock WS* ENDDO;
 
 macro: escapedMacro | nonEscapedMacro;
 escapedMacro: LESS_THAN '?' macroBody '?' MORE_THAN ;
@@ -125,6 +127,8 @@ ELSE: [eE][lL][sS][eE];
 ENDIF: [eE][nN][dD][iI][fF];
 WHILE: [wW][hH][iI][lL][eE];
 ENDWHILE: [eE][nN][dD][wW][hH][iI][lL][eE];
+DOSWITCH: [dD][oO][sS][wW][iI][tT][cC][hH];
+ENDDO: [eE][nN][dD][dD][oO];
 
 SYSMESSAGE: [sS][yY][sS][mM][eE][sS][sS][aA][gG][eE];
 RETURN: [rR][eE][tT][uU][rR][nN];

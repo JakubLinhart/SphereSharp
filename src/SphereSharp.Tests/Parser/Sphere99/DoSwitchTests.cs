@@ -9,29 +9,34 @@ using System.Threading.Tasks;
 namespace SphereSharp.Tests.Parser.Sphere99
 {
     [TestClass]
-    public class WhileTests : ParsingTestBase
+    public class DoSwitchTests : ParsingTestBase
     {
         [TestMethod]
-        public void Can_parse_while()
+        public void Can_parse_doswitch_with_one_statement()
         {
-            CheckStructure("while(2);endwhile;", @"while (1==1)
+            CheckStructure("doswitch(1);enddo;", @"doswitch 1+1
+    call1
+enddo");
+        }
+
+        [TestMethod]
+        public void Can_parse_doswitch_with_multiple_statements()
+        {
+            CheckStructure("doswitch(3);enddo;", @"doswitch 1+1
     call1
     call2
-endwhile");
+    call3
+enddo");
         }
 
         [TestMethod]
-        public void Can_parse_empty_while()
+        public void Can_parse_indented_doswitch()
         {
-            CheckStructure("while(0);endwhile;", @"while (1==1)
-endwhile");
-        }
-
-        [TestMethod]
-        public void Can_parse_while_without_space_before_condition()
-        {
-            CheckStructure("while(0);endwhile;", @"while(1==1)
-endwhile");
+            CheckStructure("doswitch(3);enddo;", @" doswitch 1+1
+        call1
+        call2
+        call3
+    enddo");
         }
 
         private void CheckStructure(string expectedResult, string src)

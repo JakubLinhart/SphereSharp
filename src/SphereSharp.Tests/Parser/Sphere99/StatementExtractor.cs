@@ -44,9 +44,16 @@ namespace SphereSharp.Tests.Parser.Sphere99
         public override bool VisitWhileStatement([NotNull] sphereScript99Parser.WhileStatementContext context)
         {
             if (context.codeBlock() != null)
-                result.Append($"while({context.codeBlock().statement().Length});endwhile");
+                result.Append($"while({context.codeBlock().statement().Length});endwhile;");
             else
-                result.Append($"while(0);endwhile");
+                result.Append($"while(0);endwhile;");
+
+            return false;
+        }
+
+        public override bool VisitDoswitchStatement([NotNull] sphereScript99Parser.DoswitchStatementContext context)
+        {
+            result.Append($"doswitch({context.codeBlock().children.Count});enddo;");
 
             return false;
         }
