@@ -60,6 +60,14 @@ call1
         }
 
         [TestMethod]
+        public void Can_parse_file_with_section_headers_prefixed_with_whitespace()
+        {
+            CheckStructure("function fun1;", @"
+     [function fun1]
+call1");
+        }
+
+        [TestMethod]
         public void Can_parse_file_with_empty_lines_at_beginning_and_end()
         {
             CheckStructure("function fun1;eof;", @"

@@ -2,7 +2,7 @@
 
 file: NEWLINE? section+ (eofSection | EOF);
 
-section: functionSection | itemDefSection | typeDefSection | templateSection;
+section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | templateSection | eventsSection;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -11,11 +11,17 @@ functionSectionHeader: FUNCTION_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 itemDefSection: itemDefSectionHeader propertyList triggerList ;
 itemDefSectionHeader: ITEMDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
+charDefSection: charDefSectionHeader propertyList triggerList ;
+charDefSectionHeader: CHARDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+
 typeDefSection: typeDefSectionHeader triggerList ;
 typeDefSectionHeader: TYPEDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 templateSection: templateSectionHeader propertyList ;
 templateSectionHeader: TEMPLATE_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+
+eventsSection: eventsSectionHeader triggerList ;
+eventsSectionHeader: EVENTS_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 codeBlock: statement+;
 
@@ -45,7 +51,7 @@ customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
 nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP
-                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI;
+                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' evalExpression ']';
 
@@ -109,8 +115,10 @@ WS: [ \t];
 EOF_SECTION_HEADER: '[' [eE] [oO] [fF] ']';
 FUNCTION_SECTION_HEADER_START: '[' [fF][uU][nN][cC][tT][iI][oO][nN] WS+;
 ITEMDEF_SECTION_HEADER_START: '[' [iI][tT][eE][mM][dD][eE][fF] WS+;
+CHARDEF_SECTION_HEADER_START: '[' [cC][hH][aA][rR][dD][eE][fF] WS+;
 TYPEDEF_SECTION_HEADER_START: '[' [tT][yY][pP][eE][dD][eE][fF] WS+;
 TEMPLATE_SECTION_HEADER_START: '[' [tT][eE][mM][pP][lL][aA][tT][eE] WS+;
+EVENTS_SECTION_HEADER_START: '[' [eE][vV][eE][nN][tT][sS] WS+;
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE][iI][fF]; 
 ELSE: [eE][lL][sS][eE];
@@ -139,6 +147,7 @@ INVIS: [iI][nN][vV][iI][sS];
 SHOW: [sS][hH][oO][wW];
 DAMAGE: [dD][aA][mM][aA][gG][eE];
 ECHO: [eE][cC][hH][oO];
+MOVE: [mM][oO][vV][eE];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];
