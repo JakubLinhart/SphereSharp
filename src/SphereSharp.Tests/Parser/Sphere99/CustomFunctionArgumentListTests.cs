@@ -50,7 +50,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
-        public void Can_parse_range_expression()
+        public void Can_parse_random_expression()
         {
             CheckStructure("({1 2})", "expr: {1 2}");
             CheckStructure("({-2 -1})", "expr: {-2 -1}");

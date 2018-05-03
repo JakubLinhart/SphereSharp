@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -102,7 +103,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
-        public void Can_parse_range_expression()
+        public void Can_parse_random_expression()
         {
             RoundtripCheck("{1 2}");
             RoundtripCheck("{-2 -1}");
@@ -111,6 +112,9 @@ namespace SphereSharp.Tests.Parser.Sphere99
             RoundtripCheck("{(1+1) (2+2)}");
             RoundtripCheck("{-<argv(0)> <argv(0)>}");
             RoundtripCheck("{1 2} + {3 4}");
+            RoundtripCheck("{0122a 1 0122b 1 0122c 1 0122d 1 0122e 1}");
+            RoundtripCheck("{ i_chest_metal 1 i_chest_metal_brass 1 I_CHEST_WOODEN_BRASS 1 }");
+            RoundtripCheck("{ 1 2 }");
         }
 
         [TestMethod]
@@ -245,13 +249,22 @@ namespace SphereSharp.Tests.Parser.Sphere99
                 return base.VisitSignedEvalOperand(context);
             }
 
-            public override bool VisitRangeExpression([NotNull] sphereScript99Parser.RangeExpressionContext context)
+            public override bool VisitRandomExpression([NotNull] sphereScript99Parser.RandomExpressionContext context)
             {
-                result.Append('{');
-                Visit(context.evalExpression()[0]);
-                result.Append(' ');
-                Visit(context.evalExpression()[1]);
-                result.Append('}');
+                foreach (var child in context.children)
+                {
+                    switch (child)
+                    {
+                        case ITerminalNode terminalNode:
+                            result.Append(child.GetText());
+                            break;
+                        case sphereScript99Parser.EvalExpressionContext evalNode:
+                            Visit(evalNode);
+                            break;
+                        default:
+                            throw new NotImplementedException(child.GetType().Name);
+                    }
+                }
 
                 return false;
             }

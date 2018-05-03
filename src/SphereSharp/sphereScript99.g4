@@ -84,7 +84,7 @@ triggerArgument: '@' SYMBOL;
 eventArgument: (PLUS | MINUS) SYMBOL;
 
 signedArgumentOperand: unaryOperator signedArgumentOperand | argumentOperand ;
-argumentOperand: rangeExpression | constantExpression | argumentSubExpression | macroExpression ;
+argumentOperand: randomExpression | constantExpression | argumentSubExpression | macroExpression ;
 argumentBinaryOperation: argumentOperator signedArgumentOperand ;
 argumentOperator: argumentBinaryOperator | macroOperator ;
 argumentSubExpression: '(' WS* expressionArgument WS* ')' ;
@@ -93,7 +93,7 @@ argumentBinaryOperator: binaryOperator;
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
-evalOperand: rangeExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess;
+evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
 evalSubExpression: '(' WS* evalExpression WS* ')' ;
@@ -104,7 +104,7 @@ lessThanEqual: LESS_THAN ASSIGN;
 
 macroConstantExpression: constantExpression macro;
 constantExpression: DEC_NUMBER | HEX_NUMBER;
-rangeExpression: '{' evalExpression WS+ evalExpression '}';
+randomExpression: '{' WS* evalExpression WS+ evalExpression (WS+ evalExpression WS+ evalExpression)* WS* '}';
 macroExpression: macro ;
 
 macroOperator: macro ;
