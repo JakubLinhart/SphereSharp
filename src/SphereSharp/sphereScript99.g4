@@ -47,8 +47,8 @@ firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
 evalCall: EVAL_FUNCTIONS WS* evalExpression; 
 nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | freeArgumentList;
-argumentAccess: (expressionArgument | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
-unquotedArgumentAccess: (SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' | '.'|  ',' | '?' | '!' | EQUAL)+? ;
+argumentAccess: (evalExpression | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
+unquotedArgumentAccess: (SYMBOL | macro | binaryOperator | constantExpression | WS | '[' | ']' | '#' | ':' | '.'|  ',' | '?' | '!' | EQUAL)+? ;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
@@ -73,24 +73,15 @@ triggerBody: codeBlock;
 enclosedArgumentList: LPAREN argumentList? RPAREN;
 freeArgumentList: firstFreeArgument (',' argument)*;
 firstFreeArgument: firstFreeArgumentOptionalWhiteSpace | firstFreeArgumentMandatoryWhiteSpace;
-firstFreeArgumentOptionalWhiteSpace: WS* (triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument);
+firstFreeArgumentOptionalWhiteSpace: WS* (triggerArgument | evalExpression | quotedLiteralArgument);
 firstFreeArgumentMandatoryWhiteSpace: WS+ (assignmentArgument | unquotedLiteralArgument);
 argumentList: argument (',' argument)*;
-argument: triggerArgument | expressionArgument | quotedLiteralArgument | eventArgument | assignmentArgument | unquotedLiteralArgument;
-expressionArgument: signedArgumentOperand argumentBinaryOperation* ;
+argument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentArgument | unquotedLiteralArgument;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
 innerQuotedLiteralArgument: (macro | ~('"' | NEWLINE))*?;
-unquotedLiteralArgument: (memberAccess | SYMBOL | macro | argumentOperator | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
+unquotedLiteralArgument: (memberAccess | SYMBOL | macro | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
-eventArgument: (PLUS | MINUS) SYMBOL;
-
-signedArgumentOperand: unaryOperator signedArgumentOperand | argumentOperand ;
-argumentOperand: randomExpression | constantExpression | argumentSubExpression | macroExpression ;
-argumentBinaryOperation: argumentOperator signedArgumentOperand ;
-argumentOperator: argumentBinaryOperator | macroOperator ;
-argumentSubExpression: '(' WS* expressionArgument WS* ')' ;
-argumentBinaryOperator: binaryOperator;
 
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;

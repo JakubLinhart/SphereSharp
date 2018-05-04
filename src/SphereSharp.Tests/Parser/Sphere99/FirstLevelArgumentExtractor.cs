@@ -10,13 +10,6 @@ namespace SphereSharp.Tests.Parser.Sphere99
 
         public string[] Arguments => arguments.ToArray();
 
-        public override bool VisitExpressionArgument([NotNull] sphereScript99Parser.ExpressionArgumentContext context)
-        {
-            arguments.Add($"expr: {context.GetText()}");
-
-            return true;
-        }
-
         public override bool VisitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context)
         {
             arguments.Add($"quoted: {context.innerQuotedLiteralArgument()?.GetText() ?? string.Empty}");
@@ -34,13 +27,6 @@ namespace SphereSharp.Tests.Parser.Sphere99
         public override bool VisitEvalExpression([NotNull] sphereScript99Parser.EvalExpressionContext context)
         {
             arguments.Add($"eval: {context.GetText()}");
-
-            return true;
-        }
-
-        public override bool VisitEventArgument([NotNull] sphereScript99Parser.EventArgumentContext context)
-        {
-            arguments.Add($"event: {context.GetText()}");
 
             return true;
         }
