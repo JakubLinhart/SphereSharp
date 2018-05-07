@@ -104,6 +104,42 @@ def_eqTarget_Char        000000002
 regy_defs[0]  i_reag_black_pearl,3962");
         }
 
+        [TestMethod]
+        public void Can_parse_dialog_section_with_position()
+        {
+            CheckStructure("", @"[dialog d_input]
+350,350
+argo.tag(sirka,400)");
+        }
+
+        [TestMethod]
+        public void Can_parse_dialog_section_without_position()
+        {
+            CheckStructure("", @"[dialog d_input]
+argo.tag(sirka,400)");
+        }
+
+        [TestMethod]
+        public void Can_parse_dialog_text_section()
+        {
+            CheckStructure("", @"[dialog d_input TEXT]
+some random text
+other random text
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_dialog_button_section()
+        {
+            CheckStructure("triggers:2;", @"[dialog d_zmenajmena_duvod button]
+on=0
+dialog(d_zmenajmena_duvod)
+
+on=1
+dialog(d_zmenajmena_duvod)
+");
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.SectionContext section = null;

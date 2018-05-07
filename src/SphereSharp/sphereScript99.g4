@@ -2,7 +2,8 @@
 
 file: NEWLINE? section+ (eofSection | EOF);
 
-section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | templateSection | eventsSection | defNamesSection;
+section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | templateSection |
+            eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -26,7 +27,19 @@ eventsSectionHeader: EVENTS_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 defNamesSection: defNamesSectionHeader propertyList;
 defNamesSectionHeader: DEFNAMES_SECTION_HEADER_START ~(NEWITEM | ']') ']' NEWLINE;
 
+dialogSection: dialogSectionHeader dialogPosition? codeBlock;
+dialogSectionHeader: DIALOG_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+dialogPosition: number WS* ',' WS* number NEWLINE;
+
+dialogTextSection: dialogTextSectionHeader dialogTextSectionLine*;
+dialogTextSectionHeader: DIALOG_SECTION_HEADER_START SYMBOL WS+ TEXT ']' NEWLINE;
+dialogTextSectionLine: ~(NEWLINE)+ NEWLINE;
+
+dialogButtonSection: dialogButtonSectionHeader triggerList;
+dialogButtonSectionHeader: DIALOG_SECTION_HEADER_START SYMBOL WS+ BUTTON ']' NEWLINE;
+
 codeBlock: statement+;
+number: DEC_NUMBER | HEX_NUMBER;
 
 statement: WS*? (call | assignment | ifStatement | whileStatement | doswitchStatement) (NEWLINE | EOF);
 
@@ -56,19 +69,19 @@ customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
 nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP
-                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE;
+                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' evalExpression ']';
 
 // properties
 propertyList: NEWLINE? propertyAssignment+;
 propertyAssignment: WS* propertyName  ((WS* ASSIGN WS*) | WS+) propertyValue (NEWLINE | EOF);
-propertyName: SYMBOL ('[' (DEC_NUMBER | HEX_NUMBER) ']')?;
+propertyName: SYMBOL ('[' number ']')?;
 propertyValue: unquotedLiteralArgument;
 
 // trigger
 triggerList: trigger*;
-trigger: TRIGGER_HEADER triggerName (NEWLINE | EOF) triggerBody?;
+trigger: TRIGGER_HEADER (('@' triggerName) | (number)) (NEWLINE | EOF) triggerBody?;
 triggerName: nativeFunction | SYMBOL;
 triggerBody: codeBlock;
 
@@ -116,6 +129,7 @@ TYPEDEF_SECTION_HEADER_START: '[' [tT][yY][pP][eE][dD][eE][fF] WS+;
 TEMPLATE_SECTION_HEADER_START: '[' [tT][eE][mM][pP][lL][aA][tT][eE] WS+;
 EVENTS_SECTION_HEADER_START: '[' [eE][vV][eE][nN][tT][sS] WS+;
 DEFNAMES_SECTION_HEADER_START: '[' [dD][eE][fF][nN][aA][mM][eE][sS] WS+;
+DIALOG_SECTION_HEADER_START: '[' [dD][iI][aA][lL][oO][gG] WS+;
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE][iI][fF]; 
 ELSE: [eE][lL][sS][eE];
@@ -147,13 +161,20 @@ SHOW: [sS][hH][oO][wW];
 DAMAGE: [dD][aA][mM][aA][gG][eE];
 ECHO: [eE][cC][hH][oO];
 MOVE: [mM][oO][vV][eE];
+RESIZEPIC: [rR][eE][sS][iI][zZ][eE][pP][iI][cC];
+TILEPIC: [tT][iI][lL][eE][pP][iI][cC];
+HTMLGUMP: [hH][tT][mM][lL][gG][uU][mM][pP];
+PAGE: [pP][aA][gG][eE];
+TEXTENTRY: [tT][eE][xX][tT][eE][nN][tT][rR][yY];
+TEXT: [tT][eE][xX][tT];
+BUTTON: [bB][uU][tT][tT][oO][nN];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];
 HVAL: [hH][vV][aA][lL];
 SAFE: [sS][aA][fF][eE];
 
-TRIGGER_HEADER: [oO][nN] '=@';
+TRIGGER_HEADER: [oO][nN] '=';
 SYMBOL: VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
 DEC_NUMBER: ('1' .. '9') DEC_DIGIT* ;
 HEX_NUMBER: '0' HEX_DIGIT* ;
