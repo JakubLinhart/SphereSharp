@@ -95,7 +95,7 @@ argumentList: argument (',' argument)*;
 argument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentArgument | unquotedLiteralArgument;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
-innerQuotedLiteralArgument: (macro | ~('"' | NEWLINE))*?;
+innerQuotedLiteralArgument: (macro | '\'' | '\\' | ~('"' | NEWLINE))*?;
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
 

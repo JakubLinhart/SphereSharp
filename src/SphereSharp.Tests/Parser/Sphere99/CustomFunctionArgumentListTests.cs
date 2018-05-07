@@ -105,6 +105,8 @@ namespace SphereSharp.Tests.Parser.Sphere99
         [TestMethod]
         public void Can_parse_quoted_arguments()
         {
+            CheckStructure("(\"can contain ''\")", "quoted: can contain ''");
+            CheckStructure("(\"can contain \\\")", "quoted: can contain \\");
             CheckStructure("(\"some text\")", "quoted: some text");
             CheckStructure("(1,\"some text\")", new[] { "eval: 1", "quoted: some text" });
             CheckStructure("(\"some text\",1)", new[] { "quoted: some text", "eval: 1" });
