@@ -2,7 +2,7 @@
 
 file: NEWLINE? section+ (eofSection | EOF);
 
-section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | templateSection | eventsSection;
+section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | templateSection | eventsSection | defNamesSection;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -22,6 +22,9 @@ templateSectionHeader: TEMPLATE_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 eventsSection: eventsSectionHeader triggerList ;
 eventsSectionHeader: EVENTS_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+
+defNamesSection: defNamesSectionHeader propertyList;
+defNamesSectionHeader: DEFNAMES_SECTION_HEADER_START ~(NEWITEM | ']') ']' NEWLINE;
 
 codeBlock: statement+;
 
@@ -58,9 +61,9 @@ memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' evalExpression ']';
 
 // properties
-propertyList: NEWLINE? propertyAssignment*;
-propertyAssignment: WS* propertyName WS* ASSIGN WS* propertyValue (NEWLINE | EOF);
-propertyName: SYMBOL;
+propertyList: NEWLINE? propertyAssignment+;
+propertyAssignment: WS* propertyName  ((WS* ASSIGN WS*) | WS+) propertyValue (NEWLINE | EOF);
+propertyName: SYMBOL ('[' (DEC_NUMBER | HEX_NUMBER) ']')?;
 propertyValue: unquotedLiteralArgument;
 
 // trigger
@@ -112,6 +115,7 @@ CHARDEF_SECTION_HEADER_START: '[' [cC][hH][aA][rR][dD][eE][fF] WS+;
 TYPEDEF_SECTION_HEADER_START: '[' [tT][yY][pP][eE][dD][eE][fF] WS+;
 TEMPLATE_SECTION_HEADER_START: '[' [tT][eE][mM][pP][lL][aA][tT][eE] WS+;
 EVENTS_SECTION_HEADER_START: '[' [eE][vV][eE][nN][tT][sS] WS+;
+DEFNAMES_SECTION_HEADER_START: '[' [dD][eE][fF][nN][aA][mM][eE][sS] WS+;
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE][iI][fF]; 
 ELSE: [eE][lL][sS][eE];

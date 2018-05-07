@@ -95,6 +95,15 @@ on=@timer
 ");
         }
 
+        [TestMethod]
+        public void Can_parse_defnames_section()
+        {
+            CheckStructure("props:3;", @"[defnames def_eqTarget]
+def_eqTarget_Item        000000001
+def_eqTarget_Char        000000002
+regy_defs[0]  i_reag_black_pearl,3962");
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.SectionContext section = null;
