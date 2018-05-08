@@ -113,7 +113,8 @@ lessThanEqual: LESS_THAN ASSIGN;
 
 macroConstantExpression: constantExpression macro;
 constantExpression: DEC_NUMBER | HEX_NUMBER;
-randomExpression: '{' WS* evalExpression WS+ evalExpression (WS+ evalExpression WS+ evalExpression)* WS* '}';
+randomExpression: '{' (randomExpressionList | macro) '}';
+randomExpressionList: WS* evalExpression WS+ evalExpression (WS+ evalExpression WS+ evalExpression)* WS*;
 macroExpression: macro ;
 
 macroOperator: macro ;

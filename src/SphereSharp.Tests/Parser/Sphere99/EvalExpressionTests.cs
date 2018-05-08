@@ -115,6 +115,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
             RoundtripCheck("{0122a 1 0122b 1 0122c 1 0122d 1 0122e 1}");
             RoundtripCheck("{ i_chest_metal 1 i_chest_metal_brass 1 I_CHEST_WOODEN_BRASS 1 }");
             RoundtripCheck("{ 1 2 }");
+            RoundtripCheck("{<fun1(123)>}");
         }
 
         [TestMethod]
@@ -258,8 +259,11 @@ namespace SphereSharp.Tests.Parser.Sphere99
                         case ITerminalNode terminalNode:
                             result.Append(child.GetText());
                             break;
-                        case sphereScript99Parser.EvalExpressionContext evalNode:
-                            Visit(evalNode);
+                        case sphereScript99Parser.RandomExpressionListContext list:
+                            result.Append(child.GetText());
+                            break;
+                        case sphereScript99Parser.MacroContext macroNode:
+                            Visit(macroNode);
                             break;
                         default:
                             throw new NotImplementedException(child.GetType().Name);

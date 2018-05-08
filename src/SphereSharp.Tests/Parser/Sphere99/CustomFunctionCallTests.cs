@@ -59,6 +59,8 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("fun1_<param1>_<param2>(1)");
             ShouldSucceed("fun1_<param1>_<param2>(1)");
             ShouldSucceed("<parametrized3>n1(123)");
+            ShouldSucceed("fu<parametrized3>(123)");
+            ShouldSucceed("fu<parametrized<param>>(123)");
         }
 
         [TestMethod]
