@@ -10,7 +10,8 @@ functionSection: functionSectionHeader codeBlock;
 functionSectionHeader: FUNCTION_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 itemDefSection: itemDefSectionHeader propertyList triggerList ;
-itemDefSectionHeader: ITEMDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+itemDefSectionHeader: ITEMDEF_SECTION_HEADER_START itemDefSectionName ']' NEWLINE;
+itemDefSectionName: SYMBOL | number;
 
 charDefSection: charDefSectionHeader propertyList triggerList ;
 charDefSectionHeader: CHARDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;

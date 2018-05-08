@@ -52,6 +52,13 @@ type=t_script");
         }
 
         [TestMethod]
+        public void Can_parse_itemdef_with_number_as_name()
+        {
+            CheckStructure("props:1;triggers:0;", @"[ItemDef 0ee9]
+DUPEITEM = 0e21");
+        }
+
+        [TestMethod]
         public void Can_parse_events_section()
         {
             CheckStructure("triggers:2;", @"[events e_something]
