@@ -71,7 +71,7 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | SKILL;
+                | TARGET | SKILL | SFX | ACTION | ATTR;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' evalExpression ']';
 
@@ -173,6 +173,9 @@ TEXT: [tT][eE][xX][tT];
 BUTTON: [bB][uU][tT][tT][oO][nN];
 TARGET: [tT][aA][rR][gG][eE][tT];
 SKILL: [sS][kK][iI][lL][lL];
+SFX: [sS][fF][xX];
+ACTION: [aA][cC][tT][iI][oO][nN];
+ATTR: [aA][tT][tT][rR];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];
@@ -181,7 +184,7 @@ SAFE: [sS][aA][fF][eE];
 
 TRIGGER_HEADER: [oO][nN] '=';
 SYMBOL: VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
-DEC_NUMBER: ('1' .. '9') DEC_DIGIT* ;
+DEC_NUMBER: ('1' .. '9') DEC_DIGIT*  ('.' ('0'..'9')+)?;
 HEX_NUMBER: '0' HEX_DIGIT* ;
 
 EQUAL: '==';

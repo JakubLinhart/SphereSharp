@@ -34,6 +34,15 @@ namespace SphereSharp.Tests.Parser.Sphere99
         }
 
         [TestMethod]
+        public void Can_parse_decimal_numbers()
+        {
+            RoundtripCheck("1.0");
+            RoundtripCheck("100.0");
+            RoundtripCheck("1.1");
+            RoundtripCheck("1.9");
+        }
+
+        [TestMethod]
         public void Can_parse_constant_macro()
         {
             RoundtripCheck("0<fun1>");
