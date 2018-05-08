@@ -70,7 +70,8 @@ customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
 nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP
-                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON;
+                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
+                | TARGET | SKILL;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' evalExpression ']';
 
@@ -96,7 +97,7 @@ argumentList: argument (',' argument)*;
 argument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentArgument | unquotedLiteralArgument;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
-innerQuotedLiteralArgument: (macro | '\'' | '\\' | ~('"' | NEWLINE))*?;
+innerQuotedLiteralArgument: (macro | '\'' | '\\' | ';' | ~('"' | NEWLINE))*?;
 unquotedLiteralArgument: (memberAccess | SYMBOL | macro | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
 
@@ -170,6 +171,8 @@ PAGE: [pP][aA][gG][eE];
 TEXTENTRY: [tT][eE][xX][tT][eE][nN][tT][rR][yY];
 TEXT: [tT][eE][xX][tT];
 BUTTON: [bB][uU][tT][tT][oO][nN];
+TARGET: [tT][aA][rR][gG][eE][tT];
+SKILL: [sS][kK][iI][lL][lL];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];
