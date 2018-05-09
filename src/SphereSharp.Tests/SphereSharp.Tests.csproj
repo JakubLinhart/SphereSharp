@@ -62,6 +62,7 @@
     <Compile Include="Parser\ParsingTestBase.cs" />
     <Compile Include="Parser\Sphere99\CustomFunctionCallTests.cs" />
     <Compile Include="Parser\FailTestErrorListener.cs" />
+    <Compile Include="Parser\Sphere99\DoRandTests.cs" />
     <Compile Include="Parser\Sphere99\DoSwitchTests.cs" />
     <Compile Include="Parser\Sphere99\EvalExpressionTests.cs" />
     <Compile Include="Parser\Sphere99\FileTests.cs" />

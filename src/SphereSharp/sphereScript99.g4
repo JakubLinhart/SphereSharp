@@ -42,7 +42,7 @@ dialogButtonSectionHeader: DIALOG_SECTION_HEADER_START SYMBOL WS+ BUTTON ']' NEW
 codeBlock: statement+;
 number: DEC_NUMBER | HEX_NUMBER;
 
-statement: WS*? (call | assignment | ifStatement | whileStatement | doswitchStatement) (NEWLINE | EOF);
+statement: WS*? (call | assignment | ifStatement | whileStatement | doswitchStatement | dorandStatement) (NEWLINE | EOF);
 
 ifStatement: IF WS* evalExpression NEWLINE codeBlock? (elseIfStatement)* elseStatement? WS* ENDIF ;
 elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock?;
@@ -51,6 +51,8 @@ elseStatement: WS* ELSE NEWLINE codeBlock?;
 whileStatement: WHILE WS* evalExpression NEWLINE codeBlock? WS* ENDWHILE;
 
 doswitchStatement: DOSWITCH WS* evalExpression NEWLINE codeBlock WS* ENDDO;
+
+dorandStatement: DORAND WS* evalExpression NEWLINE codeBlock WS* ENDDO;
 
 macro: escapedMacro | nonEscapedMacro;
 escapedMacro: LESS_THAN '?' macroBody '?' MORE_THAN ;
@@ -69,9 +71,9 @@ unquotedArgumentAccess: (SYMBOL | macro | binaryOperator | constantExpression | 
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
-nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP
+nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | SKILL | SFX | ACTION | ATTR;
+                | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' evalExpression ']';
 
@@ -140,6 +142,7 @@ ENDIF: [eE][nN][dD][iI][fF];
 WHILE: [wW][hH][iI][lL][eE];
 ENDWHILE: [eE][nN][dD][wW][hH][iI][lL][eE];
 DOSWITCH: [dD][oO][sS][wW][iI][tT][cC][hH];
+DORAND: [dD][oO][rR][aA][nN][dD];
 ENDDO: [eE][nN][dD][dD][oO];
 
 SYSMESSAGE: [sS][yY][sS][mM][eE][sS][sS][aA][gG][eE];
@@ -157,6 +160,7 @@ XXC: [xX][xX][cC];
 XXI: [xX][xX][iI];
 NEWITEM: [nN][eE][wW][iI][tT][eE][mM];
 EQUIP: [eE][qQ][uU][iI][pP];
+NEWEQUIP: [nN][eE][wW][eE][qQ][uU][iI][pP];
 MENU: [mM][eE][nN][uU];
 GO: [gG][oO];
 INVIS: [iI][nN][vV][iI][sS];
@@ -172,10 +176,14 @@ TEXTENTRY: [tT][eE][xX][tT][eE][nN][tT][rR][yY];
 TEXT: [tT][eE][xX][tT];
 BUTTON: [bB][uU][tT][tT][oO][nN];
 TARGET: [tT][aA][rR][gG][eE][tT];
+TARGETG: [tT][aA][rR][gG][eE][tT][gG];
 SKILL: [sS][kK][iI][lL][lL];
 SFX: [sS][fF][xX];
 ACTION: [aA][cC][tT][iI][oO][nN];
 ATTR: [aA][tT][tT][rR];
+NUKECHAR: [nN][uU][kK][eE][cC][hH][aA][rR];
+NUKE: [nN][uU][kK][eE];
+COLOR: [cC][oO][lL][oO][rR];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];

@@ -57,6 +57,12 @@ namespace SphereSharp.Tests.Parser.Sphere99
 
             return false;
         }
-    }
 
+        public override bool VisitDorandStatement([NotNull] sphereScript99Parser.DorandStatementContext context)
+        {
+            result.Append($"dorand({context.codeBlock().children.Count});enddo;");
+
+            return false;
+        }
+    }
 }
