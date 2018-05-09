@@ -147,6 +147,26 @@ dialog(d_zmenajmena_duvod)
 ");
         }
 
+        [TestMethod]
+        public void Can_parse_book_section()
+        {
+            CheckStructure("props:3;", @"[BOOK kniha_hcn_vstup]
+PAGES=23
+TITLE=""Kronika""
+AUTHOR = neznamy..");
+        }
+
+        [TestMethod]
+        public void Can_parse_book_page_section()
+        {
+            CheckStructure("", @"[BOOK kniha_hcn_vstup 2]
+den 44
+Hrobky jsou zajisteny,
+
+[EOF]
+");
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.SectionContext section = null;

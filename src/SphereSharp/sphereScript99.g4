@@ -2,8 +2,9 @@
 
 file: NEWLINE? section+ (eofSection | EOF);
 
-section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | templateSection |
-            eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection;
+section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | templateSection
+            | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
+            | bookSection | bookPageSection;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -38,6 +39,13 @@ dialogTextSectionLine: ~(NEWLINE)+ NEWLINE;
 
 dialogButtonSection: dialogButtonSectionHeader triggerList;
 dialogButtonSectionHeader: DIALOG_SECTION_HEADER_START SYMBOL WS+ BUTTON ']' NEWLINE;
+
+bookPageSection: bookPageSectionHeader pageLine+;
+bookPageSectionHeader: BOOK_SECTION_HEADER_START SYMBOL WS+ DEC_NUMBER ']' NEWLINE;
+pageLine: ~('[' | NEWLINE)* NEWLINE;
+
+bookSection: bookSectionHeader propertyList;
+bookSectionHeader: BOOK_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 codeBlock: statement+;
 number: DEC_NUMBER | HEX_NUMBER;
@@ -135,6 +143,8 @@ TEMPLATE_SECTION_HEADER_START: '[' [tT][eE][mM][pP][lL][aA][tT][eE] WS+;
 EVENTS_SECTION_HEADER_START: '[' [eE][vV][eE][nN][tT][sS] WS+;
 DEFNAMES_SECTION_HEADER_START: '[' [dD][eE][fF][nN][aA][mM][eE][sS] WS+;
 DIALOG_SECTION_HEADER_START: '[' [dD][iI][aA][lL][oO][gG] WS+;
+BOOK_SECTION_HEADER_START: '[' [bB][oO][oO][kK] WS+;
+
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE][iI][fF]; 
 ELSE: [eE][lL][sS][eE];
