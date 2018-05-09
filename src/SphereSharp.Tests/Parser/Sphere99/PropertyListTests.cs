@@ -47,6 +47,12 @@ prop2=value2
 prop3=value3");
         }
 
+        [TestMethod]
+        public void Can_parse_property_with_special_chars()
+        {
+            CheckStructure("props:1;", @"prop1=@");
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.PropertyListContext propertyList = null;
