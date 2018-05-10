@@ -56,32 +56,33 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parser\Sphere99\AssignmentTests.cs" />
-    <Compile Include="Parser\Sphere99\BlockTests.cs" />
-    <Compile Include="Parser\Sphere99\CustomFunctionArgumentListTests.cs" />
-    <Compile Include="Parser\ParsingTestBase.cs" />
-    <Compile Include="Parser\Sphere99\CustomFunctionCallTests.cs" />
-    <Compile Include="Parser\FailTestErrorListener.cs" />
-    <Compile Include="Parser\Sphere99\DoRandTests.cs" />
-    <Compile Include="Parser\Sphere99\DoSwitchTests.cs" />
-    <Compile Include="Parser\Sphere99\EvalExpressionTests.cs" />
-    <Compile Include="Parser\Sphere99\FileTests.cs" />
-    <Compile Include="Parser\Sphere99\FirstLevelArgumentExtractor.cs" />
-    <Compile Include="Parser\Sphere99\FunctionSectionTests.cs" />
-    <Compile Include="Parser\Sphere99\IfTests.cs" />
-    <Compile Include="Parser\Sphere99\PropertyAndTriggerExtractor.cs" />
-    <Compile Include="Parser\Sphere99\NativeFunctionCallTests.cs" />
-    <Compile Include="Parser\Sphere99\PropertyListTests.cs" />
-    <Compile Include="Parser\Sphere99\StatementExtractor.cs" />
-    <Compile Include="Parser\Sphere99\TriggerCodeBlockExtractor.cs" />
-    <Compile Include="Parser\Sphere99\TriggerTests.cs" />
-    <Compile Include="Parser\Sphere99\SectionsTests.cs" />
-    <Compile Include="Parser\Sphere99\WhileTests.cs" />
+    <Compile Include="FailTestErrorListener.cs" />
+    <Compile Include="ParsingTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sphere99\Parser\AssignmentTests.cs" />
+    <Compile Include="Sphere99\Parser\BlockTests.cs" />
+    <Compile Include="Sphere99\Parser\CustomFunctionArgumentListTests.cs" />
+    <Compile Include="Sphere99\Parser\CustomFunctionCallTests.cs" />
+    <Compile Include="Sphere99\Parser\DoRandTests.cs" />
+    <Compile Include="Sphere99\Parser\DoSwitchTests.cs" />
+    <Compile Include="Sphere99\Parser\EvalExpressionTests.cs" />
+    <Compile Include="Sphere99\Parser\FileTests.cs" />
+    <Compile Include="Sphere99\Parser\FirstLevelArgumentExtractor.cs" />
+    <Compile Include="Sphere99\Parser\FunctionSectionTests.cs" />
+    <Compile Include="Sphere99\Parser\IfTests.cs" />
+    <Compile Include="Sphere99\Parser\NativeFunctionCallTests.cs" />
+    <Compile Include="Sphere99\Parser\PropertyAndTriggerExtractor.cs" />
+    <Compile Include="Sphere99\Parser\PropertyListTests.cs" />
+    <Compile Include="Sphere99\Parser\SectionsTests.cs" />
+    <Compile Include="Sphere99\Parser\StatementExtractor.cs" />
+    <Compile Include="Sphere99\Parser\TriggerCodeBlockExtractor.cs" />
+    <Compile Include="Sphere99\Parser\TriggerTests.cs" />
+    <Compile Include="Sphere99\Parser\WhileTests.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\CallFunctionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Parser\Sphere99\example_test_file.scp">
+    <None Include="Sphere99\Parser\example_test_file.scp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -91,6 +92,7 @@
       <Name>SphereSharp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

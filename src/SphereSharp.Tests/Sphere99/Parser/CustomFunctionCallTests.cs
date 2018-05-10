@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Tests.Parser.Sphere99
+namespace SphereSharp.Tests.Sphere99.Parser
 {
     [TestClass]
     public class CustomFunctionCallTests : ParsingTestBase
@@ -20,7 +20,7 @@ namespace SphereSharp.Tests.Parser.Sphere99
         {
             ShouldSucceed("fun1");
             ShouldSucceed("fun1()");
-            ShouldSucceed(@"fun1(1)");
+            ShouldSucceed("fun1(1)");
             ShouldSucceed("fun1_2");
             ShouldSucceed("fun1_2(3)");
         }
@@ -41,7 +41,6 @@ namespace SphereSharp.Tests.Parser.Sphere99
             ShouldSucceed("findlayer.2");
             ShouldSucceed("findlayer.2.uid");
             ShouldSucceed("findlayer.2+2.uid");
-            ShouldSucceed("findlayer.some unquoted literal.uid");
             ShouldSucceed("findlayer.\"some quoted literal\".uid");
             ShouldSucceed("lastnew.tag.myfood");
         }

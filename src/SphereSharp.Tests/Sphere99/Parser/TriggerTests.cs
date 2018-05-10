@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Tests.Parser.Sphere99
+namespace SphereSharp.Tests.Sphere99.Parser
 {
     [TestClass]
     public class TriggerTests : ParsingTestBase

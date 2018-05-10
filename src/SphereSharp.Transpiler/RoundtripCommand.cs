@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using SphereSharp.Sphere99;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +59,7 @@ namespace SphereSharp.Transpiler
             var file = parser.file();
 
             Console.WriteLine($"Writing {outputFileName}");
-            var generator = new Sphere99RoundtripGenerator();
+            var generator = new RoundtripGenerator();
             generator.Visit(file);
 
             File.WriteAllText(outputFileName, generator.Output);

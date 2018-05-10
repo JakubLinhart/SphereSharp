@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Tests.Parser.Sphere99
+namespace SphereSharp.Tests.Sphere99.Parser
 {
     [TestClass]
     public class CustomFunctionArgumentListTests : ParsingTestBase

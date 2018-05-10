@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace SphereSharp.Tests.Parser
+namespace SphereSharp.Tests
 {
     public class FailTestErrorListener : BaseErrorListener
     {

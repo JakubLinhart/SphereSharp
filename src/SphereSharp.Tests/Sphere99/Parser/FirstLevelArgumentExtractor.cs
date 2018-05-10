@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SphereSharp.Tests.Parser.Sphere99
+namespace SphereSharp.Tests.Sphere99.Parser
 {
     public class FirstLevelArgumentExtractor : sphereScript99BaseVisitor<bool>
     {

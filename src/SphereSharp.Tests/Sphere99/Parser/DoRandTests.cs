@@ -6,32 +6,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Tests.Parser.Sphere99
+namespace SphereSharp.Tests.Sphere99.Parser
 {
     [TestClass]
-    public class WhileTests : ParsingTestBase
+    public class DoRandTests : ParsingTestBase
     {
         [TestMethod]
-        public void Can_parse_while()
+        public void Can_parse_dorand_with_one_statement()
         {
-            CheckStructure("while(2);endwhile;", @"while (1==1)
+            CheckStructure("dorand(1);enddo;", @"dorand 1+1
+    call1
+enddo");
+        }
+
+        [TestMethod]
+        public void Can_parse_dorand_with_multiple_statements()
+        {
+            CheckStructure("dorand(3);enddo;", @"dorand 1+1
     call1
     call2
-endwhile");
+    call3
+enddo");
         }
 
         [TestMethod]
-        public void Can_parse_empty_while()
+        public void Can_parse_indented_dorand()
         {
-            CheckStructure("while(0);endwhile;", @"while (1==1)
-endwhile");
-        }
-
-        [TestMethod]
-        public void Can_parse_while_without_space_before_condition()
-        {
-            CheckStructure("while(0);endwhile;", @"while(1==1)
-endwhile");
+            CheckStructure("dorand(2);enddo;", @" dorand 1+1
+        call1
+        call2
+    enddo");
         }
 
         private void CheckStructure(string expectedResult, string src)

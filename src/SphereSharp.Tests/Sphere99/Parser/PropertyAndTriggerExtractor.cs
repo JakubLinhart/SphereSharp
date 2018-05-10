@@ -1,7 +1,7 @@
 ﻿using Antlr4.Runtime.Misc;
 using System.Text;
 
-namespace SphereSharp.Tests.Parser.Sphere99
+namespace SphereSharp.Tests.Sphere99.Parser
 {
     public class PropertyAndTriggerExtractor : sphereScript99BaseVisitor<bool>
     {

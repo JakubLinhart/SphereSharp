@@ -1,14 +1,12 @@
 ﻿using Antlr4.Runtime.Misc;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SphereSharp.Sphere99;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SphereSharp.Tests.Parser.Sphere99
+namespace SphereSharp.Tests.Sphere99.Parser
 {
     [TestClass]
     public class FileTests : ParsingTestBase
@@ -104,10 +102,10 @@ x=<y>
         }
 
         [TestMethod]
-        [DeploymentItem(@"Parser\Sphere99\example_test_file.scp", @"Parser\Sphere99")]
+        [DeploymentItem(@"Sphere99\Parser\example_test_file.scp", @"Sphere99\Parser")]
         public void Can_parse_example_script_file()
         {
-            RoundtripCheck(File.ReadAllText(@"Parser\Sphere99\example_test_file.scp"));
+            RoundtripCheck(File.ReadAllText(@"Sphere99\Parser\example_test_file.scp"));
         }
 
         private void ShouldSucceed(string src) => Parse(src, parser =>
@@ -123,7 +121,7 @@ x=<y>
                 file = parser.file();
             });
 
-            var roundtripGenerator = new Sphere99RoundtripGenerator();
+            var roundtripGenerator = new RoundtripGenerator();
             roundtripGenerator.Visit(file);
 
             var srcWithoutEofTail = src.Substring(0, src.IndexOf("[eof]") + 5);

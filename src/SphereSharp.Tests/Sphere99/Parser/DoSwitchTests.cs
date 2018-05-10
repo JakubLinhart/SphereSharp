@@ -6,23 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Tests.Parser.Sphere99
+namespace SphereSharp.Tests.Sphere99.Parser
 {
     [TestClass]
-    public class DoRandTests : ParsingTestBase
+    public class DoSwitchTests : ParsingTestBase
     {
         [TestMethod]
-        public void Can_parse_dorand_with_one_statement()
+        public void Can_parse_doswitch_with_one_statement()
         {
-            CheckStructure("dorand(1);enddo;", @"dorand 1+1
+            CheckStructure("doswitch(1);enddo;", @"doswitch 1+1
     call1
 enddo");
         }
 
         [TestMethod]
-        public void Can_parse_dorand_with_multiple_statements()
+        public void Can_parse_doswitch_with_multiple_statements()
         {
-            CheckStructure("dorand(3);enddo;", @"dorand 1+1
+            CheckStructure("doswitch(3);enddo;", @"doswitch 1+1
     call1
     call2
     call3
@@ -30,11 +30,12 @@ enddo");
         }
 
         [TestMethod]
-        public void Can_parse_indented_dorand()
+        public void Can_parse_indented_doswitch()
         {
-            CheckStructure("dorand(2);enddo;", @" dorand 1+1
+            CheckStructure("doswitch(3);enddo;", @" doswitch 1+1
         call1
         call2
+        call3
     enddo");
         }
 

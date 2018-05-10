@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Tests.Parser
+namespace SphereSharp.Tests
 {
     public abstract class ParsingTestBase
     {

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 
-namespace SphereSharp
+namespace SphereSharp.Sphere99
 {
-    public class Sphere99RoundtripGenerator : sphereScript99BaseVisitor<bool>
+    public class RoundtripGenerator : sphereScript99BaseVisitor<bool>
     {
         public SourceCodeBuilder output = new SourceCodeBuilder();
         public string Output => output.Output;

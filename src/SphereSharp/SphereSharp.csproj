@@ -47,13 +47,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleErrorListener.cs" />
+    <Compile Include="Error.cs" />
+    <Compile Include="MemoryErrorListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceCodeBuilder.cs" />
-    <Compile Include="Sphere99RoundtripGenerator.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler.cs" />
+    <Compile Include="Sphere99\Parser.cs" />
+    <Compile Include="Sphere99\ParsingResult.cs" />
+    <Compile Include="Sphere99\RoundtripGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Antlr4 Include="sphereScript99.g4">
+    <Antlr4 Include="Sphere99\sphereScript99.g4">
       <Generator>MSBuild:Compile</Generator>
     </Antlr4>
   </ItemGroup>
