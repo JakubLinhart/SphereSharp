@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Transpiler
+namespace SphereSharp.Cli
 {
     public class RoundtripCommand
     {
@@ -55,10 +55,10 @@ namespace SphereSharp.Transpiler
             var parser = new sphereScript99Parser(tokenStream);
             parser.AddErrorListener(new ConsoleErrorListener());
 
-            Console.WriteLine($"Parsing {inputFileName}");
+            System.Console.WriteLine($"Parsing {inputFileName}");
             var file = parser.file();
 
-            Console.WriteLine($"Writing {outputFileName}");
+            System.Console.WriteLine($"Writing {outputFileName}");
             var generator = new RoundtripGenerator();
             generator.Visit(file);
 

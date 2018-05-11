@@ -6,11 +6,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{086DAEF7-FF78-4359-B217-0895B0AB8102}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SphereSharp.Transpiler</RootNamespace>
-    <AssemblyName>SphereSharp.Transpiler</AssemblyName>
+    <RootNamespace>SphereSharp.Cli</RootNamespace>
+    <AssemblyName>SphereSharp.Cli</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetName>SphereSharp</TargetName>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <StartAction>Program</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -90,5 +92,8 @@
       <Name>SphereSharp</Name>
     </ProjectReference>
   </ItemGroup>
+  <PropertyGroup>
+    <StartProgram>$(MSBuildThisFileDirectory)\$(OutputPath)SphereSharp.exe</StartProgram>
+  </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

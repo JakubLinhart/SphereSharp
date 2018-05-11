@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphereSharp", "src\SphereSh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphereSharp.Tests", "src\SphereSharp.Tests\SphereSharp.Tests.csproj", "{E99B3AEF-5BE5-42B6-92C9-4DEB33FF46AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphereSharp.Transpiler", "src\SphereSharp.Transpiler\SphereSharp.Transpiler.csproj", "{086DAEF7-FF78-4359-B217-0895B0AB8102}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphereSharp.Cli", "src\SphereSharp.Cli\SphereSharp.Cli.csproj", "{086DAEF7-FF78-4359-B217-0895B0AB8102}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
