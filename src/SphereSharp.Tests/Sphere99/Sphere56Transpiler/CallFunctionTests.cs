@@ -27,6 +27,7 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [TestMethod]
         [DataRow("arg(u,1)", "LOCAL.u=1")]
         [DataRow("arg(u,#+1)", "LOCAL.u=<LOCAL.u>+1")]
+        [DataRow("arg(u,arg(v))", "LOCAL.u=LOCAL.v")]
         public void Local_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);

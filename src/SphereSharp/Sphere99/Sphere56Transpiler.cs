@@ -83,22 +83,28 @@ namespace SphereSharp.Sphere99
                     {
                         var localVariableAccess = $"LOCAL.{arguments[0].GetText()}";
                         builder.Append(localVariableAccess);
-                        builder.Append('=');
 
-                        try
+                        if (arguments.Length == 2)
                         {
-                            lastSharpSubstitution = $"<{localVariableAccess}>";
-                            return base.Visit(arguments[1]);
+                            builder.Append('=');
+
+                            try
+                            {
+                                lastSharpSubstitution = $"<{localVariableAccess}>";
+                                return base.Visit(arguments[1]);
+                            }
+                            finally
+                            {
+                                lastSharpSubstitution = null;
+                            }
                         }
-                        finally
-                        {
-                            lastSharpSubstitution = null;
-                        }
+                        else if (arguments.Length == 1)
+                            return true;
+                        else
+                            throw new TranspilerException($"Invalid number of arguments for 'arg': {arguments.Length}");
                     }
                     else
-                    {
                         throw new TranspilerException("No arguments for 'arg'");
-                    }
                 }
                 else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase))
                 {
