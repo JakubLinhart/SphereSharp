@@ -98,7 +98,6 @@ namespace SphereSharp.Tests.Sphere99.Parser
             CheckStructure("(many words separated by space)", "unq: many words separated by space");
             CheckStructure("(many words separated by space,and other words as second argument)",
                 new[] { "unq: many words separated by space", "unq: and other words as second argument" });
-            CheckStructure("(#+1)", "unq: #+1");
             CheckStructure("(?!)", "unq: ?!");
         }
 

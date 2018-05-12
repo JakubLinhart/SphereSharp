@@ -74,7 +74,7 @@ namespace SphereSharp.Tests.Sphere99.Parser
         [TestMethod]
         public void Can_parse_arg_calls()
         {
-            CheckStructure("arg(u,#+1)", new[] { "eval: u", "unq: #+1" });
+            CheckStructure("arg(u,#+1)", new[] { "eval: u", "eval: #+1" });
         }
 
         private void ShouldSucceed(string src) => Parse(src, parser => parser.call());

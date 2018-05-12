@@ -114,7 +114,7 @@ triggerArgument: '@' SYMBOL;
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
-evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess;
+evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess | '#';
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
 evalSubExpression: '(' WS* evalExpression WS* ')' ;

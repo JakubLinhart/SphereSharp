@@ -55,6 +55,7 @@
     <Compile Include="Sphere99\Parser.cs" />
     <Compile Include="Sphere99\ParsingResult.cs" />
     <Compile Include="Sphere99\RoundtripGenerator.cs" />
+    <Compile Include="Sphere99\TranspilerException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

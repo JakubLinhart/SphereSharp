@@ -24,6 +24,22 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
             TranspileStatementCheck(source, expectedResult);
         }
 
+        [TestMethod]
+        [DataRow("arg(u,1)", "LOCAL.u=1")]
+        [DataRow("arg(u,#+1)", "LOCAL.u=<LOCAL.u>+1")]
+        public void Local_variables(string source, string expectedResult)
+        {
+            TranspileStatementCheck(source, expectedResult);
+        }
+
+        [TestMethod]
+        [DataRow("arg(u,<argcount>)", "LOCAL.u=<argv>")]
+        [DataRow("arg(u,<argv(0)>)", "LOCAL.u=<argv[0]>")]
+        public void Arguments(string source, string expectedResult)
+        {
+            TranspileStatementCheck(source, expectedResult);
+        }
+
         private void TranspileStatementCheck(string input, string expectedOutput)
         {
             var parser = new SphereSharp.Sphere99.Parser();

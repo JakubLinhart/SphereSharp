@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 
 namespace SphereSharp.Sphere99
 {
@@ -42,11 +43,85 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitArgument([NotNull] sphereScript99Parser.ArgumentContext context)
+        private string lastSharpSubstitution;
+
+        public override bool VisitEvalOperand([NotNull] sphereScript99Parser.EvalOperandContext context)
+        {
+            if (context.GetText().Equals("#", StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append(lastSharpSubstitution);
+                return true;
+            }
+
+            return base.VisitEvalOperand(context);
+        }
+
+        public override bool VisitEvalOperator([NotNull] sphereScript99Parser.EvalOperatorContext context)
         {
             builder.Append(context.GetText());
 
             return true;
+        }
+
+        public override bool VisitConstantExpression([NotNull] sphereScript99Parser.ConstantExpressionContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitFirstMemberAccess([NotNull] sphereScript99Parser.FirstMemberAccessContext context)
+        {
+            var name = context.customMemberAccess()?.memberName()?.GetText();
+            if (!string.IsNullOrEmpty(name))
+            {
+                var arguments = context.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
+
+                if (name.Equals("arg", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (arguments != null)
+                    {
+                        var localVariableAccess = $"LOCAL.{arguments[0].GetText()}";
+                        builder.Append(localVariableAccess);
+                        builder.Append('=');
+
+                        try
+                        {
+                            lastSharpSubstitution = $"<{localVariableAccess}>";
+                            return base.Visit(arguments[1]);
+                        }
+                        finally
+                        {
+                            lastSharpSubstitution = null;
+                        }
+                    }
+                    else
+                    {
+                        throw new TranspilerException("No arguments for 'arg'");
+                    }
+                }
+                else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase))
+                {
+                    builder.Append($"<argv>");
+                    return true;
+                }
+                else if (name.Equals("argv", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (arguments != null)
+                    {
+                        builder.Append($"<argv[");
+                        base.Visit(arguments[0]);
+                        builder.Append("]>");
+                        return true;
+                    }
+                    else
+                    {
+                        throw new TranspilerException("No arguments for 'argv'");
+                    }
+                }
+            }
+
+            return base.VisitFirstMemberAccess(context);
         }
     }
 }
