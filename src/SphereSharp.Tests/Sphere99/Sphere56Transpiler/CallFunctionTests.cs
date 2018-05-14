@@ -41,6 +41,22 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
             TranspileStatementCheck(source, expectedResult);
         }
 
+        [TestMethod]
+        [DataRow("tag(name,value)", "tag.name=value")]
+        [DataRow("arg(u,tag(name))", "LOCAL.u=tag.name")]
+        public void Tags(string source, string expectedResult)
+        {
+            TranspileStatementCheck(source, expectedResult);
+        }
+
+        [TestMethod]
+        [DataRow("var(name,value)", "var.name=value")]
+        [DataRow("arg(u,var(name))", "LOCAL.u=var.name")]
+        public void Global_variables(string source, string expectedResult)
+        {
+            TranspileStatementCheck(source, expectedResult);
+        }
+
         private void TranspileStatementCheck(string input, string expectedOutput)
         {
             var parser = new SphereSharp.Sphere99.Parser();

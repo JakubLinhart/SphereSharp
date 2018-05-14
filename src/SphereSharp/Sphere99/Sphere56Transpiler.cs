@@ -70,6 +70,40 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context)
+        {
+            var name = context.memberName()?.GetText();
+            if (!string.IsNullOrEmpty(name))
+            {
+                var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
+                if (name.Equals("tag", StringComparison.OrdinalIgnoreCase) || name.Equals("var", StringComparison.OrdinalIgnoreCase))
+                {
+                    builder.Append(name);
+                    builder.Append(".");
+                    if (arguments != null)
+                    {
+                        if (arguments.Length == 2)
+                        {
+                            builder.Append(arguments[0].GetText());
+                            builder.Append("=");
+                            return base.Visit(arguments[1]);
+                        }
+                        else if (arguments.Length == 1)
+                        {
+                            builder.Append(arguments[0].GetText());
+                            return true;
+                        }
+                        else
+                            throw new TranspilerException($"Invalid number of arguments for 'tag': {arguments.Length}");
+                    }
+                    else
+                        throw new TranspilerException("No arguments for tag");
+                }
+            }
+
+            return base.VisitCustomMemberAccess(context);
+        }
+
         public override bool VisitFirstMemberAccess([NotNull] sphereScript99Parser.FirstMemberAccessContext context)
         {
             var name = context.customMemberAccess()?.memberName()?.GetText();
