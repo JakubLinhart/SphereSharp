@@ -13,8 +13,9 @@ namespace SphereSharp.Cli
     {
         static void Main(string[] args)
         {
-            CommandLine.Parser.Default.ParseArguments<RoundtripOptions>(args)
-                .WithParsed(options => new RoundtripCommand().Roundtrip(options));
+            CommandLine.Parser.Default.ParseArguments<RoundtripOptions, TranspileOptions>(args)
+                .WithParsed<RoundtripOptions>(options => new RoundtripCommand().Roundtrip(options))
+                .WithParsed<TranspileOptions>(options => new TranspileCommand().Transpile(options));
         }
     }
 }

@@ -65,6 +65,19 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
             TranspileStatementCheck(source, expectedResult);
         }
 
+        [TestMethod]
+        public void Can_transpile_function()
+        {
+            TranspileFileCheck(
+@"[function fun1]
+call1
+call2",
+
+@"[function fun1]
+call1
+call2");
+        }
+
         private void TranspileStatementCheck(string input, string expectedOutput)
         {
             var parser = new SphereSharp.Sphere99.Parser();
@@ -78,7 +91,23 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
             var transpiler = new SphereSharp.Sphere99.Sphere56Transpiler();
             transpiler.Visit(parsingOutput.Tree);
 
-            transpiler.Output.Should().Be(expectedOutput);
+            transpiler.Output.Trim().Should().Be(expectedOutput.Trim());
+        }
+
+        private void TranspileFileCheck(string input, string expectedOutput)
+        {
+            var parser = new SphereSharp.Sphere99.Parser();
+            var parsingOutput = parser.ParseFile(input);
+
+            if (parsingOutput.Errors.Any())
+            {
+                Assert.Fail(parsingOutput.GetErrorsText());
+            }
+
+            var transpiler = new SphereSharp.Sphere99.Sphere56Transpiler();
+            transpiler.Visit(parsingOutput.Tree);
+
+            transpiler.Output.Trim().Should().Be(expectedOutput.Trim());
         }
     }
 }

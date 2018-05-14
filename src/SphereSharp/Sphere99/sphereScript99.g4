@@ -93,7 +93,8 @@ propertyValue: unquotedLiteralArgument;
 
 // trigger
 triggerList: trigger*;
-trigger: TRIGGER_HEADER (('@' triggerName) | (number)) (NEWLINE | EOF) triggerBody?;
+trigger: triggerHeader (NEWLINE | EOF) triggerBody?;
+triggerHeader: TRIGGER_HEADER (('@' triggerName) | (number));
 triggerName: nativeFunction | SYMBOL;
 triggerBody: codeBlock;
 

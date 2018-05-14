@@ -70,6 +70,43 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitFunctionSectionHeader([NotNull] sphereScript99Parser.FunctionSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
+        {
+            var result = base.VisitStatement(context);
+
+            builder.AppendLine();
+
+            return result;
+        }
+
+        public override bool VisitItemDefSectionHeader([NotNull] sphereScript99Parser.ItemDefSectionHeaderContext context)
+        {
+            builder.AppendLine(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitPropertyAssignment([NotNull] sphereScript99Parser.PropertyAssignmentContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitTriggerHeader([NotNull] sphereScript99Parser.TriggerHeaderContext context)
+        {
+            builder.AppendLine(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context)
         {
             var name = context.memberName()?.GetText();
