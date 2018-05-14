@@ -99,6 +99,20 @@ namespace SphereSharp.Sphere99
                     else
                         throw new TranspilerException("No arguments for tag");
                 }
+                else
+                {
+                    if (arguments != null && context.chainedMemberAccess() != null)
+                    {
+                        builder.Append(name);
+                        foreach (var argument in arguments)
+                        {
+                            builder.Append(".");
+                            base.Visit(argument);
+                        }
+
+                        return base.Visit(context.chainedMemberAccess());
+                    }
+                }
             }
 
             return base.VisitCustomMemberAccess(context);

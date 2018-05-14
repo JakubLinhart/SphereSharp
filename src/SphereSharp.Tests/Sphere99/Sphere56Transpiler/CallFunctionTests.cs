@@ -57,6 +57,14 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
             TranspileStatementCheck(source, expectedResult);
         }
 
+        [TestMethod]
+        [DataRow("findlayer(layer_pack).remove", "findlayer.layer_pack.remove")]
+        [DataRow("arg(u,findlayer(layer_pack))", "LOCAL.u=findlayer layer_pack")]
+        public void DottedArguments(string source, string expectedResult)
+        {
+            TranspileStatementCheck(source, expectedResult);
+        }
+
         private void TranspileStatementCheck(string input, string expectedOutput)
         {
             var parser = new SphereSharp.Sphere99.Parser();
