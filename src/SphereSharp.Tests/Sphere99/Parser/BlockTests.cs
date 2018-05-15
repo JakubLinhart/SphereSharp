@@ -95,7 +95,7 @@ endif");
             }
 
             public override bool VisitIfStatement([NotNull] sphereScript99Parser.IfStatementContext context)
-                => Process("if", context.evalExpression().GetText().Trim());
+                => Process("if", context.condition().GetText().Trim());
 
             public override bool VisitCall([NotNull] sphereScript99Parser.CallContext context)
                 => Process("call", context.GetText());

@@ -52,34 +52,38 @@ number: DEC_NUMBER | HEX_NUMBER;
 
 statement: WS*? (call | assignment | ifStatement | whileStatement | doswitchStatement | dorandStatement) (NEWLINE | EOF);
 
-ifStatement: IF WS* evalExpression NEWLINE codeBlock? (elseIfStatement)* elseStatement? WS* ENDIF ;
-elseIfStatement: WS* ELSEIF WS+ evalExpression (NEWLINE | EOF) codeBlock?;
-elseStatement: WS* ELSE NEWLINE codeBlock?;
+ifStatement: IF IF_WS=WS* condition NEWLINE codeBlock? (elseIfStatement)* elseStatement? endIf ;
+endIf: WS* ENDIF;
+elseIfStatement: WS* ELSEIF WS+ condition (NEWLINE | EOF) codeBlock?;
+elseStatement: else codeBlock?;
+else: WS* ELSE NEWLINE;
 
-whileStatement: WHILE WS* evalExpression NEWLINE codeBlock? WS* ENDWHILE;
+whileStatement: WHILE WS* condition NEWLINE codeBlock? WS* ENDWHILE;
 
-doswitchStatement: DOSWITCH WS* evalExpression NEWLINE codeBlock WS* ENDDO;
+doswitchStatement: DOSWITCH WS* condition NEWLINE codeBlock WS* ENDDO;
 
-dorandStatement: DORAND WS* evalExpression NEWLINE codeBlock WS* ENDDO;
+dorandStatement: DORAND WS* condition NEWLINE codeBlock WS* ENDDO;
 
+condition: evalExpression;
 macro: escapedMacro | nonEscapedMacro;
 escapedMacro: LESS_THAN '?' macroBody '?' MORE_THAN ;
 nonEscapedMacro: LESS_THAN macroBody  MORE_THAN ;
 macroBody: (firstMemberAccess | indexedMemberName);
 call: firstMemberAccess;
-assignment: firstMemberAccess WS* ASSIGN WS* argumentList?;
+assignment: firstMemberAccess assign argumentList?;
+assign: WS* ASSIGN WS*;
 
 memberAccess: firstMemberAccess | argumentAccess;
 firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
 evalCall: EVAL_FUNCTIONS WS* evalExpression; 
-nativeMemberAccess: nativeFunction nativeArgumentList? chainedMemberAccess?;
+nativeMemberAccess: nativeFunctionName nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | freeArgumentList;
 argumentAccess: (evalExpression | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
 unquotedArgumentAccess: (SYMBOL | macro | binaryOperator | constantExpression | WS | '[' | ']' | '#' | ':' | '.'|  ',' | '?' | '!' | EQUAL)+? ;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
-nativeFunction: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
+nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR;
 memberName: (SYMBOL | macro)+?;
@@ -95,7 +99,7 @@ propertyValue: unquotedLiteralArgument;
 triggerList: trigger*;
 trigger: triggerHeader (NEWLINE | EOF) triggerBody?;
 triggerHeader: TRIGGER_HEADER (('@' triggerName) | (number));
-triggerName: nativeFunction | SYMBOL;
+triggerName: nativeFunctionName | SYMBOL;
 triggerBody: codeBlock;
 
 // argument, argument expression
@@ -115,10 +119,11 @@ triggerArgument: '@' SYMBOL;
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation* ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
-evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccess | '#';
+evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccessExpression | '#';
+firstMemberAccessExpression: firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
-evalSubExpression: '(' WS* evalExpression WS* ')' ;
+evalSubExpression: '(' LEFT_WS=WS* evalExpression RIGHT_WS=WS* ')' ;
 evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | moreThanEqual | lessThanEqual | MORE_THAN | LESS_THAN;
 binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICAL_OR | BITWISE_AND | BITWISE_OR;
 moreThanEqual: MORE_THAN ASSIGN;
@@ -127,7 +132,8 @@ lessThanEqual: LESS_THAN ASSIGN;
 macroConstantExpression: constantExpression macro;
 constantExpression: DEC_NUMBER | HEX_NUMBER;
 randomExpression: '{' (randomExpressionList | macro) '}';
-randomExpressionList: WS* evalExpression WS+ evalExpression (WS+ evalExpression WS+ evalExpression)* WS*;
+randomExpressionList: STARTING_WS=WS* evalExpression randomExpressionElement (randomExpressionElement randomExpressionElement)* ENDING_WS=WS*;
+randomExpressionElement: WS+ evalExpression;
 macroExpression: macro ;
 
 macroOperator: macro ;
