@@ -38,5 +38,8 @@ namespace SphereSharp.Sphere99
 
         public ParsingResult<sphereScript99Parser.ConditionContext> ParseCondition(string src)
             => Parse(src, parser => parser.condition());
+
+        public ParsingResult<sphereScript99Parser.CodeBlockContext> ParseCodeBlock(string src)
+            => Parse(src, parser => parser.codeBlock());
     }
 }

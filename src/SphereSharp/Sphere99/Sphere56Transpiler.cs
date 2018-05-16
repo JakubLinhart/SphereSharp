@@ -162,6 +162,23 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        private SemanticContext semanticContext = new SemanticContext();
+
+        public override bool VisitCodeBlock([NotNull] sphereScript99Parser.CodeBlockContext context)
+        {
+            try
+            {
+                semanticContext.Enter();
+                var result = base.VisitCodeBlock(context);
+
+                return result;
+            }
+            finally
+            {
+                semanticContext.Leave();
+            }
+        }
+
         public override bool VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
         {
             builder.Append(context.WS());
@@ -300,6 +317,10 @@ namespace SphereSharp.Sphere99
                 if (name.Equals("tag", StringComparison.OrdinalIgnoreCase) || name.Equals("var", StringComparison.OrdinalIgnoreCase))
                 {
                     builder.Append(name);
+                    if (macroRequiredForMemberAccess && name.Equals("tag", StringComparison.OrdinalIgnoreCase))
+                    {
+                        builder.Append('0');
+                    }
                     builder.Append(".");
                     if (arguments != null)
                     {
@@ -426,7 +447,8 @@ namespace SphereSharp.Sphere99
                 {
                     if (arguments != null)
                     {
-                        var localVariableAccess = $"LOCAL.{arguments[0].GetText()}";
+                        string localVariableName = arguments[0].GetText();
+                        var localVariableAccess = $"LOCAL.{localVariableName}";
                         builder.Append(localVariableAccess);
 
                         if (arguments.Length == 2)
@@ -436,6 +458,7 @@ namespace SphereSharp.Sphere99
                             try
                             {
                                 lastSharpSubstitution = $"<{localVariableAccess}>";
+                                semanticContext.DefineLocalVariable(localVariableName);
                                 return base.Visit(arguments[1]);
                             }
                             finally
@@ -470,6 +493,16 @@ namespace SphereSharp.Sphere99
                         throw new TranspilerException("No arguments for 'argv'");
                     }
                 }
+                else if (context.customMemberAccess() != null && context.customMemberAccess().chainedMemberAccess() == null && arguments == null)
+                {
+                    if (semanticContext.IsLocalVariable(name))
+                    {
+                        builder.Append("LOCAL.");
+                        builder.Append(name);
+
+                        return true;
+                    }
+                }
             }
 
             return base.VisitFirstMemberAccess(context);
@@ -480,6 +513,44 @@ namespace SphereSharp.Sphere99
             builder.Append(context.GetText());
 
             return base.VisitEofSection(context);
+        }
+
+        private class SemanticContext
+        {
+            private Stack<HashSet<string>> localVariableScopes = new Stack<HashSet<string>>();
+
+            public void Enter()
+            {
+                localVariableScopes.Push(new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+            }
+
+            public void Leave()
+            {
+                localVariableScopes.Pop();
+            }
+
+            public void DefineLocalVariable(string variableName)
+            {
+                if (localVariableScopes.Count > 0)
+                {
+                    var scope = localVariableScopes.Peek();
+                    scope.Add(variableName);
+                }
+            }
+
+            public bool IsLocalVariable(string variableName)
+            {
+                if (localVariableScopes.Count > 0)
+                {
+                    foreach (var scope in localVariableScopes)
+                    {
+                        if (scope.Contains(variableName))
+                            return true;
+                    }
+                }
+
+                return false;
+            }
         }
     }
 }

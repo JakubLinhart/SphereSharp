@@ -49,6 +49,7 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("(fun1)", "(<fun1>)")]
         [DataRow("{1 2}", "{1 2}")]
         [DataRow("<eval 123>", "<eval 123>")]
+        [DataRow("tag(u)", "<tag0.u>")]
         public void Conditions(string src, string expectedResult)
         {
             TranspileConditionCheck(src, expectedResult);
@@ -106,9 +107,18 @@ endif");
         [TestMethod]
         [DataRow("arg(u,<argcount>)", "LOCAL.u=<argv>")]
         [DataRow("arg(u,<argv(0)>)", "LOCAL.u=<argv[0]>")]
-        public void Arguments(string source, string expectedResult)
+        public void Locals(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
+        }
+
+        [TestMethod]
+        public void Can_recognize_local_variable_read()
+        {
+            TranspileCodeBlockCheck(@"arg(xxx,1)
+arg(yyy,<eval <xxx>>)",
+@"LOCAL.xxx=1
+LOCAL.yyy=<eval <LOCAL.xxx>>");
         }
 
         [TestMethod]
@@ -156,6 +166,9 @@ call2");
 
         private void TranspileConditionCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseCondition(src));
+
+        private void TranspileCodeBlockCheck(string input, string expectedOutput)
+            => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseCodeBlock(src));
 
         private void TranspileCheck(string input, string expectedOutput, Func<string, SphereSharp.Sphere99.Parser, ParsingResult> parseFunc)
         {
