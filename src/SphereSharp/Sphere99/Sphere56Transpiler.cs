@@ -48,6 +48,11 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitArgument([NotNull] sphereScript99Parser.ArgumentContext context)
+        {
+            return semanticContext.Execute(() => base.VisitArgument(context));
+        }
+
         public override bool VisitFirstFreeArgumentMandatoryWhiteSpace([NotNull] sphereScript99Parser.FirstFreeArgumentMandatoryWhiteSpaceContext context)
         {
             builder.Append(context.WS());
@@ -123,14 +128,12 @@ namespace SphereSharp.Sphere99
             return result;
         }
 
-        private bool macroRequiredForMemberAccess = false;
-
         public override bool VisitEvalSubExpression([NotNull] sphereScript99Parser.EvalSubExpressionContext context)
         {
             builder.Append('(');
             builder.Append(context.LEFT_WS?.Text);
 
-            var result = Visit(context.evalExpression());
+            var result = Visit(context.numericExpression());
             builder.Append(context.RIGHT_WS?.Text);
             builder.Append(')');
             return result;
@@ -138,10 +141,10 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitFirstMemberAccessExpression([NotNull] sphereScript99Parser.FirstMemberAccessExpressionContext context)
         {
-            if (macroRequiredForMemberAccess)
+            if (semanticContext.IsNumeric)
                 builder.Append('<');
             var result = base.VisitFirstMemberAccessExpression(context);
-            if (macroRequiredForMemberAccess)
+            if (semanticContext.IsNumeric)
                 builder.Append('>');
 
             return result;
@@ -233,16 +236,16 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitCondition([NotNull] sphereScript99Parser.ConditionContext context)
+        public override bool VisitNumericExpression([NotNull] sphereScript99Parser.NumericExpressionContext context)
         {
             try
             {
-                macroRequiredForMemberAccess = true;
-                return base.VisitCondition(context);
+                semanticContext.EnterNumeric();
+                return base.VisitNumericExpression(context);
             }
             finally
             {
-                macroRequiredForMemberAccess = false;
+                semanticContext.Leave();
             }
         }
 
@@ -278,6 +281,11 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        private bool AlwaysChainArguments(string name)
+        {
+            return name.Equals("findid", StringComparison.OrdinalIgnoreCase);
+        }
+
         public override bool VisitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context)
         {
             var name = context.nativeFunctionName()?.GetText();
@@ -285,7 +293,7 @@ namespace SphereSharp.Sphere99
             {
                 var arguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument();
                 builder.Append(name);
-                if (arguments != null && context.chainedMemberAccess() != null)
+                if (arguments != null && (context.chainedMemberAccess() != null || AlwaysChainArguments(name)))
                 {
                     foreach (var argument in arguments)
                     {
@@ -317,7 +325,7 @@ namespace SphereSharp.Sphere99
                 if (name.Equals("tag", StringComparison.OrdinalIgnoreCase) || name.Equals("var", StringComparison.OrdinalIgnoreCase))
                 {
                     builder.Append(name);
-                    if (macroRequiredForMemberAccess && name.Equals("tag", StringComparison.OrdinalIgnoreCase))
+                    if (semanticContext.IsNumeric && name.Equals("tag", StringComparison.OrdinalIgnoreCase))
                     {
                         builder.Append('0');
                     }
@@ -345,10 +353,12 @@ namespace SphereSharp.Sphere99
                 {
                     if (context.chainedMemberAccess() != null)
                         return base.Visit(context.chainedMemberAccess());
+
+                    return true;
                 }
                 else
                 {
-                    if (arguments != null && context.chainedMemberAccess() != null)
+                    if (arguments != null && (context.chainedMemberAccess() != null || AlwaysChainArguments(name)))
                     {
                         builder.Append(name);
                         foreach (var argument in arguments)
@@ -357,7 +367,10 @@ namespace SphereSharp.Sphere99
                             base.Visit(argument);
                         }
 
-                        return base.Visit(context.chainedMemberAccess());
+                        if (context.chainedMemberAccess() != null)
+                            return base.Visit(context.chainedMemberAccess());
+                        else
+                            return true;
                     }
                 }
             }
@@ -517,39 +530,97 @@ namespace SphereSharp.Sphere99
 
         private class SemanticContext
         {
-            private Stack<HashSet<string>> localVariableScopes = new Stack<HashSet<string>>();
+            private class Scope
+            {
+                HashSet<string> localVariables = new HashSet<string>();
+
+                public Scope(bool isNumeric)
+                {
+                    IsNumeric = isNumeric;
+                }
+
+                public bool IsNumeric { get; }
+                public bool IsVariable(string variableName) => localVariables.Contains(variableName);
+                public void DefineVariable(string variableName) => localVariables.Add(variableName);
+            }
+
+            private Stack<Scope> scopes = new Stack<Scope>();
+
+            public void EnterNumeric()
+            {
+                scopes.Push(new Scope(true));
+            }
+
+            public T ExecuteNumeric<T>(Func<T> func)
+            {
+                try
+                {
+                    EnterNumeric();
+                    return func();
+                }
+                finally
+                {
+                    Leave();
+                }
+            }
+
+            public T Execute<T>(Func<T> func)
+            {
+                try
+                {
+                    Enter();
+                    return func();
+                }
+                finally
+                {
+                    Leave();
+                }
+            }
 
             public void Enter()
             {
-                localVariableScopes.Push(new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+                scopes.Push(new Scope(false));
             }
 
             public void Leave()
             {
-                localVariableScopes.Pop();
+                scopes.Pop();
             }
 
             public void DefineLocalVariable(string variableName)
             {
-                if (localVariableScopes.Count > 0)
+                if (scopes.Count > 0)
                 {
-                    var scope = localVariableScopes.Peek();
-                    scope.Add(variableName);
+                    var scope = scopes.Peek();
+                    scope.DefineVariable(variableName);
                 }
             }
 
             public bool IsLocalVariable(string variableName)
             {
-                if (localVariableScopes.Count > 0)
+                if (scopes.Count > 0)
                 {
-                    foreach (var scope in localVariableScopes)
+                    foreach (var scope in scopes)
                     {
-                        if (scope.Contains(variableName))
+                        if (scope.IsVariable(variableName))
                             return true;
                     }
                 }
 
                 return false;
+            }
+
+            public bool IsNumeric
+            {
+                get
+                {
+                    if (scopes.Count > 0)
+                    {
+                        return scopes.Peek().IsNumeric;
+                    }
+
+                    return false;
+                }
             }
         }
     }

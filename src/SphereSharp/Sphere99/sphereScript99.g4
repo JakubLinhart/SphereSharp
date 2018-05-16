@@ -64,7 +64,8 @@ doswitchStatement: DOSWITCH WS* condition NEWLINE codeBlock WS* ENDDO;
 
 dorandStatement: DORAND WS* condition NEWLINE codeBlock WS* ENDDO;
 
-condition: evalExpression;
+condition: numericExpression;
+numericExpression: evalExpression;
 macro: escapedMacro | nonEscapedMacro;
 escapedMacro: LESS_THAN '?' macroBody '?' MORE_THAN ;
 nonEscapedMacro: LESS_THAN macroBody  MORE_THAN ;
@@ -75,7 +76,7 @@ assign: WS* ASSIGN WS*;
 
 memberAccess: firstMemberAccess | argumentAccess;
 firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
-evalCall: EVAL_FUNCTIONS WS* evalExpression; 
+evalCall: EVAL_FUNCTIONS WS* numericExpression; 
 nativeMemberAccess: nativeFunctionName nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | freeArgumentList;
 argumentAccess: (evalExpression | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
@@ -87,7 +88,7 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR;
 memberName: (SYMBOL | macro)+?;
-indexedMemberName: memberName '[' evalExpression ']';
+indexedMemberName: memberName '[' numericExpression ']';
 
 // properties
 propertyList: NEWLINE? propertyAssignment+;
@@ -123,7 +124,7 @@ evalOperand: randomExpression | constantExpression | macroConstantExpression | e
 firstMemberAccessExpression: firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
-evalSubExpression: '(' LEFT_WS=WS* evalExpression RIGHT_WS=WS* ')' ;
+evalSubExpression: '(' LEFT_WS=WS* numericExpression RIGHT_WS=WS* ')' ;
 evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | moreThanEqual | lessThanEqual | MORE_THAN | LESS_THAN;
 binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICAL_OR | BITWISE_AND | BITWISE_OR;
 moreThanEqual: MORE_THAN ASSIGN;
@@ -132,8 +133,8 @@ lessThanEqual: LESS_THAN ASSIGN;
 macroConstantExpression: constantExpression macro;
 constantExpression: DEC_NUMBER | HEX_NUMBER;
 randomExpression: '{' (randomExpressionList | macro) '}';
-randomExpressionList: STARTING_WS=WS* evalExpression randomExpressionElement (randomExpressionElement randomExpressionElement)* ENDING_WS=WS*;
-randomExpressionElement: WS+ evalExpression;
+randomExpressionList: STARTING_WS=WS* numericExpression randomExpressionElement (randomExpressionElement randomExpressionElement)* ENDING_WS=WS*;
+randomExpressionElement: WS+ numericExpression;
 macroExpression: macro ;
 
 macroOperator: macro ;

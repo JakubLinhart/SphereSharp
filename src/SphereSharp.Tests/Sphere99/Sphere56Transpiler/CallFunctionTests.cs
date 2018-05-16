@@ -22,6 +22,9 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("a.b.c.fun1(1,2,3)", "a.b.c.fun1 1,2,3")]
         [DataRow("sysmessage(Zameruj jen monstra)", "sysmessage Zameruj jen monstra")]
         [DataRow("sysmessage(\"Zameruj jen monstra\")", "sysmessage \"Zameruj jen monstra\"")]
+        [DataRow("fun1(<eval fun2>)", "fun1 <eval <fun2>>")]
+        [DataRow("fun1(<eval fun2(1,2,3)>)", "fun1 <eval <fun2 1,2,3>>")]
+        [DataRow("fun1(<eval fun2(<eval 1>,<eval 2>,<eval 3>)>)", "fun1 <eval <fun2 <eval 1>,<eval 2>,<eval 3>>>")]
         public void Can_transpile_custom_function_calls(string src, string expectedResult)
         {
             TranspileStatementCheck(src, expectedResult);
@@ -29,6 +32,7 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
 
         [TestMethod]
         [DataRow("lastnew.bounce", "new.bounce")]
+        [DataRow("equip <lastnew>", "equip <new>")]
         [DataRow("arg(u,<Skill_Enticement.effect>)", "LOCAL.u=<serv.skill.enticement.effect>")]
         public void Name_transformation(string src, string expectedResult)
         {
@@ -50,6 +54,7 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("{1 2}", "{1 2}")]
         [DataRow("<eval 123>", "<eval 123>")]
         [DataRow("tag(u)", "<tag0.u>")]
+        [DataRow("<findid(i_item)>", "<findid.i_item>")]
         public void Conditions(string src, string expectedResult)
         {
             TranspileConditionCheck(src, expectedResult);
@@ -90,6 +95,8 @@ endif");
 
         [TestMethod]
         [DataRow("return 1", "return 1")]
+        [DataRow("findid(i_rune_discordance).remove", "findid.i_rune_discordance.remove")]
+        [DataRow("findid(i_rune_discordance)", "findid.i_rune_discordance")]
         public void Native_functions(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
