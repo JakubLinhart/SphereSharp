@@ -128,6 +128,15 @@ namespace SphereSharp.Sphere99
             return result;
         }
 
+        public override bool VisitEscapedMacro([NotNull] sphereScript99Parser.EscapedMacroContext context)
+        {
+            builder.Append('<');
+            var result = Visit(context.macroBody());
+            builder.Append('>');
+
+            return result;
+        }
+
         public override bool VisitEvalSubExpression([NotNull] sphereScript99Parser.EvalSubExpressionContext context)
         {
             builder.Append('(');
@@ -168,6 +177,7 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        private ISet<string> globalVariables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private SemanticContext semanticContext = new SemanticContext();
 
         public override bool VisitCodeBlock([NotNull] sphereScript99Parser.CodeBlockContext context)
@@ -224,17 +234,48 @@ namespace SphereSharp.Sphere99
 
             return true;
         }
+        
+        private void AppendTerminalsVisitNodes(IList<IParseTree> children)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    var child = children[i];
+
+                    switch (child)
+                    {
+                        case sphereScript99Parser.MemberAccessContext memberAccess:
+                            if (memberAccess.GetText() == " ")
+                            {
+                                builder.Append(memberAccess.GetText());
+                            }
+                            else
+                                Visit(memberAccess);
+                            break;
+                        case ITerminalNode node:
+                            builder.Append(node);
+                            break;
+                        default:
+                            Visit(child);
+                            break;
+                    }
+                }
+            }
+        }
 
         public override bool VisitUnquotedLiteralArgument([NotNull] sphereScript99Parser.UnquotedLiteralArgumentContext context)
         {
-            builder.Append(context.GetText());
+            AppendTerminalsVisitNodes(context.children);
 
             return true;
         }
 
         public override bool VisitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context)
         {
-            builder.Append(context.GetText());
+            builder.Append('"');
+            AppendTerminalsVisitNodes(context.innerQuotedLiteralArgument().children);
+            builder.Append('"');
 
             return true;
         }
@@ -280,6 +321,19 @@ namespace SphereSharp.Sphere99
         public override bool VisitElse([NotNull] sphereScript99Parser.ElseContext context)
         {
             builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitWhileStatement([NotNull] sphereScript99Parser.WhileStatementContext context)
+        {
+            builder.Append(context.WHILE());
+            builder.Append(context.WS());
+            Visit(context.condition());
+            builder.Append(context.NEWLINE());
+            if (context.codeBlock() != null)
+                Visit(context.codeBlock());
+            builder.Append(context.endWhile().GetText());
 
             return true;
         }
@@ -337,6 +391,11 @@ namespace SphereSharp.Sphere99
                     {
                         if (arguments.Length == 2)
                         {
+                            if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
+                            {
+                                globalVariables.Add(arguments[0].GetText());
+                            }
+
                             builder.Append(arguments[0].GetText());
                             builder.Append("=");
                             return base.Visit(arguments[1]);
@@ -464,7 +523,7 @@ namespace SphereSharp.Sphere99
                     if (arguments != null)
                     {
                         string localVariableName = arguments[0].GetText();
-                        var localVariableAccess = $"LOCAL.{localVariableName}";
+                        var localVariableAccess = $"local.{localVariableName}";
                         builder.Append(localVariableAccess);
 
                         if (arguments.Length == 2)
@@ -545,7 +604,14 @@ namespace SphereSharp.Sphere99
                 {
                     if (semanticContext.IsLocalVariable(name))
                     {
-                        builder.Append("LOCAL.");
+                        builder.Append("local.");
+                        builder.Append(name);
+
+                        return true;
+                    }
+                    else if (globalVariables.Contains(name))
+                    {
+                        builder.Append("var.");
                         builder.Append(name);
 
                         return true;

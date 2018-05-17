@@ -48,6 +48,7 @@ namespace SphereSharp.Cli
             if (inputFileName.Equals(outputFileName, StringComparison.OrdinalIgnoreCase))
                 throw new CommandLineException("Cannot parse and write to the same file.");
 
+            Console.WriteLine($"Parsing {inputFileName}");
             var parser = new Parser();
             var result = parser.ParseFile(File.ReadAllText(inputFileName));
             if (result.Errors.Any())
@@ -58,7 +59,8 @@ namespace SphereSharp.Cli
 
             var transpiler = new Sphere56Transpiler();
             transpiler.Visit(result.Tree);
-            
+
+            Console.WriteLine($"Writing transpiled file {outputFileName}");
             File.WriteAllText(outputFileName, transpiler.Output);
         }
 

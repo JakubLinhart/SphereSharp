@@ -58,7 +58,8 @@ elseIfStatement: WS* ELSEIF WS+ condition (NEWLINE | EOF) codeBlock?;
 elseStatement: else codeBlock?;
 else: WS* ELSE NEWLINE;
 
-whileStatement: WHILE WS* condition NEWLINE codeBlock? WS* ENDWHILE;
+whileStatement: WHILE WS* condition NEWLINE codeBlock? endWhile;
+endWhile: WS* ENDWHILE;
 
 doswitchStatement: DOSWITCH WS* condition NEWLINE codeBlock WS* ENDDO;
 

@@ -21,7 +21,6 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("a.b.c.fun1", "a.b.c.fun1")]
         [DataRow("a.b.c.fun1(1,2,3)", "a.b.c.fun1 1,2,3")]
         [DataRow("sysmessage(Zameruj jen monstra)", "sysmessage Zameruj jen monstra")]
-        [DataRow("sysmessage(\"Zameruj jen monstra\")", "sysmessage \"Zameruj jen monstra\"")]
         [DataRow("fun1(<eval fun2>)", "fun1 <eval <fun2>>")]
         [DataRow("fun1(<eval fun2(1,2,3)>)", "fun1 <eval <fun2 1,2,3>>")]
         [DataRow("fun1(<eval fun2(<eval 1>,<eval 2>,<eval 3>)>)", "fun1 <eval <fun2 <eval 1>,<eval 2>,<eval 3>>>")]
@@ -31,9 +30,32 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
+        [DataRow("sysmessage(\"\")", "sysmessage \"\"")]
+        [DataRow("sysmessage(\"<fun1>\")", "sysmessage \"<fun1>\"")]
+        [DataRow("sysmessage(\"<fun1(1,2,3)>\")", "sysmessage \"<fun1 1,2,3>\"")]
+        [DataRow("sysmessage(\"<?fun1(1,2,3)?>\")", "sysmessage \"<fun1 1,2,3>\"")]
+        [DataRow("sysmessage(\"<arg(x)>\")", "sysmessage \"<local.x>\"")]
+        public void QuotedArguments(string src, string expectedResult)
+        {
+            TranspileStatementCheck(src, expectedResult);
+        }
+
+        [TestMethod]
+        [DataRow("sysmessage Some text <fun1>", "sysmessage Some text <fun1>")]
+        [DataRow("sysmessage Some text <fun1(1,2,3)>", "sysmessage Some text <fun1 1,2,3>")]
+        [DataRow("sysmessage Some text <?fun1(1,2,3)?>", "sysmessage Some text <fun1 1,2,3>")]
+        [DataRow("sysmessage Some text <arg(x)>", "sysmessage Some text <local.x>")]
+        [DataRow("arg(x,Some text <arg(x)>)", "local.x=Some text <local.x>")]
+        [DataRow("arg(x,Some text <?arg(x)?>)", "local.x=Some text <local.x>")]
+        public void UnquotedArguments(string src, string expectedResult)
+        {
+            TranspileStatementCheck(src, expectedResult);
+        }
+
+        [TestMethod]
         [DataRow("lastnew.bounce", "new.bounce")]
         [DataRow("equip <lastnew>", "equip <new>")]
-        [DataRow("arg(u,<Skill_Enticement.effect>)", "LOCAL.u=<serv.skill.enticement.effect>")]
+        [DataRow("arg(u,<Skill_Enticement.effect>)", "local.u=<serv.skill.enticement.effect>")]
         public void Name_transformation(string src, string expectedResult)
         {
             TranspileStatementCheck(src, expectedResult);
@@ -58,6 +80,34 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         public void Conditions(string src, string expectedResult)
         {
             TranspileConditionCheck(src, expectedResult);
+        }
+
+        [TestMethod]
+        public void While_statement()
+        {
+            TranspileStatementCheck(@"while 1
+    call1
+endwhile",
+
+@"while 1
+    call1
+endwhile");
+
+            TranspileStatementCheck(@"while 1
+endwhile",
+
+@"while 1
+endwhile");
+
+            TranspileStatementCheck(@"while 1
+    while 2
+    endwhile
+endwhile",
+
+@"while 1
+    while 2
+    endwhile
+endwhile");
         }
 
         [TestMethod]
@@ -102,43 +152,46 @@ endif");
             TranspileStatementCheck(source, expectedResult);
         }
 
-        [DataRow("arg(length,<strlen(<argv(1)>)>+45)", "LOCAL.length=<eval strlen(<argv[1]>)>+45")]
-        [DataRow("arg(length,strlen(<argv(1)>)+45)", "LOCAL.length=<eval strlen(<argv[1]>)>+45")]
-        [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "LOCAL.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("arg(length,<strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("arg(length,strlen(<argv(1)>)+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         public void Special_functions(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
         }
 
         [TestMethod]
-        [DataRow("arg(u,1)", "LOCAL.u=1")]
-        [DataRow("arg(u,#+1)", "LOCAL.u=<LOCAL.u>+1")]
-        [DataRow("arg(u,arg(v))", "LOCAL.u=LOCAL.v")]
+        [DataRow("arg(u,1)", "local.u=1")]
+        [DataRow("arg(u,#+1)", "local.u=<local.u>+1")]
+        [DataRow("arg(u,arg(v))", "local.u=local.v")]
+        [DataRow("arg(u,<argcount>)", "local.u=<argv>")]
+        [DataRow("arg(u,<argv(0)>)", "local.u=<argv[0]>")]
         public void Local_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
         }
 
         [TestMethod]
-        [DataRow("arg(u,<argcount>)", "LOCAL.u=<argv>")]
-        [DataRow("arg(u,<argv(0)>)", "LOCAL.u=<argv[0]>")]
-        public void Locals(string source, string expectedResult)
-        {
-            TranspileStatementCheck(source, expectedResult);
-        }
-
-        [TestMethod]
-        public void Can_recognize_local_variable_read()
+        public void Can_recognize_local_variable_read_access()
         {
             TranspileCodeBlockCheck(@"arg(xxx,1)
 arg(yyy,<eval <xxx>>)",
-@"LOCAL.xxx=1
-LOCAL.yyy=<eval <LOCAL.xxx>>");
+@"local.xxx=1
+local.yyy=<eval <local.xxx>>");
+        }
+
+        [TestMethod]
+        public void Can_recognize_global_variable_read_access()
+        {
+            TranspileCodeBlockCheck(@"var(xxx,1)
+var(yyy,<eval <xxx>>)",
+@"var.xxx=1
+var.yyy=<eval <var.xxx>>");
         }
 
         [TestMethod]
         [DataRow("tag(name,value)", "tag.name=value")]
-        [DataRow("arg(u,tag(name))", "LOCAL.u=tag.name")]
+        [DataRow("arg(u,tag(name))", "local.u=tag.name")]
         public void Tags(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -146,7 +199,7 @@ LOCAL.yyy=<eval <LOCAL.xxx>>");
 
         [TestMethod]
         [DataRow("var(name,value)", "var.name=value")]
-        [DataRow("arg(u,var(name))", "LOCAL.u=var.name")]
+        [DataRow("arg(u,var(name))", "local.u=var.name")]
         public void Global_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -154,7 +207,7 @@ LOCAL.yyy=<eval <LOCAL.xxx>>");
 
         [TestMethod]
         [DataRow("findlayer(layer_pack).remove", "findlayer.layer_pack.remove")]
-        [DataRow("arg(u,findlayer(layer_pack))", "LOCAL.u=findlayer layer_pack")]
+        [DataRow("arg(u,findlayer(layer_pack))", "local.u=findlayer layer_pack")]
         public void DottedArguments(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
