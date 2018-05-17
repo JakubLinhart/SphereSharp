@@ -102,6 +102,14 @@ endif");
             TranspileStatementCheck(source, expectedResult);
         }
 
+        [DataRow("arg(length,<strlen(<argv(1)>)>+45)", "LOCAL.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("arg(length,strlen(<argv(1)>)+45)", "LOCAL.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "LOCAL.length=<eval strlen(<argv[1]>)>+45")]
+        public void Special_functions(string source, string expectedResult)
+        {
+            TranspileStatementCheck(source, expectedResult);
+        }
+
         [TestMethod]
         [DataRow("arg(u,1)", "LOCAL.u=1")]
         [DataRow("arg(u,#+1)", "LOCAL.u=<LOCAL.u>+1")]

@@ -141,10 +141,13 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitFirstMemberAccessExpression([NotNull] sphereScript99Parser.FirstMemberAccessExpressionContext context)
         {
-            if (semanticContext.IsNumeric)
+            string memberName = context.firstMemberAccess()?.customMemberAccess()?.memberName()?.GetText() ?? string.Empty;
+            bool requiresMacro = semanticContext.IsNumeric && !memberName.Equals("strlen");
+
+            if (requiresMacro)
                 builder.Append('<');
             var result = base.VisitFirstMemberAccessExpression(context);
-            if (semanticContext.IsNumeric)
+            if (requiresMacro)
                 builder.Append('>');
 
             return result;
@@ -472,7 +475,8 @@ namespace SphereSharp.Sphere99
                             {
                                 lastSharpSubstitution = $"<{localVariableAccess}>";
                                 semanticContext.DefineLocalVariable(localVariableName);
-                                return base.Visit(arguments[1]);
+
+                                return VisitArgument(arguments[1]);
                             }
                             finally
                             {
@@ -487,7 +491,7 @@ namespace SphereSharp.Sphere99
                     else
                         throw new TranspilerException("No arguments for 'arg'");
                 }
-                else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase))
+                else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase) || name.Equals("ARGVCOUNT", StringComparison.OrdinalIgnoreCase))
                 {
                     builder.Append($"argv");
                     return true;
@@ -505,6 +509,37 @@ namespace SphereSharp.Sphere99
                     {
                         throw new TranspilerException("No arguments for 'argv'");
                     }
+                }
+                else if (name.Equals("strlen", StringComparison.OrdinalIgnoreCase))
+                {
+                    bool requiresMacro = false;
+
+                    if (!(context.Parent.Parent.Parent.Parent.Parent.Parent is sphereScript99Parser.EvalCallContext))
+                    {
+                        if (context.Parent is sphereScript99Parser.MacroBodyContext)
+                        {
+                            builder.Append("eval ");
+                            requiresMacro = false;
+                        }
+                        else
+                        {
+                            builder.Append("<eval ");
+                            requiresMacro = true;
+                        }
+
+                        if (arguments.Length != 1)
+                            throw new TranspilerException($"Wrong number of arguments ({arguments.Length}) for strlen.");
+                    }
+
+                    builder.Append(name);
+                    builder.Append('(');
+                    Visit(arguments[0]);
+                    builder.Append(')');
+
+                    if (requiresMacro)
+                        builder.Append(">");
+
+                    return true;
                 }
                 else if (context.customMemberAccess() != null && context.customMemberAccess().chainedMemberAccess() == null && arguments == null)
                 {
