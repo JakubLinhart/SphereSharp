@@ -207,10 +207,63 @@ endif");
         [TestMethod]
         public void Can_recognize_local_variable_read_access()
         {
-            TranspileCodeBlockCheck(@"arg(xxx,1)
-arg(yyy,<eval <xxx>>)",
-@"local.xxx=1
-local.yyy=<eval <local.xxx>>");
+            TranspileFileCheck(@"[function fun1]
+arg(xxx,1)
+arg(yyy,<eval <xxx>>)
+yyy.color=1",
+@"[function fun1]
+local.xxx=1
+local.yyy=<eval <local.xxx>>
+local.yyy.color=1");
+        }
+
+        [TestMethod]
+        public void Function_is_local_variable_scope()
+        {
+            TranspileFileCheck(@"[function fun1]
+if 1
+    arg(variable1,1)
+else
+    arg(variable1,2)
+endif
+
+variable1=<variable1>
+
+[function fun2]
+variable1
+", @"[function fun1]
+if 1
+    local.variable1=1
+else
+    local.variable1=2
+endif
+
+local.variable1=<local.variable1>
+
+[function fun2]
+variable1
+");
+        }
+
+        [TestMethod]
+        public void Trigger_is_local_variable_scope()
+        {
+            TranspileFileCheck(@"[itemdef i_item]
+ID=i_memory
+
+on=@trigger1
+if 1
+    arg(variable1,1)
+endif
+variable1=<variable1>",
+@"[itemdef i_item]
+ID=i_memory
+
+on=@trigger1
+if 1
+    local.variable1=1
+endif
+local.variable1=<local.variable1>");
         }
 
         [TestMethod]

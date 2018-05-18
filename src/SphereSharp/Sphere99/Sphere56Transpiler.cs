@@ -180,19 +180,14 @@ namespace SphereSharp.Sphere99
         private ISet<string> globalVariables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private SemanticContext semanticContext = new SemanticContext();
 
-        public override bool VisitCodeBlock([NotNull] sphereScript99Parser.CodeBlockContext context)
+        public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
         {
-            try
-            {
-                semanticContext.Enter();
-                var result = base.VisitCodeBlock(context);
+            return semanticContext.Execute(() => base.VisitFunctionSection(context));
+        }
 
-                return result;
-            }
-            finally
-            {
-                semanticContext.Leave();
-            }
+        public override bool VisitTriggerBody([NotNull] sphereScript99Parser.TriggerBodyContext context)
+        {
+            return semanticContext.Execute(() => base.VisitTriggerBody(context));
         }
 
         public override bool VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
@@ -618,12 +613,15 @@ namespace SphereSharp.Sphere99
 
                     return true;
                 }
-                else if (context.customMemberAccess() != null && context.customMemberAccess().chainedMemberAccess() == null && arguments == null)
+                else if (context.customMemberAccess() != null && arguments == null)
                 {
                     if (semanticContext.IsLocalVariable(name))
                     {
                         builder.Append("local.");
                         builder.Append(name);
+
+                        if (context.customMemberAccess().chainedMemberAccess() != null)
+                            Visit(context.customMemberAccess().chainedMemberAccess());
 
                         return true;
                     }
@@ -631,6 +629,9 @@ namespace SphereSharp.Sphere99
                     {
                         builder.Append("var.");
                         builder.Append(name);
+
+                        if (context.customMemberAccess().chainedMemberAccess() != null)
+                            Visit(context.customMemberAccess().chainedMemberAccess());
 
                         return true;
                     }
@@ -664,6 +665,11 @@ namespace SphereSharp.Sphere99
             }
 
             private Stack<Scope> scopes = new Stack<Scope>();
+
+            public void Close()
+            {
+
+            }
 
             public void EnterNumeric()
             {
