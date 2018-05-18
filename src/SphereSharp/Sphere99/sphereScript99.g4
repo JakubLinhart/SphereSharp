@@ -54,7 +54,8 @@ statement: WS*? (call | assignment | ifStatement | whileStatement | doswitchStat
 
 ifStatement: IF IF_WS=WS* condition NEWLINE codeBlock? (elseIfStatement)* elseStatement? endIf ;
 endIf: WS* ENDIF;
-elseIfStatement: WS* ELSEIF WS+ condition (NEWLINE | EOF) codeBlock?;
+elseIfStatement: elseIf condition ELSEIF_NEWLINE=(NEWLINE | EOF) codeBlock?;
+elseIf: WS* ELSEIF WS+;
 elseStatement: else codeBlock?;
 else: WS* ELSE NEWLINE;
 

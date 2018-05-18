@@ -303,16 +303,21 @@ namespace SphereSharp.Sphere99
             builder.Append(context.NEWLINE());
             Visit(context.codeBlock());
 
+            var elseIfs = context.elseIfStatement();
+            if (elseIfs != null)
+            {
+                foreach (var elseIf in elseIfs)
+                {
+                    builder.Append(elseIf.elseIf().GetText());
+                    Visit(elseIf.condition());
+                    builder.Append(elseIf.ELSEIF_NEWLINE.Text);
+                    Visit(elseIf.codeBlock());
+                }
+            }
+
             if (context.elseStatement() != null)
                 Visit(context.elseStatement());
 
-            if (context.elseIfStatement() != null)
-            {
-                foreach (var elseIf in context.elseIfStatement())
-                {
-                    Visit(elseIf);
-                }
-            }
             builder.Append(context.endIf().GetText());
 
             return true;
@@ -406,10 +411,23 @@ namespace SphereSharp.Sphere99
                             return true;
                         }
                         else
-                            throw new TranspilerException($"Invalid number of arguments for 'tag': {arguments.Length}");
+                            throw new TranspilerException(context, $"Invalid number of arguments for 'tag': {arguments.Length}");
                     }
                     else
-                        throw new TranspilerException("No arguments for tag");
+                    {
+                        string chainedName = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.memberName()?.GetText();
+                        if (chainedName != null && chainedName.Equals("remove", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var chainedArgument = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
+                            if (chainedArgument != null && chainedArgument.Length == 1)
+                            {
+                                builder.Append($"{chainedArgument[0].GetText()}=");
+                                return true;
+                            }
+                            else
+                                throw new TranspilerException(context, $"Wrong number of arguments tag.remove: {chainedArgument.Length}");
+                        }
+                    }
                 }
                 else if (TransformFirstMemberAccessName(name))
                 {
@@ -545,10 +563,10 @@ namespace SphereSharp.Sphere99
                         else if (arguments.Length == 1)
                             return true;
                         else
-                            throw new TranspilerException($"Invalid number of arguments for 'arg': {arguments.Length}");
+                            throw new TranspilerException(context, $"Invalid number of arguments for 'arg': {arguments.Length}");
                     }
                     else
-                        throw new TranspilerException("No arguments for 'arg'");
+                        throw new TranspilerException(context, "No arguments for 'arg'");
                 }
                 else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase) || name.Equals("ARGVCOUNT", StringComparison.OrdinalIgnoreCase))
                 {
@@ -566,7 +584,7 @@ namespace SphereSharp.Sphere99
                     }
                     else
                     {
-                        throw new TranspilerException("No arguments for 'argv'");
+                        throw new TranspilerException(context, "No arguments for 'argv'");
                     }
                 }
                 else if (name.Equals("strlen", StringComparison.OrdinalIgnoreCase))
@@ -587,7 +605,7 @@ namespace SphereSharp.Sphere99
                         }
 
                         if (arguments.Length != 1)
-                            throw new TranspilerException($"Wrong number of arguments ({arguments.Length}) for strlen.");
+                            throw new TranspilerException(context, $"Wrong number of arguments ({arguments.Length}) for strlen.");
                     }
 
                     builder.Append(name);

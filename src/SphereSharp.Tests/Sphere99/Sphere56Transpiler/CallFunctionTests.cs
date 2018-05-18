@@ -141,6 +141,39 @@ endif",
 else
     call2
 endif");
+
+            TranspileStatementCheck(@"if 1
+    call1
+elseif 2
+    call2
+else
+    call3
+endif",
+@"if 1
+    call1
+elseif 2
+    call2
+else
+    call3
+endif");
+            TranspileStatementCheck(@"if 1
+    call1
+elseif 2
+    call2
+elseif 3
+    call3
+else
+    call4
+endif",
+@"if 1
+    call1
+elseif 2
+    call2
+elseif 3
+    call3
+else
+    call4
+endif");
         }
 
         [TestMethod]
@@ -192,6 +225,7 @@ var.yyy=<eval <var.xxx>>");
         [TestMethod]
         [DataRow("tag(name,value)", "tag.name=value")]
         [DataRow("arg(u,tag(name))", "local.u=tag.name")]
+        [DataRow("tag.remove(u)", "tag.u=")]
         public void Tags(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
