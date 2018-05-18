@@ -296,7 +296,9 @@ namespace SphereSharp.Sphere99
             Visit(context.condition());
 
             builder.Append(context.NEWLINE());
-            Visit(context.codeBlock());
+
+            if (context.codeBlock() != null)
+                Visit(context.codeBlock());
 
             var elseIfs = context.elseIfStatement();
             if (elseIfs != null)
@@ -306,7 +308,8 @@ namespace SphereSharp.Sphere99
                     builder.Append(elseIf.elseIf().GetText());
                     Visit(elseIf.condition());
                     builder.Append(elseIf.ELSEIF_NEWLINE.Text);
-                    Visit(elseIf.codeBlock());
+                    if (elseIf.codeBlock() != null)
+                        Visit(elseIf.codeBlock());
                 }
             }
 
@@ -580,6 +583,16 @@ namespace SphereSharp.Sphere99
                     else
                     {
                         throw new TranspilerException(context, "No arguments for 'argv'");
+                    }
+                }
+                else if (name.Equals("args", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (context.customMemberAccess().chainedMemberAccess() != null)
+                    {
+                        builder.Append("<args>");
+                        Visit(context.customMemberAccess().chainedMemberAccess());
+
+                        return false;
                     }
                 }
                 else if (name.Equals("strlen", StringComparison.OrdinalIgnoreCase))

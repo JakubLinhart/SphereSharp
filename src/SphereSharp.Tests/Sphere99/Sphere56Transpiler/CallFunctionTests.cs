@@ -30,6 +30,14 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
+        [DataRow("args.color", "<args>.color")]
+        [DataRow("<args>.color", "<args>.color")]
+        public void Args(string src, string expectedResult)
+        {
+            TranspileStatementCheck(src, expectedResult);
+        }
+
+        [TestMethod]
         [DataRow("sysmessage(\"\")", "sysmessage \"\"")]
         [DataRow("sysmessage(\"<fun1>\")", "sysmessage \"<fun1>\"")]
         [DataRow("sysmessage(\"<fun1(1,2,3)>\")", "sysmessage \"<fun1 1,2,3>\"")]
