@@ -21,6 +21,16 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitIndexedMemberName([NotNull] sphereScript99Parser.IndexedMemberNameContext context)
+        {
+            Visit(context.memberName());
+            builder.Append('[');
+            Visit(context.numericExpression());
+            builder.Append(']');
+
+            return true;
+        }
+
         public override bool VisitChainedMemberAccess([NotNull] sphereScript99Parser.ChainedMemberAccessContext context)
         {
             builder.Append(".");
@@ -392,16 +402,29 @@ namespace SphereSharp.Sphere99
                     builder.Append(".");
                     if (arguments != null)
                     {
-                        if (arguments.Length == 2)
+                        if (arguments.Length > 1)
                         {
+                            Visit(arguments[0]);
+
                             if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
                             {
                                 globalVariables.Add(arguments[0].GetText());
                             }
 
-                            builder.Append(arguments[0].GetText());
                             builder.Append("=");
-                            return base.Visit(arguments[1]);
+
+                            Visit(arguments[1]);
+
+                            if (name.Equals("tag", StringComparison.OrdinalIgnoreCase))
+                            {
+                                foreach (var argument in arguments.Skip(2))
+                                {
+                                    builder.Append(",");
+                                    Visit(argument);
+                                }
+                            }
+
+                            return true;
                         }
                         else if (arguments.Length == 1)
                         {
@@ -409,7 +432,7 @@ namespace SphereSharp.Sphere99
                             return true;
                         }
                         else
-                            throw new TranspilerException(context, $"Invalid number of arguments for 'tag': {arguments.Length}");
+                            throw new TranspilerException(context, "No arguments for 'tag'");
                     }
                     else
                     {

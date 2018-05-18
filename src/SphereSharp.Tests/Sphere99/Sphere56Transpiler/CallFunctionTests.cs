@@ -287,6 +287,8 @@ var.yyy=<eval <var.xxx>>");
         [DataRow("tag(name,value)", "tag.name=value")]
         [DataRow("arg(u,tag(name))", "local.u=tag.name")]
         [DataRow("tag.remove(u)", "tag.u=")]
+        [DataRow("tag(name,value1,value2)", "tag.name=value1,value2")]
+        [DataRow("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value")]
         public void Tags(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
