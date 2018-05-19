@@ -368,7 +368,8 @@ namespace SphereSharp.Sphere99
             var name = context.nativeFunctionName()?.GetText();
             if (!string.IsNullOrEmpty(name))
             {
-                var arguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument();
+                var arguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() ??
+                    context.nativeArgumentList()?.freeArgumentList()?.argument();
                 builder.Append(name);
 
                 if (name.Equals("return", StringComparison.OrdinalIgnoreCase))
@@ -381,6 +382,16 @@ namespace SphereSharp.Sphere99
                         {
                             builder.Append(" ");
                         }
+                    }
+                }
+                else if (name.Equals("trigger", StringComparison.OrdinalIgnoreCase))
+                {
+                    var argumentList = context.nativeArgumentList().GetText().Trim().TrimStart('(').TrimEnd(')');
+                    if (!argumentList.StartsWith("@"))
+                    {
+                        builder.Append(" @");
+                        builder.Append(argumentList);
+                        return true;
                     }
                 }
 

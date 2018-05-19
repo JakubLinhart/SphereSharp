@@ -191,6 +191,10 @@ endif");
         [DataRow("return 1", "return 1")]
         [DataRow("return<x>", "return <x>")]
         [DataRow("return <x>", "return <x>")]
+        [DataRow("trigger timer", "trigger @timer")]
+        [DataRow("trigger @timer", "trigger @timer")]
+        [DataRow("trigger(@timer)", "trigger @timer")]
+        [DataRow("trigger(timer)", "trigger @timer")]
         [DataRow("findid(i_rune_discordance).remove", "findid.i_rune_discordance.remove")]
         [DataRow("findid(i_rune_discordance)", "findid.i_rune_discordance")]
         public void Native_functions(string source, string expectedResult)
