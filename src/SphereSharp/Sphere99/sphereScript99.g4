@@ -30,22 +30,26 @@ defNamesSection: defNamesSectionHeader propertyList;
 defNamesSectionHeader: DEFNAMES_SECTION_HEADER_START ~(NEWITEM | ']') ']' NEWLINE;
 
 dialogSection: dialogSectionHeader dialogPosition? codeBlock;
-dialogSectionHeader: DIALOG_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+dialogSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL ']' NEWLINE;
 dialogPosition: number WS* ',' WS* number NEWLINE;
 
-dialogTextSection: dialogTextSectionHeader dialogTextSectionLine*;
-dialogTextSectionHeader: DIALOG_SECTION_HEADER_START SYMBOL WS+ TEXT ']' NEWLINE;
-dialogTextSectionLine: ~(NEWLINE)+ NEWLINE;
+dialogTextSection: dialogTextSectionHeader dialogTextSectionLine*?;
+dialogTextSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ TEXT ']' NEWLINE;
+dialogTextSectionLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | CHARDEF_SECTION_HEADER_START
+    | TYPEDEF_SECTION_HEADER_START | TEMPLATE_SECTION_HEADER_START | EVENTS_SECTION_HEADER_START | DEFNAMES_SECTION_HEADER_START
+    | DIALOG_SECTION_HEADER_START | BOOK_SECTION_HEADER_START | NEWLINE)* NEWLINE;
 
 dialogButtonSection: dialogButtonSectionHeader triggerList;
-dialogButtonSectionHeader: DIALOG_SECTION_HEADER_START SYMBOL WS+ BUTTON ']' NEWLINE;
+dialogButtonSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ BUTTON ']' NEWLINE;
 
-bookPageSection: bookPageSectionHeader pageLine+;
-bookPageSectionHeader: BOOK_SECTION_HEADER_START SYMBOL WS+ DEC_NUMBER ']' NEWLINE;
-pageLine: ~('[' | NEWLINE)* NEWLINE;
+bookPageSection: bookPageSectionHeader pageLine*?;
+bookPageSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL WS+ pageNumber=DEC_NUMBER ']' NEWLINE;
+pageLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | CHARDEF_SECTION_HEADER_START
+    | TYPEDEF_SECTION_HEADER_START | TEMPLATE_SECTION_HEADER_START | EVENTS_SECTION_HEADER_START | DEFNAMES_SECTION_HEADER_START
+    | DIALOG_SECTION_HEADER_START | BOOK_SECTION_HEADER_START | NEWLINE)* NEWLINE;
 
 bookSection: bookSectionHeader propertyList;
-bookSectionHeader: BOOK_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+bookSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL ']' NEWLINE;
 
 codeBlock: statement+;
 number: DEC_NUMBER | HEX_NUMBER;

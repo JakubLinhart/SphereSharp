@@ -87,6 +87,35 @@ call1");
         }
 
         [TestMethod]
+        public void Can_parse_section_after_dialog_text_section()
+        {
+            CheckStructure("dialogText d_dialog;function fun1;eof;", @"[DIALOG d_dialog TEXT]
+Jake ma byt tve druhe jmeno? 
+(vybirej peclive, zustane ti naporad...)
+OK
+
+[function fun1]
+call1
+
+[eof]
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_section_after_book_page_section()
+        {
+            CheckStructure("bookPage book_1 1;function fun1;eof;", @"[book book_1 1]
+text1
+text2
+
+[function fun1]
+call1
+
+[eof]
+");
+        }
+
+        [TestMethod]
         public void Can_handle_weird_problem_with_greedy_macro_grammer()
         {
             // the issue showed up only when both showbowtype_<src.tag(clienttype)> and [eof] were present
@@ -161,6 +190,20 @@ x=<y>
             public override bool VisitTypeDefSection([NotNull] sphereScript99Parser.TypeDefSectionContext context)
             {
                 output.Append($"typedef {context.typeDefSectionHeader().SYMBOL()};");
+
+                return true;
+            }
+
+            public override bool VisitDialogTextSection([NotNull] sphereScript99Parser.DialogTextSectionContext context)
+            {
+                output.Append($"dialogText {context.dialogTextSectionHeader().dialogName.Text};");
+
+                return true;
+            }
+
+            public override bool VisitBookPageSection([NotNull] sphereScript99Parser.BookPageSectionContext context)
+            {
+                output.Append($"bookPage {context.bookPageSectionHeader().bookName.Text} {context.bookPageSectionHeader().pageNumber.Text};");
 
                 return true;
             }
