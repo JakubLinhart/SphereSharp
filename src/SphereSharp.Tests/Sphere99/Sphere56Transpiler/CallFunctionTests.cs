@@ -216,6 +216,8 @@ endif");
         [DataRow("arg(u,arg(v))", "local.u=local.v")]
         [DataRow("arg(u,<argcount>)", "local.u=<argv>")]
         [DataRow("arg(u,<argv(0)>)", "local.u=<argv[0]>")]
+        [DataRow("arg.u=0", "local.u=0")]
+        [DataRow("arg.u=<arg.u>", "local.u=<local.u>")]
         public void Local_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -290,6 +292,11 @@ local.variable1=<local.variable1>");
 var(yyy,<eval <xxx>>)",
 @"var.xxx=1
 var.yyy=<eval <var.xxx>>");
+
+            TranspileCodeBlockCheck(@"var(asciitext,1)
+var(asciitext,1)",
+@"var.asciitext=1
+var.asciitext=1");
         }
 
         [TestMethod]

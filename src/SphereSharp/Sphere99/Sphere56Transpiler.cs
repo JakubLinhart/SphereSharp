@@ -187,6 +187,28 @@ namespace SphereSharp.Sphere99
             return base.VisitEvalCall(context);
         }
 
+        public override bool VisitDialogTextSection([NotNull] sphereScript99Parser.DialogTextSectionContext context)
+        {
+            return false;
+        }
+
+        public override bool VisitDialogSection([NotNull] sphereScript99Parser.DialogSectionContext context)
+        {
+            return false;
+        }
+
+        public override bool VisitDialogButtonSection([NotNull] sphereScript99Parser.DialogButtonSectionContext context)
+        {
+            return false;
+        }
+
+        public override bool VisitEventsSectionHeader([NotNull] sphereScript99Parser.EventsSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitFunctionSectionHeader([NotNull] sphereScript99Parser.FunctionSectionHeaderContext context)
         {
             builder.Append(context.GetText());
@@ -223,7 +245,10 @@ namespace SphereSharp.Sphere99
 
             builder.Append(context.assign().GetText());
 
-            return Visit(context.argumentList());
+            if (context.argumentList() != null)
+                return Visit(context.argumentList());
+
+            return true;
         }
 
         public override bool VisitItemDefSectionHeader([NotNull] sphereScript99Parser.ItemDefSectionHeaderContext context)
@@ -436,12 +461,13 @@ namespace SphereSharp.Sphere99
                     {
                         if (arguments.Length > 1)
                         {
-                            Visit(arguments[0]);
-
                             if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
                             {
+                                builder.Append(arguments[0].GetText());
                                 globalVariables.Add(arguments[0].GetText());
                             }
+                            else
+                                Visit(arguments[0]);
 
                             builder.Append("=");
 
@@ -623,7 +649,19 @@ namespace SphereSharp.Sphere99
                             throw new TranspilerException(context, $"Invalid number of arguments for 'arg': {arguments.Length}");
                     }
                     else
-                        throw new TranspilerException(context, "No arguments for 'arg'");
+                    {
+                        var chainedCall = context.customMemberAccess()?.chainedMemberAccess();
+                        if (chainedCall != null)
+                        {
+                            if (chainedCall.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.chainedMemberAccess() != null)
+                                throw new TranspilerException(context, "two chained calls after 'arg'");
+                            builder.Append("local");
+                            builder.Append(chainedCall.GetText());
+                            return true;
+                        }
+                        else
+                            throw new TranspilerException(context, "No arguments and no chained parameter for 'arg'");
+                    }
                 }
                 else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase) || name.Equals("ARGVCOUNT", StringComparison.OrdinalIgnoreCase))
                 {
