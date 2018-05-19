@@ -15,6 +15,7 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [TestMethod]
         [DataRow("fun1", "fun1")]
         [DataRow("fun1()", "fun1")]
+        [DataRow("fun1(-1)", "fun1 -1")]
         [DataRow("fun1_2", "fun1_2")]
         [DataRow("fun1_2(3)", "fun1_2 3")]
         [DataRow("fun1_2(3,4,5)", "fun1_2 3,4,5")]
@@ -63,6 +64,8 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [TestMethod]
         [DataRow("lastnew.bounce", "new.bounce")]
         [DataRow("equip <lastnew>", "equip <new>")]
+        [DataRow("equip lastnew", "equip <new>")]
+        [DataRow("lastnew.timer=300", "new.timer=300")]
         [DataRow("arg(u,<Skill_Enticement.effect>)", "local.u=<serv.skill.enticement.effect>")]
         public void Name_transformation(string src, string expectedResult)
         {
@@ -186,6 +189,8 @@ endif");
 
         [TestMethod]
         [DataRow("return 1", "return 1")]
+        [DataRow("return<x>", "return <x>")]
+        [DataRow("return <x>", "return <x>")]
         [DataRow("findid(i_rune_discordance).remove", "findid.i_rune_discordance.remove")]
         [DataRow("findid(i_rune_discordance)", "findid.i_rune_discordance")]
         public void Native_functions(string source, string expectedResult)

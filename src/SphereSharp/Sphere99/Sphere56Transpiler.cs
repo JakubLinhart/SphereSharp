@@ -113,6 +113,13 @@ namespace SphereSharp.Sphere99
             return result;
         }
 
+        public override bool VisitUnaryOperator([NotNull] sphereScript99Parser.UnaryOperatorContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitRandomExpressionList([NotNull] sphereScript99Parser.RandomExpressionListContext context)
         {
             builder.Append(context.STARTING_WS?.Text);
@@ -363,6 +370,20 @@ namespace SphereSharp.Sphere99
             {
                 var arguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument();
                 builder.Append(name);
+
+                if (name.Equals("return", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (context.nativeArgumentList() != null)
+                    {
+                        var whiteSpace = context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument()?.firstFreeArgumentOptionalWhiteSpace()?.WS() ??
+                            context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument()?.firstFreeArgumentMandatoryWhiteSpace()?.WS();
+                        if (whiteSpace == null || whiteSpace.Length == 0)
+                        {
+                            builder.Append(" ");
+                        }
+                    }
+                }
+
                 if (arguments != null && (context.chainedMemberAccess() != null || AlwaysChainArguments(name)))
                 {
                     foreach (var argument in arguments)
@@ -450,7 +471,7 @@ namespace SphereSharp.Sphere99
                         }
                     }
                 }
-                else if (TransformFirstMemberAccessName(name))
+                else if (TransformFirstMemberAccessName(name, context))
                 {
                     if (context.chainedMemberAccess() != null)
                         return base.Visit(context.chainedMemberAccess());
@@ -502,7 +523,7 @@ namespace SphereSharp.Sphere99
             { "Skill_Fishing", "fishing" },
             { "Skill_Forensics", "forensics" },
             { "Skill_Herding", "herding" },
-            { "Skill_Hiding", "hidding" },
+            { "Skill_Hiding", "hiding" },
             { "SKILL_PROVOCATION", "provocation" },
             { "Skill_Inscription", "inscription" },
             { "Skill_LockPick", "lockpick" },
@@ -532,11 +553,15 @@ namespace SphereSharp.Sphere99
             { "SKILL_Necromancy", "necromancy" },
         };
 
-        private bool TransformFirstMemberAccessName(string name)
+        private bool TransformFirstMemberAccessName(string name, sphereScript99Parser.CustomMemberAccessContext context)
         {
             if (name.Equals("lastnew", StringComparison.OrdinalIgnoreCase))
             {
-                builder.Append("new");
+                bool requiresMacro = context.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent is sphereScript99Parser.NativeArgumentListContext;
+                if (requiresMacro)
+                    builder.Append("<new>");
+                else
+                    builder.Append("new");
                 return true;
             }
 
