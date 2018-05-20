@@ -92,7 +92,7 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR;
+                | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' numericExpression ']';
 
@@ -160,7 +160,7 @@ DIALOG_SECTION_HEADER_START: '[' [dD][iI][aA][lL][oO][gG] WS+;
 BOOK_SECTION_HEADER_START: '[' [bB][oO][oO][kK] WS+;
 
 IF: [iI][fF];
-ELSEIF: [eE][lL][sS][eE][iI][fF]; 
+ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 
 ELSE: [eE][lL][sS][eE];
 ENDIF: [eE][nN][dD][iI][fF];
 WHILE: [wW][hH][iI][lL][eE];
@@ -208,6 +208,12 @@ ATTR: [aA][tT][tT][rR];
 NUKECHAR: [nN][uU][kK][eE][cC][hH][aA][rR];
 NUKE: [nN][uU][kK][eE];
 COLOR: [cC][oO][lL][oO][rR];
+ANIM: [aA][nN][iI][mM];
+SAY: [sS][aA][yY];
+RESCOUNT: [rR][eE][sS][cC][oO][uU][nN][tT];
+RESTEST: [rR][eE][sS][tT][eE][sS][tT];
+SMSG: [sS][mM][sS][gG];
+FIX: [fF][iI][xX];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];

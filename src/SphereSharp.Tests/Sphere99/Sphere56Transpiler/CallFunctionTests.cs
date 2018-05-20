@@ -33,7 +33,8 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [TestMethod]
         [DataRow("args.color", "<args>.color")]
         [DataRow("<args>.color", "<args>.color")]
-        public void Args(string src, string expectedResult)
+        [DataRow("arg(x,<eval argv>)", "local.x=<eval <args>>")]
+        public void Arguments(string src, string expectedResult)
         {
             TranspileStatementCheck(src, expectedResult);
         }
@@ -88,6 +89,9 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("<eval 123>", "<eval 123>")]
         [DataRow("tag(u)", "<tag0.u>")]
         [DataRow("<findid(i_item)>", "<findid.i_item>")]
+        [DataRow("arg(length)", "<local.length>")]
+        [DataRow("safe.tag(orig_stealth)", "<tag0.orig_stealth>")]
+        [DataRow("<safe.tag(orig_stealth)>", "<tag0.orig_stealth>")]
         public void Conditions(string src, string expectedResult)
         {
             TranspileConditionCheck(src, expectedResult);
@@ -213,11 +217,12 @@ endif");
         [TestMethod]
         [DataRow("arg(u,1)", "local.u=1")]
         [DataRow("arg(u,#+1)", "local.u=<local.u>+1")]
-        [DataRow("arg(u,arg(v))", "local.u=local.v")]
+        [DataRow("arg(u,arg(v))", "local.u=<local.v>")]
         [DataRow("arg(u,<argcount>)", "local.u=<argv>")]
         [DataRow("arg(u,<argv(0)>)", "local.u=<argv[0]>")]
         [DataRow("arg.u=0", "local.u=0")]
         [DataRow("arg.u=<arg.u>", "local.u=<local.u>")]
+        [DataRow("equip(arg(hiditem))", "equip <local.hiditem>")]
         public void Local_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -229,11 +234,13 @@ endif");
             TranspileFileCheck(@"[function fun1]
 arg(xxx,1)
 arg(yyy,<eval <xxx>>)
-yyy.color=1",
+yyy.color=1
+equip(xxx)",
 @"[function fun1]
 local.xxx=1
 local.yyy=<eval <local.xxx>>
-local.yyy.color=1");
+local.yyy.color=1
+equip <local.xxx>");
         }
 
         [TestMethod]

@@ -321,7 +321,7 @@ namespace SphereSharp.Sphere99
         {
             try
             {
-                semanticContext.EnterNumeric();
+                semanticContext.EnterRequireMacro();
                 return base.VisitNumericExpression(context);
             }
             finally
@@ -393,6 +393,15 @@ namespace SphereSharp.Sphere99
             var name = context.nativeFunctionName()?.GetText();
             if (!string.IsNullOrEmpty(name))
             {
+                if (name.Equals("safe"))
+                {
+                    if (context.chainedMemberAccess()?.memberAccess() != null)
+                    {
+                        Visit(context.chainedMemberAccess().memberAccess());
+                        return true;
+                    }
+                }
+
                 var arguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() ??
                     context.nativeArgumentList()?.freeArgumentList()?.argument();
                 builder.Append(name);
@@ -553,7 +562,7 @@ namespace SphereSharp.Sphere99
             { "Skill_Carpentry", "carpentry" },
             { "SKILL_CARTOGRAPHY", "cartography" },
             { "Skill_Cooking", "cooking" },
-            { "Skill_DetectHidden", "detecthidden" },
+            { "Skill_DetectHidden", "DetectingHidden" },
             { "Skill_Enticement", "enticement" },
             { "Skill_EvalInt", "evalint" },
             { "Skill_Healing", "healing" },
@@ -624,8 +633,13 @@ namespace SphereSharp.Sphere99
                     if (arguments != null)
                     {
                         string localVariableName = arguments[0].GetText();
+                        bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext && arguments.Length == 1 && !semanticContext.IsNumeric;
+                        if (requiresMacro)
+                            builder.Append('<');
                         var localVariableAccess = $"local.{localVariableName}";
                         builder.Append(localVariableAccess);
+                        if (requiresMacro)
+                            builder.Append('>');
 
                         if (arguments.Length == 2)
                         {
@@ -679,7 +693,8 @@ namespace SphereSharp.Sphere99
                     }
                     else
                     {
-                        throw new TranspilerException(context, "No arguments for 'argv'");
+                        builder.Append("args");
+                        return true;
                     }
                 }
                 else if (name.Equals("args", StringComparison.OrdinalIgnoreCase))
@@ -727,11 +742,17 @@ namespace SphereSharp.Sphere99
                 {
                     if (semanticContext.IsLocalVariable(name))
                     {
+                        bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext;
+                        if (requiresMacro)
+                            builder.Append('<');
                         builder.Append("local.");
                         builder.Append(name);
 
                         if (context.customMemberAccess().chainedMemberAccess() != null)
                             Visit(context.customMemberAccess().chainedMemberAccess());
+
+                        if (requiresMacro)
+                            builder.Append('>');
 
                         return true;
                     }
@@ -781,16 +802,16 @@ namespace SphereSharp.Sphere99
 
             }
 
-            public void EnterNumeric()
+            public void EnterRequireMacro()
             {
                 scopes.Push(new Scope(true));
             }
 
-            public T ExecuteNumeric<T>(Func<T> func)
+            public T RequireMacro<T>(Func<T> func)
             {
                 try
                 {
-                    EnterNumeric();
+                    EnterRequireMacro();
                     return func();
                 }
                 finally

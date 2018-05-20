@@ -139,6 +139,18 @@ endif");
         }
 
         [TestMethod]
+        public void Can_parse_elseif_with_whitespace_between_else_and_if()
+        {
+            CheckStructure("if(1);elseif(0);else(1);endif;", @"if 1
+    call1
+else if 2
+    // call2
+else
+    call3
+endif");
+        }
+
+        [TestMethod]
         public void Can_parse_empty_else_with_comment()
         {
             CheckStructure("if(1);else(0);endif;", @"if 1
