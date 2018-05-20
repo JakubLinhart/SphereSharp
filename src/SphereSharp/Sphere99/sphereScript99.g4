@@ -102,7 +102,7 @@ propertyList: NEWLINE? propertyAssignment+;
 propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator propertyValue? (NEWLINE | EOF);
 propertyAssignmentOperator: ((WS* ASSIGN WS*) | WS+);
 propertyName: SYMBOL ('[' number ']')?;
-propertyValue: unquotedLiteralArgument;
+propertyValue: ~(NEWLINE)*?;
 
 // trigger
 triggerList: trigger*;
@@ -122,7 +122,7 @@ argument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentA
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
 innerQuotedLiteralArgument: (macro | '\'' | '\\' | ';' | ~('"' | NEWLINE))*?;
-unquotedLiteralArgument: (memberAccess | SYMBOL | macro | constantExpression | WS | '(' | ')' | '[' | ']' | '#' | ':' |  '.' |  ',' | '?' | '!' | '@' | assignment | EQUAL)+? ;
+unquotedLiteralArgument: (memberAccess | SYMBOL | macro | constantExpression | WS | '[' | ']' | '#' | ':' |  '.' |  ',' | '?' | '!' | '@' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
 
 // eval expression
