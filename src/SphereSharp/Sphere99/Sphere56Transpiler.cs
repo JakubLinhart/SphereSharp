@@ -216,6 +216,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitTypeDefSection([NotNull] sphereScript99Parser.TypeDefSectionContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         private ISet<string> globalVariables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private SemanticContext semanticContext = new SemanticContext();
 
