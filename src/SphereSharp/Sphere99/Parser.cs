@@ -41,5 +41,8 @@ namespace SphereSharp.Sphere99
 
         public ParsingResult<sphereScript99Parser.CodeBlockContext> ParseCodeBlock(string src)
             => Parse(src, parser => parser.codeBlock());
+
+        public ParsingResult<sphereScript99Parser.PropertyAssignmentContext> ParsePropertyAssignment(string src)
+            => Parse(src, parser => parser.propertyAssignment());
     }
 }

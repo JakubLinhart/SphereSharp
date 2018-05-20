@@ -346,6 +346,14 @@ call1
 call2");
         }
 
+        [TestMethod]
+        [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
+        [DataRow("WEIGHT=", "WEIGHT=")]
+        public void Property(string source, string expectedResult)
+        {
+            TranspilePropertyAssignmentCheck(source, expectedResult);
+        }
+
         private void TranspileStatementCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseStatement(src));
 
@@ -357,6 +365,9 @@ call2");
 
         private void TranspileCodeBlockCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseCodeBlock(src));
+
+        private void TranspilePropertyAssignmentCheck(string input, string expectedOutput)
+            => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParsePropertyAssignment(src));
 
         private void TranspileCheck(string input, string expectedOutput, Func<string, SphereSharp.Sphere99.Parser, ParsingResult> parseFunc)
         {

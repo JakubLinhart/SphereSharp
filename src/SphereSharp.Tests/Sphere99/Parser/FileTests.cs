@@ -182,7 +182,7 @@ x=<y>
 
             public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
             {
-                output.Append($"function {context.functionSectionHeader().SYMBOL()};");
+                output.Append($"function {context.functionSectionHeader().functionName().GetText()};");
 
                 return true;
             }

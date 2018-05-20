@@ -8,7 +8,8 @@ section: WS* functionSection | itemDefSection | charDefSection | typeDefSection 
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
-functionSectionHeader: FUNCTION_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+functionSectionHeader: FUNCTION_SECTION_HEADER_START functionName ']' NEWLINE;
+functionName: SYMBOL | nativeFunctionName;
 
 itemDefSection: itemDefSectionHeader propertyList triggerList ;
 itemDefSectionHeader: ITEMDEF_SECTION_HEADER_START itemDefSectionName ']' NEWLINE;
@@ -98,7 +99,8 @@ indexedMemberName: memberName '[' numericExpression ']';
 
 // properties
 propertyList: NEWLINE? propertyAssignment+;
-propertyAssignment: WS* propertyName  ((WS* ASSIGN WS*) | WS+) propertyValue (NEWLINE | EOF);
+propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator propertyValue? (NEWLINE | EOF);
+propertyAssignmentOperator: ((WS* ASSIGN WS*) | WS+);
 propertyName: SYMBOL ('[' number ']')?;
 propertyValue: unquotedLiteralArgument;
 
@@ -120,7 +122,7 @@ argument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentA
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
 innerQuotedLiteralArgument: (macro | '\'' | '\\' | ';' | ~('"' | NEWLINE))*?;
-unquotedLiteralArgument: (memberAccess | SYMBOL | macro | constantExpression | WS | '[' | ']' | '#' | ':' |  '.'|  ',' | '?' | '!' | '@' | assignment | EQUAL)+? ;
+unquotedLiteralArgument: (memberAccess | SYMBOL | macro | constantExpression | WS | '(' | ')' | '[' | ']' | '#' | ':' |  '.' |  ',' | '?' | '!' | '@' | assignment | EQUAL)+? ;
 triggerArgument: '@' SYMBOL;
 
 // eval expression

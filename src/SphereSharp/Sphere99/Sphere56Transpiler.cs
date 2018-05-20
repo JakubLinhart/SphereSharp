@@ -267,7 +267,16 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitPropertyAssignment([NotNull] sphereScript99Parser.PropertyAssignmentContext context)
         {
-            builder.Append(context.GetText());
+            if (context.LEADING_WS?.Text != null)
+                builder.Append(context.LEADING_WS.Text);
+            builder.Append(context.propertyName().GetText());
+            builder.Append(context.propertyAssignmentOperator().GetText());
+
+            var propertyValueText = context.propertyValue()?.GetText();
+            if (propertyValueText != null)
+                builder.Append(propertyValueText);
+
+            builder.Append(context.NEWLINE());
 
             return true;
         }
