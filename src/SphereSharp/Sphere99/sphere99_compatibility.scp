@@ -1,0 +1,153 @@
+[function strgetascii]
+return <asc "<strsub <argv[1]> 1 <argv[0]>>">
+
+[function safe]
+return <args>
+
+[function ei]
+if (<argv> > 0)
+  EvaluatingIntel=<argv[0]>
+else
+  return <EvaluatingIntel>
+endif
+
+[function resist]
+if (<argv> > 0)
+  MagicResistance=<argv[0]>
+else
+  return <MagicResistance>
+endif
+
+[function MEMORY_FIGHT]
+return 00004
+
+[function statf_dead]
+return 000000002
+
+[function rand]
+return <eval {0 <argv[0]>}>
+
+[function flag_invisible]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_invisible
+  else
+    flags=<flags>&~statf_invisible
+  endif
+else
+  if <flags>&statf_invisible
+    return 1
+  endif
+  return 0
+endif
+
+[function flag_hidden]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_hidden
+  else
+    flags=<flags>&~statf_hidden
+  endif
+else
+  if <flags>&statf_hidden
+    return 1
+  endif
+  return 0
+endif
+
+[function flag_invul]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_invul
+  else
+    flags=<flags>&~statf_invul
+  endif
+else
+  if <flags>&statf_invul
+    return 1
+  endif
+  return 0
+endif
+
+[function flag_insubstantial]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_insubstantial
+  else
+    flags=<flags>&~statf_insubstantial
+  endif
+else
+  if <flags>&statf_insubstantial
+    return 1
+  endif
+  return 0
+endif
+
+[function flag_freeze]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_freeze
+  else
+    flags=<flags>&~statf_freeze
+  endif
+else
+  if <flags>&statf_freeze
+    return 1
+  endif
+  return 0
+endif
+
+[function flag_stone]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_stone
+  else
+    flags=<flags>&~statf_stone
+  endif
+else
+  if <flags>&statf_stone
+    return 1
+  endif
+  return 0
+endif
+
+// There is no statf_immobile on .56. STATF_Hovering on Sphere .56 has the same value as statf_immobile on Sphere .99
+// Semantically similar is statf_freeze.
+[function flag_immobile]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|STATF_Freeze
+  else
+    flags=<flags>&~STATF_Freeze
+  endif
+else
+  if <flags>&STATF_Freeze
+    return 1
+  endif
+  return 0
+endif
+
+[function flag_war]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_war
+  else
+    flags=<flags>&~statf_war
+  endif
+else
+  if <flags>&statf_war
+    return 1
+  endif
+  return 0
+endif
+
+[function newequip]
+newitem <args>
+equip <new>
+
+[function distancefrom]
+if (<argv>)
+  return <distance <<args>>>
+else
+  return <distance>
+return
