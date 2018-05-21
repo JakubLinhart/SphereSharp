@@ -189,6 +189,13 @@ elseif 3
 else
     call4
 endif");
+
+            TranspileStatementCheck(@"if(0)
+    call1
+endif",
+@"if (0)
+    call1
+endif");
         }
 
         [TestMethod]
@@ -220,9 +227,11 @@ endif");
         [DataRow("arg(u,arg(v))", "local.u=<local.v>")]
         [DataRow("arg(u,<argcount>)", "local.u=<argv>")]
         [DataRow("arg(u,<argv(0)>)", "local.u=<argv[0]>")]
+        [DataRow("arg(u,<arg(u)>,<arg(v)>)", "local.u=<local.u>,<local.v>")]
         [DataRow("arg.u=0", "local.u=0")]
         [DataRow("arg.u=<arg.u>", "local.u=<local.u>")]
         [DataRow("equip(arg(hiditem))", "equip <local.hiditem>")]
+        [DataRow("arg(v,<arg(u).name>)", "local.v=<uid.<local.u>.name>")]
         public void Local_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -312,6 +321,7 @@ var.asciitext=1");
         [DataRow("tag.remove(u)", "tag.u=")]
         [DataRow("tag(name,value1,value2)", "tag.name=value1,value2")]
         [DataRow("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value")]
+        [DataRow("arg(name,<tag(detect_src).name>)", "local.name=<uid.<tag.detect_src>.name>")]
         public void Tags(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -320,6 +330,7 @@ var.asciitext=1");
         [TestMethod]
         [DataRow("var(name,value)", "var.name=value")]
         [DataRow("arg(u,var(name))", "local.u=var.name")]
+        [DataRow("arg(name,<var(detect_src).name>)", "local.name=<uid.<var.detect_src>.name>")]
         public void Global_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);

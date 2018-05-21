@@ -349,7 +349,10 @@ namespace SphereSharp.Sphere99
         public override bool VisitIfStatement([NotNull] sphereScript99Parser.IfStatementContext context)
         {
             builder.Append(context.IF());
-            builder.Append(context.IF_WS?.Text);
+            if (!string.IsNullOrEmpty(context.IF_WS?.Text))
+                builder.Append(context.IF_WS?.Text);
+            else
+                builder.Append(' ');
 
             Visit(context.condition());
 
@@ -476,6 +479,11 @@ namespace SphereSharp.Sphere99
                 var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
                 if (name.Equals("tag", StringComparison.OrdinalIgnoreCase) || name.Equals("var", StringComparison.OrdinalIgnoreCase))
                 {
+                    bool requiresUid = context.chainedMemberAccess() != null && arguments != null;
+
+                    if (requiresUid)
+                        builder.Append("uid.<");
+
                     builder.Append(name);
                     if (semanticContext.IsNumeric && name.Equals("tag", StringComparison.OrdinalIgnoreCase))
                     {
@@ -512,10 +520,18 @@ namespace SphereSharp.Sphere99
                         else if (arguments.Length == 1)
                         {
                             builder.Append(arguments[0].GetText());
+
+                            if (context.chainedMemberAccess() != null)
+                            {
+                                if (requiresUid)
+                                    builder.Append(">");
+                                Visit(context.chainedMemberAccess());
+                            }
+
                             return true;
                         }
                         else
-                            throw new TranspilerException(context, "No arguments for 'tag'");
+                            throw new TranspilerException(context, $"No arguments for '{name}'");
                     }
                     else
                     {
@@ -652,12 +668,17 @@ namespace SphereSharp.Sphere99
                         bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext && arguments.Length == 1 && !semanticContext.IsNumeric;
                         if (requiresMacro)
                             builder.Append('<');
+
+                        bool requiresUid = context.customMemberAccess()?.chainedMemberAccess() != null && arguments.Length == 1;
+                        if (requiresUid)
+                            builder.Append("uid.<");
+
                         var localVariableAccess = $"local.{localVariableName}";
                         builder.Append(localVariableAccess);
                         if (requiresMacro)
                             builder.Append('>');
 
-                        if (arguments.Length == 2)
+                        if (arguments.Length > 1)
                         {
                             builder.Append('=');
 
@@ -665,8 +686,15 @@ namespace SphereSharp.Sphere99
                             {
                                 lastSharpSubstitution = $"<{localVariableAccess}>";
                                 semanticContext.DefineLocalVariable(localVariableName);
+                                VisitArgument(arguments[1]);
 
-                                return VisitArgument(arguments[1]);
+                                foreach (var argument in arguments.Skip(2))
+                                {
+                                    builder.Append(',');
+                                    VisitArgument(argument);
+                                }
+
+                                return true;
                             }
                             finally
                             {
@@ -674,9 +702,14 @@ namespace SphereSharp.Sphere99
                             }
                         }
                         else if (arguments.Length == 1)
+                        {
+                            if (requiresUid)
+                            {
+                                builder.Append('>');
+                                Visit(context.customMemberAccess().chainedMemberAccess());
+                            }
                             return true;
-                        else
-                            throw new TranspilerException(context, $"Invalid number of arguments for 'arg': {arguments.Length}");
+                        }
                     }
                     else
                     {
