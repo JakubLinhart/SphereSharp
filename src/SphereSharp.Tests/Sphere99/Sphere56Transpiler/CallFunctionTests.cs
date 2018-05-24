@@ -388,6 +388,31 @@ return 0");
         }
 
         [TestMethod]
+        public void Speech_section()
+        {
+            TranspileFileCheck(@"[SPEECH spk_human_prime]
+ON=*
+    call1
+
+ON=*hire*
+    call2
+
+ON=*train*
+ON=*teach*
+    call3",
+@"[SPEECH spk_human_prime]
+ON=*
+    call1
+
+ON=*hire*
+    call2
+
+ON=*train*
+ON=*teach*
+    call3");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

@@ -4,7 +4,7 @@ file: NEWLINE? section+ (eofSection | EOF);
 
 section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
-            | bookSection | bookPageSection;
+            | bookSection | bookPageSection | speechSection;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -56,6 +56,13 @@ pageLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | CHARD
 bookSection: bookSectionHeader propertyList;
 bookSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL ']' NEWLINE;
 
+speechSection: speechSectionHeader speechTriggerList;
+speechSectionHeader: SPEECH_SECTION_HEADER_START speechName=SYMBOL ']' NEWLINE;
+speechTriggerList: speechTrigger+;
+speechTrigger: speechTriggerHeader+ triggerBody;
+speechTriggerHeader: TRIGGER_HEADER speechTriggerName NEWLINE;
+speechTriggerName: ~(NEWLINE)+;
+
 codeBlock: statement+;
 number: DEC_NUMBER | HEX_NUMBER;
 
@@ -106,7 +113,7 @@ propertyList: NEWLINE? propertyAssignment+;
 propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator propertyValue? (NEWLINE | EOF);
 propertyAssignmentOperator: ((WS* ASSIGN WS*) | WS+);
 propertyName: (nativeFunctionName | SYMBOL) ('[' number ']')?;
-propertyValue: ~(NEWLINE)*?;
+propertyValue: ~(NEWLINE)+?;
 
 // trigger
 triggerList: trigger*;
@@ -165,6 +172,7 @@ EVENTS_SECTION_HEADER_START: '[' [eE][vV][eE][nN][tT][sS] WS+;
 DEFNAMES_SECTION_HEADER_START: '[' [dD][eE][fF][nN][aA][mM][eE][sS] WS+;
 DIALOG_SECTION_HEADER_START: '[' [dD][iI][aA][lL][oO][gG] WS+;
 BOOK_SECTION_HEADER_START: '[' [bB][oO][oO][kK] WS+;
+SPEECH_SECTION_HEADER_START: '[' [sS][pP][eE][eE][cC][hH] WS+;
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 

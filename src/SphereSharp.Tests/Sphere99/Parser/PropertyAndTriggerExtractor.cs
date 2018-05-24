@@ -29,5 +29,16 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return base.VisitTriggerList(context);
         }
+
+        public override bool VisitSpeechTriggerList([NotNull] sphereScript99Parser.SpeechTriggerListContext context)
+        {
+            var triggerList = context.speechTrigger();
+            if (triggerList != null)
+                output.Append($"speechTriggers:{triggerList.Length};");
+            else
+                output.Append("speechTriggers:0;");
+
+            return base.VisitSpeechTriggerList(context);
+        }
     }
 }

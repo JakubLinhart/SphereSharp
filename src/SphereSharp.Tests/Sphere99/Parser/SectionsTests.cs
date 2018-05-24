@@ -176,6 +176,22 @@ t_container               1   // any unlocked container or corpse
 t_container_locked        2");
         }
 
+        [TestMethod]
+        public void Can_parse_speech_section()
+        {
+            CheckStructure("speechTriggers:3;", @"[SPEECH spk_human_prime]
+ON=*
+    call1
+
+ON=*hire*
+    call2
+
+ON=*train*
+ON=*teach*
+    call3
+");
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.SectionContext section = null;
