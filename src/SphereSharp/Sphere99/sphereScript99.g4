@@ -2,7 +2,7 @@
 
 file: NEWLINE? section+ (eofSection | EOF);
 
-section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | templateSection
+section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
             | bookSection | bookPageSection;
 eofSection: EOF_SECTION_HEADER;
@@ -21,6 +21,9 @@ charDefSectionHeader: CHARDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 typeDefSection: typeDefSectionHeader triggerList ;
 typeDefSectionHeader: TYPEDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
+typeDefsSection: typeDefsSectionHeader propertyList ;
+typeDefsSectionHeader: TYPEDEFS_SECTION_HEADER_START ']' NEWLINE;
+
 templateSection: templateSectionHeader propertyList ;
 templateSectionHeader: TEMPLATE_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
@@ -28,7 +31,8 @@ eventsSection: eventsSectionHeader triggerList ;
 eventsSectionHeader: EVENTS_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 defNamesSection: defNamesSectionHeader propertyList;
-defNamesSectionHeader: DEFNAMES_SECTION_HEADER_START ~(NEWITEM | ']') ']' NEWLINE;
+defNamesSectionHeader: DEFNAMES_SECTION_HEADER_START defNameSectionName ']' NEWLINE;
+defNameSectionName: ~(NEWITEM | ']');
 
 dialogSection: dialogSectionHeader dialogPosition? codeBlock;
 dialogSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL ']' NEWLINE;
@@ -155,6 +159,7 @@ FUNCTION_SECTION_HEADER_START: '[' [fF][uU][nN][cC][tT][iI][oO][nN] WS+;
 ITEMDEF_SECTION_HEADER_START: '[' [iI][tT][eE][mM][dD][eE][fF] WS+;
 CHARDEF_SECTION_HEADER_START: '[' [cC][hH][aA][rR][dD][eE][fF] WS+;
 TYPEDEF_SECTION_HEADER_START: '[' [tT][yY][pP][eE][dD][eE][fF] WS+;
+TYPEDEFS_SECTION_HEADER_START: '[' [tT][yY][pP][eE][dD][eE][fF][sS];
 TEMPLATE_SECTION_HEADER_START: '[' [tT][eE][mM][pP][lL][aA][tT][eE] WS+;
 EVENTS_SECTION_HEADER_START: '[' [eE][vV][eE][nN][tT][sS] WS+;
 DEFNAMES_SECTION_HEADER_START: '[' [dD][eE][fF][nN][aA][mM][eE][sS] WS+;

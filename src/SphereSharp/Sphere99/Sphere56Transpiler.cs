@@ -14,6 +14,13 @@ namespace SphereSharp.Sphere99
 
         public string Output => builder.Output;
 
+        public override bool VisitFile([NotNull] sphereScript99Parser.FileContext context)
+        {
+            builder.Append(context.NEWLINE());
+
+            return base.VisitFile(context);
+        }
+
         public override bool VisitMemberName([NotNull] sphereScript99Parser.MemberNameContext context)
         {
             builder.Append(context.GetText());
@@ -216,11 +223,56 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitDefNamesSectionHeader([NotNull] sphereScript99Parser.DefNamesSectionHeaderContext context)
+        {
+            builder.Append("[defname ");
+            builder.Append(context.defNameSectionName().GetText());
+            builder.Append(']');
+            builder.Append(context.NEWLINE());
+
+            return true;
+        }
+
+        public override bool VisitDefNamesSection([NotNull] sphereScript99Parser.DefNamesSectionContext context)
+        {
+            Visit(context.defNamesSectionHeader());
+            Visit(context.propertyList());
+
+            builder.AppendLine();
+            builder.AppendLine();
+
+            GenerateFunctionsForPropertyList(context.propertyList());
+
+            return true;
+        }
+
         public override bool VisitTypeDefSection([NotNull] sphereScript99Parser.TypeDefSectionContext context)
         {
             builder.Append(context.GetText());
 
             return true;
+        }
+
+        public override bool VisitTypeDefsSection([NotNull] sphereScript99Parser.TypeDefsSectionContext context)
+        {
+            builder.Append(context.typeDefsSectionHeader().GetText());
+
+            Visit(context.propertyList());
+            builder.AppendLine();
+
+            GenerateFunctionsForPropertyList(context.propertyList());
+
+            return true;
+        }
+
+        private void GenerateFunctionsForPropertyList(sphereScript99Parser.PropertyListContext propertyList)
+        {
+            foreach (var property in propertyList.propertyAssignment())
+            {
+                builder.AppendLine($"[function {property.propertyName().GetText()}]");
+                builder.AppendLine($"return {property.propertyValue().GetText()}");
+                builder.AppendLine();
+            }
         }
 
         private ISet<string> globalVariables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

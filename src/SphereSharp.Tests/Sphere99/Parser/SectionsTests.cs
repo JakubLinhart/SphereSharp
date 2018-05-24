@@ -167,6 +167,15 @@ Hrobky jsou zajisteny,
 ");
         }
 
+        [TestMethod]
+        public void Can_parse_typedefs_section()
+        {
+            CheckStructure("props:3;", @"[TYPEDEFS]
+t_normal                  0
+t_container               1   // any unlocked container or corpse
+t_container_locked        2");
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.SectionContext section = null;

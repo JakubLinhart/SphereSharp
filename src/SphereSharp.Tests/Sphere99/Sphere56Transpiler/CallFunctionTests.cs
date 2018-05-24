@@ -359,6 +359,35 @@ call2");
         }
 
         [TestMethod]
+        public void TypeDefs_section()
+        {
+            TranspileFileCheck(@"[TYPEDEFS]
+t_normal                  0
+t_container               1",
+
+@"[TYPEDEFS]
+t_normal                  0
+t_container               1
+[function t_normal]
+return 0
+
+[function t_container]
+return 1");
+        }
+
+        [TestMethod]
+        public void DefNames_section()
+        {
+            TranspileFileCheck(@"[DEFNAMES blockedIPs]
+d_blocked_ips        0",
+@"[defname blockedIPs]
+d_blocked_ips        0
+
+[function d_blocked_ips]
+return 0");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)
