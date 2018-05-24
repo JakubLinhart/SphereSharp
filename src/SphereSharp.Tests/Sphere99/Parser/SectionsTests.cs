@@ -192,6 +192,24 @@ ON=*teach*
 ");
         }
 
+        [TestMethod]
+        public void Can_parse_comment_section_without_name()
+        {
+            CheckStructure("commentLines:2;", @"[comment]
+line 1
+line 2
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_comment_section_with_name()
+        {
+            CheckStructure("commentLines:2;", @"[comment function xxx]
+comment line 1
+comment line 2
+");
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.SectionContext section = null;

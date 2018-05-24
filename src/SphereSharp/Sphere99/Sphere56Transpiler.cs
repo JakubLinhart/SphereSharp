@@ -279,6 +279,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitCommentSection([NotNull] sphereScript99Parser.CommentSectionContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         private void GenerateFunctionsForPropertyList(sphereScript99Parser.PropertyListContext propertyList)
         {
             foreach (var property in propertyList.propertyAssignment())

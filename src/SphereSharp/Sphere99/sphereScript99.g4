@@ -4,7 +4,7 @@ file: NEWLINE? section+ (eofSection | EOF);
 
 section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
-            | bookSection | bookPageSection | speechSection;
+            | bookSection | bookPageSection | speechSection | commentSection;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -40,18 +40,14 @@ dialogPosition: number WS* ',' WS* number NEWLINE;
 
 dialogTextSection: dialogTextSectionHeader dialogTextSectionLine*?;
 dialogTextSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ TEXT ']' NEWLINE;
-dialogTextSectionLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | CHARDEF_SECTION_HEADER_START
-    | TYPEDEF_SECTION_HEADER_START | TEMPLATE_SECTION_HEADER_START | EVENTS_SECTION_HEADER_START | DEFNAMES_SECTION_HEADER_START
-    | DIALOG_SECTION_HEADER_START | BOOK_SECTION_HEADER_START | NEWLINE)* NEWLINE;
+dialogTextSectionLine: freeTextLine;
 
 dialogButtonSection: dialogButtonSectionHeader triggerList;
 dialogButtonSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ BUTTON ']' NEWLINE;
 
 bookPageSection: bookPageSectionHeader pageLine*?;
 bookPageSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL WS+ pageNumber=DEC_NUMBER ']' NEWLINE;
-pageLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | CHARDEF_SECTION_HEADER_START
-    | TYPEDEF_SECTION_HEADER_START | TEMPLATE_SECTION_HEADER_START | EVENTS_SECTION_HEADER_START | DEFNAMES_SECTION_HEADER_START
-    | DIALOG_SECTION_HEADER_START | BOOK_SECTION_HEADER_START | NEWLINE)* NEWLINE;
+pageLine: freeTextLine;
 
 bookSection: bookSectionHeader propertyList;
 bookSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL ']' NEWLINE;
@@ -62,6 +58,16 @@ speechTriggerList: speechTrigger+;
 speechTrigger: speechTriggerHeader+ triggerBody;
 speechTriggerHeader: TRIGGER_HEADER speechTriggerName NEWLINE;
 speechTriggerName: ~(NEWLINE)+;
+
+commentSection: commentSectionHeader commentLines*?;
+commentSectionHeader: COMMENT_SECTION_HEADER_START WS? commentSectionName? ']' NEWLINE;
+commentSectionName: ~(NEWITEM | ']')+;
+commentLines: freeTextLine;
+
+freeTextLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | CHARDEF_SECTION_HEADER_START
+    | TYPEDEF_SECTION_HEADER_START | TEMPLATE_SECTION_HEADER_START | EVENTS_SECTION_HEADER_START | DEFNAMES_SECTION_HEADER_START
+    | DIALOG_SECTION_HEADER_START | BOOK_SECTION_HEADER_START | SPEECH_SECTION_HEADER_START | COMMENT_SECTION_HEADER_START
+    | TYPEDEFS_SECTION_HEADER_START | NEWLINE)* NEWLINE;
 
 codeBlock: statement+;
 number: DEC_NUMBER | HEX_NUMBER;
@@ -173,6 +179,7 @@ DEFNAMES_SECTION_HEADER_START: '[' [dD][eE][fF][nN][aA][mM][eE][sS] WS+;
 DIALOG_SECTION_HEADER_START: '[' [dD][iI][aA][lL][oO][gG] WS+;
 BOOK_SECTION_HEADER_START: '[' [bB][oO][oO][kK] WS+;
 SPEECH_SECTION_HEADER_START: '[' [sS][pP][eE][eE][cC][hH] WS+;
+COMMENT_SECTION_HEADER_START: '[' [cC][oO][mM][mM][eE][nN][tT];
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 

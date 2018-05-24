@@ -414,6 +414,20 @@ ON=*teach*
         }
 
         [TestMethod]
+        public void Comment_section()
+        {
+            TranspileFileCheck(@"[COMMENT]
+comment line 1
+comment line 2
+",
+@"[COMMENT]
+comment line 1
+comment line 2
+
+");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

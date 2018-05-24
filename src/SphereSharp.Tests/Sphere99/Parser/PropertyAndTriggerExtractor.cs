@@ -40,5 +40,16 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return base.VisitSpeechTriggerList(context);
         }
+
+        public override bool VisitCommentSection([NotNull] sphereScript99Parser.CommentSectionContext context)
+        {
+            var commentLines = context.commentLines();
+            if (commentLines != null)
+                output.Append($"commentLines:{commentLines.Length};");
+            else
+                output.Append("commentLines:0;");
+
+            return base.VisitCommentSection(context);
+        }
     }
 }
