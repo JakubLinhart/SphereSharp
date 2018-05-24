@@ -89,6 +89,7 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("{1 2}", "{1 2}")]
         [DataRow("<eval 123>", "<eval 123>")]
         [DataRow("tag(u)", "<tag0.u>")]
+        [DataRow("var(u)", "<var0.u>")]
         [DataRow("<findid(i_item)>", "<findid.i_item>")]
         [DataRow("arg(length)", "<local.length>")]
         [DataRow("safe.tag(orig_stealth)", "<tag0.orig_stealth>")]

@@ -551,7 +551,7 @@ namespace SphereSharp.Sphere99
                         builder.Append("uid.<");
 
                     builder.Append(name);
-                    if (semanticContext.IsNumeric && name.Equals("tag", StringComparison.OrdinalIgnoreCase))
+                    if (semanticContext.IsNumeric)
                     {
                         builder.Append('0');
                     }
