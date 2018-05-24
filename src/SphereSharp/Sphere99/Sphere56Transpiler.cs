@@ -172,10 +172,18 @@ namespace SphereSharp.Sphere99
             return result;
         }
 
+        private HashSet<string> specialFunctionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "strlen",
+            "strcmpi"
+        };
+
+        private bool IsSpecialFunction(string name) => specialFunctionNames.Contains(name);
+
         public override bool VisitFirstMemberAccessExpression([NotNull] sphereScript99Parser.FirstMemberAccessExpressionContext context)
         {
             string memberName = context.firstMemberAccess()?.customMemberAccess()?.memberName()?.GetText() ?? string.Empty;
-            bool requiresMacro = semanticContext.IsNumeric && !memberName.Equals("strlen");
+            bool requiresMacro = semanticContext.IsNumeric && !IsSpecialFunction(memberName);
 
             if (requiresMacro)
                 builder.Append('<');
@@ -485,7 +493,7 @@ namespace SphereSharp.Sphere99
             var name = context.nativeFunctionName()?.GetText();
             if (!string.IsNullOrEmpty(name))
             {
-                if (name.Equals("safe"))
+                if (name.Equals("safe", StringComparison.OrdinalIgnoreCase))
                 {
                     if (context.chainedMemberAccess()?.memberAccess() != null)
                     {
@@ -834,7 +842,7 @@ namespace SphereSharp.Sphere99
                         return false;
                     }
                 }
-                else if (name.Equals("strlen", StringComparison.OrdinalIgnoreCase))
+                else if (IsSpecialFunction(name))
                 {
                     bool requiresMacro = false;
 
@@ -850,14 +858,16 @@ namespace SphereSharp.Sphere99
                             builder.Append("<eval ");
                             requiresMacro = true;
                         }
-
-                        if (arguments.Length != 1)
-                            throw new TranspilerException(context, $"Wrong number of arguments ({arguments.Length}) for strlen.");
                     }
 
                     builder.Append(name);
                     builder.Append('(');
                     Visit(arguments[0]);
+                    for (int i = 1; i < arguments.Length; i++)
+                    {
+                        builder.Append(',');
+                        Visit(arguments[i]);
+                    }
                     builder.Append(')');
 
                     if (requiresMacro)

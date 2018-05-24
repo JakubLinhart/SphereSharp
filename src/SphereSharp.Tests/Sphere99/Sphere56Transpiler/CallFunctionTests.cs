@@ -215,9 +215,11 @@ endif");
             TranspileStatementCheck(source, expectedResult);
         }
 
+        [TestMethod]
         [DataRow("arg(length,<strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(length,strlen(<argv(1)>)+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("arg(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "local.u=<eval strcmpi(<argv[0]>,<argv[1]>)>")]
         public void Special_functions(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
