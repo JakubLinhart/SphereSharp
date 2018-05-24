@@ -642,6 +642,11 @@ namespace SphereSharp.Sphere99
                     builder.Append("new");
                 return true;
             }
+            else if (name.Equals("flag_underground", StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append("underground");
+                return true;
+            }
 
             if (skillMemberNames.TryGetValue(name, out string replacement))
             {
