@@ -48,6 +48,12 @@ prop3=value3");
         }
 
         [TestMethod]
+        public void Can_parse_property_with_native_function_name()
+        {
+            CheckStructure("props:1;", @"RESOURCES=20 i_ribs_raw,1 i_christmas_pig_head");
+        }
+
+        [TestMethod]
         public void Can_parse_property_with_special_chars()
         {
             CheckStructure("props:1;", @"prop1=@");
