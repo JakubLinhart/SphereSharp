@@ -51,5 +51,16 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return base.VisitCommentSection(context);
         }
+
+        public override bool VisitDialogButtonTriggerList([NotNull] sphereScript99Parser.DialogButtonTriggerListContext context)
+        {
+            var triggers = context.dialogButtonTrigger();
+            if (triggers != null)
+                output.Append($"buttonTriggers:{triggers.Length};");
+            else
+                output.Append("buttonTriggers:0;");
+
+            return base.VisitDialogButtonTriggerList(context);
+        }
     }
 }

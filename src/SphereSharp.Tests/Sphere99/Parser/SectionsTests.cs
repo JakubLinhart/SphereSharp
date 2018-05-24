@@ -138,12 +138,20 @@ other random text
         [TestMethod]
         public void Can_parse_dialog_button_section()
         {
-            CheckStructure("triggers:2;", @"[dialog d_zmenajmena_duvod button]
+            CheckStructure("buttonTriggers:5;", @"[dialog d_zmenajmena_duvod button]
 on=0
 dialog(d_zmenajmena_duvod)
 
 on=1
 dialog(d_zmenajmena_duvod)
+
+onbutton=2
+dialog(d_zmenajmena_duvod)
+
+on=3
+
+on=@anybutton
+
 ");
         }
 

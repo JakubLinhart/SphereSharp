@@ -42,8 +42,12 @@ dialogTextSection: dialogTextSectionHeader dialogTextSectionLine*?;
 dialogTextSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ TEXT ']' NEWLINE;
 dialogTextSectionLine: freeTextLine;
 
-dialogButtonSection: dialogButtonSectionHeader triggerList;
+dialogButtonSection: dialogButtonSectionHeader dialogButtonTriggerList;
 dialogButtonSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ BUTTON ']' NEWLINE;
+dialogButtonTriggerList: dialogButtonTrigger*;
+dialogButtonTrigger: dialogButtonTriggerHeader triggerBody?;
+dialogButtonTriggerHeader: HEADER=(TRIGGER_HEADER | BUTTON_TRIGGER_HEADER) dialogButtonTriggerName NEWLINE;
+dialogButtonTriggerName: number | ANY_BUTTON;
 
 bookPageSection: bookPageSectionHeader pageLine*?;
 bookPageSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL WS+ pageNumber=DEC_NUMBER ']' NEWLINE;
@@ -110,7 +114,7 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX;
+                | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' numericExpression ']';
 
@@ -124,7 +128,7 @@ propertyValue: ~(NEWLINE)+?;
 // trigger
 triggerList: trigger*;
 trigger: triggerHeader (NEWLINE | EOF) triggerBody?;
-triggerHeader: TRIGGER_HEADER (('@' triggerName) | (number));
+triggerHeader: TRIGGER_HEADER ('@' triggerName);
 triggerName: nativeFunctionName | SYMBOL;
 triggerBody: codeBlock;
 
@@ -236,6 +240,7 @@ RESCOUNT: [rR][eE][sS][cC][oO][uU][nN][tT];
 RESTEST: [rR][eE][sS][tT][eE][sS][tT];
 SMSG: [sS][mM][sS][gG];
 FIX: [fF][iI][xX];
+INPDLG: [iI][nN][pP][dD][lL][gG];
 
 EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
 EVAL: [eE][vV][aA][lL];
@@ -243,6 +248,8 @@ HVAL: [hH][vV][aA][lL];
 SAFE: [sS][aA][fF][eE];
 
 TRIGGER_HEADER: [oO][nN] '=';
+BUTTON_TRIGGER_HEADER: [oO][nN][bB][uU][tT][tT][oO][nN] '=';
+ANY_BUTTON: '@' [aA][nN][yY][bB][uU][tT][tT][oO][nN];
 SYMBOL: VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
 DEC_NUMBER: ('1' .. '9') DEC_DIGIT*  ('.' ('0'..'9')+)?;
 HEX_NUMBER: '0' HEX_DIGIT* ;
