@@ -32,7 +32,7 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitMemberName([NotNull] sphereScript99Parser.MemberNameContext context)
         {
-            builder.Append(context.GetText());
+            AppendTerminalsVisitNodes(context.children);
 
             return true;
         }

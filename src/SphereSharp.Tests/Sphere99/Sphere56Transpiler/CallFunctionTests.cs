@@ -14,6 +14,7 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
     {
         [TestMethod]
         [DataRow("fun1", "fun1")]
+        [DataRow("<argv(1)>_<arg(u)>", "<argv[1]>_<local.u>")]
         [DataRow("fun1()", "fun1")]
         [DataRow("fun1(-1)", "fun1 -1")]
         [DataRow("fun1_2", "fun1_2")]
