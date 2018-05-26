@@ -114,7 +114,7 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG;
+                | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' numericExpression ']';
 
@@ -241,11 +241,11 @@ RESTEST: [rR][eE][sS][tT][eE][sS][tT];
 SMSG: [sS][mM][sS][gG];
 FIX: [fF][iI][xX];
 INPDLG: [iI][nN][pP][dD][lL][gG];
+SAFE: [sS][aA][fF][eE];
 
-EVAL_FUNCTIONS: EVAL | HVAL | SAFE;
+EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
 HVAL: [hH][vV][aA][lL];
-SAFE: [sS][aA][fF][eE];
 
 TRIGGER_HEADER: [oO][nN] '=';
 BUTTON_TRIGGER_HEADER: [oO][nN][bB][uU][tT][tT][oO][nN] '=';

@@ -92,11 +92,23 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("var(u)", "<var0.u>")]
         [DataRow("<findid(i_item)>", "<findid.i_item>")]
         [DataRow("arg(length)", "<local.length>")]
-        [DataRow("safe.tag(orig_stealth)", "<tag0.orig_stealth>")]
-        [DataRow("<safe.tag(orig_stealth)>", "<tag0.orig_stealth>")]
         public void Conditions(string src, string expectedResult)
         {
             TranspileConditionCheck(src, expectedResult);
+        }
+
+        [TestMethod]
+        public void Safe()
+        {
+            TranspileStatementCheck("safe(findid.i_something.remove)", "findid.i_something.remove");
+            TranspileStatementCheck("safe findid.i_something.remove", "findid.i_something.remove");
+            TranspileStatementCheck("safe(cast 020)", "cast 020");
+            TranspileStatementCheck("safe(events=+e_something)", "events=+e_something");
+            TranspileConditionCheck("safe finduid(<argv(0)>).isChar", "<finduid.<argv[0]>.isChar>");
+            TranspileConditionCheck("safe(finduid(<argv(0)>).isChar)", "<finduid.<argv[0]>.isChar>");
+            TranspileConditionCheck("safe.tag(orig_stealth)", "<tag0.orig_stealth>");
+            TranspileConditionCheck("<safe.tag(orig_stealth)>", "<tag0.orig_stealth>");
+            TranspileConditionCheck("safe(<eval (<args>)>)", "<eval (<args>)>");
         }
 
         [TestMethod]
@@ -216,7 +228,7 @@ endif");
         }
 
         [TestMethod]
-        [DataRow("arg(length,<strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
+        //[DataRow("arg(length,<strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(length,strlen(<argv(1)>)+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "local.u=<eval strcmpi(<argv[0]>,<argv[1]>)>")]
@@ -462,7 +474,7 @@ comment line 2
                 Assert.Fail(parsingOutput.GetErrorsText());
             }
 
-            var transpiler = new SphereSharp.Sphere99.Sphere56Transpiler();
+            var transpiler = new SphereSharp.Sphere99.Sphere56TranspilerVisitor();
             transpiler.Visit(parsingOutput.Tree);
 
             transpiler.Output.Trim().Should().Be(expectedOutput.Trim());

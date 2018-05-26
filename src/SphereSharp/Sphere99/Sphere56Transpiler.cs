@@ -5,14 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using SphereSharp.Sphere99.Sphere56Transpiler;
 
 namespace SphereSharp.Sphere99
 {
-    public class Sphere56Transpiler : sphereScript99BaseVisitor<bool>
+    public sealed class Sphere56TranspilerVisitor : sphereScript99BaseVisitor<bool>
     {
-        private SourceCodeBuilder builder = new SourceCodeBuilder();
+        private readonly SpecialFunctionTranspiler specialFunctionTranspiler;
+        private readonly ExpressionRequiresMacroVisitor expressionRequiresMacroVisitor = new ExpressionRequiresMacroVisitor();
+
+        private readonly SourceCodeBuilder builder = new SourceCodeBuilder();
 
         public string Output => builder.Output;
+
+        public Sphere56TranspilerVisitor()
+        {
+            specialFunctionTranspiler = new SpecialFunctionTranspiler(builder, this);
+        }
 
         public override bool VisitFile([NotNull] sphereScript99Parser.FileContext context)
         {
@@ -172,27 +181,7 @@ namespace SphereSharp.Sphere99
             return result;
         }
 
-        private HashSet<string> specialFunctionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "strlen",
-            "strcmpi"
-        };
-
-        private bool IsSpecialFunction(string name) => specialFunctionNames.Contains(name);
-
-        public override bool VisitFirstMemberAccessExpression([NotNull] sphereScript99Parser.FirstMemberAccessExpressionContext context)
-        {
-            string memberName = context.firstMemberAccess()?.customMemberAccess()?.memberName()?.GetText() ?? string.Empty;
-            bool requiresMacro = semanticContext.IsNumeric && !IsSpecialFunction(memberName);
-
-            if (requiresMacro)
-                builder.Append('<');
-            var result = base.VisitFirstMemberAccessExpression(context);
-            if (requiresMacro)
-                builder.Append('>');
-
-            return result;
-        }
+        private readonly FirstMemberAccessNameVisitor firstMemberAccessNameVisitor = new FirstMemberAccessNameVisitor();
 
         public override bool VisitEvalCall([NotNull] sphereScript99Parser.EvalCallContext context)
         {
@@ -255,6 +244,14 @@ namespace SphereSharp.Sphere99
         }
 
         public override bool VisitTypeDefSection([NotNull] sphereScript99Parser.TypeDefSectionContext context)
+        {
+            Visit(context.typeDefSectionHeader());
+            Visit(context.triggerList());
+
+            return true;
+        }
+
+        public override bool VisitTypeDefSectionHeader([NotNull] sphereScript99Parser.TypeDefSectionHeaderContext context)
         {
             builder.Append(context.GetText());
 
@@ -419,7 +416,25 @@ namespace SphereSharp.Sphere99
             try
             {
                 semanticContext.EnterRequireMacro();
-                return base.VisitNumericExpression(context);
+                if (expressionRequiresMacroVisitor.Visit(context))
+                {
+                    try
+                    {
+                        builder.Append('<');
+                        if (new SafeTranspiler(builder, this, true).Visit(context))
+                            return true;
+
+                        return base.VisitNumericExpression(context);
+                    }
+                    finally
+                    {
+                        builder.Append('>');
+                    }
+                }
+                else
+                {
+                    return base.VisitNumericExpression(context);
+                }
             }
             finally
             {
@@ -493,14 +508,37 @@ namespace SphereSharp.Sphere99
             var name = context.nativeFunctionName()?.GetText();
             if (!string.IsNullOrEmpty(name))
             {
-                if (name.Equals("safe", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (context.chainedMemberAccess()?.memberAccess() != null)
-                    {
-                        Visit(context.chainedMemberAccess().memberAccess());
-                        return true;
-                    }
-                }
+                //if (name.Equals("safe", StringComparison.OrdinalIgnoreCase))
+                //{
+                //    if (context.chainedMemberAccess()?.memberAccess() != null)
+                //    {
+                //        Visit(context.chainedMemberAccess().memberAccess());
+                //        return true;
+                //    }
+
+                //    var enclosedArguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument();
+                //    if (enclosedArguments != null)
+                //    {
+                //        if (enclosedArguments.Length == 1)
+                //        {
+                //            Visit(enclosedArguments[0]);
+                //            return true;
+                //        }
+                //        else
+                //            throw new TranspilerException(context, "unexpected safe arguments count");
+                //    }
+
+                //    var freeArgument = context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument();
+                //    if (freeArgument != null)
+                //    {
+                //        var freeArguments = context.nativeArgumentList()?.freeArgumentList()?.argument();
+                //        if (freeArguments != null && freeArguments.Length > 0)
+                //            throw new TranspilerException(context, "unexpected safe arguments count");
+
+                //        Visit(freeArgument);
+                //        return true;
+                //    }
+                //}
 
                 var arguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() ??
                     context.nativeArgumentList()?.freeArgumentList()?.argument();
@@ -741,7 +779,11 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitFirstMemberAccess([NotNull] sphereScript99Parser.FirstMemberAccessContext context)
         {
-            var name = context.customMemberAccess()?.memberName()?.GetText();
+            if (new SafeTranspiler(builder, this, false).Visit(context) || specialFunctionTranspiler.Visit(context))
+                return true;
+
+            var name = firstMemberAccessNameVisitor.Visit(context);
+
             if (!string.IsNullOrEmpty(name))
             {
                 var arguments = context.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
@@ -841,39 +883,6 @@ namespace SphereSharp.Sphere99
 
                         return false;
                     }
-                }
-                else if (IsSpecialFunction(name))
-                {
-                    bool requiresMacro = false;
-
-                    if (!(context.Parent.Parent.Parent.Parent.Parent.Parent is sphereScript99Parser.EvalCallContext))
-                    {
-                        if (context.Parent is sphereScript99Parser.MacroBodyContext)
-                        {
-                            builder.Append("eval ");
-                            requiresMacro = false;
-                        }
-                        else
-                        {
-                            builder.Append("<eval ");
-                            requiresMacro = true;
-                        }
-                    }
-
-                    builder.Append(name);
-                    builder.Append('(');
-                    Visit(arguments[0]);
-                    for (int i = 1; i < arguments.Length; i++)
-                    {
-                        builder.Append(',');
-                        Visit(arguments[i]);
-                    }
-                    builder.Append(')');
-
-                    if (requiresMacro)
-                        builder.Append(">");
-
-                    return true;
                 }
                 else if (context.customMemberAccess() != null && arguments == null)
                 {

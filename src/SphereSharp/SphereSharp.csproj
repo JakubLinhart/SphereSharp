@@ -51,10 +51,16 @@
     <Compile Include="MemoryErrorListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceCodeBuilder.cs" />
+    <Compile Include="Sphere99\FirstMemberAccessArgumentsVisitor.cs" />
+    <Compile Include="Sphere99\FirstMemberAccessNameVisitor.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\ExpressionRequiresMacroVisitor.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler.cs" />
     <Compile Include="Sphere99\Parser.cs" />
     <Compile Include="Sphere99\ParsingResult.cs" />
     <Compile Include="Sphere99\RoundtripGenerator.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\MacroRemoverTranspiler.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\SafeTranspiler.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\SpecialFunctionTranspiler.cs" />
     <Compile Include="Sphere99\TranspilerException.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -57,7 +57,7 @@ namespace SphereSharp.Cli
                     Console.WriteLine(error.Message);
             }
 
-            var transpiler = new Sphere56Transpiler();
+            var transpiler = new Sphere56TranspilerVisitor();
             transpiler.Visit(result.Tree);
 
             Console.WriteLine($"Writing transpiled file {outputFileName}");
