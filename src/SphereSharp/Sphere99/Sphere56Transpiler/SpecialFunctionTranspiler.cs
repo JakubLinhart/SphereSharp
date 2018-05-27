@@ -33,38 +33,22 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         {
             var name = firstMemberAccessNameVisitor.Visit(context);
             IParseTree[] arguments = firstMemberAccessArgumentsVisitor.Visit(context);
-            bool inEval = false;
-
-            if (context.evalCall()?.numericExpression() != null)
-            {
-                name = firstMemberAccessNameVisitor.Visit(context.evalCall().numericExpression());
-                if (IsSpecialFunction(name))
-                {
-                    builder.Append("eval ");
-                    arguments = firstMemberAccessArgumentsVisitor.Visit(context.evalCall().numericExpression());
-                    inEval = true;
-                }
-                else
-                    return false;
-            }
 
             if (IsSpecialFunction(name))
             {
-                if (!inEval)
-                    builder.Append("<eval ");
-
-                builder.Append(name);
-                builder.Append('(');
-                transpiler.Visit(arguments[0]);
-                for (int i = 1; i < arguments.Length; i++)
+                builder.EnsureEvalCall("eval", () =>
                 {
-                    builder.Append(',');
-                    transpiler.Visit(arguments[i]);
-                }
-                builder.Append(')');
+                    builder.Append(name);
+                    builder.Append('(');
+                    transpiler.Visit(arguments[0]);
+                    for (int i = 1; i < arguments.Length; i++)
+                    {
+                        builder.Append(',');
+                        transpiler.Visit(arguments[i]);
+                    }
+                    builder.Append(')');
 
-                if (!inEval)
-                    builder.Append('>');
+                });
 
                 return true;
             }

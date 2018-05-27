@@ -8,7 +8,7 @@ namespace SphereSharp.Sphere99
 {
     public class RoundtripGenerator : sphereScript99BaseVisitor<bool>
     {
-        public SourceCodeBuilder output = new SourceCodeBuilder();
+        public TextBuilder output = new TextBuilder();
         public string Output => output.Output;
 
         public override bool VisitTerminal(ITerminalNode node)

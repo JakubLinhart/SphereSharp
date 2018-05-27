@@ -4,7 +4,7 @@ using Antlr4.Runtime.Tree;
 
 namespace SphereSharp
 {
-    public class SourceCodeBuilder
+    public class TextBuilder
     {
         private StringBuilder output = new StringBuilder();
         public string Output => output.ToString();

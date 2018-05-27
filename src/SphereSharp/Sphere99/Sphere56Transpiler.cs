@@ -161,6 +161,15 @@ namespace SphereSharp.Sphere99
             return result;
         }
 
+        public override bool VisitMacro([NotNull] sphereScript99Parser.MacroContext context)
+        {
+            builder.StartMacro();
+            base.VisitMacro(context);
+            builder.EndMacro();
+
+            return true;
+        }
+
         public override bool VisitEscapedMacro([NotNull] sphereScript99Parser.EscapedMacroContext context)
         {
             builder.Append('<');
@@ -185,10 +194,15 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitEvalCall([NotNull] sphereScript99Parser.EvalCallContext context)
         {
+            builder.StartEvalCall();
             builder.Append(context.EVAL_FUNCTIONS());
             builder.Append(context.WS());
 
-            return base.VisitEvalCall(context);
+            base.VisitEvalCall(context);
+
+            builder.EndEvalCall();
+
+            return true;
         }
 
         public override bool VisitDialogTextSection([NotNull] sphereScript99Parser.DialogTextSectionContext context)
@@ -415,29 +429,14 @@ namespace SphereSharp.Sphere99
         {
             try
             {
+                builder.StartNumericExpression();
                 semanticContext.EnterRequireMacro();
-                if (expressionRequiresMacroVisitor.Visit(context))
-                {
-                    try
-                    {
-                        builder.Append('<');
-                        if (new SafeTranspiler(builder, this, true).Visit(context))
-                            return true;
 
-                        return base.VisitNumericExpression(context);
-                    }
-                    finally
-                    {
-                        builder.Append('>');
-                    }
-                }
-                else
-                {
-                    return base.VisitNumericExpression(context);
-                }
+                return base.VisitNumericExpression(context);
             }
             finally
             {
+                builder.EndNumericExpression();
                 semanticContext.Leave();
             }
         }
@@ -508,38 +507,6 @@ namespace SphereSharp.Sphere99
             var name = context.nativeFunctionName()?.GetText();
             if (!string.IsNullOrEmpty(name))
             {
-                //if (name.Equals("safe", StringComparison.OrdinalIgnoreCase))
-                //{
-                //    if (context.chainedMemberAccess()?.memberAccess() != null)
-                //    {
-                //        Visit(context.chainedMemberAccess().memberAccess());
-                //        return true;
-                //    }
-
-                //    var enclosedArguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument();
-                //    if (enclosedArguments != null)
-                //    {
-                //        if (enclosedArguments.Length == 1)
-                //        {
-                //            Visit(enclosedArguments[0]);
-                //            return true;
-                //        }
-                //        else
-                //            throw new TranspilerException(context, "unexpected safe arguments count");
-                //    }
-
-                //    var freeArgument = context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument();
-                //    if (freeArgument != null)
-                //    {
-                //        var freeArguments = context.nativeArgumentList()?.freeArgumentList()?.argument();
-                //        if (freeArguments != null && freeArguments.Length > 0)
-                //            throw new TranspilerException(context, "unexpected safe arguments count");
-
-                //        Visit(freeArgument);
-                //        return true;
-                //    }
-                //}
-
                 var arguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() ??
                     context.nativeArgumentList()?.freeArgumentList()?.argument();
                 builder.Append(name);
@@ -779,143 +746,152 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitFirstMemberAccess([NotNull] sphereScript99Parser.FirstMemberAccessContext context)
         {
-            if (new SafeTranspiler(builder, this, false).Visit(context) || specialFunctionTranspiler.Visit(context))
+            if (new SafeTranspiler(builder, this).Visit(context) || specialFunctionTranspiler.Visit(context))
                 return true;
 
-            var name = firstMemberAccessNameVisitor.Visit(context);
+            builder.StartMemberAccess();
 
-            if (!string.IsNullOrEmpty(name))
+            try
             {
-                var arguments = context.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
+                var name = firstMemberAccessNameVisitor.Visit(context);
 
-                if (name.Equals("arg", StringComparison.OrdinalIgnoreCase))
+                if (!string.IsNullOrEmpty(name))
                 {
-                    if (arguments != null)
+                    var arguments = context.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
+
+                    if (name.Equals("arg", StringComparison.OrdinalIgnoreCase))
                     {
-                        string localVariableName = arguments[0].GetText();
-                        bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext && arguments.Length == 1 && !semanticContext.IsNumeric;
-                        if (requiresMacro)
-                            builder.Append('<');
-
-                        bool requiresUid = context.customMemberAccess()?.chainedMemberAccess() != null && arguments.Length == 1;
-                        if (requiresUid)
-                            builder.Append("uid.<");
-
-                        var localVariableAccess = $"local.{localVariableName}";
-                        builder.Append(localVariableAccess);
-                        if (requiresMacro)
-                            builder.Append('>');
-
-                        if (arguments.Length > 1)
+                        if (arguments != null)
                         {
-                            builder.Append('=');
+                            string localVariableName = arguments[0].GetText();
+                            bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext && arguments.Length == 1 && !semanticContext.IsNumeric;
+                            if (requiresMacro)
+                                builder.Append('<');
 
-                            try
+                            bool requiresUid = context.customMemberAccess()?.chainedMemberAccess() != null && arguments.Length == 1;
+                            if (requiresUid)
+                                builder.Append("uid.<");
+
+                            var localVariableAccess = $"local.{localVariableName}";
+                            builder.Append(localVariableAccess);
+                            if (requiresMacro)
+                                builder.Append('>');
+
+                            if (arguments.Length > 1)
                             {
-                                lastSharpSubstitution = $"<{localVariableAccess}>";
-                                semanticContext.DefineLocalVariable(localVariableName);
-                                VisitArgument(arguments[1]);
+                                builder.Append('=');
 
-                                foreach (var argument in arguments.Skip(2))
+                                try
                                 {
-                                    builder.Append(',');
-                                    VisitArgument(argument);
-                                }
+                                    lastSharpSubstitution = $"<{localVariableAccess}>";
+                                    semanticContext.DefineLocalVariable(localVariableName);
+                                    VisitArgument(arguments[1]);
 
+                                    foreach (var argument in arguments.Skip(2))
+                                    {
+                                        builder.Append(',');
+                                        VisitArgument(argument);
+                                    }
+
+                                    return true;
+                                }
+                                finally
+                                {
+                                    lastSharpSubstitution = null;
+                                }
+                            }
+                            else if (arguments.Length == 1)
+                            {
+                                if (requiresUid)
+                                {
+                                    builder.Append('>');
+                                    Visit(context.customMemberAccess().chainedMemberAccess());
+                                }
                                 return true;
                             }
-                            finally
-                            {
-                                lastSharpSubstitution = null;
-                            }
                         }
-                        else if (arguments.Length == 1)
+                        else
                         {
-                            if (requiresUid)
+                            var chainedCall = context.customMemberAccess()?.chainedMemberAccess();
+                            if (chainedCall != null)
                             {
-                                builder.Append('>');
-                                Visit(context.customMemberAccess().chainedMemberAccess());
+                                if (chainedCall.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.chainedMemberAccess() != null)
+                                    throw new TranspilerException(context, "two chained calls after 'arg'");
+                                builder.Append("local");
+                                builder.Append(chainedCall.GetText());
+                                return true;
                             }
-                            return true;
+                            else
+                                throw new TranspilerException(context, "No arguments and no chained parameter for 'arg'");
                         }
                     }
-                    else
+                    else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase) || name.Equals("ARGVCOUNT", StringComparison.OrdinalIgnoreCase))
                     {
-                        var chainedCall = context.customMemberAccess()?.chainedMemberAccess();
-                        if (chainedCall != null)
+                        builder.Append($"argv");
+                        return true;
+                    }
+                    else if (name.Equals("argv", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (arguments != null)
                         {
-                            if (chainedCall.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.chainedMemberAccess() != null)
-                                throw new TranspilerException(context, "two chained calls after 'arg'");
-                            builder.Append("local");
-                            builder.Append(chainedCall.GetText());
+                            builder.Append($"argv[");
+                            base.Visit(arguments[0]);
+                            builder.Append("]");
                             return true;
                         }
                         else
-                            throw new TranspilerException(context, "No arguments and no chained parameter for 'arg'");
+                        {
+                            builder.Append("args");
+                            return true;
+                        }
                     }
-                }
-                else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase) || name.Equals("ARGVCOUNT", StringComparison.OrdinalIgnoreCase))
-                {
-                    builder.Append($"argv");
-                    return true;
-                }
-                else if (name.Equals("argv", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (arguments != null)
+                    else if (name.Equals("args", StringComparison.OrdinalIgnoreCase))
                     {
-                        builder.Append($"argv[");
-                        base.Visit(arguments[0]);
-                        builder.Append("]");
-                        return true;
-                    }
-                    else
-                    {
-                        builder.Append("args");
-                        return true;
-                    }
-                }
-                else if (name.Equals("args", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (context.customMemberAccess().chainedMemberAccess() != null)
-                    {
-                        builder.Append("<args>");
-                        Visit(context.customMemberAccess().chainedMemberAccess());
-
-                        return false;
-                    }
-                }
-                else if (context.customMemberAccess() != null && arguments == null)
-                {
-                    if (semanticContext.IsLocalVariable(name))
-                    {
-                        bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext;
-                        if (requiresMacro)
-                            builder.Append('<');
-                        builder.Append("local.");
-                        builder.Append(name);
-
                         if (context.customMemberAccess().chainedMemberAccess() != null)
+                        {
+                            builder.Append("<args>");
                             Visit(context.customMemberAccess().chainedMemberAccess());
 
-                        if (requiresMacro)
-                            builder.Append('>');
-
-                        return true;
+                            return false;
+                        }
                     }
-                    else if (globalVariables.Contains(name))
+                    else if (context.customMemberAccess() != null && arguments == null)
                     {
-                        builder.Append("var.");
-                        builder.Append(name);
+                        if (semanticContext.IsLocalVariable(name))
+                        {
+                            bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext;
+                            if (requiresMacro)
+                                builder.Append('<');
+                            builder.Append("local.");
+                            builder.Append(name);
 
-                        if (context.customMemberAccess().chainedMemberAccess() != null)
-                            Visit(context.customMemberAccess().chainedMemberAccess());
+                            if (context.customMemberAccess().chainedMemberAccess() != null)
+                                Visit(context.customMemberAccess().chainedMemberAccess());
 
-                        return true;
+                            if (requiresMacro)
+                                builder.Append('>');
+
+                            return true;
+                        }
+                        else if (globalVariables.Contains(name))
+                        {
+                            builder.Append("var.");
+                            builder.Append(name);
+
+                            if (context.customMemberAccess().chainedMemberAccess() != null)
+                                Visit(context.customMemberAccess().chainedMemberAccess());
+
+                            return true;
+                        }
                     }
                 }
+
+                return base.VisitFirstMemberAccess(context);
             }
-
-            return base.VisitFirstMemberAccess(context);
+            finally
+            {
+                builder.EndMemberAccess();
+            }
         }
 
         public override bool VisitEofSection([NotNull] sphereScript99Parser.EofSectionContext context)

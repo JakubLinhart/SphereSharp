@@ -87,6 +87,7 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("(<fun1>)", "(<fun1>)")]
         [DataRow("fun1", "<fun1>")]
         [DataRow("(fun1)", "(<fun1>)")]
+        [DataRow("(fun1==fun2)", "(<fun1>==<fun2>)")]
         [DataRow("{1 2}", "{1 2}")]
         [DataRow("<eval 123>", "<eval 123>")]
         [DataRow("tag(u)", "<tag0.u>")]
@@ -229,7 +230,7 @@ endif");
         }
 
         [TestMethod]
-        //[DataRow("arg(length,<strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("arg(length,<strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(length,strlen(<argv(1)>)+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "local.u=<eval strcmpi(<argv[0]>,<argv[1]>)>")]

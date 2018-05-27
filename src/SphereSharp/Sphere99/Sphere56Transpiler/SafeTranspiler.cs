@@ -11,20 +11,18 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
     {
         private readonly SourceCodeBuilder builder;
         private readonly Sphere56TranspilerVisitor transpiler;
-        private readonly bool removeSafeArgumentMacro;
         private readonly FirstMemberAccessNameVisitor firstMemberAccessNameVisitor = new FirstMemberAccessNameVisitor();
 
-        public SafeTranspiler(SourceCodeBuilder builder, Sphere56TranspilerVisitor transpiler, bool removeSafeArgumentMacro)
+        public SafeTranspiler(SourceCodeBuilder builder, Sphere56TranspilerVisitor transpiler)
         {
             this.builder = builder;
             this.transpiler = transpiler;
-            this.removeSafeArgumentMacro = removeSafeArgumentMacro;
         }
 
         public override bool VisitNumericExpression([NotNull] sphereScript99Parser.NumericExpressionContext context)
         {
             var name = firstMemberAccessNameVisitor.Visit(context);
-            if (!name.Equals("safe", StringComparison.OrdinalIgnoreCase))
+            if (name != null && !name.Equals("safe", StringComparison.OrdinalIgnoreCase))
                 return false;
 
             return base.VisitNumericExpression(context);
@@ -63,12 +61,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             if (arguments == null || arguments.Length != 1)
                 throw new TranspilerException(context, "wrong number of arguments for safe method");
 
-            if (removeSafeArgumentMacro)
-            {
-                new MacroRemoverTranspiler(builder, transpiler).Visit(arguments[0]);
-            }
-            else
-                transpiler.Visit(arguments[0]);
+            transpiler.Visit(arguments[0]);
 
             return true;
         }
