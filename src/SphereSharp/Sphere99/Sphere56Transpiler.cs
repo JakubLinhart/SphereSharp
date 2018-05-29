@@ -575,9 +575,9 @@ namespace SphereSharp.Sphere99
                     {
                         builder.Append('0');
                     }
-                    builder.Append(".");
                     if (arguments != null)
                     {
+                        builder.Append(".");
                         if (arguments.Length > 1)
                         {
                             if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
@@ -624,6 +624,7 @@ namespace SphereSharp.Sphere99
                         string chainedName = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.memberName()?.GetText();
                         if (chainedName != null && chainedName.Equals("remove", StringComparison.OrdinalIgnoreCase))
                         {
+                            builder.Append(".");
                             var chainedArgument = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
                             if (chainedArgument != null && chainedArgument.Length == 1)
                             {
@@ -632,6 +633,11 @@ namespace SphereSharp.Sphere99
                             }
                             else
                                 throw new TranspilerException(context, $"Wrong number of arguments tag.remove: {chainedArgument.Length}");
+                        }
+                        else
+                        {
+                            Visit(context.chainedMemberAccess());
+                            return true;
                         }
                     }
                 }

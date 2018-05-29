@@ -340,6 +340,7 @@ var.asciitext=1");
         [DataRow("tag(name,value1,value2)", "tag.name=value1,value2")]
         [DataRow("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value")]
         [DataRow("arg(name,<tag(detect_src).name>)", "local.name=<uid.<tag.detect_src>.name>")]
+        [DataRow("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>")]
         public void Tags(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
