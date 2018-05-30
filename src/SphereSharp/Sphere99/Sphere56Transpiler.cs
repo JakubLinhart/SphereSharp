@@ -497,18 +497,22 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        private bool AlwaysChainArguments(string name)
+        private HashSet<string> alwaysChainArgumentsFunctionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            return name.Equals("findid", StringComparison.OrdinalIgnoreCase);
-        }
+            "findid",
+            "isevent"
+        };
+
+        private bool AlwaysChainArguments(string name) => alwaysChainArgumentsFunctionNames.Contains(name);
 
         public override bool VisitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context)
         {
             var name = context.nativeFunctionName()?.GetText();
             if (!string.IsNullOrEmpty(name))
             {
-                var arguments = context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() ??
-                    context.nativeArgumentList()?.freeArgumentList()?.argument();
+                var arguments = new FirstMemberAccessArgumentsVisitor().Visit(context);
+                    //context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() ??
+                    //context.nativeArgumentList()?.freeArgumentList()?.argument();
                 builder.Append(name);
 
                 if (name.Equals("return", StringComparison.OrdinalIgnoreCase))
@@ -542,7 +546,10 @@ namespace SphereSharp.Sphere99
                         base.Visit(argument);
                     }
 
-                    return base.Visit(context.chainedMemberAccess());
+                    if (context.chainedMemberAccess() != null)
+                        return base.Visit(context.chainedMemberAccess());
+                    else
+                        return true;
                 }
                 else
                 {
@@ -631,13 +638,22 @@ namespace SphereSharp.Sphere99
                                 builder.Append($"{chainedArgument[0].GetText()}=");
                                 return true;
                             }
-                            else
-                                throw new TranspilerException(context, $"Wrong number of arguments tag.remove: {chainedArgument.Length}");
                         }
                         else
                         {
-                            Visit(context.chainedMemberAccess());
-                            return true;
+                            var secondChainedName = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.chainedMemberAccess()?.memberAccess().firstMemberAccess()?.customMemberAccess()?.memberName()?.GetText();
+                            if (secondChainedName != null && secondChainedName.Equals("remove", StringComparison.OrdinalIgnoreCase))
+                            {
+                                builder.Append('.');
+                                builder.Append(chainedName);
+                                builder.Append('=');
+                                return true;
+                            }
+                            else
+                            {
+                                Visit(context.chainedMemberAccess());
+                                return true;
+                            }
                         }
                     }
                 }

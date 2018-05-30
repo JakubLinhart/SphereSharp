@@ -224,6 +224,9 @@ endif");
         [DataRow("trigger(timer)", "trigger @timer")]
         [DataRow("findid(i_rune_discordance).remove", "findid.i_rune_discordance.remove")]
         [DataRow("findid(i_rune_discordance)", "findid.i_rune_discordance")]
+        [DataRow("isevent(e_something)", "isevent.e_something")]
+        [DataRow("isevent e_something", "isevent.e_something")]
+        [DataRow("isevent.e_something", "isevent.e_something")]
         public void Native_functions(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -337,6 +340,7 @@ var.asciitext=1");
         [DataRow("tag(name,value)", "tag.name=value")]
         [DataRow("arg(u,tag(name))", "local.u=tag.name")]
         [DataRow("tag.remove(u)", "tag.u=")]
+        [DataRow("tag.u.remove", "tag.u=")]
         [DataRow("tag(name,value1,value2)", "tag.name=value1,value2")]
         [DataRow("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value")]
         [DataRow("arg(name,<tag(detect_src).name>)", "local.name=<uid.<tag.detect_src>.name>")]
