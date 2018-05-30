@@ -222,6 +222,7 @@ endif");
         [DataRow("trigger @timer", "trigger @timer")]
         [DataRow("trigger(@timer)", "trigger @timer")]
         [DataRow("trigger(timer)", "trigger @timer")]
+        [DataRow("go 4764,1362,10", "go 4764,1362,10")]
         [DataRow("findid(i_rune_discordance).remove", "findid.i_rune_discordance.remove")]
         [DataRow("findid(i_rune_discordance)", "findid.i_rune_discordance")]
         [DataRow("isevent(e_something)", "isevent.e_something")]

@@ -63,15 +63,28 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitArgumentList([NotNull] sphereScript99Parser.ArgumentListContext context)
         {
-            var arguments = context.argument();
-            for (int i = 0; i < arguments.Length; i++)
-            {
-                VisitArgument(arguments[i]);
-                if (i < arguments.Length - 1)
-                    builder.Append(",");
-            }
+            AppendArguments(context.argument());
 
             return true;
+        }
+
+        private void AppendArguments(IEnumerable<IParseTree> arguments)
+        {
+            if (arguments == null)
+                return;
+
+            var argumentCount = arguments.Count();
+            if (argumentCount == 0)
+                return;
+
+            var firstArgument = arguments.First();
+            Visit(firstArgument);
+
+            foreach (var argument in arguments.Skip(1))
+            {
+                builder.Append(',');
+                Visit(argument);
+            }
         }
 
         public override bool VisitArgument([NotNull] sphereScript99Parser.ArgumentContext context)
@@ -511,21 +524,19 @@ namespace SphereSharp.Sphere99
             if (!string.IsNullOrEmpty(name))
             {
                 var arguments = new FirstMemberAccessArgumentsVisitor().Visit(context);
-                    //context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() ??
-                    //context.nativeArgumentList()?.freeArgumentList()?.argument();
                 builder.Append(name);
 
                 if (name.Equals("return", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (context.nativeArgumentList() != null)
-                    {
-                        var whiteSpace = context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument()?.firstFreeArgumentOptionalWhiteSpace()?.WS() ??
-                            context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument()?.firstFreeArgumentMandatoryWhiteSpace()?.WS();
-                        if (whiteSpace == null || whiteSpace.Length == 0)
-                        {
-                            builder.Append(" ");
-                        }
-                    }
+                    //if (context.nativeArgumentList() != null)
+                    //{
+                    //    var whiteSpace = context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument()?.firstFreeArgumentOptionalWhiteSpace()?.WS() ??
+                    //        context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument()?.firstFreeArgumentMandatoryWhiteSpace()?.WS();
+                    //    if (whiteSpace == null || whiteSpace.Length == 0)
+                    //    {
+                    //        builder.Append(" ");
+                    //    }
+                    //}
                 }
                 else if (name.Equals("trigger", StringComparison.OrdinalIgnoreCase))
                 {
@@ -551,14 +562,13 @@ namespace SphereSharp.Sphere99
                     else
                         return true;
                 }
-                else
+
+                if (arguments != null && arguments.Length > 0)
                 {
-                    var nativeArgumentList = context.nativeArgumentList();
-                    if (nativeArgumentList != null)
-                    {
-                        return base.Visit(nativeArgumentList);
-                    }
+                    builder.Append(' ');
+                    AppendArguments(arguments);
                 }
+                return true;
             }
 
             return base.VisitNativeMemberAccess(context);
