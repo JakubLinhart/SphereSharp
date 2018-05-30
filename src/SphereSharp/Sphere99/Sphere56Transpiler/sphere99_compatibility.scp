@@ -151,3 +151,16 @@ if (<argv>)
 else
   return <distance>
 return
+
+[function StrGetTok]
+return <f__StrGetTok_core <argv[1]>,<explode <argv[2]>,<argv[0]>>>
+
+[function f__StrGetTok_core]
+local.idx=<eval <argv[0]>+1>
+return <argv[<local.idx>]>
+
+[function serverTime]
+return serv.time
+
+[function statclients]
+return <serv.clients>
