@@ -11,7 +11,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
     {
         private enum Scope
         {
-            None, Numeric, Eval, Argument,
+            None, Numeric, Eval, ArgumentRequiringEval,
             Macro
         }
 
@@ -53,6 +53,9 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         public void StartNumericExpression() => scopes.Enter(Scope.Numeric);
         public void EndNumericExpression() => scopes.Leave();
 
+        public void StartArgumentRequiringEval() => scopes.Enter(Scope.ArgumentRequiringEval);
+        public void EndArgumentRequiringEval() => scopes.Leave();
+
         public void StartEvalCall() => scopes.Enter(Scope.Eval);
         public void EndEvalCall() => scopes.Leave();
         public void EnsureEvalCall(string evalFuncName, Action evalAction)
@@ -86,10 +89,9 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             }
         }
 
-        public void StartArgumentList() => scopes.Enter(Scope.Argument);
         public void StartMemberAccess()
         {
-            if (scopes.Current == Scope.Numeric)
+            if (scopes.Current == Scope.Numeric || scopes.Current == Scope.ArgumentRequiringEval)
             {
                 builder.Append('<');
             }
@@ -99,7 +101,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         public void EndMemberAccess()
         {
             scopes.Leave();
-            if (scopes.Current == Scope.Numeric)
+            if (scopes.Current == Scope.Numeric || scopes.Current == Scope.ArgumentRequiringEval)
                 builder.Append('>');
         }
 

@@ -526,19 +526,7 @@ namespace SphereSharp.Sphere99
                 var arguments = new FirstMemberAccessArgumentsVisitor().Visit(context);
                 builder.Append(name);
 
-                if (name.Equals("return", StringComparison.OrdinalIgnoreCase))
-                {
-                    //if (context.nativeArgumentList() != null)
-                    //{
-                    //    var whiteSpace = context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument()?.firstFreeArgumentOptionalWhiteSpace()?.WS() ??
-                    //        context.nativeArgumentList()?.freeArgumentList()?.firstFreeArgument()?.firstFreeArgumentMandatoryWhiteSpace()?.WS();
-                    //    if (whiteSpace == null || whiteSpace.Length == 0)
-                    //    {
-                    //        builder.Append(" ");
-                    //    }
-                    //}
-                }
-                else if (name.Equals("trigger", StringComparison.OrdinalIgnoreCase))
+                if (name.Equals("trigger", StringComparison.OrdinalIgnoreCase))
                 {
                     var argumentList = context.nativeArgumentList().GetText().Trim().TrimStart('(').TrimEnd(')');
                     if (!argumentList.StartsWith("@"))
@@ -666,6 +654,18 @@ namespace SphereSharp.Sphere99
                             }
                         }
                     }
+                }
+                else if (name.Equals("findres", StringComparison.OrdinalIgnoreCase))
+                {
+                    builder.Append("serv.");
+                    Visit(arguments[0]);
+                    builder.Append('.');
+                    builder.StartArgumentRequiringEval();
+                    Visit(arguments[1]);
+                    builder.EndArgumentRequiringEval();
+
+                    if (context.chainedMemberAccess() != null)
+                        return base.Visit(context.chainedMemberAccess());
                 }
                 else if (TransformFirstMemberAccessName(name, context))
                 {

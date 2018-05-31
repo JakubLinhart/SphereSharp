@@ -457,6 +457,14 @@ comment line 2
             TranspilePropertyAssignmentCheck(source, expectedResult);
         }
 
+        [TestMethod]
+        public void Findres()
+        {
+            TranspileConditionCheck("<findres(chardef,tag.spawnID).defname>", "<serv.chardef.<tag.spawnID>.defname>");
+            TranspileConditionCheck("<findres(skill,<arg(u)>).name>", "<serv.skill.<local.u>.name>");
+            TranspileConditionCheck("<findres(spell,<args>).flags>", "<serv.spell.<args>.flags>");
+        }
+
         private void TranspileStatementCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseStatement(src));
 
