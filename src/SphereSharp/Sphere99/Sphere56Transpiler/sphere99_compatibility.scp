@@ -141,6 +141,21 @@ else
   return 0
 endif
 
+[function flag_nightsight]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_nightsight
+  else
+    flags=<flags>&~statf_nightsight
+  endif
+else
+  if <flags>&statf_nightsight
+    return 1
+  endif
+  return 0
+endif
+
+
 [function newequip]
 newitem <args>
 equip <new>
@@ -164,3 +179,61 @@ return serv.time
 
 [function statclients]
 return <serv.clients>
+
+[function attr_movenever]
+if (<argv> > 0)
+  if (<argv[0]>)
+    attr=<attr>|<def.attr_move_never>
+  else
+    attr=<attr>&~<def.attr_move_never>
+  endif
+else
+  if <attr>&<def.attr_move_never>
+    return <def.attr_move_never>
+  endif
+  return 0
+endif
+
+[function attr_static]
+if (<argv> > 0)
+  if (<argv[0]>)
+    attr=<attr>|<def.attr_static>
+  else
+    attr=<attr>&~<def.attr_static>
+  endif
+else
+  if <attr>&<def.attr_static>
+    return <def.attr_static>
+  endif
+  return 0
+endif
+
+[function attr_decay]
+serv.log attr_decay <attr>
+if (<argv> > 0)
+  if (<argv[0]>)
+    attr=<attr>|<def.attr_decay>
+  else
+    attr=<attr>&~<def.attr_decay>
+  endif
+else
+  if <attr>&<def.attr_decay>
+    return <def.attr_decay>
+  endif
+  return 0
+endif
+
+[function attr_invis]
+serv.log attr_invis <attr>
+if (<argv> > 0)
+  if (<argv[0]>)
+    attr=<attr>|<def.attr_invis>
+  else
+    attr=<attr>&~<def.attr_invis>
+  endif
+else
+  if <attr>&<def.attr_invis>
+    return <def.attr_invis>
+  endif
+  return 0
+endif
