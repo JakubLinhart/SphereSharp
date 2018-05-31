@@ -11,7 +11,7 @@ functionSection: functionSectionHeader codeBlock;
 functionSectionHeader: FUNCTION_SECTION_HEADER_START functionName ']' NEWLINE;
 functionName: SYMBOL | nativeFunctionName;
 
-itemDefSection: itemDefSectionHeader propertyList triggerList ;
+itemDefSection: itemDefSectionHeader propertyList? triggerList? ;
 itemDefSectionHeader: ITEMDEF_SECTION_HEADER_START itemDefSectionName ']' NEWLINE;
 itemDefSectionName: SYMBOL | number;
 

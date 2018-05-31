@@ -31,6 +31,13 @@ remove");
         }
 
         [TestMethod]
+        public void Can_parse_empty_itemdef_section()
+        {
+            CheckStructure("triggers:0;", @"[itemdef i_something]
+");
+        }
+
+        [TestMethod]
         public void Can_parse_itemdef_without_triggers()
         {
             CheckStructure("props:3;triggers:0;", @"[itemdef i_dclickME]
