@@ -660,12 +660,14 @@ namespace SphereSharp.Sphere99
                     builder.Append("serv.");
                     Visit(arguments[0]);
                     builder.Append('.');
-                    builder.StartArgumentRequiringEval();
+                    builder.StartRequireMacro();
                     Visit(arguments[1]);
-                    builder.EndArgumentRequiringEval();
+                    builder.EndRequireMacro();
 
                     if (context.chainedMemberAccess() != null)
                         return base.Visit(context.chainedMemberAccess());
+
+                    return true;
                 }
                 else if (TransformFirstMemberAccessName(name, context))
                 {
@@ -798,16 +800,19 @@ namespace SphereSharp.Sphere99
                             string localVariableName = arguments[0].GetText();
                             bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext && arguments.Length == 1 && !semanticContext.IsNumeric;
                             if (requiresMacro)
-                                builder.Append('<');
+                                builder.StartRequireMacro();
 
+                            builder.StartMemberAccess();
                             bool requiresUid = context.customMemberAccess()?.chainedMemberAccess() != null && arguments.Length == 1;
                             if (requiresUid)
                                 builder.Append("uid.<");
 
                             var localVariableAccess = $"local.{localVariableName}";
                             builder.Append(localVariableAccess);
+                            builder.EndMemberAccess();
+
                             if (requiresMacro)
-                                builder.Append('>');
+                                builder.EndRequireMacro();
 
                             if (arguments.Length > 1)
                             {

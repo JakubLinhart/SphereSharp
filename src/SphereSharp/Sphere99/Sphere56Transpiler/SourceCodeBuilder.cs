@@ -12,7 +12,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private enum Scope
         {
             None, Numeric, Eval, ArgumentRequiringEval,
-            Macro
+            Macro, MemberAccess
         }
 
         private class Scopes
@@ -53,8 +53,17 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         public void StartNumericExpression() => scopes.Enter(Scope.Numeric);
         public void EndNumericExpression() => scopes.Leave();
 
-        public void StartArgumentRequiringEval() => scopes.Enter(Scope.ArgumentRequiringEval);
-        public void EndArgumentRequiringEval() => scopes.Leave();
+        public void StartRequireMacro()
+        {
+            if (scopes.Current != Scope.Macro)
+                scopes.Enter(Scope.ArgumentRequiringEval);
+        }
+
+        public void EndRequireMacro()
+        {
+            if (scopes.Current != Scope.Macro)
+                scopes.Leave();
+        }
 
         public void StartEvalCall() => scopes.Enter(Scope.Eval);
         public void EndEvalCall() => scopes.Leave();
@@ -94,15 +103,17 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             if (scopes.Current == Scope.Numeric || scopes.Current == Scope.ArgumentRequiringEval)
             {
                 builder.Append('<');
+                StartMacro();
             }
-            scopes.Enter(Scope.None);
+            else
+                scopes.Enter(Scope.MemberAccess);
         }
 
         public void EndMemberAccess()
         {
-            scopes.Leave();
-            if (scopes.Current == Scope.Numeric || scopes.Current == Scope.ArgumentRequiringEval)
+            if (scopes.Current == Scope.Macro)
                 builder.Append('>');
+            scopes.Leave();
         }
 
         public void StartMacro() => scopes.Enter(Scope.Macro);

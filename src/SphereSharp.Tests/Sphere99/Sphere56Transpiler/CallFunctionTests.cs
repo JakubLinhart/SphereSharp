@@ -253,10 +253,19 @@ endif");
         [DataRow("arg.u=0", "local.u=0")]
         [DataRow("arg.u=<arg.u>", "local.u=<local.u>")]
         [DataRow("equip(arg(hiditem))", "equip <local.hiditem>")]
-        [DataRow("arg(v,<arg(u).name>)", "local.v=<uid.<local.u>.name>")]
         public void Local_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
+        }
+
+        [TestMethod]
+        public void Induced_uid()
+        {
+            TranspileStatementCheck("arg(v,<arg(u).name>)", "local.v=<uid.<local.u>.name>");
+            TranspileStatementCheck("arg(name,<tag(detect_src).name>)", "local.name=<uid.<tag.detect_src>.name>");
+            TranspileStatementCheck("arg(name,<var(detect_src).name>)", "local.name=<uid.<var.detect_src>.name>");
+
+            TranspileConditionCheck("<eval arg(x).flags>", "<eval <uid.<local.x>.flags>>");
         }
 
         [TestMethod]
@@ -344,7 +353,6 @@ var.asciitext=1");
         [DataRow("tag.u.remove", "tag.u=")]
         [DataRow("tag(name,value1,value2)", "tag.name=value1,value2")]
         [DataRow("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value")]
-        [DataRow("arg(name,<tag(detect_src).name>)", "local.name=<uid.<tag.detect_src>.name>")]
         [DataRow("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>")]
         public void Tags(string source, string expectedResult)
         {
@@ -354,7 +362,6 @@ var.asciitext=1");
         [TestMethod]
         [DataRow("var(name,value)", "var.name=value")]
         [DataRow("arg(u,var(name))", "local.u=var.name")]
-        [DataRow("arg(name,<var(detect_src).name>)", "local.name=<uid.<var.detect_src>.name>")]
         public void Global_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -461,14 +468,17 @@ comment line 2
         public void Findres()
         {
             TranspileConditionCheck("<findres(chardef,tag.spawnID).defname>", "<serv.chardef.<tag.spawnID>.defname>");
+            TranspileConditionCheck("<findres(chardef, tag.spawnID).defname>", "<serv.chardef.<tag.spawnID>.defname>");
             TranspileConditionCheck("<findres(skill,<arg(u)>).name>", "<serv.skill.<local.u>.name>");
             TranspileConditionCheck("<findres(spell,<args>).flags>", "<serv.spell.<args>.flags>");
+            TranspileConditionCheck("findres(itemdef,arg(createID))", "<serv.itemdef.<local.createID>>");
+            TranspileStatementCheck("arg(x,<findres(skill,arg(i)).name>)", "local.x=<serv.skill.<local.i>.name>");
         }
 
         private void TranspileStatementCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseStatement(src));
 
-        private void TranspileFileCheck(string input, string expectedOutput) 
+        private void TranspileFileCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseFile(src));
 
         private void TranspileConditionCheck(string input, string expectedOutput)
