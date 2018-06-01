@@ -336,6 +336,39 @@ namespace SphereSharp.Sphere99
             return semanticContext.Execute(() => base.VisitFunctionSection(context));
         }
 
+        private Dictionary<string, string> triggerNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "UserDClick", "dclick" },
+            { "spellcast", "spellselect" },
+        };
+
+        public override bool VisitTriggerHeader([NotNull] sphereScript99Parser.TriggerHeaderContext context)
+        {
+            builder.Append(context.TRIGGER_HEADER());
+
+            var triggerName = context.triggerName().GetText();
+            builder.Append('@');
+            if (triggerNames.TryGetValue(triggerName, out string translatedTriggerName))
+                builder.Append(translatedTriggerName);
+            else
+                builder.Append(triggerName);
+
+            return true;
+        }
+
+        public override bool VisitTrigger([NotNull] sphereScript99Parser.TriggerContext context)
+        {
+            Visit(context.triggerHeader());
+
+            if (context.NEWLINE() != null)
+                builder.Append(context.NEWLINE().GetText());
+
+            if (context.triggerBody() != null)
+                Visit(context.triggerBody());
+
+            return true;
+        }
+
         public override bool VisitTriggerBody([NotNull] sphereScript99Parser.TriggerBodyContext context)
         {
             return semanticContext.Execute(() => base.VisitTriggerBody(context));
@@ -386,13 +419,6 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitTriggerHeader([NotNull] sphereScript99Parser.TriggerHeaderContext context)
-        {
-            builder.AppendLine(context.GetText());
-
-            return true;
-        }
-        
         private void AppendTerminalsVisitNodes(IList<IParseTree> children)
         {
             if (children != null)

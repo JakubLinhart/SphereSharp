@@ -312,6 +312,19 @@ variable1
         }
 
         [TestMethod]
+        public void Trigger_name_translation()
+        {
+            TranspileFileCheck(@"[itemdef i_item]
+on=@UserDClick
+on=@spellcast
+",
+@"[itemdef i_item]
+on=@dclick
+on=@spellselect");
+
+        }
+
+        [TestMethod]
         public void Trigger_is_local_variable_scope()
         {
             TranspileFileCheck(@"[itemdef i_item]
