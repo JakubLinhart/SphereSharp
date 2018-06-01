@@ -70,6 +70,8 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("lastnew.timer=300", "new.timer=300")]
         [DataRow("arg(u,<Skill_Enticement.effect>)", "local.u=<serv.skill.enticement.effect>")]
         [DataRow("region.flag_underground", "region.underground")]
+        [DataRow("profession=class_<arg(class)>", "skillclass=class_<local.class>")]
+        [DataRow("return <profession>", "return <skillclass>")]
         public void Name_transformation(string src, string expectedResult)
         {
             TranspileStatementCheck(src, expectedResult);

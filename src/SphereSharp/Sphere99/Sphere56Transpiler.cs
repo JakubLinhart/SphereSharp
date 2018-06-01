@@ -793,6 +793,11 @@ namespace SphereSharp.Sphere99
                 builder.Append("underground");
                 return true;
             }
+            else if (name.Equals("profession", StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append("skillclass");
+                return true;
+            }
 
             if (skillMemberNames.TryGetValue(name, out string replacement))
             {
