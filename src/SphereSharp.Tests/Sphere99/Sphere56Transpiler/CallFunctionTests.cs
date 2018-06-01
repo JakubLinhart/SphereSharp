@@ -64,14 +64,14 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
-        [DataRow("lastnew.bounce", "new.bounce")]
-        [DataRow("equip <lastnew>", "equip <new>")]
+        //[DataRow("lastnew.bounce", "new.bounce")]
+        //[DataRow("equip <lastnew>", "equip <new>")]
         [DataRow("equip lastnew", "equip <new>")]
-        [DataRow("lastnew.timer=300", "new.timer=300")]
-        [DataRow("arg(u,<Skill_Enticement.effect>)", "local.u=<serv.skill.enticement.effect>")]
-        [DataRow("region.flag_underground", "region.underground")]
-        [DataRow("profession=class_<arg(class)>", "skillclass=class_<local.class>")]
-        [DataRow("return <profession>", "return <skillclass>")]
+        //[DataRow("lastnew.timer=300", "new.timer=300")]
+        //[DataRow("arg(u,<Skill_Enticement.effect>)", "local.u=<serv.skill.enticement.effect>")]
+        //[DataRow("region.flag_underground", "region.underground")]
+        //[DataRow("profession=class_<arg(class)>", "skillclass=class_<local.class>")]
+        //[DataRow("return <profession>", "return <skillclass>")]
         public void Name_transformation(string src, string expectedResult)
         {
             TranspileStatementCheck(src, expectedResult);
@@ -261,6 +261,23 @@ endif");
         }
 
         [TestMethod]
+        public void Local_variable_tag_name_conflict()
+        {
+            TranspileFileCheck(@"[function fun1]
+arg(u,1)
+arg(v,1)
+tag.u=1
+tag(u,1)
+tag(u_<arg(v)>,1)",
+@"[function fun1]
+local.u=1
+local.v=1
+tag.u=1
+tag.u=1
+tag.u_<local.v>=1");
+        }
+
+        [TestMethod]
         public void Induced_uid()
         {
             TranspileStatementCheck("arg(v,<arg(u).name>)", "local.v=<uid.<local.u>.name>");
@@ -277,11 +294,13 @@ endif");
 arg(xxx,1)
 arg(yyy,<eval <xxx>>)
 yyy.color=1
-equip(xxx)",
+equip(xxx)
+equip(<xxx>)",
 @"[function fun1]
 local.xxx=1
 local.yyy=<eval <local.xxx>>
 local.yyy.color=1
+equip <local.xxx>
 equip <local.xxx>");
         }
 

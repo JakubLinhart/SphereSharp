@@ -12,7 +12,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private enum Scope
         {
             None, Numeric, Eval, ArgumentRequiringEval,
-            Macro, MemberAccess
+            Macro, MemberAccess, TagName
         }
 
         private class Scopes
@@ -20,6 +20,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             private Stack<Scope> scopes = new Stack<Scope>();
 
             public Scope Current => scopes.Count > 0 ? scopes.Peek() : Scope.None;
+            public Scope Parent => scopes.Count > 1 ? scopes.Skip(1).First() : Scope.None;
 
             public void Enter(Scope scope) => scopes.Push(scope);
             public void Leave() => scopes.Pop();
@@ -49,6 +50,24 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             if (scopes.Current == Scope.Numeric)
                 Append('0');
         }
+
+        public void AppendLocalVariable(string name)
+        {
+            bool requiresMacro = scopes.Parent != Scope.TagName && scopes.Parent != Scope.Macro && scopes.Parent != Scope.None;
+
+            if (requiresMacro)
+                builder.Append('<');
+
+            if (scopes.Parent != Scope.TagName)
+                builder.Append("local.");
+            builder.Append(name);
+
+            if (requiresMacro)
+                builder.Append('>');
+        }
+
+        public void StartTagName() => scopes.Enter(Scope.TagName);
+        public void EndTagName() => scopes.Leave();
 
         public void StartNumericExpression() => scopes.Enter(Scope.Numeric);
         public void EndNumericExpression() => scopes.Leave();

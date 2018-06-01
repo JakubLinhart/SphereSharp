@@ -617,7 +617,11 @@ namespace SphereSharp.Sphere99
                                 globalVariables.Add(arguments[0].GetText());
                             }
                             else
+                            {
+                                builder.StartTagName();
                                 Visit(arguments[0]);
+                                builder.EndTagName();
+                            }
 
                             builder.Append("=");
 
@@ -675,7 +679,9 @@ namespace SphereSharp.Sphere99
                             }
                             else
                             {
+                                builder.StartTagName();
                                 Visit(context.chainedMemberAccess());
+                                builder.EndTagName();
                                 return true;
                             }
                         }
@@ -927,17 +933,10 @@ namespace SphereSharp.Sphere99
                     {
                         if (semanticContext.IsLocalVariable(name))
                         {
-                            bool requiresMacro = context.Parent is sphereScript99Parser.FirstMemberAccessExpressionContext;
-                            if (requiresMacro)
-                                builder.Append('<');
-                            builder.Append("local.");
-                            builder.Append(name);
+                            builder.AppendLocalVariable(name);
 
                             if (context.customMemberAccess().chainedMemberAccess() != null)
                                 Visit(context.customMemberAccess().chainedMemberAccess());
-
-                            if (requiresMacro)
-                                builder.Append('>');
 
                             return true;
                         }

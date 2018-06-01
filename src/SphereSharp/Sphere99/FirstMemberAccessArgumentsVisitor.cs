@@ -22,7 +22,7 @@ namespace SphereSharp.Sphere99
         public override IParseTree[] VisitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context)
         {
             if (context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() != null)
-                return context.nativeArgumentList().enclosedArgumentList().argumentList().argument();
+                return context.nativeArgumentList().enclosedArgumentList().argumentList().argument().Select(x => x.children[0]).ToArray();
 
             var freeArgumentList = context.nativeArgumentList()?.freeArgumentList();
             if (freeArgumentList != null)
