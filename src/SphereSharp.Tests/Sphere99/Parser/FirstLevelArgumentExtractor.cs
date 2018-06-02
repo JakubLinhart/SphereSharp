@@ -44,5 +44,12 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return true;
         }
+
+        public override bool VisitEmptyArgument([NotNull] sphereScript99Parser.EmptyArgumentContext context)
+        {
+            arguments.Add("empty");
+
+            return true;
+        }
     }
 }

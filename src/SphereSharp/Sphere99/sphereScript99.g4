@@ -140,15 +140,18 @@ firstFreeArgument: firstFreeArgumentOptionalWhiteSpace | firstFreeArgumentMandat
 firstFreeArgumentOptionalWhiteSpace: WS* (triggerArgument | evalExpression | quotedLiteralArgument);
 firstFreeArgumentMandatoryWhiteSpace: WS+ (assignmentArgument | unquotedLiteralArgument);
 argumentList: argument (',' WS* argument)*;
-argument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentArgument | unquotedLiteralArgument;
+argument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentArgument | unquotedLiteralArgument | emptyArgument;
+emptyArgument: ;
+triggerArgument: '@' SYMBOL;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
 innerQuotedLiteralArgument: (macro | '\'' | '\\' | ';' | ~('"' | NEWLINE))*?;
-unquotedLiteralArgument: (memberAccess | SYMBOL | macro | constantExpression | WS | '[' | ']' | '#' | ':' |  '.' |  ',' | '?' | '!' | '@' | assignment | EQUAL)+? ;
-triggerArgument: '@' SYMBOL;
+unquotedLiteralArgument: (textLiteralSegment | macroLiteralSegment)+;
+textLiteralSegment: ~(',' | NEWLINE | LESS_THAN)+;
+macroLiteralSegment: macro;
 
 // eval expression
-evalExpression: signedEvalOperand evalBinaryOperation* ;
+evalExpression: signedEvalOperand evalBinaryOperation*? ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
 evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccessExpression | '#';
 firstMemberAccessExpression: firstMemberAccess;

@@ -52,26 +52,35 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
-        [DataRow("sysmessage Some text <fun1>", "sysmessage Some text <fun1>")]
-        [DataRow("sysmessage Some text <fun1(1,2,3)>", "sysmessage Some text <fun1 1,2,3>")]
-        [DataRow("sysmessage Some text <?fun1(1,2,3)?>", "sysmessage Some text <fun1 1,2,3>")]
-        [DataRow("sysmessage Some text <arg(x)>", "sysmessage Some text <local.x>")]
-        [DataRow("arg(x,Some text <arg(x)>)", "local.x=Some text <local.x>")]
-        [DataRow("arg(x,Some text <?arg(x)?>)", "local.x=Some text <local.x>")]
-        public void UnquotedArguments(string src, string expectedResult)
+        public void UnquotedArguments()
         {
-            TranspileStatementCheck(src, expectedResult);
+            TranspileStatementCheck("sysmessage Some text <fun1>", "sysmessage Some text <fun1>");
+            TranspileStatementCheck("sysmessage Some text <fun1(1,2,3)>", "sysmessage Some text <fun1 1,2,3>");
+            TranspileStatementCheck("sysmessage Some text <?fun1(1,2,3)?>", "sysmessage Some text <fun1 1,2,3>");
+            TranspileStatementCheck("sysmessage Some text <arg(x)>", "sysmessage Some text <local.x>");
+            TranspileStatementCheck("arg(x,Some text <arg(x)>)", "local.x=Some text <local.x>");
+            TranspileStatementCheck("arg(x,Some text <?arg(x)?>)", "local.x=Some text <local.x>");
+            TranspileStatementCheck(
+                "serv.allclients(sendpacket(0c0 <hval(<argv(0)>)> <split4bytes(<xxx>)> <split2bytes(<nid(<argv(1)>)>)>))",
+                "serv.allclients sendpacket 0c0 <hval(<argv[0]>)> <split4bytes <xxx>> <split2bytes <nid <argv[1]>>>");
+
+            TranspileFileCheck(@"[function fun1]
+arg(sometext,1)
+fun2(this is just sometext nothing more! no sometext variable replacement!)",
+@"[function fun1]
+local.sometext=1
+fun2 this is just sometext nothing more! no sometext variable replacement!");
         }
 
         [TestMethod]
-        //[DataRow("lastnew.bounce", "new.bounce")]
-        //[DataRow("equip <lastnew>", "equip <new>")]
+        [DataRow("lastnew.bounce", "new.bounce")]
+        [DataRow("equip <lastnew>", "equip <new>")]
         [DataRow("equip lastnew", "equip <new>")]
-        //[DataRow("lastnew.timer=300", "new.timer=300")]
-        //[DataRow("arg(u,<Skill_Enticement.effect>)", "local.u=<serv.skill.enticement.effect>")]
-        //[DataRow("region.flag_underground", "region.underground")]
-        //[DataRow("profession=class_<arg(class)>", "skillclass=class_<local.class>")]
-        //[DataRow("return <profession>", "return <skillclass>")]
+        [DataRow("lastnew.timer=300", "new.timer=300")]
+        [DataRow("arg(u,<Skill_Enticement.effect>)", "local.u=<serv.skill.enticement.effect>")]
+        [DataRow("region.flag_underground", "region.underground")]
+        [DataRow("profession=class_<arg(class)>", "skillclass=class_<local.class>")]
+        [DataRow("return <profession>", "return <skillclass>")]
         public void Name_transformation(string src, string expectedResult)
         {
             TranspileStatementCheck(src, expectedResult);
@@ -388,6 +397,9 @@ var.asciitext=1");
         [DataRow("tag(name,value1,value2)", "tag.name=value1,value2")]
         [DataRow("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value")]
         [DataRow("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>")]
+        [DataRow(
+            "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
+            "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>")]
         public void Tags(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);

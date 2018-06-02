@@ -450,8 +450,7 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitUnquotedLiteralArgument([NotNull] sphereScript99Parser.UnquotedLiteralArgumentContext context)
         {
-            AppendTerminalsVisitNodes(context.children);
-
+            new LiteralArgumentTranspiler(this, builder).Visit(context);
             return true;
         }
 
