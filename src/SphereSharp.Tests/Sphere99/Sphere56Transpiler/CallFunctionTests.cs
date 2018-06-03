@@ -284,16 +284,30 @@ local.v=1
 tag.u=1
 tag.u=1
 tag.u_<local.v>=1");
+// TODO:
+//            TranspileFileCheck(@"[function fun1]
+//var(u,1)
+//var(v,1)
+//tag.u=1
+//tag(u,1)
+//tag(u_<var(v)>,1)",
+//@"[function fun1]
+//var.u=1
+//var.v=1
+//tag.u=1
+//tag.u=1
+//tag.u_<var.v>=1");
         }
 
         [TestMethod]
         public void Induced_uid()
         {
             TranspileStatementCheck("arg(v,<arg(u).name>)", "local.v=<uid.<local.u>.name>");
-            TranspileStatementCheck("arg(name,<tag(detect_src).name>)", "local.name=<uid.<tag.detect_src>.name>");
-            TranspileStatementCheck("arg(name,<var(detect_src).name>)", "local.name=<uid.<var.detect_src>.name>");
+            TranspileStatementCheck("arg(name,<tag(detect_src).name>)", "local.name=<uid.<tag0.detect_src>.name>");
+            TranspileStatementCheck("arg(name,<var(detect_src).name>)", "local.name=<uid.<var0.detect_src>.name>");
 
             TranspileConditionCheck("<eval arg(x).flags>", "<eval <uid.<local.x>.flags>>");
+            TranspileConditionCheck("<eval tag(x).flags>", "<eval <uid.<tag0.x>.flags>>");
         }
 
         [TestMethod]
@@ -397,9 +411,10 @@ var.asciitext=1");
         [DataRow("tag(name,value1,value2)", "tag.name=value1,value2")]
         [DataRow("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value")]
         [DataRow("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>")]
-        [DataRow(
-            "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
-            "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>")]
+        // TODO:
+        //[DataRow(
+        //    "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
+        //    "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>")]
         public void Tags(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);

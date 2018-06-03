@@ -601,7 +601,7 @@ namespace SphereSharp.Sphere99
                         builder.Append("uid.<");
 
                     builder.Append(name);
-                    if (semanticContext.IsNumeric)
+                    if (semanticContext.IsNumeric || requiresUid)
                     {
                         builder.Append('0');
                     }
