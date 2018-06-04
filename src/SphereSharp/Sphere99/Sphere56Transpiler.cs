@@ -543,6 +543,24 @@ namespace SphereSharp.Sphere99
 
         private bool AlwaysChainArguments(string name) => alwaysChainArgumentsFunctionNames.Contains(name);
 
+        public override bool VisitGenericNativeMemberAccess([NotNull] sphereScript99Parser.GenericNativeMemberAccessContext context)
+        {
+            if (context.nativeMemberAccess() == null)
+            {
+                var name = firstMemberAccessNameVisitor.Visit(context);
+                var arguments = new FirstMemberAccessArgumentsVisitor().Visit(context);
+
+                builder.Append(name);
+                if (arguments != null && arguments.Length > 0)
+                    builder.Append(' ');
+                AppendArguments(arguments);
+
+                return true;
+            }
+
+            return base.VisitGenericNativeMemberAccess(context);
+        }
+
         public override bool VisitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context)
         {
             var name = context.nativeFunctionName()?.GetText();

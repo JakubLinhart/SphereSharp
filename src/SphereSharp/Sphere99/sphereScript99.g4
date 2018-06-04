@@ -103,8 +103,9 @@ assignment: firstMemberAccess assign argumentList?;
 assign: WS* ASSIGN WS*;
 
 memberAccess: firstMemberAccess | argumentAccess;
-firstMemberAccess: evalCall | nativeMemberAccess | customMemberAccess;
+firstMemberAccess: evalCall | genericNativeMemberAccess | customMemberAccess;
 evalCall: EVAL_FUNCTIONS WS* numericExpression; 
+genericNativeMemberAccess: actionMemberAccess | nativeMemberAccess;
 nativeMemberAccess: nativeFunctionName nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | freeArgumentList;
 argumentAccess: (evalExpression | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
@@ -114,8 +115,10 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | TARGETG | SKILL | SFX | ACTION | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
+                | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
                 | ISEVENT;
+actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
+actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro)+?;
 indexedMemberName: memberName '[' numericExpression ']';
 

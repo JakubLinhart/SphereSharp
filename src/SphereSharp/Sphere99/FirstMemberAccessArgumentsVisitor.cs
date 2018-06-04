@@ -10,11 +10,19 @@ namespace SphereSharp.Sphere99
 {
     public sealed class FirstMemberAccessArgumentsVisitor : sphereScript99BaseVisitor<IParseTree[]>
     {
-        public override IParseTree[] VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context)
+        public override IParseTree[] VisitEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context)
         {
-            var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
+            var arguments = context.argumentList()?.argument();
             if (arguments != null)
                 return arguments;
+
+            return Array.Empty<IParseTree>();
+        }
+
+        public override IParseTree[] VisitActionMemberAccess([NotNull] sphereScript99Parser.ActionMemberAccessContext context)
+        {
+            if (context.actionNativeArgument() != null)
+                return new[] { context.actionNativeArgument().evalExpression() };
 
             return Array.Empty<IParseTree>();
         }

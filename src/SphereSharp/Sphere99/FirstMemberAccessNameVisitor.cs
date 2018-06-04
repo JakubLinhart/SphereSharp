@@ -23,5 +23,10 @@ namespace SphereSharp.Sphere99
         {
             return context.EVAL_FUNCTIONS().GetText();
         }
+
+        public override string VisitActionMemberAccess([NotNull] sphereScript99Parser.ActionMemberAccessContext context)
+        {
+            return context.ACTION().GetText();
+        }
     }
 }

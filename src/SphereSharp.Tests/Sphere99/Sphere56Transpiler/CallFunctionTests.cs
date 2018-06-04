@@ -105,6 +105,7 @@ fun2 this is just sometext nothing more! no sometext variable replacement!");
         [DataRow("var(u)", "<var0.u>")]
         [DataRow("<findid(i_item)>", "<findid.i_item>")]
         [DataRow("arg(length)", "<local.length>")]
+        [DataRow("src.action == 1", "<src.action> == 1")]
         public void Conditions(string src, string expectedResult)
         {
             TranspileConditionCheck(src, expectedResult);
