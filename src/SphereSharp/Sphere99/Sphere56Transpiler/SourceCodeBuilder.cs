@@ -12,7 +12,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private enum Scope
         {
             None, Numeric, Eval, ArgumentRequiringEval,
-            Macro, MemberAccess, TagName
+            Macro, MemberAccess, VariableName
         }
 
         private class Scopes
@@ -53,21 +53,37 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
         public void AppendLocalVariable(string name)
         {
-            bool requiresMacro = scopes.Parent != Scope.TagName && scopes.Parent != Scope.Macro && scopes.Parent != Scope.None;
+            AppendVariable("local", name);
+        }
+
+        public void AppendGlobalVariable(string name)
+        {
+            AppendVariable("var", name);
+        }
+
+        private void AppendVariable(string variableType, string name)
+        {
+            bool requiresMacro = scopes.Parent != Scope.VariableName 
+                && scopes.Current != Scope.Macro && scopes.Parent != Scope.Macro
+                && scopes.Parent != Scope.None;
 
             if (requiresMacro)
                 builder.Append('<');
 
-            if (scopes.Parent != Scope.TagName)
-                builder.Append("local.");
+            if (scopes.Parent != Scope.VariableName)
+            {
+                builder.Append(variableType);
+                builder.Append('.');
+            }
+
             builder.Append(name);
 
             if (requiresMacro)
                 builder.Append('>');
         }
 
-        public void StartTagName() => scopes.Enter(Scope.TagName);
-        public void EndTagName() => scopes.Leave();
+        public void StartVariableName() => scopes.Enter(Scope.VariableName);
+        public void EndVariableName() => scopes.Leave();
 
         public void StartNumericExpression() => scopes.Enter(Scope.Numeric);
         public void EndNumericExpression() => scopes.Leave();
@@ -137,5 +153,38 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
         public void StartMacro() => scopes.Enter(Scope.Macro);
         public void EndMacro() => scopes.Leave();
+
+        private int callStartIndex = -1;
+        private int lastSharpSubstitutionStartIndex = -1;
+        private int lastSharpSubstitutionEndIndex = -1;
+
+        public void StartCall()
+        {
+            callStartIndex = builder.Length;
+        }
+
+        public void EndCall()
+        {
+            callStartIndex = -1;
+        }
+
+        public void CaptureLastSharpSubstitution()
+        {
+            if (callStartIndex >= 0)
+            {
+                lastSharpSubstitutionStartIndex = callStartIndex;
+                lastSharpSubstitutionEndIndex = builder.Length - 1;
+            }
+        }
+
+        public void AppendLastSharpSubstitution()
+        {
+            if (lastSharpSubstitutionStartIndex < 0 || lastSharpSubstitutionEndIndex < 0 || lastSharpSubstitutionStartIndex > lastSharpSubstitutionEndIndex)
+                throw new InvalidOperationException();
+
+            builder.Append('<');
+            builder.AppendSubstring(lastSharpSubstitutionStartIndex, lastSharpSubstitutionEndIndex);
+            builder.Append('>');
+        }
     }
 }

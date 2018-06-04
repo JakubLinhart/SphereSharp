@@ -106,13 +106,11 @@ namespace SphereSharp.Sphere99
             return base.VisitFirstFreeArgumentOptionalWhiteSpace(context);
         }
 
-        private string lastSharpSubstitution;
-
         public override bool VisitEvalOperand([NotNull] sphereScript99Parser.EvalOperandContext context)
         {
             if (context.GetText().Equals("#", StringComparison.OrdinalIgnoreCase))
             {
-                builder.Append(lastSharpSubstitution);
+                builder.AppendLastSharpSubstitution();
                 return true;
             }
 
@@ -342,7 +340,11 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
         {
-            return semanticContext.Execute(() => base.VisitFunctionSection(context));
+            semanticContext.ClearLocalVariables();
+            base.VisitFunctionSection(context);
+            semanticContext.ClearLocalVariables();
+
+            return true;
         }
 
         private Dictionary<string, string> triggerNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -380,7 +382,11 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitTriggerBody([NotNull] sphereScript99Parser.TriggerBodyContext context)
         {
-            return semanticContext.Execute(() => base.VisitTriggerBody(context));
+            semanticContext.ClearLocalVariables();
+            base.VisitTriggerBody(context);
+            semanticContext.ClearLocalVariables();
+
+            return true;
         }
 
         public override bool VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
@@ -391,6 +397,15 @@ namespace SphereSharp.Sphere99
             builder.Append(context.NEWLINE());
 
             return result;
+        }
+
+        public override bool VisitCall([NotNull] sphereScript99Parser.CallContext context)
+        {
+            builder.StartCall();
+            base.VisitCall(context);
+            builder.EndCall();
+
+            return true;
         }
 
         public override bool VisitAssignment([NotNull] sphereScript99Parser.AssignmentContext context)
@@ -637,17 +652,20 @@ namespace SphereSharp.Sphere99
                         builder.Append(".");
                         if (arguments.Length > 1)
                         {
-                            lastSharpSubstitution = $"<{name}.{arguments[0].GetText()}>";
                             if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
                             {
-                                builder.Append(arguments[0].GetText());
+                                builder.StartVariableName();
+                                Visit(arguments[0]);
+                                builder.EndVariableName();
+                                builder.CaptureLastSharpSubstitution();
                                 globalVariables.Add(arguments[0].GetText());
                             }
                             else
                             {
-                                builder.StartTagName();
+                                builder.StartVariableName();
                                 Visit(arguments[0]);
-                                builder.EndTagName();
+                                builder.CaptureLastSharpSubstitution();
+                                builder.EndVariableName();
                             }
 
                             builder.Append("=");
@@ -706,9 +724,9 @@ namespace SphereSharp.Sphere99
                             }
                             else
                             {
-                                builder.StartTagName();
+                                builder.StartVariableName();
                                 Visit(context.chainedMemberAccess());
-                                builder.EndTagName();
+                                builder.EndVariableName();
                                 return true;
                             }
                         }
@@ -874,6 +892,7 @@ namespace SphereSharp.Sphere99
                             var localVariableAccess = $"local.{localVariableName}";
                             builder.Append(localVariableAccess);
                             builder.EndMemberAccess();
+                            builder.CaptureLastSharpSubstitution();
 
                             if (requiresMacro)
                                 builder.EndRequireMacro();
@@ -882,24 +901,16 @@ namespace SphereSharp.Sphere99
                             {
                                 builder.Append('=');
 
-                                try
-                                {
-                                    lastSharpSubstitution = $"<{localVariableAccess}>";
-                                    semanticContext.DefineLocalVariable(localVariableName);
-                                    VisitArgument(arguments[1]);
+                                semanticContext.DefineLocalVariable(localVariableName);
+                                VisitArgument(arguments[1]);
 
-                                    foreach (var argument in arguments.Skip(2))
-                                    {
-                                        builder.Append(',');
-                                        VisitArgument(argument);
-                                    }
-
-                                    return true;
-                                }
-                                finally
+                                foreach (var argument in arguments.Skip(2))
                                 {
-                                    lastSharpSubstitution = null;
+                                    builder.Append(',');
+                                    VisitArgument(argument);
                                 }
+
+                                return true;
                             }
                             else if (arguments.Length == 1)
                             {
@@ -969,8 +980,7 @@ namespace SphereSharp.Sphere99
                         }
                         else if (globalVariables.Contains(name))
                         {
-                            builder.Append("var.");
-                            builder.Append(name);
+                            builder.AppendGlobalVariable(name);
 
                             if (context.customMemberAccess().chainedMemberAccess() != null)
                                 Visit(context.customMemberAccess().chainedMemberAccess());
@@ -997,18 +1007,16 @@ namespace SphereSharp.Sphere99
 
         private class SemanticContext
         {
+            HashSet<string> localVariables = new HashSet<string>();
+
             private class Scope
             {
-                HashSet<string> localVariables = new HashSet<string>();
-
                 public Scope(bool isNumeric)
                 {
                     IsNumeric = isNumeric;
                 }
 
                 public bool IsNumeric { get; }
-                public bool IsVariable(string variableName) => localVariables.Contains(variableName);
-                public void DefineVariable(string variableName) => localVariables.Add(variableName);
             }
 
             private Stack<Scope> scopes = new Stack<Scope>();
@@ -1059,28 +1067,9 @@ namespace SphereSharp.Sphere99
                 scopes.Pop();
             }
 
-            public void DefineLocalVariable(string variableName)
-            {
-                if (scopes.Count > 0)
-                {
-                    var scope = scopes.Peek();
-                    scope.DefineVariable(variableName);
-                }
-            }
-
-            public bool IsLocalVariable(string variableName)
-            {
-                if (scopes.Count > 0)
-                {
-                    foreach (var scope in scopes)
-                    {
-                        if (scope.IsVariable(variableName))
-                            return true;
-                    }
-                }
-
-                return false;
-            }
+            public void ClearLocalVariables() => localVariables.Clear();
+            public void DefineLocalVariable(string variableName) => localVariables.Add(variableName);
+            public bool IsLocalVariable(string variableName) => localVariables.Contains(variableName);
 
             public bool IsNumeric
             {

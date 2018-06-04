@@ -9,6 +9,14 @@ namespace SphereSharp
         private StringBuilder output = new StringBuilder();
         public string Output => output.ToString();
 
+        public int Length => output.Length;
+
+        public void AppendSubstring(int startIndex, int endIndex)
+        {
+            for (int i = startIndex; i <= endIndex; i++)
+                output.Append(output[i]);
+        }
+
         public void Append(ITerminalNode node) 
             => output.Append(Format(node));
         public void Append(ITerminalNode[] nodes)

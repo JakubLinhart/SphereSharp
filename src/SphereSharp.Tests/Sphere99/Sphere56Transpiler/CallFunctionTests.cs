@@ -258,17 +258,21 @@ endif");
         }
 
         [TestMethod]
-        [DataRow("arg(u,1)", "local.u=1")]
-        [DataRow("arg(u,arg(v))", "local.u=<local.v>")]
-        [DataRow("arg(u,<argcount>)", "local.u=<argv>")]
-        [DataRow("arg(u,<argv(0)>)", "local.u=<argv[0]>")]
-        [DataRow("arg(u,<arg(u)>,<arg(v)>)", "local.u=<local.u>,<local.v>")]
-        [DataRow("arg.u=0", "local.u=0")]
-        [DataRow("arg.u=<arg.u>", "local.u=<local.u>")]
-        [DataRow("equip(arg(hiditem))", "equip <local.hiditem>")]
-        public void Local_variables(string source, string expectedResult)
+        public void Local_variables()
         {
-            TranspileStatementCheck(source, expectedResult);
+            TranspileStatementCheck("arg(u,1)", "local.u=1");
+            TranspileStatementCheck("arg(u,arg(v))", "local.u=<local.v>");
+            TranspileStatementCheck("arg(u,<argcount>)", "local.u=<argv>");
+            TranspileStatementCheck("arg(u,<argv(0)>)", "local.u=<argv[0]>");
+            TranspileStatementCheck("arg(u,<arg(u)>,<arg(v)>)", "local.u=<local.u>,<local.v>");
+            TranspileStatementCheck("arg.u=0", "local.u=0");
+            TranspileStatementCheck("arg.u=<arg.u>", "local.u=<local.u>");
+            TranspileStatementCheck("equip(arg(hiditem))", "equip <local.hiditem>");
+
+            TranspileCodeBlockCheck(@"arg(u,1)
+arg(v,<eval u>)",
+@"local.u=1
+local.v=<eval <local.u>>");
         }
 
         [TestMethod]
@@ -277,7 +281,9 @@ endif");
             TranspileStatementCheck("arg(u,#+1)", "local.u=<local.u>+1");
             TranspileStatementCheck("tag(u,#+1)", "tag.u=<tag.u>+1");
             TranspileStatementCheck("var(u,#+1)", "var.u=<var.u>+1");
-            //TranspileStatementCheck("var(u[arg(x)],#+1)", "var.u[<local.x>]=<var.u[<local.x>]>+1");
+            TranspileStatementCheck("var(u[arg(x)],#+1)", "var.u[<local.x>]=<var.u[<local.x>]>+1");
+            TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u[<local.x>]=<tag.u[<local.x>]>+1");
+            TranspileStatementCheck("src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
         }
 
         [TestMethod]
@@ -295,27 +301,26 @@ local.v=1
 tag.u=1
 tag.u=1
 tag.u_<local.v>=1");
-// TODO:
-//            TranspileFileCheck(@"[function fun1]
-//var(u,1)
-//var(v,1)
-//tag.u=1
-//tag(u,1)
-//tag(u_<var(v)>,1)",
-//@"[function fun1]
-//var.u=1
-//var.v=1
-//tag.u=1
-//tag.u=1
-//tag.u_<var.v>=1");
+            TranspileFileCheck(@"[function fun1]
+var(u,1)
+var(v,1)
+tag.u=1
+tag(u,1)
+tag(u_<var(v)>,1)",
+@"[function fun1]
+var.u=1
+var.v=1
+tag.u=1
+tag.u=1
+tag.u_<var.v>=1");
         }
 
         [TestMethod]
         public void Induced_uid()
         {
             TranspileStatementCheck("arg(v,<arg(u).name>)", "local.v=<uid.<local.u>.name>");
-            TranspileStatementCheck("arg(name,<tag(detect_src).name>)", "local.name=<uid.<tag0.detect_src>.name>");
-            TranspileStatementCheck("arg(name,<var(detect_src).name>)", "local.name=<uid.<var0.detect_src>.name>");
+            TranspileStatementCheck("arg(v,<tag(detect_src).name>)", "local.v=<uid.<tag0.detect_src>.name>");
+            TranspileStatementCheck("arg(v,<var(detect_src).name>)", "local.v=<uid.<var0.detect_src>.name>");
 
             TranspileConditionCheck("<eval arg(x).flags>", "<eval <uid.<local.x>.flags>>");
             TranspileConditionCheck("<eval tag(x).flags>", "<eval <uid.<tag0.x>.flags>>");
@@ -415,28 +420,36 @@ var.asciitext=1");
         }
 
         [TestMethod]
-        [DataRow("tag(name,value)", "tag.name=value")]
-        [DataRow("arg(u,tag(name))", "local.u=tag.name")]
-        [DataRow("tag.remove(u)", "tag.u=")]
-        [DataRow("tag.u.remove", "tag.u=")]
-        [DataRow("tag(name,value1,value2)", "tag.name=value1,value2")]
-        [DataRow("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value")]
-        [DataRow("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>")]
-        // TODO:
-        //[DataRow(
-        //    "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
-        //    "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>")]
-        public void Tags(string source, string expectedResult)
+        public void Tags()
         {
-            TranspileStatementCheck(source, expectedResult);
+            TranspileStatementCheck("tag(name,value)", "tag.name=value");
+            TranspileStatementCheck("arg(u,tag(name))", "local.u=tag.name");
+            TranspileStatementCheck("tag.remove(u)", "tag.u=");
+            TranspileStatementCheck("tag.u.remove", "tag.u=");
+            TranspileStatementCheck("tag(name,value1,value2)", "tag.name=value1,value2");
+            TranspileStatementCheck("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value");
+            TranspileStatementCheck("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>");
+            // TODO:
+            //TranspileStatementCheck(
+            //    "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
+            //    "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>");
+
+            TranspileCodeBlockCheck(@"tag(u,1)
+tag(v,<eval tag.u>)",
+@"tag.u=1
+tag.v=<eval <tag0.u>>");
         }
 
         [TestMethod]
-        [DataRow("var(name,value)", "var.name=value")]
-        [DataRow("arg(u,var(name))", "local.u=var.name")]
-        public void Global_variables(string source, string expectedResult)
+        public void Global_variables()
         {
-            TranspileStatementCheck(source, expectedResult);
+            TranspileStatementCheck("var(name,value)", "var.name=value");
+            TranspileStatementCheck("arg(u,var(name))", "local.u=var.name");
+
+            TranspileCodeBlockCheck(@"var(u,1)
+var(v,<eval u>)",
+@"var.u=1
+var.v=<eval <var.u>>");
         }
 
         [TestMethod]
