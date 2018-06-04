@@ -637,6 +637,7 @@ namespace SphereSharp.Sphere99
                         builder.Append(".");
                         if (arguments.Length > 1)
                         {
+                            lastSharpSubstitution = $"<{name}.{arguments[0].GetText()}>";
                             if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
                             {
                                 builder.Append(arguments[0].GetText());

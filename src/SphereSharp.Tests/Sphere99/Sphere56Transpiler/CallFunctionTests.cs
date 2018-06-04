@@ -259,7 +259,6 @@ endif");
 
         [TestMethod]
         [DataRow("arg(u,1)", "local.u=1")]
-        [DataRow("arg(u,#+1)", "local.u=<local.u>+1")]
         [DataRow("arg(u,arg(v))", "local.u=<local.v>")]
         [DataRow("arg(u,<argcount>)", "local.u=<argv>")]
         [DataRow("arg(u,<argv(0)>)", "local.u=<argv[0]>")]
@@ -270,6 +269,15 @@ endif");
         public void Local_variables(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
+        }
+
+        [TestMethod]
+        public void Self_reference_sharp_replacement()
+        {
+            TranspileStatementCheck("arg(u,#+1)", "local.u=<local.u>+1");
+            TranspileStatementCheck("tag(u,#+1)", "tag.u=<tag.u>+1");
+            TranspileStatementCheck("var(u,#+1)", "var.u=<var.u>+1");
+            //TranspileStatementCheck("var(u[arg(x)],#+1)", "var.u[<local.x>]=<var.u[<local.x>]>+1");
         }
 
         [TestMethod]
