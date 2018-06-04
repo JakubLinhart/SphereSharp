@@ -167,7 +167,7 @@ moreThanEqual: MORE_THAN ASSIGN;
 lessThanEqual: LESS_THAN ASSIGN;
 
 macroConstantExpression: constantExpression macro;
-constantExpression: DEC_NUMBER | HEX_NUMBER;
+constantExpression: number;
 randomExpression: '{' (randomExpressionList | macro) '}';
 randomExpressionList: STARTING_WS=WS* numericExpression randomExpressionElement (randomExpressionElement randomExpressionElement)* ENDING_WS=WS*;
 randomExpressionElement: WS+ numericExpression;
@@ -260,7 +260,7 @@ BUTTON_TRIGGER_HEADER: [oO][nN][bB][uU][tT][tT][oO][nN] '=';
 ANY_BUTTON: '@' [aA][nN][yY][bB][uU][tT][tT][oO][nN];
 SYMBOL: VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
 DEC_NUMBER: ('1' .. '9') DEC_DIGIT*  ('.' ('0'..'9')+)?;
-HEX_NUMBER: '0' HEX_DIGIT* ;
+HEX_NUMBER: '#'? '0' HEX_DIGIT* ;
 
 EQUAL: '==';
 NOT_EQUAL: '!=';

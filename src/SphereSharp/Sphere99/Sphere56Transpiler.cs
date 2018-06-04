@@ -126,11 +126,20 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitConstantExpression([NotNull] sphereScript99Parser.ConstantExpressionContext context)
+        public override bool VisitNumber([NotNull] sphereScript99Parser.NumberContext context)
         {
-            builder.Append(context.GetText());
+            if (context.HEX_NUMBER() != null)
+            {
+                builder.Append(context.HEX_NUMBER().GetText().TrimStart('#'));
+                return true;
+            }
+            else if (context.DEC_NUMBER() != null)
+            {
+                builder.Append(context.DEC_NUMBER().GetText());
+                return true;
+            }
 
-            return true;
+            return base.VisitNumber(context);
         }
 
         public override bool VisitRandomExpression([NotNull] sphereScript99Parser.RandomExpressionContext context)

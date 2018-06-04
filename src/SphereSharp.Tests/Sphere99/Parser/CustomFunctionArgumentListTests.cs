@@ -15,6 +15,8 @@ namespace SphereSharp.Tests.Sphere99.Parser
         public void Can_parse_basic_expression_arguments()
         {
             CheckStructure("x(321)", "eval: 321");
+            CheckStructure("x(0abc)", "eval: 0abc");
+            CheckStructure("x(#0abc)", "eval: #0abc");
             CheckStructure("x(123,321)", new[] { "eval: 123", "eval: 321" });
             CheckStructure("x(123,321,987)", new[] { "eval: 123", "eval: 321", "eval: 987" });
             CheckStructure("x(123, 321, 987)", new[] { "eval: 123", "eval: 321", "eval: 987" });
