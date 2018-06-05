@@ -36,7 +36,7 @@ eventsSectionHeader: EVENTS_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 defNamesSection: defNamesSectionHeader propertyList;
 defNamesSectionHeader: DEFNAMES_SECTION_HEADER_START defNameSectionName ']' NEWLINE;
-defNameSectionName: ~(NEWITEM | ']');
+defNameSectionName: ~(NEWITEM | ']')+;
 
 dialogSection: dialogSectionHeader dialogPosition? codeBlock;
 dialogSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL ']' NEWLINE;
@@ -118,7 +118,7 @@ customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
-                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
+                | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
                 | ISEVENT | SPELLEFFECT;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
@@ -231,6 +231,7 @@ DAMAGE: [dD][aA][mM][aA][gG][eE];
 ECHO: [eE][cC][hH][oO];
 MOVE: [mM][oO][vV][eE];
 RESIZEPIC: [rR][eE][sS][iI][zZ][eE][pP][iI][cC];
+GUMPPIC: [gG][uU][mM][pP][pP][iI][cC];
 TILEPIC: [tT][iI][lL][eE][pP][iI][cC];
 HTMLGUMP: [hH][tT][mM][lL][gG][uU][mM][pP];
 PAGE: [pP][aA][gG][eE];

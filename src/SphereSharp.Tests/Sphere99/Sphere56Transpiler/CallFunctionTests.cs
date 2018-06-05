@@ -507,9 +507,9 @@ return 1");
         [TestMethod]
         public void DefNames_section()
         {
-            TranspileFileCheck(@"[DEFNAMES blockedIPs]
+            TranspileFileCheck(@"[DEFNAMES blockedIPs section name with spaces]
 d_blocked_ips        0",
-@"[defname blockedIPs]
+@"[defname blockedIPs section name with spaces]
 d_blocked_ips        0
 
 [function d_blocked_ips]
