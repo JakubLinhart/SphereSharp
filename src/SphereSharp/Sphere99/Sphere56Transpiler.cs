@@ -339,6 +339,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitTemplateSectionHeader([NotNull] sphereScript99Parser.TemplateSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         private void GenerateFunctionsForPropertyList(sphereScript99Parser.PropertyListContext propertyList)
         {
             foreach (var property in propertyList.propertyAssignment())
@@ -475,8 +482,14 @@ namespace SphereSharp.Sphere99
             {
                 if (promiles2PercentProperties.Contains(originalPropertyName))
                 {
-                    decimal propertyValueNumber = (decimal)int.Parse(propertyValueText) / 10;
-                    builder.Append($"{propertyValueNumber:###.0}");
+                    int propertyValueNumber = int.Parse(propertyValueText);
+                    if (propertyValueNumber != 0)
+                    {
+                        decimal percents = (decimal)propertyValueNumber / 10;
+                        builder.Append($"{percents:###.0}");
+                    }
+                    else
+                        builder.Append(propertyValueNumber.ToString());
                 }
                 else
                     builder.Append(propertyValueText);

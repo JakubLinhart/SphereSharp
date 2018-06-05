@@ -583,7 +583,18 @@ events e_character
         }
 
         [TestMethod]
-        [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
+        public void Template_section()
+        {
+            TranspileFileCheck(@"[template tm_rangernewbie]
+item=i_spellbook_3
+ITEM=i_shirt_plain",
+@"[template tm_rangernewbie]
+item=i_spellbook_3
+ITEM=i_shirt_plain");
+        }
+
+        [TestMethod]
+        [DataRow("name =fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)
         {
