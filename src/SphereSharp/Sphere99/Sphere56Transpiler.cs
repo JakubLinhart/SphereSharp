@@ -229,21 +229,6 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitDialogTextSection([NotNull] sphereScript99Parser.DialogTextSectionContext context)
-        {
-            return false;
-        }
-
-        public override bool VisitDialogSection([NotNull] sphereScript99Parser.DialogSectionContext context)
-        {
-            return false;
-        }
-
-        public override bool VisitDialogButtonSection([NotNull] sphereScript99Parser.DialogButtonSectionContext context)
-        {
-            return false;
-        }
-
         public override bool VisitEventsSectionHeader([NotNull] sphereScript99Parser.EventsSectionHeaderContext context)
         {
             builder.Append(context.GetText());
@@ -340,6 +325,34 @@ namespace SphereSharp.Sphere99
         }
 
         public override bool VisitTemplateSectionHeader([NotNull] sphereScript99Parser.TemplateSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitDialogSectionHeader([NotNull] sphereScript99Parser.DialogSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitDialogButtonSectionHeader([NotNull] sphereScript99Parser.DialogButtonSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitDialogButtonTriggerHeader([NotNull] sphereScript99Parser.DialogButtonTriggerHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitDialogTextSection([NotNull] sphereScript99Parser.DialogTextSectionContext context)
         {
             builder.Append(context.GetText());
 

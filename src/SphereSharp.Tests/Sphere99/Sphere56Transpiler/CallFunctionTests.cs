@@ -594,6 +594,42 @@ ITEM=i_shirt_plain");
         }
 
         [TestMethod]
+        public void Dialog_sections()
+        {
+            TranspileFileCheck(
+@"[DIALOG D_RACEclass_background]
+gumppic 510 110 5536
+gumppic 35 110 5536
+
+[DIALOG D_RACEclass_background button]
+on=0
+call1
+
+on=@anybutton
+call2
+
+[DIALOG D_RACEclass_background text]
+some text
+",
+
+@"[DIALOG D_RACEclass_background]
+gumppic 510 110 5536
+gumppic 35 110 5536
+
+[DIALOG D_RACEclass_background button]
+on=0
+call1
+
+on=@anybutton
+call2
+
+[DIALOG D_RACEclass_background text]
+some text
+");
+        }
+
+
+        [TestMethod]
         [DataRow("name =fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)
