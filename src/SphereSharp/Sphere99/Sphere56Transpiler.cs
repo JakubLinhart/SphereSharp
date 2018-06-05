@@ -329,6 +329,16 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitProfessionSectionHeader([NotNull] sphereScript99Parser.ProfessionSectionHeaderContext context)
+        {
+            builder.Append("[skillclass ");
+            builder.Append(context.professionSectionName().GetText());
+            builder.Append(']');
+            builder.Append(context.NEWLINE());
+
+            return true;
+        }
+
         private void GenerateFunctionsForPropertyList(sphereScript99Parser.PropertyListContext propertyList)
         {
             foreach (var property in propertyList.propertyAssignment())
@@ -431,16 +441,46 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        private readonly Dictionary<string, string> propertyNameDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "EI", "EvaluatingIntel" },
+            { "Resist", "MagicResistance" },
+        };
+        private readonly ISet<string> promiles2PercentProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "AnimalLore", "Alchemy", "Anatomy","Archery","ArmsLore","Begging","Blacksmithing","Bowcraft","Camping",
+            "Carpentry","Cartography","Cooking","DetectingHidden","Enticement","EI","Fencing","Fishing","Forensics",
+            "Healing","Herding","Hiding","Inscription","ItemID","LockPicking","Lumberjacking","Macefighting","Magery",
+            "Resist","Meditation","Mining","Musicianship","Parrying","Peacemaking","Poisoning","Provocation",
+            "RemoveTrap","Snooping","SpiritSpeak","Stealing","Stealth","Swordsmanship","Tactics","Tailoring",
+            "Taming","TasteID","Tinkering","Tracking","Veterinary","Wrestling",
+        };
+
         public override bool VisitPropertyAssignment([NotNull] sphereScript99Parser.PropertyAssignmentContext context)
         {
             if (context.LEADING_WS?.Text != null)
                 builder.Append(context.LEADING_WS.Text);
-            builder.Append(context.propertyName().GetText());
+
+            var originalPropertyName = context.propertyName().GetText();
+            if (!propertyNameDictionary.TryGetValue(originalPropertyName, out string propertyName))
+                propertyName = originalPropertyName;
+
+            builder.Append(propertyName);
+
             builder.Append(context.propertyAssignmentOperator().GetText());
 
             var propertyValueText = context.propertyValue()?.GetText();
+
             if (propertyValueText != null)
-                builder.Append(propertyValueText);
+            {
+                if (promiles2PercentProperties.Contains(originalPropertyName))
+                {
+                    decimal propertyValueNumber = (decimal)int.Parse(propertyValueText) / 10;
+                    builder.Append($"{propertyValueNumber:###.0}");
+                }
+                else
+                    builder.Append(propertyValueText);
+            }
 
             builder.Append(context.NEWLINE());
 

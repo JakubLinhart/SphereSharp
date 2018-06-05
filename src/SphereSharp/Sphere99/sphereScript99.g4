@@ -2,9 +2,9 @@
 
 file: NEWLINE? section+ (eofSection | EOF);
 
-section: WS* functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
+section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
-            | bookSection | bookPageSection | speechSection | commentSection;
+            | bookSection | bookPageSection | speechSection | commentSection | professionSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -17,6 +17,10 @@ itemDefSectionName: SYMBOL | number;
 
 charDefSection: charDefSectionHeader propertyList triggerList ;
 charDefSectionHeader: CHARDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+
+professionSection: professionSectionHeader propertyList triggerList;
+professionSectionHeader: PROFESSION_SECTION_HEADER_START professionSectionName ']' NEWLINE;
+professionSectionName: number;
 
 typeDefSection: typeDefSectionHeader triggerList ;
 typeDefSectionHeader: TYPEDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
@@ -191,6 +195,7 @@ DIALOG_SECTION_HEADER_START: '[' [dD][iI][aA][lL][oO][gG] WS+;
 BOOK_SECTION_HEADER_START: '[' [bB][oO][oO][kK] WS+;
 SPEECH_SECTION_HEADER_START: '[' [sS][pP][eE][eE][cC][hH] WS+;
 COMMENT_SECTION_HEADER_START: '[' [cC][oO][mM][mM][eE][nN][tT];
+PROFESSION_SECTION_HEADER_START: '[' [pP][rR][oO][fF][eE][sS][sS][iI][oO][nN] WS+;
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 

@@ -556,6 +556,33 @@ comment line 2
         }
 
         [TestMethod]
+        public void Profession_section()
+        {
+            TranspileFileCheck(@"[profession 1]
+DEFNAME=class_necro
+NAME=Necro
+STATSUM=1000
+str=400
+EI=1000
+Resist=1000
+
+on=@login
+events e_character
+",
+@"[skillclass 1]
+DEFNAME=class_necro
+NAME=Necro
+STATSUM=1000
+str=400
+EvaluatingIntel=100.0
+MagicResistance=100.0
+
+on=@login
+events e_character
+");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

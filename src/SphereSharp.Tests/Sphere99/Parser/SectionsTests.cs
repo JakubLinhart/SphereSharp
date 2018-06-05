@@ -239,5 +239,17 @@ comment line 2
 
             extractor.Output.Should().Be(expectedResult);
         }
+
+        [TestMethod]
+        public void Can_parse_profession_section()
+        {
+            CheckStructure("props:3;triggers:1;", @"[profession 1]
+DEFNAME=class_necro
+NAME=Necro
+STATSUM=1000
+
+on=@login
+events e_character");
+        }
     }
 }
