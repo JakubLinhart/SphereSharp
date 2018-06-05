@@ -51,7 +51,11 @@ namespace SphereSharp.Sphere99
         {
             builder.Append(".");
 
-            return base.VisitChainedMemberAccess(context);
+            builder.RestrictVariables();
+            base.VisitChainedMemberAccess(context);
+            builder.AllowVariables();
+
+            return true;
         }
 
         public override bool VisitEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context)
@@ -654,18 +658,18 @@ namespace SphereSharp.Sphere99
                         {
                             if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
                             {
-                                builder.StartVariableName();
+                                builder.RestrictVariables();
                                 Visit(arguments[0]);
-                                builder.EndVariableName();
+                                builder.AllowVariables();
                                 builder.CaptureLastSharpSubstitution();
                                 globalVariables.Add(arguments[0].GetText());
                             }
                             else
                             {
-                                builder.StartVariableName();
+                                builder.RestrictVariables();
                                 Visit(arguments[0]);
                                 builder.CaptureLastSharpSubstitution();
-                                builder.EndVariableName();
+                                builder.AllowVariables();
                             }
 
                             builder.Append("=");
@@ -724,9 +728,9 @@ namespace SphereSharp.Sphere99
                             }
                             else
                             {
-                                builder.StartVariableName();
+                                builder.RestrictVariables();
                                 Visit(context.chainedMemberAccess());
-                                builder.EndVariableName();
+                                builder.AllowVariables();
                                 return true;
                             }
                         }

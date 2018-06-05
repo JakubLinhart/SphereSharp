@@ -287,6 +287,20 @@ local.v=<eval <local.u>>");
         }
 
         [TestMethod]
+        public void Variable_name_conflicts()
+        {
+            TranspileStatementCheck("arg(name,<src.name>)", "local.name=<src.name>");
+            TranspileStatementCheck("var(name,<src.tag.name>)", "var.name=<src.tag.name>");
+
+            TranspileFileCheck(@"[function fun1]
+var(name,1)
+src.tag(name,<src.tag.name>)",
+@"[function fun1]
+var.name=1
+src.tag.name=<src.tag.name>");
+        }
+
+        [TestMethod]
         public void Local_variable_tag_name_conflict()
         {
             TranspileFileCheck(@"[function fun1]

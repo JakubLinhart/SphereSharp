@@ -12,7 +12,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private enum Scope
         {
             None, Numeric, Eval, ArgumentRequiringEval,
-            Macro, MemberAccess, VariableName
+            Macro, MemberAccess, VariablesRestriced
         }
 
         private class Scopes
@@ -63,14 +63,14 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
         private void AppendVariable(string variableType, string name)
         {
-            bool requiresMacro = scopes.Parent != Scope.VariableName 
+            bool requiresMacro = scopes.Parent != Scope.VariablesRestriced 
                 && scopes.Current != Scope.Macro && scopes.Parent != Scope.Macro
                 && scopes.Parent != Scope.None;
 
             if (requiresMacro)
                 builder.Append('<');
 
-            if (scopes.Parent != Scope.VariableName)
+            if (scopes.Parent != Scope.VariablesRestriced)
             {
                 builder.Append(variableType);
                 builder.Append('.');
@@ -82,8 +82,8 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                 builder.Append('>');
         }
 
-        public void StartVariableName() => scopes.Enter(Scope.VariableName);
-        public void EndVariableName() => scopes.Leave();
+        public void RestrictVariables() => scopes.Enter(Scope.VariablesRestriced);
+        public void AllowVariables() => scopes.Leave();
 
         public void StartNumericExpression() => scopes.Enter(Scope.Numeric);
         public void EndNumericExpression() => scopes.Leave();
