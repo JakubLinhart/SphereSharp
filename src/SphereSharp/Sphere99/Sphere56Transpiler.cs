@@ -39,6 +39,11 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitIndexedMemberName([NotNull] sphereScript99Parser.IndexedMemberNameContext context)
         {
+            string memberName = context.memberName().GetText();
+
+            if (defNames.Contains(memberName))
+                builder.Append("def.");
+
             Visit(context.memberName());
             builder.Append('[');
             Visit(context.numericExpression());
@@ -260,7 +265,7 @@ namespace SphereSharp.Sphere99
             foreach (var assignment in context.propertyList().propertyAssignment())
             {
                 Visit(assignment);
-                var name = assignment.propertyName().GetText();
+                var name = assignment.propertyName().propertyNameText().GetText();
                 defNames.Add(name);
             }
 

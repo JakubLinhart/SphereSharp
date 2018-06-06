@@ -484,6 +484,18 @@ xy   1
 [function fun1]
 call <def.xy>
 ");
+
+            TranspileFileCheck(
+@"[defnames defs1]
+xy[0]   1
+[function fun1]
+call(<xy[0]>)
+",
+@"[defname defs1]
+xy[0]   1
+[function fun1]
+call <def.xy[0]>
+");
         }
 
         [TestMethod]

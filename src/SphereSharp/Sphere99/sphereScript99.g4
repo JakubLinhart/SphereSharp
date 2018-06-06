@@ -130,7 +130,9 @@ indexedMemberName: memberName '[' numericExpression ']';
 propertyList: NEWLINE? propertyAssignment+;
 propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator propertyValue? (NEWLINE | EOF);
 propertyAssignmentOperator: ((WS* ASSIGN WS*) | WS+);
-propertyName: (nativeFunctionName | SYMBOL) ('[' number ']')?;
+propertyName: propertyNameText propertyNameIndex?;
+propertyNameText: (nativeFunctionName | SYMBOL);
+propertyNameIndex: ('[' number ']');
 propertyValue: ~(NEWLINE)+?;
 
 // trigger
