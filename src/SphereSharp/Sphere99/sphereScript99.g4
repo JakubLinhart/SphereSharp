@@ -163,7 +163,7 @@ signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
 evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccessExpression | '#';
 firstMemberAccessExpression: firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
-evalOperator: WS* (evalBinaryOperator | macroOperator) WS* ;
+evalOperator: WS* evalBinaryOperator WS* ;
 evalSubExpression: '(' LEFT_WS=WS* numericExpression RIGHT_WS=WS* ')' ;
 evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | moreThanEqual | lessThanEqual | MORE_THAN | LESS_THAN;
 binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICAL_OR | BITWISE_AND | BITWISE_OR;
