@@ -20,12 +20,25 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
         public override bool VisitDialogSection([NotNull] sphereScript99Parser.DialogSectionContext context)
         {
-            if (!string.IsNullOrEmpty(context.dialogPosition()?.GetText()))
+            if (context.dialogPosition() != null)
             {
-                return parentTranspiler.Visit(context.dialogPosition());
+                parentTranspiler.Visit(context.dialogPosition());
+                return true;
             }
 
-            return base.VisitDialogSection(context);
+            var statements = context.codeBlock()?.statement();
+            if (statements != null)
+            {
+                foreach (var statement in statements)
+                {
+                    if (statement.call()?.firstMemberAccess() != null && VisitFirstMemberAccess(statement.call().firstMemberAccess()))
+                        return true;
+                    if (statement.assignment() != null && VisitAssignment(statement.assignment()))
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         public override bool VisitFirstMemberAccess([NotNull] sphereScript99Parser.FirstMemberAccessContext context)
@@ -38,6 +51,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                 {
                     parentTranspiler.AppendArguments(arguments);
                     builder.AppendLine();
+                    return true;
                 }
             }
 
@@ -54,6 +68,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                 {
                     parentTranspiler.AppendArguments(arguments);
                     builder.AppendLine();
+                    return true;
                 }
             }
 

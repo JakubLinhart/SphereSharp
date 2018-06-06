@@ -336,7 +336,8 @@ namespace SphereSharp.Sphere99
         {
             Visit(context.dialogSectionHeader());
 
-            new DialogPositionTranspiler(builder, this).Visit(context);
+            if (!new DialogPositionTranspiler(builder, this).Visit(context))
+                builder.AppendLine("0,0");
 
             if (context.codeBlock() != null)
                 Visit(context.codeBlock());

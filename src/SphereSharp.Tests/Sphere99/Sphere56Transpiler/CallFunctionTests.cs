@@ -676,6 +676,7 @@ gumppic 510 110 5536");
 @"[dialog d_dlg]
 gumppic 510 110 5536",
 @"[dialog d_dlg]
+0,0
 gumppic 510 110 5536");
         }
 
