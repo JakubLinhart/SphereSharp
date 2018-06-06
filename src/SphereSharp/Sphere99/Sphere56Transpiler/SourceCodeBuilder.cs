@@ -61,6 +61,11 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             AppendVariable("var", name);
         }
 
+        public void AppendDefNameVariable(string name)
+        {
+            AppendVariable("def", name);
+        }
+
         private void AppendVariable(string variableType, string name)
         {
             bool requiresMacro = scopes.Parent != Scope.VariablesRestriced 

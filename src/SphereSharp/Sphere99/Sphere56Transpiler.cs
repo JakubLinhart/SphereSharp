@@ -256,12 +256,13 @@ namespace SphereSharp.Sphere99
         public override bool VisitDefNamesSection([NotNull] sphereScript99Parser.DefNamesSectionContext context)
         {
             Visit(context.defNamesSectionHeader());
-            Visit(context.propertyList());
 
-            builder.AppendLine();
-            builder.AppendLine();
-
-            GenerateFunctionsForPropertyList(context.propertyList());
+            foreach (var assignment in context.propertyList().propertyAssignment())
+            {
+                Visit(assignment);
+                var name = assignment.propertyName().GetText();
+                defNames.Add(name);
+            }
 
             return true;
         }
@@ -370,6 +371,7 @@ namespace SphereSharp.Sphere99
         }
 
         private ISet<string> globalVariables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private ISet<string> defNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private SemanticContext semanticContext = new SemanticContext();
 
         public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
@@ -1051,6 +1053,15 @@ namespace SphereSharp.Sphere99
                         else if (globalVariables.Contains(name))
                         {
                             builder.AppendGlobalVariable(name);
+
+                            if (context.customMemberAccess().chainedMemberAccess() != null)
+                                Visit(context.customMemberAccess().chainedMemberAccess());
+
+                            return true;
+                        }
+                        else if (defNames.Contains(name))
+                        {
+                            builder.AppendDefNameVariable(name);
 
                             if (context.customMemberAccess().chainedMemberAccess() != null)
                                 Visit(context.customMemberAccess().chainedMemberAccess());

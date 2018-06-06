@@ -467,6 +467,22 @@ var.v=<eval <var.u>>");
         }
 
         [TestMethod]
+        public void Defnames()
+        {
+            TranspileFileCheck(
+@"[defnames defs1]
+xy   1
+[function fun1]
+call(<xy>)
+",
+@"[defname defs1]
+xy   1
+[function fun1]
+call <def.xy>
+");
+        }
+
+        [TestMethod]
         [DataRow("findlayer(layer_pack).remove", "findlayer.layer_pack.remove")]
         [DataRow("arg(u,findlayer(layer_pack))", "local.u=findlayer layer_pack")]
         public void DottedArguments(string source, string expectedResult)
@@ -510,10 +526,7 @@ return 1");
             TranspileFileCheck(@"[DEFNAMES blockedIPs section name with spaces]
 d_blocked_ips        0",
 @"[defname blockedIPs section name with spaces]
-d_blocked_ips        0
-
-[function d_blocked_ips]
-return 0");
+d_blocked_ips        0");
         }
 
         [TestMethod]
@@ -630,7 +643,7 @@ some text
 
 
         [TestMethod]
-        [DataRow("name =fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
+        [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)
         {
