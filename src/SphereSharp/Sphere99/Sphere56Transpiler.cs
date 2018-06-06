@@ -72,7 +72,7 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        private void AppendArguments(IEnumerable<IParseTree> arguments)
+        public void AppendArguments(IEnumerable<IParseTree> arguments)
         {
             if (arguments == null)
                 return;
@@ -332,6 +332,25 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitDialogSection([NotNull] sphereScript99Parser.DialogSectionContext context)
+        {
+            Visit(context.dialogSectionHeader());
+
+            new DialogPositionTranspiler(builder, this).Visit(context);
+
+            if (context.codeBlock() != null)
+                Visit(context.codeBlock());
+
+            return true;
+        }
+
+        public override bool VisitDialogPosition([NotNull] sphereScript99Parser.DialogPositionContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitDialogSectionHeader([NotNull] sphereScript99Parser.DialogSectionHeaderContext context)
         {
             builder.Append(context.GetText());
@@ -427,6 +446,13 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
         {
+            var name = new FinalChainedMemberAccessNameVisitor().Visit(context);
+            if (name != null)
+            {
+                if (name.Equals("setlocation", StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
             builder.Append(context.WS());
             var result = base.VisitStatement(context);
 
@@ -446,6 +472,13 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitAssignment([NotNull] sphereScript99Parser.AssignmentContext context)
         {
+            var name = new FinalChainedMemberAccessNameVisitor().Visit(context.firstMemberAccess());
+            if (name != null)
+            {
+                if (name.Equals("setlocation", StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
             Visit(context.firstMemberAccess());
 
             builder.Append(context.assign().GetText());

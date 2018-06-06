@@ -8,17 +8,8 @@ using System.Threading.Tasks;
 
 namespace SphereSharp.Sphere99
 {
-    public sealed class FirstMemberAccessArgumentsVisitor : sphereScript99BaseVisitor<IParseTree[]>
+    public abstract class MemberAccessArgumentsVisitor : sphereScript99BaseVisitor<IParseTree[]>
     {
-        public override IParseTree[] VisitEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context)
-        {
-            var arguments = context.argumentList()?.argument();
-            if (arguments != null)
-                return arguments;
-
-            return Array.Empty<IParseTree>();
-        }
-
         public override IParseTree[] VisitActionMemberAccess([NotNull] sphereScript99Parser.ActionMemberAccessContext context)
         {
             if (context.actionNativeArgument() != null)
@@ -26,6 +17,19 @@ namespace SphereSharp.Sphere99
 
             return Array.Empty<IParseTree>();
         }
+
+        protected abstract bool CanVisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context);
+
+        public override IParseTree[] VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context)
+        {
+            var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
+            if (arguments != null && arguments.Length > 0)
+                return arguments;
+            else
+                return Array.Empty<IParseTree>();
+        }
+
+        protected abstract bool CanVisitNatvieMemberAccess(sphereScript99Parser.NativeMemberAccessContext context);
 
         public override IParseTree[] VisitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context)
         {
@@ -39,8 +43,8 @@ namespace SphereSharp.Sphere99
                 var optionalWhiteSpaceArgument = freeArgumentList?.firstFreeArgument()?.firstFreeArgumentOptionalWhiteSpace();
                 if (optionalWhiteSpaceArgument != null)
                 {
-                    arguments.Add(optionalWhiteSpaceArgument.evalExpression() 
-                        ?? optionalWhiteSpaceArgument.triggerArgument() 
+                    arguments.Add(optionalWhiteSpaceArgument.evalExpression()
+                        ?? optionalWhiteSpaceArgument.triggerArgument()
                         ?? (IParseTree)optionalWhiteSpaceArgument.quotedLiteralArgument());
                 }
 
@@ -58,5 +62,29 @@ namespace SphereSharp.Sphere99
 
             return Array.Empty<IParseTree>();
         }
+
+        public override IParseTree[] VisitArgumentList([NotNull] sphereScript99Parser.ArgumentListContext context)
+        {
+            return context.argument();
+        }
+    }
+
+    public class FinalChainedMemberAccessArgumentsVisitor : MemberAccessArgumentsVisitor
+    {
+        protected override bool CanVisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context) 
+            => context.chainedMemberAccess() == null;
+
+        protected override bool CanVisitNatvieMemberAccess(sphereScript99Parser.NativeMemberAccessContext context) 
+            => context.chainedMemberAccess() == null;
+    }
+
+    public class FirstMemberAccessArgumentsVisitor : MemberAccessArgumentsVisitor
+    {
+        protected override bool CanVisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context) 
+            => true;
+
+        protected override bool CanVisitNatvieMemberAccess(sphereScript99Parser.NativeMemberAccessContext context) 
+            => true;
     }
 }
+

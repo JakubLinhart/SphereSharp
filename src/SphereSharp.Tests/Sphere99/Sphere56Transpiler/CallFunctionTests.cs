@@ -28,6 +28,10 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("fun1(<eval fun2>)", "fun1 <eval <fun2>>")]
         [DataRow("fun1(<eval fun2(1,2,3)>)", "fun1 <eval <fun2 1,2,3>>")]
         [DataRow("fun1(<eval fun2(<eval 1>,<eval 2>,<eval 3>)>)", "fun1 <eval <fun2 <eval 1>,<eval 2>,<eval 3>>>")]
+        [DataRow("fun1(<a1><a2><a3>)", "fun1 <a1><a2><a3>")]
+        [DataRow("fun1(<a1><a2><a3>,<a1><a2><a3>)", "fun1 <a1><a2><a3>,<a1><a2><a3>")]
+        [DataRow("fun1(<?a1?><?a2?><?a3?>)", "fun1 <a1><a2><a3>")]
+        [DataRow("fun1(<?a1?><?a2?><?a3?>,<?a1?><?a2?><?a3?>)", "fun1 <a1><a2><a3>,<a1><a2><a3>")]
         public void Can_transpile_custom_function_calls(string src, string expectedResult)
         {
             TranspileStatementCheck(src, expectedResult);
@@ -611,6 +615,7 @@ ITEM=i_shirt_plain");
         {
             TranspileFileCheck(
 @"[DIALOG D_RACEclass_background]
+123,456
 gumppic 510 110 5536
 gumppic 35 110 5536
 
@@ -626,6 +631,7 @@ some text
 ",
 
 @"[DIALOG D_RACEclass_background]
+123,456
 gumppic 510 110 5536
 gumppic 35 110 5536
 
@@ -639,6 +645,28 @@ call2
 [DIALOG D_RACEclass_background text]
 some text
 ");
+
+            TranspileFileCheck(
+@"[dialog d_dlg]
+gumppic 510 110 5536
+argo.SetLocation(285,250)",
+@"[dialog d_dlg]
+285,250
+gumppic 510 110 5536");
+
+            TranspileFileCheck(
+@"[dialog d_dlg]
+gumppic 510 110 5536
+argo.SetLocation=285,250",
+@"[dialog d_dlg]
+285,250
+gumppic 510 110 5536");
+
+            TranspileFileCheck(
+@"[dialog d_dlg]
+gumppic 510 110 5536",
+@"[dialog d_dlg]
+gumppic 510 110 5536");
         }
 
 
