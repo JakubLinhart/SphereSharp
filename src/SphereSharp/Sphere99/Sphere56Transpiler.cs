@@ -449,7 +449,30 @@ namespace SphereSharp.Sphere99
             var name = new FinalChainedMemberAccessNameVisitor().Visit(context);
             if (name != null)
             {
-                if (name.Equals("setlocation", StringComparison.OrdinalIgnoreCase))
+                if (name.Equals("htmlgumpa", StringComparison.OrdinalIgnoreCase))
+                {
+                    var arguments = new FinalChainedMemberAccessArgumentsVisitor().Visit(context);
+                    builder.Append("htmlgump ");
+                    Visit(arguments[0]);
+                    builder.Append(' ');
+                    Visit(arguments[1]);
+                    builder.Append(' ');
+                    Visit(arguments[2]);
+                    builder.Append(' ');
+                    Visit(arguments[3]);
+                    builder.Append(' ');
+                    Visit(arguments[5]);
+                    builder.Append(' ');
+                    Visit(arguments[6]);
+                    builder.Append(' ');
+                    Visit(arguments[4]);
+
+                    if (context.NEWLINE() != null)
+                        builder.Append(context.NEWLINE().GetText());
+
+                    return true;
+                }
+                else if (name.Equals("setlocation", StringComparison.OrdinalIgnoreCase))
                     return true;
             }
 

@@ -10,6 +10,19 @@ namespace SphereSharp.Sphere99
 {
     public abstract class MemberAccessArgumentsVisitor : sphereScript99BaseVisitor<IParseTree[]>
     {
+        public override IParseTree[] VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
+        {
+            if (context.call() != null)
+                return Visit(context.call());
+
+            return base.VisitStatement(context);
+        }
+
+        public override IParseTree[] VisitCall([NotNull] sphereScript99Parser.CallContext context)
+        {
+            return Visit(context.firstMemberAccess());
+        }
+
         public override IParseTree[] VisitActionMemberAccess([NotNull] sphereScript99Parser.ActionMemberAccessContext context)
         {
             if (context.actionNativeArgument() != null)
@@ -22,6 +35,9 @@ namespace SphereSharp.Sphere99
 
         public override IParseTree[] VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context)
         {
+            if (!CanVisitCustomMemberAccess(context))
+                return base.VisitCustomMemberAccess(context);
+
             var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
             if (arguments != null && arguments.Length > 0)
                 return arguments;
@@ -33,6 +49,9 @@ namespace SphereSharp.Sphere99
 
         public override IParseTree[] VisitNativeMemberAccess([NotNull] sphereScript99Parser.NativeMemberAccessContext context)
         {
+            if (!CanVisitNatvieMemberAccess(context))
+                return base.VisitNativeMemberAccess(context);
+
             if (context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() != null)
                 return context.nativeArgumentList().enclosedArgumentList().argumentList().argument().Select(x => x.children[0]).ToArray();
 

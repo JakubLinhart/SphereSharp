@@ -611,6 +611,16 @@ ITEM=i_shirt_plain");
         }
 
         [TestMethod]
+        public void Dialog_functions()
+        {
+            TranspileCodeBlockCheck(
+@"argo.HTMLGUMPa(210,215,110,160,<?std_basefont?><?seznamclass[0]?><?basefont_end?>,0,0) // comment
+",
+@"htmlgump 210 215 110 160 0 0 <std_basefont><seznamclass[0]><basefont_end> // comment
+");
+        }
+
+        [TestMethod]
         public void Dialog_sections()
         {
             TranspileFileCheck(
