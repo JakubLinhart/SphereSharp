@@ -13,10 +13,13 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private readonly Sphere56TranspilerVisitor parentVisitor;
         private readonly SourceCodeBuilder builder;
 
-        public LiteralArgumentTranspiler(Sphere56TranspilerVisitor parentVisitor, SourceCodeBuilder builder)
+        private readonly bool stripDoubleQuotes = false;
+
+        public LiteralArgumentTranspiler(Sphere56TranspilerVisitor parentVisitor, SourceCodeBuilder builder, bool stripDoubleQuotes = false)
         {
             this.parentVisitor = parentVisitor;
             this.builder = builder;
+            this.stripDoubleQuotes = stripDoubleQuotes;
         }
 
         public override bool VisitMacro([NotNull] sphereScript99Parser.MacroContext context)
@@ -24,6 +27,14 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             parentVisitor.Visit(context);
 
             return true;
+        }
+
+        public override bool VisitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context)
+        {
+            if (!stripDoubleQuotes)
+                return base.VisitQuotedLiteralArgument(context);
+
+            return Visit(context.innerQuotedLiteralArgument());
         }
 
         public override bool VisitTerminal(ITerminalNode node)

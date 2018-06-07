@@ -625,11 +625,18 @@ ITEM=i_shirt_plain");
         [TestMethod]
         public void Dialog_functions()
         {
+            TranspileStatementCheck("button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
+            TranspileStatementCheck("argo.button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
+            TranspileStatementCheck("argo.HTMLGUMP 20,20,600,200,0,0,0", "HTMLGUMP 20 20 600 200 0 0 0");
+            TranspileStatementCheck(
+                "HTMLGUMPa(210,215,110,160,\"some text\",0,0)",
+                "dhtmlgump 210 215 110 160 0 0 some text");
+
             TranspileCodeBlockCheck(
-@"argo.HTMLGUMPa(210,215,110,160,<?std_basefont?><?seznamclass[0]?><?basefont_end?>,0,0) // comment
-",
-@"htmlgump 210 215 110 160 0 0 <std_basefont><seznamclass[0]><basefont_end> // comment
-");
+@"HTMLGUMPa(210,215,110,160,<?std_basefont?><?seznamclass[0]?><?basefont_end?>,0,0) // comment
+            ",
+@"dhtmlgump 210 215 110 160 0 0 <std_basefont><seznamclass[0]><basefont_end> // comment
+            ");
         }
 
         [TestMethod]
@@ -661,7 +668,7 @@ gumppic 35 110 5536
 on=0
 call1
 
-on=@anybutton
+on=0 255
 call2
 
 [DIALOG D_RACEclass_background text]

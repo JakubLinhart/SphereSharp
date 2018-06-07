@@ -77,7 +77,7 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public void AppendArguments(IEnumerable<IParseTree> arguments)
+        public void AppendArguments(IEnumerable<IParseTree> arguments, string separator=",")
         {
             if (arguments == null)
                 return;
@@ -91,7 +91,7 @@ namespace SphereSharp.Sphere99
 
             foreach (var argument in arguments.Skip(1))
             {
-                builder.Append(',');
+                builder.Append(separator);
                 Visit(argument);
             }
         }
@@ -373,7 +373,15 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitDialogButtonTriggerHeader([NotNull] sphereScript99Parser.DialogButtonTriggerHeaderContext context)
         {
-            builder.Append(context.GetText());
+            var triggerName = context.dialogButtonTriggerName().GetText();
+            if (triggerName.Equals("@anybutton", StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append("on=0 255");
+                if (context.NEWLINE() != null)
+                    builder.Append(context.NEWLINE().GetText());
+            }
+            else
+                builder.Append(context.GetText());
 
             return true;
         }
@@ -455,10 +463,14 @@ namespace SphereSharp.Sphere99
             var name = new FinalChainedMemberAccessNameVisitor().Visit(context);
             if (name != null)
             {
+                var arguments = new FinalChainedMemberAccessArgumentsVisitor().Visit(context);
+
                 if (name.Equals("htmlgumpa", StringComparison.OrdinalIgnoreCase))
                 {
-                    var arguments = new FinalChainedMemberAccessArgumentsVisitor().Visit(context);
-                    builder.Append("htmlgump ");
+                    if (context.WS() != null)
+                        builder.Append(context.WS());
+
+                    builder.Append("dhtmlgump ");
                     Visit(arguments[0]);
                     builder.Append(' ');
                     Visit(arguments[1]);
@@ -471,7 +483,22 @@ namespace SphereSharp.Sphere99
                     builder.Append(' ');
                     Visit(arguments[6]);
                     builder.Append(' ');
-                    Visit(arguments[4]);
+                    new LiteralArgumentTranspiler(this, builder, true).Visit(arguments[4]);
+
+                    if (context.NEWLINE() != null)
+                        builder.Append(context.NEWLINE().GetText());
+
+                    return true;
+                }
+                else if (name.Equals("button", StringComparison.OrdinalIgnoreCase) || name.Equals("htmlgump", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (context.WS() != null)
+                        builder.Append(context.WS());
+
+                    builder.Append(name);
+                    builder.Append(' ');
+
+                    AppendArguments(arguments, " ");
 
                     if (context.NEWLINE() != null)
                         builder.Append(context.NEWLINE().GetText());
