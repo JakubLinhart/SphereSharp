@@ -285,8 +285,8 @@ local.v=<eval <local.u>>");
             TranspileStatementCheck("arg(u,#+1)", "local.u=<local.u>+1");
             TranspileStatementCheck("tag(u,#+1)", "tag.u=<tag.u>+1");
             TranspileStatementCheck("var(u,#+1)", "var.u=<var.u>+1");
-            TranspileStatementCheck("var(u[arg(x)],#+1)", "var.u[<local.x>]=<var.u[<local.x>]>+1");
-            TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u[<local.x>]=<tag.u[<local.x>]>+1");
+            TranspileStatementCheck("var(u[arg(x)],#+1)", "var.u_<local.x>_=<var.u_<local.x>_>+1");
+            TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u_<local.x>_=<tag.u_<local.x>_>+1");
             TranspileStatementCheck("src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
         }
 
@@ -445,7 +445,7 @@ var.asciitext=1");
             TranspileStatementCheck("tag.remove(u)", "tag.u=");
             TranspileStatementCheck("tag.u.remove", "tag.u=");
             TranspileStatementCheck("tag(name,value1,value2)", "tag.name=value1,value2");
-            TranspileStatementCheck("tag(name[<tag(index)>],value)", "tag.name[<tag0.index>]=value");
+            TranspileStatementCheck("tag(name[<tag(index)>],value)", "tag.name_<tag0.index>_=value");
             TranspileStatementCheck("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>");
             // TODO:
             //TranspileStatementCheck(
@@ -481,8 +481,12 @@ call(<xy>)
 ",
 @"[defname defs1]
 xy   1
+
+[function xy]
+return <def.xy>
+
 [function fun1]
-call <def.xy>
+call <xy>
 ");
 
             TranspileFileCheck(
@@ -492,9 +496,13 @@ xy[0]   1
 call(<xy[0]>)
 ",
 @"[defname defs1]
-xy[0]   1
+xy_0_   1
+
+[function xy_0_]
+return <def.xy_0_>
+
 [function fun1]
-call <def.xy[0]>
+call <xy_0_>
 ");
         }
 
@@ -542,7 +550,9 @@ return 1");
             TranspileFileCheck(@"[DEFNAMES blockedIPs section name with spaces]
 d_blocked_ips        0",
 @"[defname blockedIPs section name with spaces]
-d_blocked_ips        0");
+d_blocked_ips        0
+[function d_blocked_ips]
+return <def.d_blocked_ips>");
         }
 
         [TestMethod]
@@ -633,9 +643,9 @@ ITEM=i_shirt_plain");
                 "dhtmlgump 210 215 110 160 0 0 some text");
 
             TranspileCodeBlockCheck(
-@"HTMLGUMPa(210,215,110,160,<?std_basefont?><?seznamclass[0]?><?basefont_end?>,0,0) // comment
+@"HTMLGUMPa(210,215,110,160,<?std_basefont?><?seznamclass_0_?><?basefont_end?>,0,0) // comment
             ",
-@"dhtmlgump 210 215 110 160 0 0 <std_basefont><seznamclass[0]><basefont_end> // comment
+@"dhtmlgump 210 215 110 160 0 0 <std_basefont><seznamclass_0_><basefont_end> // comment
             ");
         }
 
@@ -734,6 +744,8 @@ gumppic 510 110 5536");
         private void TranspilePropertyAssignmentCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParsePropertyAssignment(src));
 
+        private DefinitionsRepository definitionsRepository = new DefinitionsRepository();
+
         private void TranspileCheck(string input, string expectedOutput, Func<string, SphereSharp.Sphere99.Parser, ParsingResult> parseFunc)
         {
             var parser = new SphereSharp.Sphere99.Parser();
@@ -744,8 +756,11 @@ gumppic 510 110 5536");
                 Assert.Fail(parsingOutput.GetErrorsText());
             }
 
-            var transpiler = new SphereSharp.Sphere99.Sphere56TranspilerVisitor();
+            new DefinitionsCollector(definitionsRepository).Visit(parsingOutput.Tree);
+
+            var transpiler = new SphereSharp.Sphere99.Sphere56TranspilerVisitor(definitionsRepository);
             transpiler.Visit(parsingOutput.Tree);
+
 
             transpiler.Output.Trim().Should().Be(expectedOutput.Trim());
         }

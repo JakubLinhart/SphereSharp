@@ -18,9 +18,10 @@ namespace SphereSharp.Sphere99
 
         public string Output => builder.Output;
 
-        public Sphere56TranspilerVisitor()
+        public Sphere56TranspilerVisitor(IDefinitionsRepository definitionRepository)
         {
             specialFunctionTranspiler = new SpecialFunctionTranspiler(builder, this);
+            this.definitionRepository = definitionRepository ?? new DefinitionsRepository();
         }
 
         public override bool VisitFile([NotNull] sphereScript99Parser.FileContext context)
@@ -41,13 +42,10 @@ namespace SphereSharp.Sphere99
         {
             string memberName = context.memberName().GetText();
 
-            if (defNames.Contains(memberName))
-                builder.Append("def.");
-
             Visit(context.memberName());
-            builder.Append('[');
+            builder.Append('_');
             Visit(context.numericExpression());
-            builder.Append(']');
+            builder.Append('_');
 
             return true;
         }
@@ -258,15 +256,52 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        private string TransformDefName(sphereScript99Parser.PropertyAssignmentContext assignment)
+        {
+            var nameBuilder = new StringBuilder();
+
+            nameBuilder.Append(assignment.propertyName().propertyNameText().GetText());
+            if (assignment.propertyName().propertyNameIndex()?.number() != null)
+            {
+                nameBuilder.Append('_');
+                nameBuilder.Append(assignment.propertyName().propertyNameIndex().number().GetText());
+                nameBuilder.Append('_');
+            }
+
+            return nameBuilder.ToString();
+        }
+
         public override bool VisitDefNamesSection([NotNull] sphereScript99Parser.DefNamesSectionContext context)
         {
             Visit(context.defNamesSectionHeader());
 
+            if (context.propertyList().NEWLINE() != null)
+                builder.Append(context.propertyList().NEWLINE().GetText());
+
             foreach (var assignment in context.propertyList().propertyAssignment())
             {
-                Visit(assignment);
-                var name = assignment.propertyName().propertyNameText().GetText();
-                defNames.Add(name);
+                if (assignment.LEADING_WS?.Text != null)
+                    builder.Append(assignment.LEADING_WS.Text);
+
+                builder.Append(TransformDefName(assignment));
+
+                if (assignment.propertyAssignmentOperator() != null)
+                    builder.Append(assignment.propertyAssignmentOperator().GetText());
+                if (assignment.propertyValue() != null)
+                    builder.Append(assignment.propertyValue().GetText());
+
+                if (assignment.NEWLINE() != null)
+                    builder.Append(assignment.NEWLINE());
+            }
+
+            builder.AppendLine();
+
+            foreach (var assignment in context.propertyList().propertyAssignment())
+            {
+                string transformedDefName = TransformDefName(assignment);
+                builder.AppendLine($"[function {transformedDefName}]");
+                builder.AppendLine($"return <def.{transformedDefName}>");
+                builder.AppendLine();
             }
 
             return true;
@@ -404,7 +439,6 @@ namespace SphereSharp.Sphere99
         }
 
         private ISet<string> globalVariables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        private ISet<string> defNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private SemanticContext semanticContext = new SemanticContext();
 
         public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
@@ -566,6 +600,7 @@ namespace SphereSharp.Sphere99
             "RemoveTrap","Snooping","SpiritSpeak","Stealing","Stealth","Swordsmanship","Tactics","Tailoring",
             "Taming","TasteID","Tinkering","Tracking","Veterinary","Wrestling",
         };
+        private readonly IDefinitionsRepository definitionRepository;
 
         public override bool VisitPropertyAssignment([NotNull] sphereScript99Parser.PropertyAssignmentContext context)
         {
@@ -1142,15 +1177,6 @@ namespace SphereSharp.Sphere99
                         else if (globalVariables.Contains(name))
                         {
                             builder.AppendGlobalVariable(name);
-
-                            if (context.customMemberAccess().chainedMemberAccess() != null)
-                                Visit(context.customMemberAccess().chainedMemberAccess());
-
-                            return true;
-                        }
-                        else if (defNames.Contains(name))
-                        {
-                            builder.AppendDefNameVariable(name);
 
                             if (context.customMemberAccess().chainedMemberAccess() != null)
                                 Visit(context.customMemberAccess().chainedMemberAccess());
