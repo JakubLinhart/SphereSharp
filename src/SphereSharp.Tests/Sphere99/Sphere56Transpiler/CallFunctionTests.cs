@@ -652,8 +652,10 @@ ITEM=i_shirt_plain");
             TranspileStatementCheck("dialog(d_test,\"first arg\",\"second arg\")", "dialog d_test,0,\"first arg\",\"second arg\"");
             TranspileStatementCheck("button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
             TranspileStatementCheck("argo.button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
-            TranspileStatementCheck("argo.HTMLGUMP 20,20,600,200,0,0,0", "HTMLGUMP 20 20 600 200 0 0 0");
+            TranspileStatementCheck("argo.HTMLGUMP 20,20,600,200,0,0,0", "htmlgump 20 20 600 200 0 0 0");
             TranspileStatementCheck("gumppic 140,200,2200", "gumppic 140 200 2200");
+            TranspileStatementCheck("argo.texta(180,233,1000,\"text\")", "dtext 180 233 1000 \"text\"");
+            TranspileStatementCheck("argo.textentry(340,233,300,30,1000,100,10)", "textentry 340 233 300 30 1000 100 10");
             TranspileStatementCheck(
                 "HTMLGUMPa(210,215,110,160,\"some text\",0,0)",
                 "dhtmlgump 210 215 110 160 0 0 some text");

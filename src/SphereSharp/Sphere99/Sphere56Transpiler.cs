@@ -519,9 +519,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        private HashSet<string> genericGumpFunctionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private Dictionary<string, string> genericGumpFunctionTranslations = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            "button", "htmlgump", "gumppic"
+            { "button", "button" },
+            { "htmlgump", "htmlgump" },
+            { "gumppic", "gumppic" },
+            { "texta", "dtext" },
+            { "textentry", "textentry" },
         };
 
         public override bool VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
@@ -574,12 +578,12 @@ namespace SphereSharp.Sphere99
                         return true;
                     }
                 }
-                else if (genericGumpFunctionNames.Contains(name))
+                else if (genericGumpFunctionTranslations.TryGetValue(name, out string translatedName))
                 {
                     if (context.WS() != null)
                         builder.Append(context.WS());
 
-                    builder.Append(name);
+                    builder.Append(translatedName);
                     builder.Append(' ');
 
                     AppendArguments(arguments, " ");
