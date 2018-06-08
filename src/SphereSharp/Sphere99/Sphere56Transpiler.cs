@@ -1076,31 +1076,36 @@ namespace SphereSharp.Sphere99
 
         private bool TransformFirstMemberAccessName(string name, sphereScript99Parser.CustomMemberAccessContext context)
         {
-            if (name.Equals("lastnew", StringComparison.OrdinalIgnoreCase))
+            if (builder.MemberNameNeedsTranspilation)
             {
-                bool requiresMacro = context.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent is sphereScript99Parser.NativeArgumentListContext;
-                if (requiresMacro)
-                    builder.Append("<new>");
-                else
-                    builder.Append("new");
-                return true;
-            }
-            else if (name.Equals("flag_underground", StringComparison.OrdinalIgnoreCase))
-            {
-                builder.Append("underground");
-                return true;
-            }
-            else if (name.Equals("profession", StringComparison.OrdinalIgnoreCase))
-            {
-                builder.Append("skillclass");
-                return true;
-            }
+                if (name.Equals("lastnew", StringComparison.OrdinalIgnoreCase))
+                {
+                    bool requiresMacro = context.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent is sphereScript99Parser.NativeArgumentListContext;
+                    if (requiresMacro)
+                        builder.Append("<new>");
+                    else
+                        builder.Append("new");
+                    return true;
+                }
+                else if (name.Equals("flag_underground", StringComparison.OrdinalIgnoreCase))
+                {
+                    builder.Append("underground");
+                    return true;
+                }
+                else if (name.Equals("profession", StringComparison.OrdinalIgnoreCase))
+                {
+                    builder.Append("skillclass");
+                    return true;
+                }
 
-            if (skillMemberNames.TryGetValue(name, out string replacement))
-            {
-                builder.Append("serv.skill.");
-                builder.Append(replacement);
-                return true;
+                if (skillMemberNames.TryGetValue(name, out string replacement))
+                {
+                    builder.StartMemberAccess();
+                    builder.Append("serv.skill.");
+                    builder.Append(replacement);
+                    builder.EndMemberAccess();
+                    return true;
+                }
             }
 
             return false;

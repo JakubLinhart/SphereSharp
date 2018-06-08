@@ -263,6 +263,11 @@ endif");
         [DataRow("arg(length,strlen(<argv(1)>)+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "local.u=<eval strcmpi(<argv[0]>,<argv[1]>)>")]
+        [DataRow("arg(u,strcmpi(<secondnumb>,skill_inscription))", "local.u=<eval strcmpi(<secondnumb>,skill_inscription)>")]
+        [DataRow("arg(u,strcmpi(<secondnumb>,<skill_inscription>))", "local.u=<eval strcmpi(<secondnumb>,<serv.skill.inscription>)>")]
+        [DataRow(
+            "arg(u,<eval strcmpi(<argv(0)>,someunquotedliterallookinglikefunctionname)>)",
+            "local.u=<eval strcmpi(<argv[0]>,someunquotedliterallookinglikefunctionname)>")]
         public void Special_functions(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);

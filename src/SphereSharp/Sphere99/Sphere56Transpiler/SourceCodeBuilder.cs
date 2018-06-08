@@ -12,7 +12,8 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private enum Scope
         {
             None, Numeric, Eval, ArgumentRequiringEval,
-            Macro, MemberAccess, VariablesRestriced
+            Macro, MemberAccess, VariablesRestriced,
+            SpecialFunctionArguments
         }
 
         private class Scopes
@@ -28,6 +29,8 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
         private TextBuilder builder = new TextBuilder();
         public string Output => builder.Output;
+
+        public bool MemberNameNeedsTranspilation => scopes.Current != Scope.SpecialFunctionArguments && scopes.Parent != Scope.SpecialFunctionArguments;
 
         public void Append(ITerminalNode node)
             => builder.Append(node);
@@ -158,6 +161,10 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
         public void StartMacro() => scopes.Enter(Scope.Macro);
         public void EndMacro() => scopes.Leave();
+
+        public void StartSpecialFunctionArguments() => scopes.Enter(Scope.SpecialFunctionArguments);
+        public void EndSpecialFunctionArguments() => scopes.Leave();
+
 
         private int callStartIndex = -1;
         private int lastSharpSubstitutionStartIndex = -1;

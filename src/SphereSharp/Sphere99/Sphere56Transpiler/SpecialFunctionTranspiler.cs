@@ -39,15 +39,18 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                 builder.EnsureEvalCall("eval", () =>
                 {
                     builder.Append(name);
+
                     builder.Append('(');
                     transpiler.Visit(arguments[0]);
-                    for (int i = 1; i < arguments.Length; i++)
+
+                    if (name.Equals("strcmpi", StringComparison.OrdinalIgnoreCase))
                     {
+                        builder.StartSpecialFunctionArguments();
                         builder.Append(',');
-                        transpiler.Visit(arguments[i]);
+                        transpiler.Visit(arguments[1]);
+                        builder.EndSpecialFunctionArguments();
                     }
                     builder.Append(')');
-
                 });
 
                 return true;
