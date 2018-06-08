@@ -753,6 +753,24 @@ namespace SphereSharp.Sphere99
             }
         }
 
+        public override bool VisitDoswitchStatement([NotNull] sphereScript99Parser.DoswitchStatementContext context)
+        {
+            builder.Append(context.DOSWITCH());
+            if (context.BEFORE_CONDITION_WS?.Text != null)
+                builder.Append(context.BEFORE_CONDITION_WS.Text);
+
+            Visit(context.condition());
+            builder.Append(context.NEWLINE().GetText());
+            Visit(context.codeBlock());
+
+            if (context.AFTER_BLOCK_WS?.Text != null)
+                builder.Append(context.AFTER_BLOCK_WS.Text);
+
+            builder.Append(context.ENDDO().GetText());
+
+            return true;
+        }
+
         public override bool VisitIfStatement([NotNull] sphereScript99Parser.IfStatementContext context)
         {
             builder.Append(context.IF());

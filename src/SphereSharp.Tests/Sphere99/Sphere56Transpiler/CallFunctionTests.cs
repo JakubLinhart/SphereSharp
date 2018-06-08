@@ -240,6 +240,32 @@ endif");
         }
 
         [TestMethod]
+        public void DoSwitch_statement()
+        {
+            TranspileStatementCheck(@"doswitch arg(x)
+    call1
+    call2
+    call3
+enddo",
+@"doswitch <local.x>
+    call1
+    call2
+    call3
+enddo");
+
+            TranspileStatementCheck(@"doswitch <arg(x)>
+    call1
+    call2
+    call3
+enddo",
+@"doswitch <local.x>
+    call1
+    call2
+    call3
+enddo");
+        }
+
+        [TestMethod]
         [DataRow("return 1", "return 1")]
         [DataRow("return<x>", "return <x>")]
         [DataRow("return <x>", "return <x>")]
