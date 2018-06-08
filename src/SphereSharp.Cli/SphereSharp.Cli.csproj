@@ -81,11 +81,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TranspileCommand.cs" />
+    <Compile Include="TranspileCommandFileNameHandler.cs" />
     <Compile Include="TranspileOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SphereSharp\SphereSharp.csproj">

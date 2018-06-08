@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphereSharp.Tests", "src\Sp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphereSharp.Cli", "src\SphereSharp.Cli\SphereSharp.Cli.csproj", "{086DAEF7-FF78-4359-B217-0895B0AB8102}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphereSharp.Cli.Tests", "src\SphereSharp.Cli.Tests\SphereSharp.Cli.Tests.csproj", "{1D3891BA-EFF7-411E-A402-79115BF88E9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{086DAEF7-FF78-4359-B217-0895B0AB8102}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{086DAEF7-FF78-4359-B217-0895B0AB8102}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{086DAEF7-FF78-4359-B217-0895B0AB8102}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D3891BA-EFF7-411E-A402-79115BF88E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D3891BA-EFF7-411E-A402-79115BF88E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D3891BA-EFF7-411E-A402-79115BF88E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D3891BA-EFF7-411E-A402-79115BF88E9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

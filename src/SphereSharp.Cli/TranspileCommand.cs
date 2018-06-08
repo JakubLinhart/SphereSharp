@@ -1,4 +1,5 @@
-﻿using SphereSharp.Sphere99;
+﻿using Antlr4.Runtime.Tree;
+using SphereSharp.Sphere99;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,82 +9,113 @@ using System.Threading.Tasks;
 
 namespace SphereSharp.Cli
 {
-    internal sealed class TranspileCommand
+    public struct CompiledFile
     {
-        public void Transpile(TranspileOptions options)
+        public string FileName { get; }
+        public IParseTree ParsedTree { get; }
+
+        public CompiledFile(string fileName, IParseTree parsedTree)
         {
-            if (File.Exists(options.InputPath))
-            {
-                string outputPath = options.OutputPath;
+            FileName = fileName;
+            ParsedTree = parsedTree;
+        }
+    }
 
-                if (Directory.Exists(outputPath))
-                {
-                    outputPath = Path.Combine(outputPath, Path.GetFileName(options.InputPath));
-                }
-                outputPath = AddSuffix(outputPath, options.OutputSuffix);
+    public sealed class Compilation
+    {
+        private readonly DefinitionsCollector definitionsCollector;
+        private readonly DefinitionsRepository repository = new DefinitionsRepository();
+        private readonly List<CompiledFile> compiledFiles = new List<CompiledFile>();
+        private readonly List<Error> compilationErrors = new List<Error>();
 
-                TranspileFile(options.InputPath, outputPath);
-                return;
-            }
+        public IEnumerable<CompiledFile> CompiledFiles => compiledFiles;
+        public IEnumerable<Error> CompilationErrors => compilationErrors;
+        public IDefinitionsRepository DefinitionRepository => repository;
 
-            if (Directory.Exists(options.InputPath))
-            {
-                TranspileDirectory(options.InputPath, options.OutputPath, options.OutputSuffix);
-                return;
-            }
-
-            throw new CommandLineException($"Cannot find {options.InputPath}");
+        public Compilation()
+        {
+            definitionsCollector = new DefinitionsCollector(repository);
         }
 
-        private string AddSuffix(string fileName, string suffix)
+        public void AddFile(string inputFileName)
         {
-            if (string.IsNullOrEmpty(suffix))
-                return fileName;
-
-            return fileName + "." + suffix;
-        }
-
-        private void TranspileFile(string inputFileName, string outputFileName)
-        {
-            if (inputFileName.Equals(outputFileName, StringComparison.OrdinalIgnoreCase))
-                throw new CommandLineException("Cannot parse and write to the same file.");
-
-            Console.WriteLine($"Parsing {inputFileName}");
             var parser = new Parser();
             var result = parser.ParseFile(File.ReadAllText(inputFileName));
             if (result.Errors.Any())
             {
-                foreach (var error in result.Errors)
-                    Console.WriteLine(error.Message);
+                compilationErrors.AddRange(result.Errors);
             }
+            else
+            {
+                definitionsCollector.Visit(result.Tree);
+                compiledFiles.Add(new CompiledFile(inputFileName, result.Tree));
+            }
+        }
+    }
 
-            var transpiler = new Sphere56TranspilerVisitor();
-            transpiler.Visit(result.Tree);
+    internal sealed class TranspileCommand
+    {
+        private Compilation compilation = new Compilation();
 
-            Console.WriteLine($"Writing transpiled file {outputFileName}");
-            File.WriteAllText(outputFileName, transpiler.Output);
+        public void Transpile(TranspileOptions options)
+        {
+            if (File.Exists(options.InputPath))
+            {
+                ParseFile(options.InputPath);
+            }
+            else if (Directory.Exists(options.InputPath))
+            {
+                ParseDirectory(options.InputPath);
+            }
+            else
+                throw new CommandLineException($"Cannot find {options.InputPath}");
+
+            if (compilation.CompilationErrors.Any())
+            {
+                foreach (var error in compilation.CompilationErrors)
+                {
+                    if (!string.IsNullOrEmpty(error.FileName))
+                        Console.WriteLine(error.FileName);
+                    Console.WriteLine(error.Message);
+                }
+            }
+            else
+            {
+                var fileNameHandler = new TranspileCommandFileNameHandler(options);
+                foreach (var file in compilation.CompiledFiles)
+                {
+                    var outputFileName = fileNameHandler.GetOututFileNameFromInput(file.FileName);
+                    var outputDirectory = Path.GetDirectoryName(outputFileName);
+                    if (!Directory.Exists(outputDirectory))
+                        Directory.CreateDirectory(outputDirectory);
+
+                    Console.WriteLine($"Transpiling to {outputFileName}");
+                    var transpiler = new Sphere56TranspilerVisitor(compilation.DefinitionRepository);
+                    transpiler.Visit(file.ParsedTree);
+                    File.WriteAllText(outputFileName, transpiler.Output);
+                }
+            }
         }
 
-        private void TranspileDirectory(string inputDirectory, string outputDirectory, string suffix)
+        private void ParseFile(string inputFileName)
+        {
+            Console.WriteLine($"Parsing {inputFileName}");
+            compilation.AddFile(inputFileName);
+        }
+
+        private void ParseDirectory(string inputDirectory)
         {
             foreach (var file in Directory.GetFiles(inputDirectory, "*.scp"))
             {
                 string fileName = Path.GetFileName(file);
-                string outputFile = AddSuffix(Path.Combine(outputDirectory, fileName), suffix);
-
-                TranspileFile(file, outputFile);
+                ParseFile(file);
             }
 
             foreach (var dir in Directory.GetDirectories(inputDirectory))
             {
                 var dirName = Path.GetFileName(dir);
                 string inputDir = Path.Combine(inputDirectory, dirName);
-                string outputDir = Path.Combine(outputDirectory, dirName);
-
-                if (!Directory.Exists(outputDir))
-                    Directory.CreateDirectory(outputDir);
-
-                TranspileDirectory(inputDir, outputDir, suffix);
+                ParseDirectory(inputDir);
             }
         }
     }
