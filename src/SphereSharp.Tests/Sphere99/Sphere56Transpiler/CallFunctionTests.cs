@@ -671,26 +671,58 @@ ITEM=i_shirt_plain");
         }
 
         [TestMethod]
+        public void Dialog_settext_function()
+        {
+            TranspileFileCheck(@"[dialog d_test]
+argo.settext(10,""text"")
+",
+@"[dialog d_test]
+0,0
+setdialogtext d_test,10,""text""
+");
+        }
+
+        [TestMethod]
+        public void Dialog_textentry_function()
+        {
+            TranspileFileCheck(@"[dialog d_test]
+argo.textentry(340,233,300,30,1000,100,10)
+",
+@"[dialog d_test]
+0,0
+dtextentry 340 233 300 30 1000 100 <getdialogtext d_test,10>
+");
+
+            TranspileFileCheck(@"[dialog d_test]
+textentry 150 120 340 347 2116 1 1
+",
+@"[dialog d_test]
+0,0
+dtextentry 150 120 340 347 2116 1 <getdialogtext d_test,1>
+");
+        }
+
+        [TestMethod]
         public void Dialog_functions()
         {
-            //TranspileStatementCheck("dialog(d_test)", "dialog d_test");
-            //TranspileStatementCheck("dialog(d_test,1)", "dialog d_test,0,1");
-            //TranspileStatementCheck("dialog(d_test,\"first arg\",\"second arg\")", "dialog d_test,0,\"first arg\",\"second arg\"");
+            TranspileStatementCheck("dialog(d_test)", "dialog d_test");
+            TranspileStatementCheck("dialog(d_test,1)", "dialog d_test,0,1");
+            TranspileStatementCheck("dialog(d_test,\"first arg\",\"second arg\")", "dialog d_test,0,\"first arg\",\"second arg\"");
             TranspileStatementCheck("button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
-//            TranspileStatementCheck("argo.button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
-//            TranspileStatementCheck("argo.HTMLGUMP 20,20,600,200,0,0,0", "htmlgump 20 20 600 200 0 0 0");
-//            TranspileStatementCheck("gumppic 140,200,2200", "gumppic 140 200 2200");
-//            TranspileStatementCheck("argo.texta(180,233,1000,\"text\")", "dtext 180 233 1000 text");
-//            TranspileStatementCheck("argo.textentry(340,233,300,30,1000,100,10)", "textentry 340 233 300 30 1000 100 10");
-//            TranspileStatementCheck(
-//                "HTMLGUMPa(210,215,110,160,\"some text\",0,0)",
-//                "dhtmlgump 210 215 110 160 0 0 some text");
+            TranspileStatementCheck("argo.button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
+            TranspileStatementCheck("argo.HTMLGUMP 20,20,600,200,0,0,0", "htmlgump 20 20 600 200 0 0 0");
+            TranspileStatementCheck("gumppic 140,200,2200", "gumppic 140 200 2200");
+            TranspileStatementCheck("argo.texta(180,233,1000,\"text\")", "dtext 180 233 1000 text");
+            TranspileStatementCheck("argo.textentry(340,233,300,30,1000,100,10)", "textentry 340 233 300 30 1000 100 10");
+            TranspileStatementCheck(
+                "HTMLGUMPa(210,215,110,160,\"some text\",0,0)",
+                "dhtmlgump 210 215 110 160 0 0 some text");
 
-//            TranspileCodeBlockCheck(
-//@"HTMLGUMPa(210,215,110,160,<?std_basefont?><?seznamclass_0_?><?basefont_end?>,0,0) // comment
-//            ",
-//@"dhtmlgump 210 215 110 160 0 0 <std_basefont><seznamclass_0_><basefont_end> // comment
-//            ");
+            TranspileCodeBlockCheck(
+@"HTMLGUMPa(210,215,110,160,<?std_basefont?><?seznamclass_0_?><?basefont_end?>,0,0) // comment
+            ",
+@"dhtmlgump 210 215 110 160 0 0 <std_basefont><seznamclass_0_><basefont_end> // comment
+            ");
         }
 
         [TestMethod]

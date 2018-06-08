@@ -240,5 +240,14 @@ endif
 
 [function op_shiftleft]
 return "<<"
+
 [function op_shiftright]
 return ">>"
+
+[function setdialogtext]
+local.ctagname=dialogtext_<argv[0]>_<argv[1]>
+ctag.<local.ctagname>=<argv[2]>
+
+[function getdialogtext]
+local.ctagname=dialogtext_<argv[0]>_<argv[1]>
+return <ctag.<local.ctagname>>

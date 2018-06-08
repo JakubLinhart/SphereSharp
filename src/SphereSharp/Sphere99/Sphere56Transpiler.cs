@@ -390,13 +390,19 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitDialogSection([NotNull] sphereScript99Parser.DialogSectionContext context)
         {
+            var dialogName = context.dialogSectionHeader().dialogName.Text;
             Visit(context.dialogSectionHeader());
 
             if (!new DialogPositionTranspiler(builder, this).Visit(context))
                 builder.AppendLine("0,0");
 
             if (context.codeBlock() != null)
-                Visit(context.codeBlock());
+            {
+                foreach (var statement in context.codeBlock().statement())
+                {
+                    VisitDialogStatement(dialogName, statement);
+                }
+            }
 
             return true;
         }
@@ -527,6 +533,70 @@ namespace SphereSharp.Sphere99
             { "texta", "dtext" },
             { "textentry", "textentry" },
         };
+
+        public bool VisitDialogStatement(string dialogName, [NotNull] sphereScript99Parser.StatementContext context)
+        {
+            var name = new FinalChainedMemberAccessNameVisitor().Visit(context);
+            if (name != null)
+            {
+                var arguments = new FinalChainedMemberAccessArgumentsVisitor().Visit(context);
+                if (name.Equals("settext", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (context.WS() != null)
+                        builder.Append(context.WS());
+
+                    builder.Append("setdialogtext ");
+                    builder.Append(dialogName);
+                    builder.Append(',');
+                    AppendArguments(arguments);
+
+                    if (context.NEWLINE() != null)
+                        builder.Append(context.NEWLINE().GetText());
+
+                    return true;
+                }
+                else if (name.Equals("textentry", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (context.WS() != null)
+                        builder.Append(context.WS());
+
+                    builder.Append("dtextentry ");
+                    if (arguments.Length > 1)
+                    {
+                        new DialogFunctionArgumentsTranspiler(this, builder)
+                            .AppendArguments(arguments.Reverse().Skip(1).Reverse());
+
+                        builder.Append(' ');
+
+                        builder.Append("<getdialogtext ");
+                        builder.Append(dialogName);
+                        builder.Append(',');
+                        Visit(arguments.Last());
+                        builder.Append('>');
+                    }
+                    else
+                    {
+                        var subArguments = arguments[0].GetText().Split(' ');
+                        var newSubArguments = string.Join(" ", subArguments.Reverse().Skip(1).Reverse().ToArray());
+                        builder.Append(newSubArguments);
+                        builder.Append(' ');
+
+                        builder.Append("<getdialogtext ");
+                        builder.Append(dialogName);
+                        builder.Append(',');
+                        builder.Append(subArguments.Last());
+                        builder.Append('>');
+                    }
+
+                    if (context.NEWLINE() != null)
+                        builder.Append(context.NEWLINE().GetText());
+
+                    return true;
+                }
+            }
+
+            return VisitStatement(context);
+        }
 
         public override bool VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
         {
