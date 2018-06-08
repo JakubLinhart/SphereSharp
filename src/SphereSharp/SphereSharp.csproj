@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compilation.cs" />
+    <Compile Include="CompiledFile.cs" />
     <Compile Include="ConsoleErrorListener.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="MemoryErrorListener.cs" />
