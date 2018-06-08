@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineException.cs" />
+    <Compile Include="PretranspilationReplacements.cs" />
+    <Compile Include="PretranspilationReplacementScope.cs" />
     <Compile Include="RoundtripCommand.cs" />
     <Compile Include="RoundtripOptions.cs" />
     <Compile Include="Program.cs" />

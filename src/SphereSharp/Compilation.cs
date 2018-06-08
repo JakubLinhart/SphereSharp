@@ -21,10 +21,10 @@ namespace SphereSharp
             definitionsCollector = new DefinitionsCollector(repository);
         }
 
-        public void AddFile(string inputFileName)
+        public void AddFile(string inputFileName, string src)
         {
             var parser = new Parser();
-            var result = parser.ParseFile(File.ReadAllText(inputFileName));
+            var result = parser.ParseFile(src);
             if (result.Errors.Any())
             {
                 compilationErrors.AddRange(result.Errors);
@@ -34,6 +34,7 @@ namespace SphereSharp
                 definitionsCollector.Visit(result.Tree);
                 compiledFiles.Add(new CompiledFile(inputFileName, result.Tree));
             }
+
         }
     }
 }
