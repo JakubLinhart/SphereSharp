@@ -10,21 +10,21 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 {
     internal sealed class LiteralArgumentTranspiler : sphereScript99BaseVisitor<bool>
     {
-        private readonly Sphere56TranspilerVisitor parentVisitor;
+        private readonly Sphere56TranspilerVisitor parentTranspiler;
         private readonly SourceCodeBuilder builder;
 
         private readonly bool stripDoubleQuotes = false;
 
-        public LiteralArgumentTranspiler(Sphere56TranspilerVisitor parentVisitor, SourceCodeBuilder builder, bool stripDoubleQuotes = false)
+        public LiteralArgumentTranspiler(Sphere56TranspilerVisitor parentTranspiler, SourceCodeBuilder builder, bool stripDoubleQuotes = false)
         {
-            this.parentVisitor = parentVisitor;
+            this.parentTranspiler = parentTranspiler;
             this.builder = builder;
             this.stripDoubleQuotes = stripDoubleQuotes;
         }
 
         public override bool VisitMacro([NotNull] sphereScript99Parser.MacroContext context)
         {
-            parentVisitor.Visit(context);
+            parentTranspiler.Visit(context);
 
             return true;
         }

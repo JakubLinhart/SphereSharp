@@ -75,7 +75,7 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public void AppendArguments(IEnumerable<IParseTree> arguments, string separator=",")
+        public void AppendArguments(IEnumerable<IParseTree> arguments)
         {
             if (arguments == null)
                 return;
@@ -89,7 +89,7 @@ namespace SphereSharp.Sphere99
 
             foreach (var argument in arguments.Skip(1))
             {
-                builder.Append(separator);
+                builder.Append(',');
                 Visit(argument);
             }
         }
@@ -586,7 +586,7 @@ namespace SphereSharp.Sphere99
                     builder.Append(translatedName);
                     builder.Append(' ');
 
-                    AppendArguments(arguments, " ");
+                    new DialogFunctionArgumentsTranspiler(this, builder).AppendArguments(arguments);
 
                     if (context.NEWLINE() != null)
                         builder.Append(context.NEWLINE().GetText());
