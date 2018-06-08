@@ -638,6 +638,7 @@ ITEM=i_shirt_plain");
             TranspileStatementCheck("button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
             TranspileStatementCheck("argo.button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
             TranspileStatementCheck("argo.HTMLGUMP 20,20,600,200,0,0,0", "HTMLGUMP 20 20 600 200 0 0 0");
+            TranspileStatementCheck("gumppic 140,200,2200", "gumppic 140 200 2200");
             TranspileStatementCheck(
                 "HTMLGUMPa(210,215,110,160,\"some text\",0,0)",
                 "dhtmlgump 210 215 110 160 0 0 some text");

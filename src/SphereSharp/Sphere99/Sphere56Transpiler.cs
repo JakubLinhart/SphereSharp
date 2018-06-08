@@ -492,6 +492,11 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        private HashSet<string> genericGumpFunctionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "button", "htmlgump", "gumppic"
+        };
+
         public override bool VisitStatement([NotNull] sphereScript99Parser.StatementContext context)
         {
             var name = new FinalChainedMemberAccessNameVisitor().Visit(context);
@@ -524,7 +529,7 @@ namespace SphereSharp.Sphere99
 
                     return true;
                 }
-                else if (name.Equals("button", StringComparison.OrdinalIgnoreCase) || name.Equals("htmlgump", StringComparison.OrdinalIgnoreCase))
+                else if (genericGumpFunctionNames.Contains(name))
                 {
                     if (context.WS() != null)
                         builder.Append(context.WS());
