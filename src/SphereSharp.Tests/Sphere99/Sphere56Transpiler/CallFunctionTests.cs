@@ -118,6 +118,13 @@ fun2 this is just sometext nothing more! no sometext variable replacement!");
         }
 
         [TestMethod]
+        [DataRow("4 >> 8", "4 <op_shiftright> 8")]
+        public void Binary_shift_operators(string src, string expectedResult)
+        {
+            TranspileConditionCheck(src, expectedResult);
+        }
+
+        [TestMethod]
         public void Safe()
         {
             TranspileStatementCheck("safe(findid.i_something.remove)", "findid.i_something.remove");

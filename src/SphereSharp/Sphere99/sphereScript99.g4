@@ -165,12 +165,13 @@ signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
 evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccessExpression | '#';
 firstMemberAccessExpression: firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
-evalOperator: WS* evalBinaryOperator WS* ;
+evalOperator: LEADING_WS=WS* evalBinaryOperator TRAILING_WS=WS* ;
 evalSubExpression: '(' LEFT_WS=WS* numericExpression RIGHT_WS=WS* ')' ;
-evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | moreThanEqual | lessThanEqual | MORE_THAN | LESS_THAN;
+evalBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | moreThanEqual | lessThanEqual | MORE_THAN | LESS_THAN | rightBitShiftOperator;
 binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICAL_OR | BITWISE_AND | BITWISE_OR;
 moreThanEqual: MORE_THAN ASSIGN;
 lessThanEqual: LESS_THAN ASSIGN;
+rightBitShiftOperator: LEADING_WS=WS+ MORE_THAN MORE_THAN TRAILING_WS=WS+;
 
 macroConstantExpression: constantExpression macro;
 constantExpression: number;

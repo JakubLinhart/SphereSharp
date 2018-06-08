@@ -126,7 +126,23 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitEvalOperator([NotNull] sphereScript99Parser.EvalOperatorContext context)
         {
-            builder.Append(context.GetText());
+            if (context.LEADING_WS?.Text != null)
+                builder.Append(context.LEADING_WS.Text);
+
+            var op = context.evalBinaryOperator().GetText();
+            if (context.evalBinaryOperator()?.rightBitShiftOperator() != null)
+            {
+                if (context.evalBinaryOperator().rightBitShiftOperator().LEADING_WS?.Text != null)
+                    builder.Append(context.evalBinaryOperator().rightBitShiftOperator().LEADING_WS?.Text);
+                builder.Append("<op_shiftright>"); 
+                if (context.evalBinaryOperator().rightBitShiftOperator().LEADING_WS?.Text != null)
+                    builder.Append(context.evalBinaryOperator().rightBitShiftOperator().TRAILING_WS?.Text);
+            }
+            else
+                builder.Append(op);
+
+            if (context.TRAILING_WS?.Text != null)
+                builder.Append(context.TRAILING_WS.Text);
 
             return true;
         }

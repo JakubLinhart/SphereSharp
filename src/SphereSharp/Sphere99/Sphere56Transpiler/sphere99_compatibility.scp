@@ -237,3 +237,8 @@ else
   endif
   return 0
 endif
+
+[function op_shiftleft]
+return "<<"
+[function op_shiftright]
+return ">>"
