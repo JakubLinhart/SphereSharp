@@ -642,6 +642,9 @@ ITEM=i_shirt_plain");
         [TestMethod]
         public void Dialog_functions()
         {
+            TranspileStatementCheck("dialog(d_test)", "dialog d_test");
+            TranspileStatementCheck("dialog(d_test,1)", "dialog d_test,0,1");
+            TranspileStatementCheck("dialog(d_test,\"first arg\",\"second arg\")", "dialog d_test,0,\"first arg\",\"second arg\"");
             TranspileStatementCheck("button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
             TranspileStatementCheck("argo.button 170,210,2151,2152,1,0,1", "button 170 210 2151 2152 1 0 1");
             TranspileStatementCheck("argo.HTMLGUMP 20,20,600,200,0,0,0", "HTMLGUMP 20 20 600 200 0 0 0");

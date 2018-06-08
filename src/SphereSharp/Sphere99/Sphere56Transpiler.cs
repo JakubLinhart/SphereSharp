@@ -556,6 +556,24 @@ namespace SphereSharp.Sphere99
 
                     return true;
                 }
+                else if (name.Equals("dialog", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (arguments.Length > 1)
+                    {
+                        if (context.WS() != null)
+                            builder.Append(context.WS());
+
+                        builder.Append("dialog ");
+                        Visit(arguments[0]);
+                        builder.Append(",0,");
+                        AppendArguments(arguments.Skip(1));
+
+                        if (context.NEWLINE() != null)
+                            builder.Append(context.NEWLINE().GetText());
+
+                        return true;
+                    }
+                }
                 else if (genericGumpFunctionNames.Contains(name))
                 {
                     if (context.WS() != null)
