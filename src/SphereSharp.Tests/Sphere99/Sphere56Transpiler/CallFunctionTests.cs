@@ -658,6 +658,19 @@ ITEM=i_shirt_plain");
         }
 
         [TestMethod]
+        public void Dialog_trigger_functions()
+        {
+            TranspileFileCheck(@"[dialog d_test button]
+on=0
+argo.tag(test)
+",
+@"[dialog d_test button]
+on=0
+src.tag.test
+");
+        }
+
+        [TestMethod]
         public void Dialog_sections()
         {
             TranspileFileCheck(

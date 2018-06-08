@@ -437,6 +437,17 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        private bool replaceArgoWithSrc = false;
+
+        public override bool VisitDialogButtonTrigger([NotNull] sphereScript99Parser.DialogButtonTriggerContext context)
+        {
+            replaceArgoWithSrc = true;
+            base.VisitDialogButtonTrigger(context);
+            replaceArgoWithSrc = false;
+
+            return true;
+        }
+
         public override bool VisitDialogTextSection([NotNull] sphereScript99Parser.DialogTextSectionContext context)
         {
             builder.Append(context.GetText());
@@ -1157,6 +1168,12 @@ namespace SphereSharp.Sphere99
                     else if (name.Equals("argcount", StringComparison.OrdinalIgnoreCase) || name.Equals("ARGVCOUNT", StringComparison.OrdinalIgnoreCase))
                     {
                         builder.Append($"argv");
+                        return true;
+                    }
+                    else if (name.Equals("argo", StringComparison.OrdinalIgnoreCase) && replaceArgoWithSrc)
+                    {
+                        builder.Append("src");
+                        Visit(context.customMemberAccess().chainedMemberAccess());
                         return true;
                     }
                     else if (name.Equals("argv", StringComparison.OrdinalIgnoreCase))
