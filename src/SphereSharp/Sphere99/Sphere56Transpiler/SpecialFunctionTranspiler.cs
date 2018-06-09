@@ -18,7 +18,8 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private readonly HashSet<string> specialFunctionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "strlen",
-            "strcmpi"
+            "strcmpi",
+            "strmatch",
         };
 
         private bool IsSpecialFunction(string name) => specialFunctionNames.Contains(name);
@@ -41,14 +42,25 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                     builder.Append(name);
 
                     builder.Append('(');
-                    transpiler.Visit(arguments[0]);
-
-                    if (name.Equals("strcmpi", StringComparison.OrdinalIgnoreCase))
+                    if (name.Equals("strmatch", StringComparison.OrdinalIgnoreCase))
                     {
                         builder.StartSpecialFunctionArguments();
-                        builder.Append(',');
                         transpiler.Visit(arguments[1]);
+                        builder.Append(',');
+                        transpiler.Visit(arguments[0]);
                         builder.EndSpecialFunctionArguments();
+                    }
+                    else
+                    {
+                        transpiler.Visit(arguments[0]);
+
+                        if (name.Equals("strcmpi", StringComparison.OrdinalIgnoreCase))
+                        {
+                            builder.StartSpecialFunctionArguments();
+                            builder.Append(',');
+                            transpiler.Visit(arguments[1]);
+                            builder.EndSpecialFunctionArguments();
+                        }
                     }
                     builder.Append(')');
                 });

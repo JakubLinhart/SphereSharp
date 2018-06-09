@@ -1316,6 +1316,18 @@ namespace SphereSharp.Sphere99
                             return false;
                         }
                     }
+                    else if (name.Equals("strmid", StringComparison.OrdinalIgnoreCase))
+                    {
+                        builder.Append("strsub");
+                        builder.Append(' ');
+                        Visit(arguments[1]);
+                        builder.Append(' ');
+                        Visit(arguments[2]);
+                        builder.Append(' ');
+                        new LiteralArgumentTranspiler(this, builder, true).Visit(arguments[0]);
+
+                        return true;
+                    }
                     else if (context.customMemberAccess() != null && arguments == null)
                     {
                         if (semanticContext.IsLocalVariable(name))

@@ -291,12 +291,21 @@ enddo");
         [DataRow("arg(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "local.u=<eval strcmpi(<argv[0]>,<argv[1]>)>")]
         [DataRow("arg(u,strcmpi(<secondnumb>,skill_inscription))", "local.u=<eval strcmpi(<secondnumb>,skill_inscription)>")]
         [DataRow("arg(u,strcmpi(<secondnumb>,<skill_inscription>))", "local.u=<eval strcmpi(<secondnumb>,<serv.skill.inscription>)>")]
+        [DataRow("tag(class,<strmid(\"class_necro\",6,20)>)", "tag.class=<strsub 6 20 class_necro>")]
+        [DataRow("tag(class,<strmid(<x>,6,20)>)", "tag.class=<strsub 6 20 <x>>")]
         [DataRow(
             "arg(u,<eval strcmpi(<argv(0)>,someunquotedliterallookinglikefunctionname)>)",
             "local.u=<eval strcmpi(<argv[0]>,someunquotedliterallookinglikefunctionname)>")]
         public void Special_functions(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
+        }
+
+        [TestMethod]
+        [DataRow("strmatch(<args>,<arg(pattern)>)", "strmatch(<local.pattern>,<args>)")]
+        public void Special_functions_in_condition(string source, string expectedResult)
+        {
+            TranspileConditionCheck(source, expectedResult);
         }
 
         [TestMethod]
