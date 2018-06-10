@@ -42,10 +42,24 @@ namespace SphereSharp.Sphere99
         {
             string memberName = context.memberName().GetText();
 
+            builder.StartMemberAccess();
             Visit(context.memberName());
             builder.Append('_');
-            Visit(context.numericExpression());
+            var indexMemberName = new FirstMemberAccessNameVisitor().Visit(context.numericExpression());
+            if (indexMemberName == null || indexMemberName.Equals("eval", StringComparison.OrdinalIgnoreCase))
+            {
+                Visit(context.numericExpression());
+            }
+            else
+            {
+                builder.EnsureEvalCall("eval", () =>
+                {
+                    Visit(context.numericExpression());
+                });
+            }
+
             builder.Append('_');
+            builder.EndMemberAccess();
 
             return true;
         }

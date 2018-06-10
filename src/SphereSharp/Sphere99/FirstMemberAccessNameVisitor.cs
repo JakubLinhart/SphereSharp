@@ -70,5 +70,23 @@ namespace SphereSharp.Sphere99
         {
             return context.ACTION().GetText();
         }
+
+        public override string VisitMacro([NotNull] sphereScript99Parser.MacroContext context)
+        {
+            if (context.escapedMacro()?.macroBody() != null)
+                return Visit(context.escapedMacro().macroBody());
+            if (context.nonEscapedMacro()?.macroBody() != null)
+                return Visit(context.nonEscapedMacro().macroBody());
+
+            return base.VisitMacro(context);
+        }
+
+        public override string VisitSignedEvalOperand([NotNull] sphereScript99Parser.SignedEvalOperandContext context)
+        {
+            if (context.evalOperand() != null)
+                return Visit(context.evalOperand());
+
+            return base.VisitSignedEvalOperand(context);
+        }
     }
 }

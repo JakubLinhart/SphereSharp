@@ -332,8 +332,10 @@ local.v=<eval <local.u>>");
             TranspileStatementCheck("arg(u,#+1)", "local.u=<local.u>+1");
             TranspileStatementCheck("tag(u,#+1)", "tag.u=<tag.u>+1");
             TranspileStatementCheck("var(u,#+1)", "var.u=<var.u>+1");
-            TranspileStatementCheck("var(u[arg(x)],#+1)", "var.u_<local.x>_=<var.u_<local.x>_>+1");
-            TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u_<local.x>_=<tag.u_<local.x>_>+1");
+            TranspileStatementCheck("var(u[arg(x)],#+1)", "var.u_<eval <local.x>>_=<var.u_<eval <local.x>>_>+1");
+            TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u_<eval <local.x>>_=<tag.u_<eval <local.x>>_>+1");
+            TranspileStatementCheck("var(u[1],#+1)", "var.u_1_=<var.u_1_>+1");
+            TranspileStatementCheck("tag(u[2],#+1)", "tag.u_2_=<tag.u_2_>+1");
             TranspileStatementCheck("src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
         }
 
@@ -492,7 +494,7 @@ var.asciitext=1");
             TranspileStatementCheck("tag.remove(u)", "tag.u=");
             TranspileStatementCheck("tag.u.remove", "tag.u=");
             TranspileStatementCheck("tag(name,value1,value2)", "tag.name=value1,value2");
-            TranspileStatementCheck("tag(name[<tag(index)>],value)", "tag.name_<tag0.index>_=value");
+            TranspileStatementCheck("tag(name[<tag(index)>],value)", "tag.name_<eval <tag0.index>>_=value");
             TranspileStatementCheck("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>");
             // TODO:
             //TranspileStatementCheck(
@@ -541,6 +543,8 @@ call <xy>
 xy[0]   1
 [function fun1]
 call(<xy[0]>)
+call(<xy[<arg(i)>]>)
+call(<xy[<eval arg(i)>]>)
 ",
 @"[defname defs1]
 xy_0_   1
@@ -550,6 +554,8 @@ return <def.xy_0_>
 
 [function fun1]
 call <xy_0_>
+call <xy_<eval <local.i>>_>
+call <xy_<eval <local.i>>_>
 ");
         }
 
