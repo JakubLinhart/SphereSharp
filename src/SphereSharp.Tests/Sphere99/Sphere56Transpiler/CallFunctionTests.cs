@@ -131,8 +131,8 @@ fun2 this is just sometext nothing more! no sometext variable replacement!");
             TranspileStatementCheck("safe findid.i_something.remove", "findid.i_something.remove");
             TranspileStatementCheck("safe(cast 020)", "cast 020");
             TranspileStatementCheck("safe(events=+e_something)", "events=+e_something");
-            TranspileConditionCheck("safe finduid(<argv(0)>).isChar", "<finduid.<argv[0]>.isChar>");
-            TranspileConditionCheck("safe(finduid(<argv(0)>).isChar)", "<finduid.<argv[0]>.isChar>");
+            TranspileConditionCheck("safe fun1(<argv(0)>).isChar", "<fun1.<argv[0]>.isChar>");
+            TranspileConditionCheck("safe(fun1(<argv(0)>).isChar)", "<fun1.<argv[0]>.isChar>");
             TranspileConditionCheck("safe.tag(orig_stealth)", "<tag0.orig_stealth>");
             TranspileConditionCheck("<safe.tag(orig_stealth)>", "<tag0.orig_stealth>");
             TranspileConditionCheck("safe(<eval (<args>)>)", "<eval (<args>)>");
@@ -859,6 +859,13 @@ return i_test");
             TranspileConditionCheck("<findres(spell,<args>).flags>", "<serv.spell.<args>.flags>");
             TranspileConditionCheck("findres(itemdef,arg(createID))", "<serv.itemdef.<local.createID>>");
             TranspileStatementCheck("arg(x,<findres(skill,arg(i)).name>)", "local.x=<serv.skill.<local.i>.name>");
+        }
+
+        [TestMethod]
+        public void Finduid()
+        {
+            TranspileConditionCheck("finduid(tag(weaponuid))", "<uid.<tag.weaponuid>>");
+            TranspileConditionCheck("finduid(tag(weaponuid)).more2", "<uid.<tag.weaponuid>.more2>");
         }
 
         private void TranspileStatementCheck(string input, string expectedOutput)

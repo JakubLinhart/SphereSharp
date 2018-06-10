@@ -1387,6 +1387,21 @@ namespace SphereSharp.Sphere99
 
                         return true;
                     }
+                    else if (name.Equals("finduid", StringComparison.OrdinalIgnoreCase))
+                    {
+                        builder.StartMemberAccess();
+                        builder.Append("uid.");
+                        builder.StartRequireMacro();
+                        Visit(arguments[0]);
+                        builder.EndRequireMacro();
+
+                        if (context.customMemberAccess().chainedMemberAccess() != null)
+                            Visit(context.customMemberAccess().chainedMemberAccess());
+
+                        builder.EndMemberAccess();
+
+                        return true;
+                    }
                     else if (context.customMemberAccess() != null && arguments == null)
                     {
                         if (semanticContext.IsLocalVariable(name))
