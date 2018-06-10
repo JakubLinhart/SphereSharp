@@ -565,8 +565,8 @@ call <xy_<eval <local.i>>_>
         }
 
         [TestMethod]
-        [DataRow("findlayer(layer_pack).remove", "findlayer.layer_pack.remove")]
-        [DataRow("arg(u,findlayer(layer_pack))", "local.u=findlayer layer_pack")]
+        [DataRow("findlayer(layer_pack).remove", "findlayer.<layer_pack>.remove")]
+        [DataRow("arg(u,findlayer(layer_pack))", "local.u=findlayer.<layer_pack>")]
         public void DottedArguments(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
@@ -866,6 +866,13 @@ return i_test");
         {
             TranspileConditionCheck("finduid(tag(weaponuid))", "<uid.<tag.weaponuid>>");
             TranspileConditionCheck("finduid(tag(weaponuid)).more2", "<uid.<tag.weaponuid>.more2>");
+        }
+
+        [TestMethod]
+        public void Findlayer()
+        {
+            TranspileConditionCheck("findlayer(tag(weaponuid).typedef.layer)", "<findlayer.<uid.<tag0.weaponuid>.typedef.layer>>");
+            TranspileConditionCheck("findlayer.<args>", "<findlayer.<args>>");
         }
 
         private void TranspileStatementCheck(string input, string expectedOutput)
