@@ -41,6 +41,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         public void Append(char ch) => builder.Append(ch);
 
         public void AppendLine(string str) => builder.AppendLine(str);
+        public void AppendLine(char ch) => builder.AppendLine(ch);
         public void AppendLine() => builder.AppendLine();
         public void AppendLine(ITerminalNode[] nodes)
             => builder.AppendLine(nodes);

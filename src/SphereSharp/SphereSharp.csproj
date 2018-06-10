@@ -53,6 +53,7 @@
     <Compile Include="MemoryErrorListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sphere99\IDefinitionsRepository.cs" />
+    <Compile Include="Sphere99\PropertyValueExtractor.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\DialogFunctionArgumentsTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\DialogPositionTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\LiteralArgumentTranspiler.cs" />

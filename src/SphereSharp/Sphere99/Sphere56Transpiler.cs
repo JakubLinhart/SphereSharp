@@ -385,6 +385,25 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitProfessionSection([NotNull] sphereScript99Parser.ProfessionSectionContext context)
+        {
+            base.VisitProfessionSection(context);
+
+            if (new PropertyValueExtractor().TryExtract("DEFNAME", context, out string professionName))
+            {
+                builder.AppendLine();
+                builder.Append("[function ");
+                builder.Append(professionName);
+                builder.AppendLine(']');
+                builder.Append("return ");
+                builder.AppendLine(professionName);
+            }
+            else
+                throw new TranspilerException(context, "no DEFNAME property found");
+
+            return true;
+        }
+
         public override bool VisitProfessionSectionHeader([NotNull] sphereScript99Parser.ProfessionSectionHeaderContext context)
         {
             builder.Append("[skillclass ");

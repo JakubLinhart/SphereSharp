@@ -671,6 +671,9 @@ MagicResistance=100.0
 
 on=@login
 events e_character
+
+[function class_necro]
+return class_necro
 ");
         }
 

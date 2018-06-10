@@ -26,6 +26,13 @@ namespace SphereSharp
         public void Append(char ch) => output.Append(ch);
 
         public void AppendLine(string str) => output.AppendLine(str);
+
+        public void AppendLine(char ch)
+        {
+            output.Append(ch);
+            output.AppendLine();
+        }
+
         public void AppendLine() => output.AppendLine();
         public void AppendLine(ITerminalNode[] nodes)
             => output.AppendLine(nodes?.Select(x => x.GetText()).Aggregate(string.Empty, (l, r) => l + r) ?? string.Empty);
