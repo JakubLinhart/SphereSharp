@@ -112,7 +112,8 @@ on=@timer
         [TestMethod]
         public void Can_parse_defnames_section()
         {
-            CheckStructure("props:3;", @"[defnames def_eqTarget]
+            CheckStructure("props:4;", @"[defnames def_eqTarget]
+def_rearAbilities_manareg_class[0]                   //everyone
 def_eqTarget_Item        000000001
 def_eqTarget_Char        000000002
 regy_defs[0]  i_reag_black_pearl,3962");

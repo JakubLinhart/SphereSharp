@@ -128,7 +128,7 @@ indexedMemberName: memberName '[' numericExpression ']';
 
 // properties
 propertyList: NEWLINE? propertyAssignment+;
-propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator propertyValue? (NEWLINE | EOF);
+propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator? propertyValue? (NEWLINE | EOF);
 propertyAssignmentOperator: ((WS* ASSIGN WS*) | WS+);
 propertyName: propertyNameText propertyNameIndex?;
 propertyNameText: (nativeFunctionName | SYMBOL);
