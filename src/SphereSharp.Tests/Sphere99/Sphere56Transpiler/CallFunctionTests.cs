@@ -447,8 +447,10 @@ on=@spellcast
 ",
 @"[itemdef i_item]
 on=@dclick
-on=@spellselect");
+on=@spellselect
 
+[function i_item]
+return i_item");
         }
 
         [TestMethod]
@@ -469,7 +471,9 @@ on=@trigger1
 if 1
     local.variable1=1
 endif
-local.variable1=<local.variable1>");
+local.variable1=<local.variable1>
+[function i_item]
+return i_item");
         }
 
         [TestMethod]
@@ -815,6 +819,26 @@ gumppic 510 110 5536",
 @"[dialog d_dlg]
 0,0
 gumppic 510 110 5536");
+        }
+
+        [TestMethod]
+        public void Itemdef_section()
+        {
+            TranspileFileCheck(
+@"[itemdef i_test]
+name=some name",
+@"[itemdef i_test]
+name=some name
+[function i_test]
+return i_test");
+
+            TranspileFileCheck(
+@"[ITEMDEF 0469]
+DEFNAME=i_test",
+@"[ITEMDEF 0469]
+DEFNAME=i_test
+[function i_test]
+return i_test");
         }
 
 

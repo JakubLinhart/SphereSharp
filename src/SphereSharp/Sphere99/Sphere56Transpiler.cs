@@ -736,6 +736,31 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitItemDefSection([NotNull] sphereScript99Parser.ItemDefSectionContext context)
+        {
+            Visit(context.itemDefSectionHeader());
+            if (context.propertyList() != null)
+                Visit(context.propertyList());
+            if (context.triggerList() != null)
+                Visit(context.triggerList());
+
+            string shadowFunctionName;
+            if (context.propertyList() != null && new PropertyValueExtractor().TryExtract("defname", context.propertyList(), out string defName))
+                shadowFunctionName = defName;
+            else
+                shadowFunctionName = context.itemDefSectionHeader().itemDefSectionName().GetText();
+
+            builder.AppendLine();
+            builder.Append("[function ");
+            builder.Append(shadowFunctionName);
+            builder.AppendLine(']');
+            builder.Append("return ");
+            builder.AppendLine(shadowFunctionName);
+            builder.AppendLine();
+
+            return true;
+        }
+
         public override bool VisitItemDefSectionHeader([NotNull] sphereScript99Parser.ItemDefSectionHeaderContext context)
         {
             builder.Append(context.GetText());
