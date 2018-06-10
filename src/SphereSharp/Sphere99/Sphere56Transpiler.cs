@@ -1079,7 +1079,8 @@ namespace SphereSharp.Sphere99
                             var chainedArgument = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
                             if (chainedArgument != null && chainedArgument.Length == 1)
                             {
-                                builder.Append($"{chainedArgument[0].GetText()}=");
+                                Visit(chainedArgument[0]);
+                                builder.Append('=');
                                 return true;
                             }
                         }
@@ -1164,7 +1165,7 @@ namespace SphereSharp.Sphere99
             { "Skill_Cooking", "cooking" },
             { "Skill_DetectHidden", "DetectingHidden" },
             { "Skill_Enticement", "enticement" },
-            { "Skill_EvalInt", "evalint" },
+            { "Skill_EvalInt", "EvaluatingIntel" },
             { "Skill_Healing", "healing" },
             { "Skill_Fishing", "fishing" },
             { "Skill_Forensics", "forensics" },
@@ -1174,7 +1175,7 @@ namespace SphereSharp.Sphere99
             { "Skill_Inscription", "inscription" },
             { "Skill_LockPick", "lockpick" },
             { "Skill_Magery", "magery" },
-            { "Skill_MagicResist", "magicresist" },
+            { "Skill_MagicResist", "MagicResistance" },
             { "Skill_Tactics", "tactics" },
             { "Skill_Snooping", "snooping" },
             { "Skill_Musicianship", "musicianship" },

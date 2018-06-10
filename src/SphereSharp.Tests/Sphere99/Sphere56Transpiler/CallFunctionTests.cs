@@ -492,19 +492,20 @@ var.asciitext=1");
             TranspileStatementCheck("tag(name,value)", "tag.name=value");
             TranspileStatementCheck("arg(u,tag(name))", "local.u=tag.name");
             TranspileStatementCheck("tag.remove(u)", "tag.u=");
+            TranspileStatementCheck("tag.remove(u[<arg(x)>])", "tag.u_<eval <local.x>>_=");
             TranspileStatementCheck("tag.u.remove", "tag.u=");
             TranspileStatementCheck("tag(name,value1,value2)", "tag.name=value1,value2");
             TranspileStatementCheck("tag(name[<tag(index)>],value)", "tag.name_<eval <tag0.index>>_=value");
             TranspileStatementCheck("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>");
-            // TODO:
-            //TranspileStatementCheck(
-            //    "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
-            //    "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>");
-
             TranspileCodeBlockCheck(@"tag(u,1)
 tag(v,<eval tag.u>)",
 @"tag.u=1
 tag.v=<eval <tag0.u>>");
+
+            // TODO:
+            //TranspileStatementCheck(
+            //    "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
+            //    "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>");
         }
 
         [TestMethod]
