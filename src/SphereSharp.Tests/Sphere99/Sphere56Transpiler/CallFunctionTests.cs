@@ -707,6 +707,11 @@ ITEM=i_shirt_plain",
 @"[template tm_rangernewbie]
 item=i_spellbook_3
 ITEM=i_shirt_plain");
+
+            TranspileFileCheck(@"[template 1234]
+defname=loot_something",
+@"[template 1234]
+defname=loot_something");
         }
 
         [TestMethod]
@@ -855,6 +860,22 @@ DEFNAME=i_test",
 DEFNAME=i_test
 [function i_test]
 return i_test");
+        }
+
+        [TestMethod]
+        public void Chardef_section()
+        {
+            TranspileFileCheck(
+@"[chardef c_test]
+name=some name",
+@"[chardef c_test]
+name=some name");
+
+            TranspileFileCheck(
+@"[CHARDEF 0469]
+DEFNAME=c_test",
+@"[CHARDEF 0469]
+DEFNAME=c_test");
         }
 
 

@@ -12,11 +12,12 @@ functionSectionHeader: FUNCTION_SECTION_HEADER_START functionName ']' NEWLINE;
 functionName: SYMBOL | nativeFunctionName;
 
 itemDefSection: itemDefSectionHeader propertyList? triggerList? ;
-itemDefSectionHeader: ITEMDEF_SECTION_HEADER_START itemDefSectionName ']' NEWLINE;
-itemDefSectionName: SYMBOL | number;
+itemDefSectionHeader: ITEMDEF_SECTION_HEADER_START sectionName ']' NEWLINE;
 
 charDefSection: charDefSectionHeader propertyList triggerList ;
-charDefSectionHeader: CHARDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+charDefSectionHeader: CHARDEF_SECTION_HEADER_START sectionName ']' NEWLINE;
+
+sectionName: SYMBOL | number;
 
 professionSection: professionSectionHeader propertyList triggerList;
 professionSectionHeader: PROFESSION_SECTION_HEADER_START professionSectionName ']' NEWLINE;
@@ -29,7 +30,7 @@ typeDefsSection: typeDefsSectionHeader propertyList ;
 typeDefsSectionHeader: TYPEDEFS_SECTION_HEADER_START ']' NEWLINE;
 
 templateSection: templateSectionHeader propertyList ;
-templateSectionHeader: TEMPLATE_SECTION_HEADER_START SYMBOL ']' NEWLINE;
+templateSectionHeader: TEMPLATE_SECTION_HEADER_START sectionName ']' NEWLINE;
 
 eventsSection: eventsSectionHeader triggerList ;
 eventsSectionHeader: EVENTS_SECTION_HEADER_START SYMBOL ']' NEWLINE;

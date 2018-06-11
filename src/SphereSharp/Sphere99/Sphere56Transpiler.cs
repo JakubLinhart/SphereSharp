@@ -746,7 +746,7 @@ namespace SphereSharp.Sphere99
             if (context.propertyList() != null && new PropertyValueExtractor().TryExtract("defname", context.propertyList(), out string defName))
                 shadowFunctionName = defName;
             else
-                shadowFunctionName = context.itemDefSectionHeader().itemDefSectionName().GetText();
+                shadowFunctionName = context.itemDefSectionHeader().sectionName().GetText();
 
             builder.AppendLine();
             builder.Append("[function ");
@@ -760,6 +760,13 @@ namespace SphereSharp.Sphere99
         }
 
         public override bool VisitItemDefSectionHeader([NotNull] sphereScript99Parser.ItemDefSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitCharDefSectionHeader([NotNull] sphereScript99Parser.CharDefSectionHeaderContext context)
         {
             builder.Append(context.GetText());
 
