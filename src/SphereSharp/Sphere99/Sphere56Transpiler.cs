@@ -504,7 +504,6 @@ namespace SphereSharp.Sphere99
             }
         }
 
-        private ISet<string> globalVariables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private SemanticContext semanticContext = new SemanticContext();
 
         public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
@@ -1054,7 +1053,6 @@ namespace SphereSharp.Sphere99
                                 Visit(arguments[0]);
                                 builder.AllowVariables();
                                 builder.CaptureLastSharpSubstitution();
-                                globalVariables.Add(arguments[0].GetText());
                             }
                             else
                             {
@@ -1428,9 +1426,11 @@ namespace SphereSharp.Sphere99
 
                             return true;
                         }
-                        else if (globalVariables.Contains(name))
+                        else if (definitionRepository.IsGlobalVariable(name))
                         {
-                            builder.AppendGlobalVariable(name);
+                            builder.StartGlobalVariable();
+                            new FirstMemberAccessNameTranspiler(builder, this).Visit(context);
+                            builder.EndGlobalVariable();
 
                             if (context.customMemberAccess().chainedMemberAccess() != null)
                                 Visit(context.customMemberAccess().chainedMemberAccess());

@@ -522,6 +522,18 @@ tag.v=<eval <tag0.u>>");
 var(v,<eval u>)",
 @"var.u=1
 var.v=<eval <var.u>>");
+
+            TranspileCodeBlockCheck(
+@"var(name_<argv(0)>,1)
+var(name_<argv(0)>,2)",
+@"var.name_<argv[0]>=1
+var.name_<argv[0]>=2");
+
+            TranspileCodeBlockCheck(
+@"var(u,1)
+fun1(u)",
+@"var.u=1
+fun1 <var.u>");
         }
 
         [TestMethod]

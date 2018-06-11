@@ -41,6 +41,24 @@ namespace SphereSharp.Sphere99
             return base.VisitFunctionName(context);
         }
 
+        public override bool VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context)
+        {
+            var name = context.memberName()?.GetText();
+            if (!string.IsNullOrEmpty(name))
+            {
+                if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
+                {
+                    var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
+                    if (arguments != null && arguments.Length > 1)
+                    {
+                        repository.DefineGlobalVariable(arguments[0].GetText());
+                    }
+                }
+            }
+
+            return base.VisitCustomMemberAccess(context);
+        }
+
         private void DefineProperty(string propertyName) => repository.DefineDefName(propertyName);
     }
 }

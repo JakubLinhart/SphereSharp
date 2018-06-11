@@ -65,18 +65,18 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             AppendVariable("var", name);
         }
 
-        public void AppendDefNameVariable(string name)
-        {
-            AppendVariable("def", name);
-        }
+        public void StartGlobalVariable() => StartVariable("var");
+        public void EndGlobalVariable() => EndVariable();
+        public void AppendDefNameVariable(string name) => AppendVariable("def", name);
 
-        private void AppendVariable(string variableType, string name)
-        {
-            bool requiresMacro = scopes.Parent != Scope.VariablesRestriced 
-                && scopes.Current != Scope.Macro && scopes.Parent != Scope.Macro
-                && scopes.Parent != Scope.None;
+        private bool VariableRequiresMacro =>
+            scopes.Parent != Scope.VariablesRestriced
+            && scopes.Current != Scope.Macro && scopes.Parent != Scope.Macro
+            && scopes.Parent != Scope.None;
 
-            if (requiresMacro)
+        private void StartVariable(string variableType)
+        {
+            if (VariableRequiresMacro)
                 builder.Append('<');
 
             if (scopes.Parent != Scope.VariablesRestriced)
@@ -84,11 +84,19 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                 builder.Append(variableType);
                 builder.Append('.');
             }
+        }
 
-            builder.Append(name);
-
-            if (requiresMacro)
+        private void EndVariable()
+        {
+            if (VariableRequiresMacro)
                 builder.Append('>');
+        }
+
+        private void AppendVariable(string variableType, string name)
+        {
+            StartVariable(variableType);
+            builder.Append(name);
+            EndVariable();
         }
 
         public void RestrictVariables() => scopes.Enter(Scope.VariablesRestriced);
