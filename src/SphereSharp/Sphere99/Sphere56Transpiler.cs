@@ -518,7 +518,6 @@ namespace SphereSharp.Sphere99
         private Dictionary<string, string> triggerNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "UserDClick", "dclick" },
-            { "spellcast", "spellselect" },
         };
 
         public override bool VisitTriggerHeader([NotNull] sphereScript99Parser.TriggerHeaderContext context)

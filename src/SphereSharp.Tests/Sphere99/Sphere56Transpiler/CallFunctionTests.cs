@@ -443,11 +443,9 @@ variable1
         {
             TranspileFileCheck(@"[itemdef i_item]
 on=@UserDClick
-on=@spellcast
 ",
 @"[itemdef i_item]
 on=@dclick
-on=@spellselect
 
 [function i_item]
 return i_item");
