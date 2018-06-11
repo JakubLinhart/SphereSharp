@@ -189,7 +189,7 @@ local.idx=<eval <argv[0]>+1>
 return <argv[<local.idx>]>
 
 [function serverTime]
-return <serv.time>
+return <serv.rtime>
 
 [function statclients]
 return <serv.clients>
@@ -271,3 +271,14 @@ return <canseelos>
 
 [function mapplane]
 return <map>
+
+[function p_x]
+return <p.x>
+
+[function p_y]
+return <p.y>
+
+[function p_z]
+return <p.z>
+
+
