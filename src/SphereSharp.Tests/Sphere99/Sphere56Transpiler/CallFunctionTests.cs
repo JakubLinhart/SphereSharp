@@ -534,6 +534,12 @@ var.name_<argv[0]>=2");
 fun1(u)",
 @"var.u=1
 fun1 <var.u>");
+
+            TranspileCodeBlockCheck(
+@"var(is_blunt    ,1)
+var(u,<eval(is_blunt)>)",
+@"var.is_blunt    =1
+var.u=<eval(<var.is_blunt>)>");
         }
 
         [TestMethod]

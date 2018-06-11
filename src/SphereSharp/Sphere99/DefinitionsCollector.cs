@@ -51,7 +51,7 @@ namespace SphereSharp.Sphere99
                     var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
                     if (arguments != null && arguments.Length > 1)
                     {
-                        repository.DefineGlobalVariable(arguments[0].GetText());
+                        repository.DefineGlobalVariable(arguments[0].GetText().Trim());
                     }
                 }
             }
