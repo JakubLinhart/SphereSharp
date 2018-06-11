@@ -111,6 +111,20 @@ else
   return 0
 endif
 
+[function flag_poisoned]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_poisoned
+  else
+    flags=<flags>&~statf_poisoned
+  endif
+else
+  if <flags>&statf_poisoned
+    return 1
+  endif
+  return 0
+endif
+
 // There is no statf_immobile on .56. STATF_Hovering on Sphere .56 has the same value as statf_immobile on Sphere .99
 // Semantically similar is statf_freeze.
 [function flag_immobile]
@@ -175,7 +189,7 @@ local.idx=<eval <argv[0]>+1>
 return <argv[<local.idx>]>
 
 [function serverTime]
-return serv.time
+return <serv.time>
 
 [function statclients]
 return <serv.clients>
@@ -251,3 +265,9 @@ ctag.<local.ctagname>=<argv[2]>
 [function getdialogtext]
 local.ctagname=dialogtext_<argv[0]>_<argv[1]>
 return <ctag.<local.ctagname>>
+
+[function srccanseelos]
+return <canseelos>
+
+[function mapplane]
+return <map>
