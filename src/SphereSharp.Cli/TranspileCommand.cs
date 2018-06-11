@@ -19,6 +19,10 @@ namespace SphereSharp.Cli
                 { "\"dialog(D_RACEclass_races)\"", "\"dialog D_RACEclass_races\"" },
                 { "\"dialog(D_raceclass_nations)\"", "\"dialog D_raceclass_nations\"" },
                 { "\"dialog(D_RACEclass_stats)\"", "\"dialog D_RACEclass_stats\"" },
+            })),
+            new PretranspilationReplacementScope("funkce.scp", new PretranspilationReplacements(new Dictionary<string, string>
+            {
+                { "try s(<serverTime> <?args?>)", "serv.log(<serverTime> <?args?>)" }
             }))
         };
 
