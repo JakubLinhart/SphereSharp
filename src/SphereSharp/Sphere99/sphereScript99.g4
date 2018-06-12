@@ -121,7 +121,7 @@ chainedMemberAccess: '.' memberAccess;
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
-                | ISEVENT | SPELLEFFECT | ADDSPELL;
+                | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro)+?;
@@ -262,6 +262,8 @@ SAFE: [sS][aA][fF][eE];
 ISEVENT: [iI][sS][eE][vV][eE][nN][tT];
 SPELLEFFECT: [sS][pP][eE][lL][lL][eE][fF][fF][eE][cC][tT];
 ADDSPELL: [aA][dD][dD][sS][pP][eE][lL][lL];
+NEWNPC: [nN][eE][wW][nN][pP][cC];
+EMOTE: [eE][mM][oO][tT][eE];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
