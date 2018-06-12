@@ -273,5 +273,83 @@ DEFNAME=s_clumsy
 NAME=Clumsy
 SOUND=snd_spell_clumsy");
         }
+
+        [TestMethod]
+        public void Can_parse_areadef_section()
+        {
+            CheckStructure("props:3;",
+@"[AREA Gondorske uzemi]//dtto
+GROUP=Gondorske uzemi
+P=1520, 1704
+Rect=1,606,1984,2328");
+        }
+
+        [TestMethod]
+        public void Can_parse_area_section()
+        {
+            CheckStructure("props:3;",
+@"[AREA Gondorske uzemi]//dtto
+GROUP=Gondorske uzemi
+P=1520, 1704
+Rect=1,606,1984,2328");
+        }
+
+        [TestMethod]
+        public void Can_parse_are_section_with_tag_assignment()
+        {
+            CheckStructure("props:2;",
+@"[AREA Stredozeme]
+CLASS=11
+tag.realm=3");
+        }
+
+        [TestMethod]
+        public void Can_parse_regiontype_section_with_subname()
+        {
+            CheckStructure("props:1;triggers:0;",
+@"[REGIONTYPE r_default_rock t_rock]
+RESOURCES=100 r_nothing");
+        }
+
+        [TestMethod]
+        public void Can_parse_regiontype_section()
+        {
+            CheckStructure("props:1;triggers:0;",
+@"[REGIONTYPE r_default_rock]
+RESOURCES=100 r_nothing");
+        }
+
+        [TestMethod]
+        public void Can_parse_regiontype_section_with_triggers()
+        {
+            CheckStructure("props:1;triggers:1;",
+@"[REGIONTYPE r_default_rock]
+RESOURCES=100 r_nothing
+
+ON=@CLIPERIODIC
+  SRC.MIDILIST=midi_ForestA");
+        }
+
+        [TestMethod]
+        public void Can_parse_regiontype_section_without_properties()
+        {
+            CheckStructure("triggers:1;",
+@"[REGIONTYPE r_moria_mesto]
+
+ON=@ENTER
+  src.sysmessage(Nachazis se v Morii.)
+  SRC.MIDILIST=midi_LBCastle");
+        }
+
+        [TestMethod]
+        public void Can_parse_regionresource_section()
+        {
+            CheckStructure("props:3;",
+@"[REGIONRESOURCE o_verite]
+// t_rock
+SKILL=70.0,110.0
+AMOUNT=10,15
+REAP=i_ore_verite");
+        }
     }
 }

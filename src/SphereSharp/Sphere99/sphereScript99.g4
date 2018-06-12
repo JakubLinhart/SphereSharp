@@ -4,7 +4,8 @@ file: NEWLINE? section+ (eofSection | EOF);
 
 section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
-            | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection) WS*;
+            | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection
+            | areaSection | regionTypeSection | regionResourceSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -26,6 +27,17 @@ professionSectionName: number;
 spellSection: spellSectionHeader propertyList triggerList?;
 spellSectionHeader: SPELL_SECTION_HEADER_START spellSectionName ']' NEWLINE;
 spellSectionName: number;
+
+areaSection: areaSectionHeader propertyList;
+areaSectionHeader: AREA_SECTION_HEADER_START areaSectionName ']' NEWLINE;
+areaSectionName: ~(NEWITEM | ']')+;
+
+regionTypeSection: regionTypeSectionHeader propertyList? triggerList?;
+regionTypeSectionHeader: REGIONTYPE_SECTION_HEADER_START sectionName regionTypeSectionSubName? ']' NEWLINE;
+regionTypeSectionSubName: WS+ secondName=sectionName;
+
+regionResourceSection: regionResourceSectionHeader propertyList;
+regionResourceSectionHeader: REGIONRESOURCE_SECTION_HEADER_START sectionName ']' NEWLINE;
 
 typeDefSection: typeDefSectionHeader triggerList ;
 typeDefSectionHeader: TYPEDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
@@ -128,7 +140,7 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
-memberName: (SYMBOL | macro)+?;
+memberName: (SYMBOL | macro | TAG)+?;
 indexedMemberName: memberName '[' numericExpression ']';
 
 // properties
@@ -136,7 +148,8 @@ propertyList: NEWLINE? propertyAssignment+;
 propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator? propertyValue? (NEWLINE | EOF);
 propertyAssignmentOperator: ((WS* ASSIGN WS*) | WS+);
 propertyName: propertyNameText propertyNameIndex?;
-propertyNameText: (nativeFunctionName | SYMBOL);
+propertyNameText: (propertyTagName | nativeFunctionName | SYMBOL);
+propertyTagName: TAG '.' (nativeFunctionName | SYMBOL);
 propertyNameIndex: ('[' number ']');
 propertyValue: ~(NEWLINE)+?;
 
@@ -205,6 +218,9 @@ SPEECH_SECTION_HEADER_START: '[' [sS][pP][eE][eE][cC][hH] WS+;
 COMMENT_SECTION_HEADER_START: '[' [cC][oO][mM][mM][eE][nN][tT];
 PROFESSION_SECTION_HEADER_START: '[' [pP][rR][oO][fF][eE][sS][sS][iI][oO][nN] WS+;
 SPELL_SECTION_HEADER_START: '[' [sS][pP][eE][lL][lL] WS+;
+AREA_SECTION_HEADER_START: '[' [aA][rR][eE][aA] WS+;
+REGIONTYPE_SECTION_HEADER_START: '[' [rR][eE][gG][iI][oO][nN][tT][yY][pP][eE] WS+;
+REGIONRESOURCE_SECTION_HEADER_START: '[' [rR][eE][gG][iI][oO][nN][rR][eE][sS][oO][uU][rR][cC][eE] WS+;
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 
@@ -273,6 +289,8 @@ EMOTE: [eE][mM][oO][tT][eE];
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
 HVAL: [hH][vV][aA][lL];
+
+TAG: [tT][aA][gG];
 
 TRIGGER_HEADER: [oO][nN] '=';
 BUTTON_TRIGGER_HEADER: [oO][nN][bB][uU][tT][tT][oO][nN] '=';

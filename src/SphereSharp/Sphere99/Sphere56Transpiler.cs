@@ -421,6 +421,60 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitAreaSection([NotNull] sphereScript99Parser.AreaSectionContext context)
+        {
+            Visit(context.areaSectionHeader());
+
+            if (context.propertyList()?.NEWLINE() != null)
+                builder.Append(context.propertyList().NEWLINE().GetText());
+
+            if (context.propertyList()?.propertyAssignment() != null)
+            {
+                if (new PropertyValueExtractor().TryExtract("mapplane", context.propertyList(), out string mapplaneValue))
+                {
+                    foreach (var assignment in context.propertyList().propertyAssignment())
+                    {
+                        AppendPropertyAssignmentWithoutNewLine(assignment);
+                        if (assignment.propertyName().GetText().Equals("rect", StringComparison.OrdinalIgnoreCase))
+                        {
+                            builder.Append(',');
+                            builder.Append(mapplaneValue);
+                        }
+
+                        builder.Append(assignment.NEWLINE());
+                    }
+                }
+                else
+                    Visit(context.propertyList());
+            }
+
+            return true;
+        }
+
+        public override bool VisitAreaSectionHeader([NotNull] sphereScript99Parser.AreaSectionHeaderContext context)
+        {
+            builder.Append("[AREADEF ");
+            builder.Append(context.areaSectionName().GetText());
+            builder.Append(']');
+            builder.Append(context.NEWLINE());
+
+            return true;
+        }
+
+        public override bool VisitRegionTypeSectionHeader([NotNull] sphereScript99Parser.RegionTypeSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitRegionResourceSectionHeader([NotNull] sphereScript99Parser.RegionResourceSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitTemplateSectionHeader([NotNull] sphereScript99Parser.TemplateSectionHeaderContext context)
         {
             builder.Append(context.GetText());
@@ -828,7 +882,7 @@ namespace SphereSharp.Sphere99
         };
         private readonly IDefinitionsRepository definitionRepository;
 
-        public override bool VisitPropertyAssignment([NotNull] sphereScript99Parser.PropertyAssignmentContext context)
+        private void AppendPropertyAssignmentWithoutNewLine(sphereScript99Parser.PropertyAssignmentContext context)
         {
             if (context.LEADING_WS?.Text != null)
                 builder.Append(context.LEADING_WS.Text);
@@ -859,6 +913,11 @@ namespace SphereSharp.Sphere99
                 else
                     builder.Append(propertyValueText);
             }
+        }
+
+        public override bool VisitPropertyAssignment([NotNull] sphereScript99Parser.PropertyAssignmentContext context)
+        {
+            AppendPropertyAssignmentWithoutNewLine(context);
 
             builder.Append(context.NEWLINE());
 

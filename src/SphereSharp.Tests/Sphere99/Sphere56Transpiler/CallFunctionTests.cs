@@ -910,6 +910,60 @@ DEFNAME=c_test
 return c_test");
         }
 
+        [TestMethod]
+        public void Area_section()
+        {
+            TranspileFileCheck(
+@"[AREA Stredozeme]
+RECT=1,1,6143,4096
+P=1323,1624,55,255
+DEFNAME=a_world
+tag.realm=3",
+@"[AREADEF Stredozeme]
+RECT=1,1,6143,4096
+P=1323,1624,55,255
+DEFNAME=a_world
+tag.realm=3");
+
+            TranspileFileCheck(
+@"[AREA Stredozeme]
+mapplane=55
+RECT=1,1,10,10",
+@"[AREADEF Stredozeme]
+mapplane=55
+RECT=1,1,10,10,55
+");
+        }
+
+        [TestMethod]
+        public void RegionResource_section()
+        {
+            TranspileFileCheck(
+@"[REGIONRESOURCE o_iron]
+SKILL=30.0,70.0
+AMOUNT=50,75
+REAP=i_ore_iron
+REGEN=60*60*1",
+@"[REGIONRESOURCE o_iron]
+SKILL=30.0,70.0
+AMOUNT=50,75
+REAP=i_ore_iron
+REGEN=60*60*1"); 
+        }
+
+        [TestMethod]
+        public void RegionType_section()
+        {
+            TranspileFileCheck(
+@"[REGIONTYPE r_default_water t_water]
+RESOURCES=100 r_nothing
+resources=15 w_fish1
+resources=8 w_fish2",
+@"[REGIONTYPE r_default_water t_water]
+RESOURCES=100 r_nothing
+resources=15 w_fish1
+resources=8 w_fish2");
+        }
 
         [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
