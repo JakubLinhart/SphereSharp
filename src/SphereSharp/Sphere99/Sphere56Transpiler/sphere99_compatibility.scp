@@ -125,6 +125,48 @@ else
   return 0
 endif
 
+[function flag_hasshield]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_hasshield
+  else
+    flags=<flags>&~statf_hasshield
+  endif
+else
+  if <flags>&statf_hasshield
+    return 1
+  endif
+  return 0
+endif
+
+[function flag_reactive]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_reactive
+  else
+    flags=<flags>&~statf_reactive
+  endif
+else
+  if <flags>&statf_reactive
+    return 1
+  endif
+  return 0
+endif
+
+[function flag_spawned]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_spawned
+  else
+    flags=<flags>&~statf_spawned
+  endif
+else
+  if <flags>&statf_spawned
+    return 1
+  endif
+  return 0
+endif
+
 // There is no statf_immobile on .56. STATF_Hovering on Sphere .56 has the same value as statf_immobile on Sphere .99
 // Semantically similar is statf_freeze.
 [function flag_immobile]
@@ -169,6 +211,19 @@ else
   return 0
 endif
 
+[function flag_conjured]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_conjured
+  else
+    flags=<flags>&~statf_conjured
+  endif
+else
+  if <flags>&statf_conjured
+    return 1
+  endif
+  return 0
+endif
 
 [function newequip]
 newitem <args>
