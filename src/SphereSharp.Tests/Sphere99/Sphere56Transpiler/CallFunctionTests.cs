@@ -699,6 +699,34 @@ return class_necro
         }
 
         [TestMethod]
+        public void Spell_section()
+        {
+            TranspileFileCheck(
+@"[SPELL 1]
+DEFNAME=s_clumsy
+NAME=Clumsy
+SOUND=snd_spell_clumsy
+RUNEITEM=i_rune_CLUMSY
+SCROLLITEM=i_scroll_CLUMSY
+CASTTIME=12
+EFFECTID=i_fx_curse
+
+ON=@Effect
+   call1",
+@"[SPELL 1]
+DEFNAME=s_clumsy
+NAME=Clumsy
+SOUND=snd_spell_clumsy
+RUNE_ITEM=i_rune_CLUMSY
+SCROLL_ITEM=i_scroll_CLUMSY
+CAST_TIME=12
+EFFECT_ID=i_fx_curse
+
+ON=@Effect
+   call1");
+        }
+
+        [TestMethod]
         public void Template_section()
         {
             TranspileFileCheck(@"[template tm_rangernewbie]

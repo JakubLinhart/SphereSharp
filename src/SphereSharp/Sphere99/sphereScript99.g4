@@ -4,7 +4,7 @@ file: NEWLINE? section+ (eofSection | EOF);
 
 section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
-            | bookSection | bookPageSection | speechSection | commentSection | professionSection) WS*;
+            | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -22,6 +22,10 @@ sectionName: SYMBOL | number;
 professionSection: professionSectionHeader propertyList triggerList;
 professionSectionHeader: PROFESSION_SECTION_HEADER_START professionSectionName ']' NEWLINE;
 professionSectionName: number;
+
+spellSection: spellSectionHeader propertyList triggerList?;
+spellSectionHeader: SPELL_SECTION_HEADER_START spellSectionName ']' NEWLINE;
+spellSectionName: number;
 
 typeDefSection: typeDefSectionHeader triggerList ;
 typeDefSectionHeader: TYPEDEF_SECTION_HEADER_START SYMBOL ']' NEWLINE;
@@ -200,6 +204,7 @@ BOOK_SECTION_HEADER_START: '[' [bB][oO][oO][kK] WS+;
 SPEECH_SECTION_HEADER_START: '[' [sS][pP][eE][eE][cC][hH] WS+;
 COMMENT_SECTION_HEADER_START: '[' [cC][oO][mM][mM][eE][nN][tT];
 PROFESSION_SECTION_HEADER_START: '[' [pP][rR][oO][fF][eE][sS][sS][iI][oO][nN] WS+;
+SPELL_SECTION_HEADER_START: '[' [sS][pP][eE][lL][lL] WS+;
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 

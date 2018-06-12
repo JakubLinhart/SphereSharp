@@ -414,6 +414,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitSpellSectionHeader([NotNull] sphereScript99Parser.SpellSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitTemplateSectionHeader([NotNull] sphereScript99Parser.TemplateSectionHeaderContext context)
         {
             builder.Append(context.GetText());
@@ -802,6 +809,13 @@ namespace SphereSharp.Sphere99
         {
             { "EI", "EvaluatingIntel" },
             { "Resist", "MagicResistance" },
+            { "RUNEITEM", "RUNE_ITEM" },
+            { "SCROLLITEM", "SCROLL_ITEM" },
+            { "CASTTIME", "CAST_TIME" },
+            { "EFFECTID", "EFFECT_ID" },
+            { "ATTACK", "DAM" },
+            { "RESOURCES2", "RESOURCES" },
+            { "can_replicate", "REPLICATE" },
         };
         private readonly ISet<string> promiles2PercentProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {

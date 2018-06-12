@@ -252,5 +252,26 @@ STATSUM=1000
 on=@login
 events e_character");
         }
+
+        [TestMethod]
+        public void Can_parse_spell_section()
+        {
+            CheckStructure("props:3;triggers:1;", @"[SPELL 1]
+DEFNAME=s_clumsy
+NAME=Clumsy
+SOUND=snd_spell_clumsy
+
+ON=@Effect
+   call1");
+        }
+
+        [TestMethod]
+        public void Can_parse_spell_section_without_triggers()
+        {
+            CheckStructure("props:3;triggers:0;", @"[SPELL 1]
+DEFNAME=s_clumsy
+NAME=Clumsy
+SOUND=snd_spell_clumsy");
+        }
     }
 }
