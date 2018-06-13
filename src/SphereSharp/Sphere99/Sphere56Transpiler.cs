@@ -961,9 +961,7 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context)
         {
-            builder.Append('"');
-            AppendTerminalsVisitNodes(context.innerQuotedLiteralArgument().children);
-            builder.Append('"');
+            new LiteralArgumentTranspiler(this, builder).Visit(context);
 
             return true;
         }

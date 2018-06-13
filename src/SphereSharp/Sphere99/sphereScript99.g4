@@ -116,7 +116,7 @@ dorandStatement: DORAND WS* condition NEWLINE codeBlock WS* ENDDO;
 condition: numericExpression;
 numericExpression: evalExpression;
 macro: escapedMacro | nonEscapedMacro;
-escapedMacro: LESS_THAN '?' macroBody '?' MORE_THAN ;
+escapedMacro: LESS_THAN '?' LEFT_WS=WS* macroBody RIGHT_WS=WS* '?' MORE_THAN ;
 nonEscapedMacro: LESS_THAN macroBody  MORE_THAN ;
 macroBody: (firstMemberAccess | indexedMemberName);
 call: firstMemberAccess;
@@ -137,7 +137,7 @@ chainedMemberAccess: '.' memberAccess;
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
-                | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE;
+                | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG)+?;
@@ -172,7 +172,9 @@ emptyArgument: ;
 triggerArgument: '@' SYMBOL;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
-innerQuotedLiteralArgument: (macro | '\'' | '\\' | ';' | ~('"' | NEWLINE))*?;
+innerQuotedLiteralArgument: (quotedTextLiteralSegment | macroLiteralSegment | lessThanSegment)*;
+lessThanSegment: LESS_THAN;
+quotedTextLiteralSegment: ~('"' | NEWLINE | LESS_THAN)+; 
 unquotedLiteralArgument: (textLiteralSegment | macroLiteralSegment)+;
 textLiteralSegment: ~(',' | NEWLINE | LESS_THAN)+;
 macroLiteralSegment: macro;
@@ -285,6 +287,7 @@ SPELLEFFECT: [sS][pP][eE][lL][lL][eE][fF][fF][eE][cC][tT];
 ADDSPELL: [aA][dD][dD][sS][pP][eE][lL][lL];
 NEWNPC: [nN][eE][wW][nN][pP][cC];
 EMOTE: [eE][mM][oO][tT][eE];
+SEX: [sS][eE][xX];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
@@ -292,7 +295,7 @@ HVAL: [hH][vV][aA][lL];
 
 TAG: [tT][aA][gG];
 
-TRIGGER_HEADER: [oO][nN] '=';
+TRIGGER_HEADER: [oO][nN] WS* '=' WS*;
 BUTTON_TRIGGER_HEADER: [oO][nN][bB][uU][tT][tT][oO][nN] '=';
 ANY_BUTTON: '@' [aA][nN][yY][bB][uU][tT][tT][oO][nN];
 SYMBOL: VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
@@ -315,6 +318,9 @@ MODULO: '%';
 LOGICAL_AND: '&&';
 LOGICAL_OR: '||';
 LOGICAL_NOT: '!';
+SQ: '\'';
+BACKSLASH: '\\';
+SEMICOLON: ';';
 
 fragment VALID_SYMBOL_START
    : ('a' .. 'z') | ('A' .. 'Z') | '_'

@@ -51,7 +51,10 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("sysmessage(\"<fun1>\")", "sysmessage \"<fun1>\"")]
         [DataRow("sysmessage(\"<fun1(1,2,3)>\")", "sysmessage \"<fun1 1,2,3>\"")]
         [DataRow("sysmessage(\"<?fun1(1,2,3)?>\")", "sysmessage \"<fun1 1,2,3>\"")]
+        [DataRow("sysmessage(\"<? fun1(1,2,3) ?>\")", "sysmessage \"<fun1 1,2,3>\"")]
         [DataRow("sysmessage(\"<arg(x)>\")", "sysmessage \"<local.x>\"")]
+        [DataRow("say(\"some text with spaces\")", "say \"some text with spaces\"")]
+        [DataRow("say(\"some <text> with <spaces(<argv(0)>)> and <macros>\")", "say \"some <text> with <spaces <argv[0]>> and <macros>\"")]
         public void QuotedArguments(string src, string expectedResult)
         {
             TranspileStatementCheck(src, expectedResult);

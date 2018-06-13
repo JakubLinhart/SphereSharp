@@ -32,9 +32,15 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         public override bool VisitQuotedLiteralArgument([NotNull] sphereScript99Parser.QuotedLiteralArgumentContext context)
         {
             if (!stripDoubleQuotes)
-                return base.VisitQuotedLiteralArgument(context);
+                builder.Append('"');
 
-            return Visit(context.innerQuotedLiteralArgument());
+            if (context.innerQuotedLiteralArgument() != null)
+                Visit(context.innerQuotedLiteralArgument());
+
+            if (!stripDoubleQuotes)
+                builder.Append('"');
+
+            return true;
         }
 
         public override bool VisitTerminal(ITerminalNode node)

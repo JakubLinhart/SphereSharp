@@ -209,6 +209,15 @@ ON=*teach*
         }
 
         [TestMethod]
+        public void Can_parse_speech_trigger_with_whitespace_around_assign_operator()
+        {
+            CheckStructure("speechTriggers:1;", @"[SPEECH spk_human_prime]
+ON = *hire*
+    call2
+");
+        }
+
+        [TestMethod]
         public void Can_parse_comment_section_without_name()
         {
             CheckStructure("commentLines:2;", @"[comment]

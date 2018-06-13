@@ -109,7 +109,8 @@ namespace SphereSharp.Tests.Sphere99.Parser
         public void Can_parse_quoted_arguments()
         {
             CheckStructure("x(\"can contain ''\")", "quoted: can contain ''");
-            CheckStructure("x(\"can contain \\\")", "quoted: can contain \\");
+            CheckStructure("x(\"can contain \\,:.;?!*/-+][()}{\")", "quoted: can contain \\,:.;?!*/-+][()}{");
+            CheckStructure("x(\"*<*\")", "quoted: *<*");
             CheckStructure("x(\"some text\")", "quoted: some text");
             CheckStructure("x(1,\"some text\")", new[] { "eval: 1", "quoted: some text" });
             CheckStructure("x(\"some text\",1)", new[] { "quoted: some text", "eval: 1" });
@@ -118,7 +119,6 @@ namespace SphereSharp.Tests.Sphere99.Parser
             CheckStructure("x(\"<hours>:<mins>:<seconds>\")", "quoted: <hours>:<mins>:<seconds>");
             CheckStructure("x(\"some text with dot. and comma,\")", "quoted: some text with dot. and comma,");
             CheckStructure("x(\"\")", "quoted: ");
-            CheckStructure("x(\"?!\")", "quoted: ?!");
             CheckStructure("x(\"Natocil <?arg(u)?> <?<findres(itemdef,<tag(id)>)>.name?> z uid=<?uid?>  (<?amount?> <?name?>) umisten <?p?> (<?region.name?>)\")", "quoted: Natocil <?arg(u)?> <?<findres(itemdef,<tag(id)>)>.name?> z uid=<?uid?>  (<?amount?> <?name?>) umisten <?p?> (<?region.name?>)");
             CheckStructure("x(\"<fun1(\"something\")>\")", "quoted: <fun1(\"something\")>");
         }
