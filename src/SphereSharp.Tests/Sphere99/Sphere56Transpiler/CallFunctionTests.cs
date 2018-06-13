@@ -394,6 +394,34 @@ tag.u_<var.v>=1");
 
             TranspileConditionCheck("<eval arg(x).flags>", "<eval <uid.<local.x>.flags>>");
             TranspileConditionCheck("<eval tag(x).flags>", "<eval <uid.<tag0.x>.flags>>");
+
+            TranspileCodeBlockCheck(
+@"arg(v,1)
+if (v.color)
+endif",
+@"local.v=1
+if (<uid.<local.v>.color>)
+endif");
+
+            TranspileCodeBlockCheck(
+@"var(v,1)
+if (v.color)
+endif",
+@"var.v=1
+if (<uid.<var.v>.color>)
+endif");
+
+            TranspileCodeBlockCheck(
+@"arg(v,123)
+v.remove",
+@"local.v=123
+uid.<local.v>.remove");
+
+            TranspileCodeBlockCheck(
+@"var(v,123)
+v.remove",
+@"var.v=123
+uid.<var.v>.remove");
         }
 
         [TestMethod]
@@ -402,13 +430,11 @@ tag.u_<var.v>=1");
             TranspileFileCheck(@"[function fun1]
 arg(xxx,1)
 arg(yyy,<eval <xxx>>)
-yyy.color=1
 equip(xxx)
 equip(<xxx>)",
 @"[function fun1]
 local.xxx=1
 local.yyy=<eval <local.xxx>>
-local.yyy.color=1
 equip <local.xxx>
 equip <local.xxx>");
         }

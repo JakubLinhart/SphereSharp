@@ -869,6 +869,7 @@ namespace SphereSharp.Sphere99
             { "EFFECTID", "EFFECT_ID" },
             { "ATTACK", "DAM" },
             { "RESOURCES2", "RESOURCES" },
+            { "can_PILE", "pile" },
             { "can_replicate", "REPLICATE" },
         };
         private readonly ISet<string> promiles2PercentProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -1521,21 +1522,47 @@ namespace SphereSharp.Sphere99
                     {
                         if (semanticContext.IsLocalVariable(name))
                         {
+                            bool requiresUid = context.customMemberAccess().chainedMemberAccess() != null;
+                            if (requiresUid)
+                            {
+                                builder.Append("uid.");
+                                builder.StartMemberAccess();
+                                builder.StartRequireMacro();
+                            }
+
                             builder.AppendLocalVariable(name);
 
-                            if (context.customMemberAccess().chainedMemberAccess() != null)
+                            if (requiresUid)
+                            {
+                                builder.EndRequireMacro();
+                                builder.EndMemberAccess();
+
                                 Visit(context.customMemberAccess().chainedMemberAccess());
+                            }
 
                             return true;
                         }
                         else if (definitionRepository.IsGlobalVariable(name))
                         {
+                            bool requiresUid = context.customMemberAccess().chainedMemberAccess() != null;
+                            if (requiresUid)
+                            {
+                                builder.Append("uid.");
+                                builder.StartMemberAccess();
+                                builder.StartRequireMacro();
+                            }
+
                             builder.StartGlobalVariable();
                             new FirstMemberAccessNameTranspiler(builder, this).Visit(context);
                             builder.EndGlobalVariable();
 
-                            if (context.customMemberAccess().chainedMemberAccess() != null)
+                            if (requiresUid)
+                            {
+                                builder.EndRequireMacro();
+                                builder.EndMemberAccess();
+
                                 Visit(context.customMemberAccess().chainedMemberAccess());
+                            }
 
                             return true;
                         }
