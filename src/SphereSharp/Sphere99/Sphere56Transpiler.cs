@@ -1467,9 +1467,17 @@ namespace SphereSharp.Sphere99
                     {
                         if (arguments != null)
                         {
+                            bool requiresUid = new HasChainedMemberVisitor().Visit(context);
+                            if (requiresUid)
+                                builder.Append("uid.<");
                             builder.Append($"argv[");
                             base.Visit(arguments[0]);
                             builder.Append("]");
+                            if (requiresUid)
+                            {
+                                builder.Append('>');
+                                new ChainedMemberTranspiler(builder, this).Visit(context);
+                            }
                             return true;
                         }
                         else
@@ -1482,7 +1490,7 @@ namespace SphereSharp.Sphere99
                     {
                         if (context.customMemberAccess().chainedMemberAccess() != null)
                         {
-                            builder.Append("<args>");
+                            builder.Append("uid.<args>");
                             Visit(context.customMemberAccess().chainedMemberAccess());
 
                             return false;

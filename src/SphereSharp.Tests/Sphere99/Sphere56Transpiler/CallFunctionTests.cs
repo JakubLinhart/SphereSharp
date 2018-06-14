@@ -38,8 +38,6 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
-        [DataRow("args.color", "<args>.color")]
-        [DataRow("<args>.color", "<args>.color")]
         [DataRow("arg(x,<eval argv>)", "local.x=<eval <args>>")]
         public void Arguments(string src, string expectedResult)
         {
@@ -405,6 +403,8 @@ tag.u_<var.v>=1");
 
             TranspileConditionCheck("<eval arg(x).flags>", "<eval <uid.<local.x>.flags>>");
             TranspileConditionCheck("<eval tag(x).flags>", "<eval <uid.<tag0.x>.flags>>");
+            TranspileConditionCheck("<args.color>", "<uid.<args>.color>");
+            TranspileConditionCheck("<argv(0).color>", "<uid.<argv[0]>.color>");
 
             TranspileCodeBlockCheck(
 @"arg(v,1)
