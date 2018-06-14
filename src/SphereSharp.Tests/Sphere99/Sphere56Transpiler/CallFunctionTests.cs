@@ -652,10 +652,10 @@ t_container               1",
 t_normal                  0
 t_container               1
 [function t_normal]
-return 0
+return <def.t_normal>
 
 [function t_container]
-return 1");
+return <def.t_container>");
         }
 
         [TestMethod]

@@ -567,7 +567,7 @@ namespace SphereSharp.Sphere99
             foreach (var property in propertyList.propertyAssignment())
             {
                 builder.AppendLine($"[function {property.propertyName().GetText()}]");
-                builder.AppendLine($"return {property.propertyValue().GetText()}");
+                builder.AppendLine($"return <def.{property.propertyName().GetText()}>");
                 builder.AppendLine();
             }
         }
