@@ -225,6 +225,20 @@ else
   return 0
 endif
 
+[function flag_reflection]
+if (<argv> > 0)
+  if (<argv[0]>)
+    flags=<flags>|statf_reflection
+  else
+    flags=<flags>&~statf_reflection
+  endif
+else
+  if <flags>&statf_reflection
+    return 1
+  endif
+  return 0
+endif
+
 [function newequip]
 newitem <args>
 equip <new>
@@ -336,4 +350,5 @@ return <p.y>
 [function p_z]
 return <p.z>
 
-
+[function message]
+sysmessage <args>
