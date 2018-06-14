@@ -56,6 +56,7 @@
     <Compile Include="Sphere99\FirstMemberAccessNameTranspiler.cs" />
     <Compile Include="Sphere99\IDefinitionsRepository.cs" />
     <Compile Include="Sphere99\PropertyValueExtractor.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\ChainedMemberTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\DialogFunctionArgumentsTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\DialogPositionTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\LiteralArgumentTranspiler.cs" />

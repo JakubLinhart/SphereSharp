@@ -272,10 +272,6 @@ enddo");
         [DataRow("return 1", "return 1")]
         [DataRow("return<x>", "return <x>")]
         [DataRow("return <x>", "return <x>")]
-        [DataRow("trigger timer", "trigger @timer")]
-        [DataRow("trigger @timer", "trigger @timer")]
-        [DataRow("trigger(@timer)", "trigger @timer")]
-        [DataRow("trigger(timer)", "trigger @timer")]
         [DataRow("go 4764,1362,10", "go 4764,1362,10")]
         [DataRow("findid(i_rune_discordance).remove", "findid.i_rune_discordance.remove")]
         [DataRow("findid(i_rune_discordance)", "findid.i_rune_discordance")]
@@ -285,6 +281,21 @@ enddo");
         public void Native_functions(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
+        }
+
+        [TestMethod]
+        public void Trigger_function()
+        {
+            TranspileStatementCheck("arg(killer).trigger(@playerKill)", "uid.<local.killer>.trigger @playerKill");
+            TranspileStatementCheck("arg(killer).trigger(@userdclick)", "uid.<local.killer>.trigger @dclick");
+            TranspileStatementCheck("trigger timer", "trigger @timer");
+            TranspileStatementCheck("trigger @userdclick", "trigger @dclick");
+            TranspileStatementCheck("trigger @timer", "trigger @timer");
+            TranspileStatementCheck("src.trigger @timer", "src.trigger @timer");
+            TranspileStatementCheck("trigger(@timer)", "trigger @timer");
+            TranspileStatementCheck("trigger(@userdclick)", "trigger @dclick");
+            TranspileStatementCheck("src.trigger(@timer)", "src.trigger @timer");
+            TranspileStatementCheck("trigger(timer)", "trigger @timer");
         }
 
         [TestMethod]

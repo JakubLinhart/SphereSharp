@@ -127,6 +127,13 @@ namespace SphereSharp.Sphere99
             return base.VisitFirstFreeArgumentOptionalWhiteSpace(context);
         }
 
+        public override bool VisitTriggerArgument([NotNull] sphereScript99Parser.TriggerArgumentContext context)
+        {
+            AppendTriggerName(context.SYMBOL().GetText());
+
+            return true;
+        }
+
         public override bool VisitEvalOperand([NotNull] sphereScript99Parser.EvalOperandContext context)
         {
             if (context.GetText().Equals("#", StringComparison.OrdinalIgnoreCase))
@@ -586,13 +593,18 @@ namespace SphereSharp.Sphere99
             builder.Append(context.TRIGGER_HEADER());
 
             var triggerName = context.triggerName().GetText();
+            AppendTriggerName(triggerName);
+
+            return true;
+        }
+
+        private void AppendTriggerName(string triggerName)
+        {
             builder.Append('@');
             if (triggerNames.TryGetValue(triggerName, out string translatedTriggerName))
                 builder.Append(translatedTriggerName);
             else
                 builder.Append(triggerName);
-
-            return true;
         }
 
         public override bool VisitTrigger([NotNull] sphereScript99Parser.TriggerContext context)
@@ -1522,7 +1534,7 @@ namespace SphereSharp.Sphere99
                     {
                         if (semanticContext.IsLocalVariable(name))
                         {
-                            bool requiresUid = context.customMemberAccess().chainedMemberAccess() != null;
+                            bool requiresUid = new HasChainedMemberVisitor().Visit(context);
                             if (requiresUid)
                             {
                                 builder.Append("uid.");
@@ -1537,14 +1549,14 @@ namespace SphereSharp.Sphere99
                                 builder.EndRequireMacro();
                                 builder.EndMemberAccess();
 
-                                Visit(context.customMemberAccess().chainedMemberAccess());
+                                new ChainedMemberTranspiler(builder, this).Visit(context);
                             }
 
                             return true;
                         }
                         else if (definitionRepository.IsGlobalVariable(name))
                         {
-                            bool requiresUid = context.customMemberAccess().chainedMemberAccess() != null;
+                            bool requiresUid = new HasChainedMemberVisitor().Visit(context);
                             if (requiresUid)
                             {
                                 builder.Append("uid.");
@@ -1561,7 +1573,7 @@ namespace SphereSharp.Sphere99
                                 builder.EndRequireMacro();
                                 builder.EndMemberAccess();
 
-                                Visit(context.customMemberAccess().chainedMemberAccess());
+                                new ChainedMemberTranspiler(builder, this).Visit(context);
                             }
 
                             return true;
