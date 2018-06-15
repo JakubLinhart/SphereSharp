@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SphereSharp.Tests.Sphere99.Sphere56Transpiler.TranspilerTestsHelper;
 
 namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
 {
@@ -1036,42 +1037,6 @@ resources=8 w_fish2");
         {
             TranspileConditionCheck("findlayer(tag(weaponuid).typedef.layer)", "<findlayer.<uid.<tag0.weaponuid>.typedef.layer>>");
             TranspileConditionCheck("findlayer.<args>", "<findlayer.<args>>");
-        }
-
-        private void TranspileStatementCheck(string input, string expectedOutput)
-            => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseStatement(src));
-
-        private void TranspileFileCheck(string input, string expectedOutput)
-            => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseFile(src));
-
-        private void TranspileConditionCheck(string input, string expectedOutput)
-            => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseCondition(src));
-
-        private void TranspileCodeBlockCheck(string input, string expectedOutput)
-            => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseCodeBlock(src));
-
-        private void TranspilePropertyAssignmentCheck(string input, string expectedOutput)
-            => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParsePropertyAssignment(src));
-
-        private DefinitionsRepository definitionsRepository = new DefinitionsRepository();
-
-        private void TranspileCheck(string input, string expectedOutput, Func<string, SphereSharp.Sphere99.Parser, ParsingResult> parseFunc)
-        {
-            var parser = new SphereSharp.Sphere99.Parser();
-            var parsingOutput = parseFunc(input, parser);
-
-            if (parsingOutput.Errors.Any())
-            {
-                Assert.Fail(parsingOutput.GetErrorsText());
-            }
-
-            new DefinitionsCollector(definitionsRepository).Visit(parsingOutput.Tree);
-
-            var transpiler = new SphereSharp.Sphere99.Sphere56TranspilerVisitor(definitionsRepository);
-            transpiler.Visit(parsingOutput.Tree);
-
-
-            transpiler.Output.Trim().Should().Be(expectedOutput.Trim());
         }
     }
 }

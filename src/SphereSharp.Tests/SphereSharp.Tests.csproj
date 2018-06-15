@@ -73,12 +73,15 @@
     <Compile Include="Sphere99\Parser\NativeFunctionCallTests.cs" />
     <Compile Include="Sphere99\Parser\PropertyAndTriggerExtractor.cs" />
     <Compile Include="Sphere99\Parser\PropertyListTests.cs" />
+    <Compile Include="Sphere99\Parser\SaveFileSectionTests.cs" />
     <Compile Include="Sphere99\Parser\SectionsTests.cs" />
     <Compile Include="Sphere99\Parser\StatementExtractor.cs" />
     <Compile Include="Sphere99\Parser\TriggerCodeBlockExtractor.cs" />
     <Compile Include="Sphere99\Parser\TriggerTests.cs" />
     <Compile Include="Sphere99\Parser\WhileTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\CallFunctionTests.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\SaveFileTests.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\TranspilerTestsHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

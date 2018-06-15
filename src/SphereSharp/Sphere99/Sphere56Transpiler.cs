@@ -14,13 +14,14 @@ namespace SphereSharp.Sphere99
         private readonly SpecialFunctionTranspiler specialFunctionTranspiler;
         private readonly ExpressionRequiresMacroVisitor expressionRequiresMacroVisitor = new ExpressionRequiresMacroVisitor();
 
-        private readonly SourceCodeBuilder builder = new SourceCodeBuilder();
+        private readonly SourceCodeBuilder builder;
 
         public string Output => builder.Output;
 
-        public Sphere56TranspilerVisitor(IDefinitionsRepository definitionRepository)
+        public Sphere56TranspilerVisitor(IDefinitionsRepository definitionRepository, SourceCodeBuilder builder = null)
         {
-            specialFunctionTranspiler = new SpecialFunctionTranspiler(builder, this);
+            this.builder = builder ?? new SourceCodeBuilder();
+            specialFunctionTranspiler = new SpecialFunctionTranspiler(this.builder, this);
             this.definitionRepository = definitionRepository ?? new DefinitionsRepository();
         }
 
@@ -265,6 +266,52 @@ namespace SphereSharp.Sphere99
             base.VisitEvalCall(context);
 
             builder.EndEvalCall();
+
+            return true;
+        }
+
+        public override bool VisitSectionName([NotNull] sphereScript99Parser.SectionNameContext context)
+        {
+            if (context.SYMBOL() != null)
+                builder.Append(context.SYMBOL().GetText());
+            else if (context.number() != null)
+                Visit(context.number());
+
+            return true;
+        }
+
+        public override bool VisitVarNamesSectionHeader([NotNull] sphereScript99Parser.VarNamesSectionHeaderContext context)
+        {
+            builder.Append("[GLOBALS]");
+            if (context.NEWLINE() != null)
+                builder.Append(context.NEWLINE().GetText());
+
+            return true;
+        }
+
+        public override bool VisitWorldCharSectionHeader([NotNull] sphereScript99Parser.WorldCharSectionHeaderContext context)
+        {
+            builder.Append(context.WORLDCHAR_SECTION_HEADER_START());
+            Visit(context.sectionName());
+            builder.Append(']');
+            builder.Append(context.NEWLINE());
+
+            return true;
+        }
+
+        public override bool VisitWorldItemSectionHeader([NotNull] sphereScript99Parser.WorldItemSectionHeaderContext context)
+        {
+            builder.Append(context.WORLDITEM_SECTION_HEADER_START());
+            Visit(context.sectionName());
+            builder.Append(']');
+            builder.Append(context.NEWLINE());
+
+            return true;
+        }
+
+        public override bool VisitSectorSectionHeader([NotNull] sphereScript99Parser.SectorSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
 
             return true;
         }
@@ -906,7 +953,8 @@ namespace SphereSharp.Sphere99
 
             builder.Append(propertyName);
 
-            builder.Append(context.propertyAssignmentOperator().GetText());
+            if (context.propertyAssignmentOperator() != null)
+                builder.Append(context.propertyAssignmentOperator().GetText());
 
             var propertyValueText = context.propertyValue()?.GetText();
 
@@ -914,14 +962,18 @@ namespace SphereSharp.Sphere99
             {
                 if (promiles2PercentProperties.Contains(originalPropertyName))
                 {
-                    int propertyValueNumber = int.Parse(propertyValueText);
-                    if (propertyValueNumber != 0)
+                    if (int.TryParse(propertyValueText, out int propertyValueNumber))
                     {
-                        decimal percents = (decimal)propertyValueNumber / 10;
-                        builder.Append($"{percents:###.0}");
+                        if (propertyValueNumber != 0)
+                        {
+                            decimal percents = (decimal)propertyValueNumber / 10;
+                            builder.Append($"{percents:###.0}");
+                        }
+                        else
+                            builder.Append(propertyValueNumber.ToString());
                     }
                     else
-                        builder.Append(propertyValueNumber.ToString());
+                        builder.Append(propertyValueText);
                 }
                 else
                     builder.Append(propertyValueText);

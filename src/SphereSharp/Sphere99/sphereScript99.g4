@@ -1,11 +1,13 @@
 ﻿grammar sphereScript99;
 
 file: NEWLINE? section+ (eofSection | EOF);
+saveFile: NEWLINE? propertyList? saveFileSection+ (eofSection | EOF);
 
 section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
             | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection
             | areaSection | regionTypeSection | regionResourceSection) WS*;
+saveFileSection: WS* (varNamesSection | worldCharSection | worldItemSection | sectorSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock;
@@ -89,6 +91,19 @@ commentSectionHeader: COMMENT_SECTION_HEADER_START WS? commentSectionName? ']' N
 commentSectionName: ~(NEWITEM | ']')+;
 commentLines: freeTextLine;
 
+varNamesSection: varNamesSectionHeader propertyList;
+varNamesSectionHeader: VARNAMES_SECTION_HEADER_START ']' NEWLINE;
+
+worldItemSection: worldItemSectionHeader propertyList;
+worldItemSectionHeader: WORLDITEM_SECTION_HEADER_START sectionName ']' NEWLINE;
+
+worldCharSection: worldCharSectionHeader propertyList;
+worldCharSectionHeader: WORLDCHAR_SECTION_HEADER_START sectionName ']' NEWLINE;
+
+sectorSection: sectorSectionHeader propertyList;
+sectorSectionHeader: SECTOR_SECTION_HEADER_START sectorName ']' NEWLINE;
+sectorName: ~(NEWITEM | ']')+;
+
 freeTextLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | CHARDEF_SECTION_HEADER_START
     | TYPEDEF_SECTION_HEADER_START | TEMPLATE_SECTION_HEADER_START | EVENTS_SECTION_HEADER_START | DEFNAMES_SECTION_HEADER_START
     | DIALOG_SECTION_HEADER_START | BOOK_SECTION_HEADER_START | SPEECH_SECTION_HEADER_START | COMMENT_SECTION_HEADER_START
@@ -140,7 +155,7 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
-memberName: (SYMBOL | macro | TAG)+?;
+memberName: (SYMBOL | macro | TAG | REGION)+?;
 indexedMemberName: memberName '[' numericExpression ']';
 
 // properties
@@ -148,8 +163,9 @@ propertyList: NEWLINE? propertyAssignment+;
 propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator? propertyValue? (NEWLINE | EOF);
 propertyAssignmentOperator: ((WS* ASSIGN WS*) | WS+);
 propertyName: propertyNameText propertyNameIndex?;
-propertyNameText: (propertyTagName | nativeFunctionName | SYMBOL);
-propertyTagName: TAG '.' (nativeFunctionName | SYMBOL);
+propertyNameText: (propertyTagName | propertyRegionName | nativeFunctionName | SYMBOL | ACTION);
+propertyTagName: TAG '.' (nativeFunctionName | SYMBOL | ACTION);
+propertyRegionName: REGION '.' (nativeFunctionName | SYMBOL | ACTION);
 propertyNameIndex: ('[' number ']');
 propertyValue: ~(NEWLINE)+?;
 
@@ -223,6 +239,10 @@ SPELL_SECTION_HEADER_START: '[' [sS][pP][eE][lL][lL] WS+;
 AREA_SECTION_HEADER_START: '[' [aA][rR][eE][aA] WS+;
 REGIONTYPE_SECTION_HEADER_START: '[' [rR][eE][gG][iI][oO][nN][tT][yY][pP][eE] WS+;
 REGIONRESOURCE_SECTION_HEADER_START: '[' [rR][eE][gG][iI][oO][nN][rR][eE][sS][oO][uU][rR][cC][eE] WS+;
+VARNAMES_SECTION_HEADER_START: '[' [vV][aA][rR][nN][aA][mM][eE][sS];
+WORLDITEM_SECTION_HEADER_START: '[' [wW][oO][rR][lL][dD][iI][tT][eE][mM] WS+;
+WORLDCHAR_SECTION_HEADER_START: '[' [wW][oO][rR][lL][dD][cC][hH][aA][rR] WS+;
+SECTOR_SECTION_HEADER_START: '[' [sS][eE][cC][tT][oO][rR] WS+;
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 
@@ -288,6 +308,7 @@ ADDSPELL: [aA][dD][dD][sS][pP][eE][lL][lL];
 NEWNPC: [nN][eE][wW][nN][pP][cC];
 EMOTE: [eE][mM][oO][tT][eE];
 SEX: [sS][eE][xX];
+REGION: [rR][eE][gG][iI][oO][nN];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];

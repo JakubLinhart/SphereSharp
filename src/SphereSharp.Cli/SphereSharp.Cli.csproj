@@ -85,6 +85,8 @@
     <Compile Include="TranspileCommand.cs" />
     <Compile Include="TranspileCommandFileNameHandler.cs" />
     <Compile Include="TranspileOptions.cs" />
+    <Compile Include="TranspileSave\TranspileSaveCommand.cs" />
+    <Compile Include="TranspileSave\TranspileSaveOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
