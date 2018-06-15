@@ -372,5 +372,16 @@ Listek
 Listovlas
 ");
         }
+
+        [TestMethod]
+        public void Spawn_section()
+        {
+            CheckStructure("props:3;",
+@"[SPAWN s_undead_magic_weak]
+DEFNAME=s_undead_magic_weak
+ID=c_skeleton_mage
+ID=c_shadow
+");
+        }
     }
 }

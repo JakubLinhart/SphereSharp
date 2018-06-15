@@ -1025,6 +1025,22 @@ Listovlas
         }
 
         [TestMethod]
+        public void Spawn_section()
+        {
+            TranspileFileCheck(
+@"[SPAWN s_undead_magic_weak]
+DEFNAME=s_undead_magic_weak
+ID=c_skeleton_mage
+ID=c_shadow
+",
+@"[SPAWN s_undead_magic_weak]
+DEFNAME=s_undead_magic_weak
+ID=c_skeleton_mage
+ID=c_shadow
+");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

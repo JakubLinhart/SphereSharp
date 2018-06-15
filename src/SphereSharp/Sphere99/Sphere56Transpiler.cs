@@ -557,6 +557,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitSpawnSectionHeader([NotNull] sphereScript99Parser.SpawnSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitDialogSection([NotNull] sphereScript99Parser.DialogSectionContext context)
         {
             var dialogName = context.dialogSectionHeader().dialogName.Text;
