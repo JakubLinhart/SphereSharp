@@ -1007,6 +1007,24 @@ resources=8 w_fish2");
         }
 
         [TestMethod]
+        public void Names_section()
+        {
+            TranspileFileCheck(
+@"[NAMES NAMES_ENT]
+53
+Stromovous
+Listek
+Listovlas
+",
+@"[NAMES NAMES_ENT]
+53
+Stromovous
+Listek
+Listovlas
+");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

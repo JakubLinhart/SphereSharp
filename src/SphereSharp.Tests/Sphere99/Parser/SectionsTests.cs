@@ -360,5 +360,17 @@ SKILL=70.0,110.0
 AMOUNT=10,15
 REAP=i_ore_verite");
         }
+
+        [TestMethod]
+        public void Can_parse_names_section()
+        {
+            CheckStructure("free:3;",
+@"[NAMES NAMES_ENT]
+53
+Stromovous
+Listek
+Listovlas
+");
+        }
     }
 }

@@ -6,7 +6,7 @@ saveFile: NEWLINE? propertyList? saveFileSection+ (eofSection | EOF);
 section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
             | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection
-            | areaSection | regionTypeSection | regionResourceSection) WS*;
+            | areaSection | regionTypeSection | regionResourceSection | namesSection) WS*;
 saveFileSection: WS* (varNamesSection | worldCharSection | worldItemSection | sectorSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
@@ -99,6 +99,10 @@ worldItemSectionHeader: WORLDITEM_SECTION_HEADER_START sectionName ']' NEWLINE;
 
 worldCharSection: worldCharSectionHeader propertyList;
 worldCharSectionHeader: WORLDCHAR_SECTION_HEADER_START sectionName ']' NEWLINE;
+
+namesSection: namesSectionHeader namesCount freeTextLine+;
+namesSectionHeader: NAMES_SECTION_HEADER_START sectionName ']' NEWLINE;
+namesCount: number NEWLINE;
 
 sectorSection: sectorSectionHeader propertyList;
 sectorSectionHeader: SECTOR_SECTION_HEADER_START sectorName ']' NEWLINE;
@@ -243,6 +247,7 @@ VARNAMES_SECTION_HEADER_START: '[' [vV][aA][rR][nN][aA][mM][eE][sS];
 WORLDITEM_SECTION_HEADER_START: '[' [wW][oO][rR][lL][dD][iI][tT][eE][mM] WS+;
 WORLDCHAR_SECTION_HEADER_START: '[' [wW][oO][rR][lL][dD][cC][hH][aA][rR] WS+;
 SECTOR_SECTION_HEADER_START: '[' [sS][eE][cC][tT][oO][rR] WS+;
+NAMES_SECTION_HEADER_START: '[' [nN][aA][mM][eE][sS]  WS+;
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 

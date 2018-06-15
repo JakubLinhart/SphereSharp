@@ -62,5 +62,16 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return base.VisitDialogButtonTriggerList(context);
         }
+
+        public override bool VisitNamesSection([NotNull] sphereScript99Parser.NamesSectionContext context)
+        {
+            var lines = context.freeTextLine();
+            if (lines != null)
+                output.Append($"free:{lines.Length};");
+            else
+                output.Append("free:0;");
+
+            return base.VisitNamesSection(context);
+        }
     }
 }

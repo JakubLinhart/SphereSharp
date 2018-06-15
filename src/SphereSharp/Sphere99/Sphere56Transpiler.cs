@@ -529,6 +529,27 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitNamesSectionHeader([NotNull] sphereScript99Parser.NamesSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitNamesCount([NotNull] sphereScript99Parser.NamesCountContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitFreeTextLine([NotNull] sphereScript99Parser.FreeTextLineContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitTemplateSectionHeader([NotNull] sphereScript99Parser.TemplateSectionHeaderContext context)
         {
             builder.Append(context.GetText());
