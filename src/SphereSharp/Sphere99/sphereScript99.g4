@@ -152,7 +152,7 @@ chainedMemberAccess: '.' memberAccess;
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
-                | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX;
+                | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+?;
@@ -309,6 +309,7 @@ NEWNPC: [nN][eE][wW][nN][pP][cC];
 EMOTE: [eE][mM][oO][tT][eE];
 SEX: [sS][eE][xX];
 REGION: [rR][eE][gG][iI][oO][nN];
+BANK: [bB][aA][nN][kK];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
