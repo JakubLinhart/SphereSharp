@@ -150,6 +150,8 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             }
         }
 
+        public void EnsureNewline() => builder.EnsureNewline();
+
         public void StartMemberAccess()
         {
             if (scopes.Current == Scope.Numeric || scopes.Current == Scope.ArgumentRequiringEval)

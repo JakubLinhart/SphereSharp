@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Antlr4.Runtime.Tree;
 
@@ -39,5 +40,11 @@ namespace SphereSharp
 
         private string Format(ITerminalNode node) => node?.GetText() ?? string.Empty;
         private string Format(ITerminalNode[] nodes) => nodes?.Select(x => x.GetText()).Aggregate(string.Empty, (l, r) => l + r) ?? string.Empty;
+
+        internal void EnsureNewline()
+        {
+            if (output[output.Length - 1] != '\n')
+                output.AppendLine();
+        }
     }
 }

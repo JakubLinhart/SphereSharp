@@ -26,14 +26,14 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             return worldVisitor.Visit(context);
         }
 
-        public override bool VisitWorldCharSectionHeader([NotNull] sphereScript99Parser.WorldCharSectionHeaderContext context)
+        public override bool VisitWorldCharSection([NotNull] sphereScript99Parser.WorldCharSectionContext context)
         {
-            return worldVisitor.VisitWorldCharSectionHeader(context);
+            return worldVisitor.VisitWorldCharSection(context);
         }
 
-        public override bool VisitWorldItemSectionHeader([NotNull] sphereScript99Parser.WorldItemSectionHeaderContext context)
+        public override bool VisitWorldItemSection([NotNull] sphereScript99Parser.WorldItemSectionContext context)
         {
-            return worldVisitor.VisitWorldItemSectionHeader(context);
+            return worldVisitor.VisitWorldItemSection(context);
         }
 
         public override bool VisitSectorSectionHeader([NotNull] sphereScript99Parser.SectorSectionHeaderContext context)

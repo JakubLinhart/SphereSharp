@@ -289,12 +289,28 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitWorldCharSection([NotNull] sphereScript99Parser.WorldCharSectionContext context)
+        {
+            Visit(context.worldCharSectionHeader());
+            new CharSaveFilePropertiesTranspiler(builder, this).Visit(context.propertyList());
+
+            return true;
+        }
+
         public override bool VisitWorldCharSectionHeader([NotNull] sphereScript99Parser.WorldCharSectionHeaderContext context)
         {
             builder.Append(context.WORLDCHAR_SECTION_HEADER_START());
             Visit(context.sectionName());
             builder.Append(']');
             builder.Append(context.NEWLINE());
+
+            return true;
+        }
+
+        public override bool VisitWorldItemSection([NotNull] sphereScript99Parser.WorldItemSectionContext context)
+        {
+            Visit(context.worldItemSectionHeader());
+            new ItemSaveFilePropertiesTranspiler(builder, this).Visit(context.propertyList());
 
             return true;
         }
@@ -958,6 +974,7 @@ namespace SphereSharp.Sphere99
             { "RESOURCES2", "RESOURCES" },
             { "can_PILE", "pile" },
             { "can_replicate", "REPLICATE" },
+            { "Age", "Create" },
         };
         private readonly ISet<string> promiles2PercentProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -970,7 +987,7 @@ namespace SphereSharp.Sphere99
         };
         private readonly IDefinitionsRepository definitionRepository;
 
-        private void AppendPropertyAssignmentWithoutNewLine(sphereScript99Parser.PropertyAssignmentContext context)
+        public void AppendPropertyAssignmentWithoutNewLine(sphereScript99Parser.PropertyAssignmentContext context)
         {
             if (context.LEADING_WS?.Text != null)
                 builder.Append(context.LEADING_WS.Text);
