@@ -6,7 +6,7 @@ saveFile: NEWLINE? propertyList? saveFileSection+ (eofSection | EOF);
 section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
             | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection
-            | areaSection | regionTypeSection | regionResourceSection | namesSection | spawnSection) WS*;
+            | areaSection | regionTypeSection | regionResourceSection | namesSection | spawnSection | menuSection) WS*;
 saveFileSection: WS* (varNamesSection | worldCharSection | worldItemSection | sectorSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
@@ -107,6 +107,12 @@ namesCount: number NEWLINE;
 spawnSection: spawnSectionHeader propertyList;
 spawnSectionHeader: SPAWN_SECTION_HEADER_START sectionName ']' NEWLINE;
 
+menuSection: menuSectionHeader menuName=freeTextLine menuTriggerList;
+menuSectionHeader: MENU_SECTION_HEADER_START sectionName ']' NEWLINE;
+menuTriggerList: menuTrigger*;
+menuTrigger: menuTriggerHeader triggerBody?;
+menuTriggerHeader: HEADER=TRIGGER_HEADER triggerNumber=number WS+ freeTextLine;
+
 sectorSection: sectorSectionHeader propertyList;
 sectorSectionHeader: SECTOR_SECTION_HEADER_START sectorName ']' NEWLINE;
 sectorName: ~(NEWITEM | ']')+;
@@ -179,7 +185,7 @@ propertyValue: ~(NEWLINE)+?;
 // trigger
 triggerList: trigger*;
 trigger: triggerHeader (NEWLINE | EOF) triggerBody?;
-triggerHeader: TRIGGER_HEADER ('@' triggerName);
+triggerHeader: WS* TRIGGER_HEADER ('@' triggerName);
 triggerName: nativeFunctionName | SYMBOL;
 triggerBody: codeBlock;
 
@@ -252,6 +258,7 @@ WORLDCHAR_SECTION_HEADER_START: '[' [wW][oO][rR][lL][dD][cC][hH][aA][rR] WS+;
 SECTOR_SECTION_HEADER_START: '[' [sS][eE][cC][tT][oO][rR] WS+;
 NAMES_SECTION_HEADER_START: '[' [nN][aA][mM][eE][sS]  WS+;
 SPAWN_SECTION_HEADER_START: '[' [sS][pP][aA][wW][nN] WS+;
+MENU_SECTION_HEADER_START: '[' [mM][eE][nN][uU] WS+;
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 

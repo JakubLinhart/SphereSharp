@@ -346,6 +346,20 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitMenuSectionHeader([NotNull] sphereScript99Parser.MenuSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitMenuTriggerHeader([NotNull] sphereScript99Parser.MenuTriggerHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitDefNamesSectionHeader([NotNull] sphereScript99Parser.DefNamesSectionHeaderContext context)
         {
             builder.Append("[defname ");

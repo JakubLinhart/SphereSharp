@@ -73,5 +73,16 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return base.VisitNamesSection(context);
         }
+
+        public override bool VisitMenuTriggerList([NotNull] sphereScript99Parser.MenuTriggerListContext context)
+        {
+            var triggers = context.menuTrigger();
+            if (triggers != null)
+                output.Append($"menuTriggers:{triggers.Length};");
+            else
+                output.Append($"menuTriggers:{triggers.Length};");
+
+            return base.VisitMenuTriggerList(context);
+        }
     }
 }

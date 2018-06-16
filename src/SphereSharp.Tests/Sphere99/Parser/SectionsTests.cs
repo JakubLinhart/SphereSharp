@@ -383,5 +383,17 @@ ID=c_skeleton_mage
 ID=c_shadow
 ");
         }
+
+        [TestMethod]
+        public void Can_parse_menu_section()
+        {
+            CheckStructure("menuTriggers:2;",
+@"[MENU m_cons_tool]
+Menu Kanclere
+ON=0 Presunout char/item
+return 1
+ON=0 Stats a ability na zaklad. (prikaz .zakladabilities, .zakladstats)
+return 1");
+        }
     }
 }

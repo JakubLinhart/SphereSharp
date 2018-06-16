@@ -1041,6 +1041,26 @@ ID=c_shadow
         }
 
         [TestMethod]
+        public void Menu_section()
+        {
+            TranspileFileCheck(
+@"[MENU m_gm_tool]
+GM menu
+ON=0 Presunout char/item
+ return 1
+ON=0 Stats a ability na zaklad. (prikaz .zakladabilities, .zakladstats)
+ return 2
+",
+@"[MENU m_gm_tool]
+GM menu
+ON=0 Presunout char/item
+ return 1
+ON=0 Stats a ability na zaklad. (prikaz .zakladabilities, .zakladstats)
+ return 2
+");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

@@ -42,6 +42,14 @@ return 1");
             CheckStructure("userdclick:0;", @"on=@userdclick");
         }
 
+        [TestMethod]
+        public void Can_parse_trigger_with_leading_whitespace()
+        {
+            CheckStructure("timer:1;", @"   on=@timer
+return 1");
+
+        }
+
         private void CheckStructure(string expectedResult, string src)
         {
             sphereScript99Parser.TriggerContext trigger = null;
