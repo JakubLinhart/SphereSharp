@@ -1061,6 +1061,18 @@ ON=0 Stats a ability na zaklad. (prikaz .zakladabilities, .zakladstats)
         }
 
         [TestMethod]
+        public void Scroll_section()
+        {
+            TranspileFileCheck(
+@"[scroll sc_q029_alchnezdar_planek]
+Vidis zbesilou cmaranici plnou skrtanic a nesrozumitelnych popisku.
+",
+@"[scroll sc_q029_alchnezdar_planek]
+Vidis zbesilou cmaranici plnou skrtanic a nesrozumitelnych popisku.
+");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

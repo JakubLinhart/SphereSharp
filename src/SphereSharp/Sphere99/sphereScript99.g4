@@ -6,7 +6,8 @@ saveFile: NEWLINE? propertyList? saveFileSection+ (eofSection | EOF);
 section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
             | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection
-            | areaSection | regionTypeSection | regionResourceSection | namesSection | spawnSection | menuSection) WS*;
+            | areaSection | regionTypeSection | regionResourceSection | namesSection | spawnSection | menuSection
+            | scrollSection) WS*;
 saveFileSection: WS* (varNamesSection | worldCharSection | worldItemSection | sectorSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
@@ -112,6 +113,9 @@ menuSectionHeader: MENU_SECTION_HEADER_START sectionName ']' NEWLINE;
 menuTriggerList: menuTrigger*;
 menuTrigger: menuTriggerHeader triggerBody?;
 menuTriggerHeader: HEADER=TRIGGER_HEADER triggerNumber=number WS+ freeTextLine;
+
+scrollSection: scrollSectionHeader freeTextLine+;
+scrollSectionHeader: SCROLL_SECTION_HEADER_START sectionName ']' NEWLINE;
 
 sectorSection: sectorSectionHeader propertyList;
 sectorSectionHeader: SECTOR_SECTION_HEADER_START sectorName ']' NEWLINE;
@@ -259,6 +263,7 @@ SECTOR_SECTION_HEADER_START: '[' [sS][eE][cC][tT][oO][rR] WS+;
 NAMES_SECTION_HEADER_START: '[' [nN][aA][mM][eE][sS]  WS+;
 SPAWN_SECTION_HEADER_START: '[' [sS][pP][aA][wW][nN] WS+;
 MENU_SECTION_HEADER_START: '[' [mM][eE][nN][uU] WS+;
+SCROLL_SECTION_HEADER_START: '[' [sS][cC][rR][oO][lL][lL] WS+;
 
 IF: [iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 

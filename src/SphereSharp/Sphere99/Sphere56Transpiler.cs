@@ -360,6 +360,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitScrollSectionHeader([NotNull] sphereScript99Parser.ScrollSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitDefNamesSectionHeader([NotNull] sphereScript99Parser.DefNamesSectionHeaderContext context)
         {
             builder.Append("[defname ");

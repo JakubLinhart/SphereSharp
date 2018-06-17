@@ -395,5 +395,14 @@ return 1
 ON=0 Stats a ability na zaklad. (prikaz .zakladabilities, .zakladstats)
 return 1");
         }
+
+        [TestMethod]
+        public void Can_parse_scroll_section()
+        {
+            CheckStructure("free:1;",
+@"[scroll sc_q029_alchnezdar_planek]
+Vidis zbesilou cmaranici plnou skrtanic a nesrozumitelnych popisku.
+");
+        }
     }
 }

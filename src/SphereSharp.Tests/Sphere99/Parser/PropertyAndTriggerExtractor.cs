@@ -84,5 +84,16 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return base.VisitMenuTriggerList(context);
         }
+
+        public override bool VisitScrollSection([NotNull] sphereScript99Parser.ScrollSectionContext context)
+        {
+            var freeTextLines = context.freeTextLine();
+            if (freeTextLines != null)
+                output.Append($"free:{freeTextLines.Length};");
+            else
+                output.Append($"free:{freeTextLines.Length};");
+
+            return base.VisitScrollSection(context);
+        }
     }
 }
