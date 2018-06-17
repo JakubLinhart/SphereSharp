@@ -120,6 +120,14 @@ regy_defs[0]  i_reag_black_pearl,3962");
         }
 
         [TestMethod]
+        public void Can_parse_defnames_section_without_name()
+        {
+            CheckStructure("props:1;", @"[defnames]
+def_eqTarget_Item        000000001
+");
+        }
+
+        [TestMethod]
         public void Can_parse_dialog_section_with_position()
         {
             CheckStructure("", @"[dialog d_input]

@@ -599,6 +599,16 @@ return <def.xy>
 [function fun1]
 call <xy>
 ");
+            TranspileFileCheck(
+@"[defnames]
+xy   1
+",
+@"[defname]
+xy   1
+
+[function xy]
+return <def.xy>
+");
 
             TranspileFileCheck(
 @"[defnames defs1]

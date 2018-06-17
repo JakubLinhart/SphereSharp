@@ -369,8 +369,9 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitDefNamesSectionHeader([NotNull] sphereScript99Parser.DefNamesSectionHeaderContext context)
         {
-            builder.Append("[defname ");
-            builder.Append(context.defNameSectionName().GetText());
+            builder.Append("[defname");
+            if (context.defNameSectionName() != null)
+                builder.Append(context.defNameSectionName().GetText());
             builder.Append(']');
             builder.Append(context.NEWLINE());
 

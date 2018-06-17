@@ -55,8 +55,8 @@ eventsSection: eventsSectionHeader triggerList ;
 eventsSectionHeader: EVENTS_SECTION_HEADER_START SYMBOL ']' NEWLINE;
 
 defNamesSection: defNamesSectionHeader propertyList;
-defNamesSectionHeader: DEFNAMES_SECTION_HEADER_START defNameSectionName ']' NEWLINE;
-defNameSectionName: ~(NEWITEM | ']')+;
+defNamesSectionHeader: DEFNAMES_SECTION_HEADER_START defNameSectionName? ']' NEWLINE;
+defNameSectionName: WS+ ~(NEWITEM | ']')+;
 
 dialogSection: dialogSectionHeader dialogPosition? codeBlock;
 dialogSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL ']' NEWLINE;
@@ -246,7 +246,7 @@ TYPEDEF_SECTION_HEADER_START: '[' [tT][yY][pP][eE][dD][eE][fF] WS+;
 TYPEDEFS_SECTION_HEADER_START: '[' [tT][yY][pP][eE][dD][eE][fF][sS];
 TEMPLATE_SECTION_HEADER_START: '[' [tT][eE][mM][pP][lL][aA][tT][eE] WS+;
 EVENTS_SECTION_HEADER_START: '[' [eE][vV][eE][nN][tT][sS] WS+;
-DEFNAMES_SECTION_HEADER_START: '[' [dD][eE][fF][nN][aA][mM][eE][sS] WS+;
+DEFNAMES_SECTION_HEADER_START: '[' [dD][eE][fF][nN][aA][mM][eE][sS];
 DIALOG_SECTION_HEADER_START: '[' [dD][iI][aA][lL][oO][gG] WS+;
 BOOK_SECTION_HEADER_START: '[' [bB][oO][oO][kK] WS+;
 SPEECH_SECTION_HEADER_START: '[' [sS][pP][eE][eE][cC][hH] WS+;
