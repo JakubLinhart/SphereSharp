@@ -109,16 +109,25 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             foreach (var assignment in context.propertyAssignment())
             {
                 var name = assignment.propertyName().GetText();
+                var value = assignment.propertyValue()?.GetText();
+
                 if (specificFlagValues.TryGetValue(name, out uint specificFlagValue))
-                    flagValue = flagValue.HasValue ? flagValue.Value | specificFlagValue : specificFlagValue;
+                {
+                    if (!value.Equals("0", StringComparison.OrdinalIgnoreCase))
+                        flagValue = flagValue.HasValue ? flagValue.Value | specificFlagValue : specificFlagValue;
+                }
                 else if (specificAttrValues.TryGetValue(name, out uint specificAttrValue))
-                    attrValue = attrValue.HasValue ? attrValue.Value | specificAttrValue : specificAttrValue;
+                {
+                    if (!value.Equals("0", StringComparison.OrdinalIgnoreCase))
+                        attrValue = attrValue.HasValue ? attrValue.Value | specificAttrValue : specificAttrValue;
+                }
+                else if (name.Equals("MORE1", StringComparison.OrdinalIgnoreCase))
+                {
+                    parentVisitor.AppendPropertyAssignment(assignment, value.Trim('"'));
+                }
                 else if (!forbiddenProperties.Contains(name))
                 {
-                    parentVisitor.AppendPropertyAssignmentWithoutNewLine(assignment);
-
-                    if (assignment.NEWLINE()?.GetText() != null)
-                        builder.Append(assignment.NEWLINE()?.GetText());
+                    parentVisitor.AppendPropertyAssignment(assignment);
                 }
             }
 

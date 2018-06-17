@@ -63,5 +63,26 @@ Attr_Magic=1
 @"[WorldItem i_staff_gnarled_valorite]
 ATTR=0000000B4");
         }
+
+        [TestMethod]
+        public void Removes_doublequotes_from_MORE1_property()
+        {
+            TranspileSaveFileCheck(
+@"[WorldItem i_something]
+MORE1=""c_drapac_blood""",
+@"[WorldItem i_something]
+MORE1=c_drapac_blood");
+        }
+
+        [TestMethod]
+        public void Preserves_MORE1_value_without_doublequotes()
+        {
+            TranspileSaveFileCheck(
+@"[WorldItem i_something]
+MORE1=0B000B",
+@"[WorldItem i_something]
+MORE1=0B000B");
+        }
     }
+    
 }

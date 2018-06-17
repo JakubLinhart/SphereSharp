@@ -1001,7 +1001,15 @@ namespace SphereSharp.Sphere99
         };
         private readonly IDefinitionsRepository definitionRepository;
 
-        public void AppendPropertyAssignmentWithoutNewLine(sphereScript99Parser.PropertyAssignmentContext context)
+        public void AppendPropertyAssignment(sphereScript99Parser.PropertyAssignmentContext context, string valueText = null)
+        {
+            AppendPropertyAssignmentWithoutNewLine(context, valueText);
+
+            if (context.NEWLINE()?.GetText() != null)
+                builder.Append(context.NEWLINE()?.GetText());
+        }
+
+        public void AppendPropertyAssignmentWithoutNewLine(sphereScript99Parser.PropertyAssignmentContext context, string propertyValueText = null)
         {
             if (context.LEADING_WS?.Text != null)
                 builder.Append(context.LEADING_WS.Text);
@@ -1015,7 +1023,7 @@ namespace SphereSharp.Sphere99
             if (context.propertyAssignmentOperator() != null)
                 builder.Append(context.propertyAssignmentOperator().GetText());
 
-            var propertyValueText = context.propertyValue()?.GetText();
+            propertyValueText = propertyValueText ?? context.propertyValue()?.GetText();
 
             if (propertyValueText != null)
             {
