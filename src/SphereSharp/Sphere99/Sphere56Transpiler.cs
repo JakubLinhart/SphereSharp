@@ -374,6 +374,20 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitSkillMenuSectionHeader([NotNull] sphereScript99Parser.SkillMenuSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
+        public override bool VisitSkillMenuItem([NotNull] sphereScript99Parser.SkillMenuItemContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitDefNamesSectionHeader([NotNull] sphereScript99Parser.DefNamesSectionHeaderContext context)
         {
             builder.Append("[defname");
@@ -1143,6 +1157,13 @@ namespace SphereSharp.Sphere99
                 builder.Append(context.AFTER_BLOCK_WS.Text);
 
             builder.Append(context.ENDDO().GetText());
+
+            return true;
+        }
+
+        public override bool VisitTestIfStatement([NotNull] sphereScript99Parser.TestIfStatementContext context)
+        {
+            builder.Append(context.GetText());
 
             return true;
         }

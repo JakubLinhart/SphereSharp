@@ -1102,6 +1102,31 @@ gowest
         }
 
         [TestMethod]
+        public void SkillMenu_section()
+        {
+            TranspileFileCheck(
+@"[SKILLMENU sm_summon]
+What do you want to summon ?
+
+ON=i_pet_horse_brown_lt <name>
+TESTIF (src.profession!=class_necro)
+TESTIF (src.MAGERY>400)
+TESTIF (src.hasStaff(oak))
+SUMMON=c_horse_brown_mage
+",
+@"[SKILLMENU sm_summon]
+What do you want to summon ?
+
+ON=i_pet_horse_brown_lt <name>
+TESTIF (src.profession!=class_necro)
+TESTIF (src.MAGERY>400)
+TESTIF (src.hasStaff(oak))
+SUMMON=c_horse_brown_mage
+
+");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

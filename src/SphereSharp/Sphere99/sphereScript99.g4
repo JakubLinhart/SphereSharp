@@ -7,7 +7,7 @@ section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
             | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection
             | areaSection | regionTypeSection | regionResourceSection | namesSection | spawnSection | menuSection
-            | scrollSection | plevelSection) WS*;
+            | scrollSection | plevelSection | skillMenuSection) WS*;
 saveFileSection: WS* (varNamesSection | worldCharSection | worldItemSection | sectorSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
@@ -120,6 +120,14 @@ scrollSectionHeader: SCROLL_SECTION_HEADER_START sectionName ']' NEWLINE;
 plevelSection: plevelSectionHeader codeBlock?;
 plevelSectionHeader: PLEVEL_SECTION_HEADER_START number ']' NEWLINE;
 
+skillMenuSection: skillMenuSectionHeader skillMenuQuestion? skillMenuItemList;
+skillMenuSectionHeader: SKILLMENU_SECTION_HEADER_START sectionName ']' NEWLINE;
+skillMenuQuestion: freeTextLine;
+skillMenuItemList: skillMenuItem+;
+skillMenuItem: skillMenuItemHeader codeBlock;
+skillMenuItemHeader: HEADER=TRIGGER_HEADER skillMenuItemId WS+ name=unquotedLiteralArgument NEWLINE;
+skillMenuItemId: SYMBOL | number;
+
 sectorSection: sectorSectionHeader propertyList;
 sectorSectionHeader: SECTOR_SECTION_HEADER_START sectorName ']' NEWLINE;
 sectorName: ~(NEWITEM | ']')+;
@@ -132,7 +140,7 @@ freeTextLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | C
 codeBlock: statement+;
 number: DEC_NUMBER | HEX_NUMBER;
 
-statement: WS*? (call | assignment | ifStatement | whileStatement | doswitchStatement | dorandStatement) (NEWLINE | EOF);
+statement: WS*? (call | assignment | ifStatement | testIfStatement | whileStatement | doswitchStatement | dorandStatement) (NEWLINE | EOF);
 
 ifStatement: IF IF_WS=WS* condition NEWLINE codeBlock? (elseIfStatement)* elseStatement? endIf ;
 endIf: WS* ENDIF;
@@ -140,6 +148,8 @@ elseIfStatement: elseIf condition ELSEIF_NEWLINE=(NEWLINE | EOF) codeBlock?;
 elseIf: WS* ELSEIF WS+;
 elseStatement: else codeBlock?;
 else: WS* ELSE NEWLINE;
+
+testIfStatement: TESTIF WS* condition;
 
 whileStatement: WHILE WS* condition NEWLINE codeBlock? endWhile;
 endWhile: WS* ENDWHILE;
@@ -173,7 +183,7 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
                 | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK | CHECKBOX | CROPPEDTEXT | SPEAK | SAYUA | REMOVE | QVAL | ALLCLIENTS
-                | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL;
+                | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+?;
@@ -269,8 +279,10 @@ SPAWN_SECTION_HEADER_START: '[' [sS][pP][aA][wW][nN] WS+;
 MENU_SECTION_HEADER_START: '[' [mM][eE][nN][uU] WS+;
 SCROLL_SECTION_HEADER_START: '[' [sS][cC][rR][oO][lL][lL] WS+;
 PLEVEL_SECTION_HEADER_START: '[' [pP][lL][eE][vV][eE][lL] WS+;
+SKILLMENU_SECTION_HEADER_START: '[' [sS][kK][iI][lL][lL][mM][eE][nN][uU] WS+;
 
 IF: [iI][fF];
+TESTIF: [tT][eE][sS][tT][iI][fF];
 ELSEIF: [eE][lL][sS][eE] WS* [iI][fF]; 
 ELSE: [eE][lL][sS][eE];
 ENDIF: [eE][nN][dD][iI][fF];
@@ -352,6 +364,7 @@ EFFECT: [eE][fF][fF][eE][cC][tT];
 GUMPPICTILED: [gG][uU][mM][pP][pP][iI][cC][tT][iI][lL][eE][dD];
 CHECKERTRANS: [cC][hH][eE][cC][kK][eE][rR][tT][rR][aA][nN][sS];
 INVUL: [iI][nN][vV][uU][lL];
+POLY: [pP][oO][lL][yY];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];

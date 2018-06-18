@@ -430,5 +430,36 @@ goeast");
 @"[plevel 1]
 ");
         }
+
+        [TestMethod]
+        public void Can_parse_skillmenu_section()
+        {
+            CheckStructure("menuItems:1;",
+@"[SKILLMENU sm_summon]
+ON=i_pet_horse_brown_lt <name>
+call1
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_skillmenu_section_with_question()
+        {
+            CheckStructure("menuItems:1;",
+@"[SKILLMENU sm_summon]
+this is a question!
+ON=i_pet_horse_brown_lt <name>
+call1
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_skillmenu_section_with_numbered_item()
+        {
+            CheckStructure("menuItems:1;",
+@"[SKILLMENU sm_summon]
+ON=0 <name>
+call2
+");
+        }
     }
 }

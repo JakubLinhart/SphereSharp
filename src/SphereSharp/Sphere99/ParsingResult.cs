@@ -25,7 +25,7 @@ namespace SphereSharp.Sphere99
         public string GetErrorsText(string separator = null)
         {
             separator = separator ?? Environment.NewLine;
-            return Errors.Select(x => x.Message).Aggregate((l, r) => l + separator + r);
+            return Errors.Select(x => $"{x.Line},{x.Column}:{x.Message}").Aggregate((l, r) => l + separator + r);
         }
     }
 
