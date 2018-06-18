@@ -478,5 +478,15 @@ ON=0 <name>
 call2
 ");
         }
+
+        [TestMethod]
+        public void Can_parse_newbie_section()
+        {
+            CheckStructure("props:2;",
+@"[NEWBIE MALE_DEFAULT]
+ITEMNEWBIE=i_shirt_plain
+COLOR=colors_all
+");
+        }
     }
 }

@@ -388,6 +388,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitNewbieSection([NotNull] sphereScript99Parser.NewbieSectionContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitDefNamesSectionHeader([NotNull] sphereScript99Parser.DefNamesSectionHeaderContext context)
         {
             builder.Append("[defname");

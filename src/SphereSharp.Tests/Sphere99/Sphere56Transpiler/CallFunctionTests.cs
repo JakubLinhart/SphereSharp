@@ -1127,6 +1127,20 @@ SUMMON=c_horse_brown_mage
         }
 
         [TestMethod]
+        public void Newbie_section()
+        {
+            TranspileFileCheck(
+@"[NEWBIE MALE_DEFAULT]
+ITEMNEWBIE=i_shirt_plain
+COLOR=colors_all
+",
+@"[NEWBIE MALE_DEFAULT]
+ITEMNEWBIE=i_shirt_plain
+COLOR=colors_all
+");
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)
