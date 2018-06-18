@@ -186,7 +186,7 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
                 | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK | CHECKBOX | CROPPEDTEXT | SPEAK | SAYUA | REMOVE | QVAL | ALLCLIENTS
-                | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY | WEBLINK | EVERBTARG;
+                | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY | WEBLINK | EVERBTARG | GROUP | RADIO;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+?;
@@ -371,6 +371,8 @@ INVUL: [iI][nN][vV][uU][lL];
 POLY: [pP][oO][lL][yY];
 WEBLINK: [wW][eE][bB][lL][iI][nN][kK];
 EVERBTARG: [eE][vV][eE][rR][bB][tT][aA][rR][gG];
+GROUP: [gG][rR][oO][uU][pP];
+RADIO: [rR][aA][dD][iI][oO];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
