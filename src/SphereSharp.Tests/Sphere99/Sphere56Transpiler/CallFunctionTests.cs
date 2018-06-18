@@ -1083,6 +1083,25 @@ Vidis zbesilou cmaranici plnou skrtanic a nesrozumitelnych popisku.
         }
 
         [TestMethod]
+        public void Plevel_section()
+        {
+            TranspileFileCheck(
+@"[plevel 1]
+gonorth
+gosouth
+goeast
+gowest
+",
+@"[plevel 1]
+gonorth
+gosouth
+goeast
+gowest
+"
+);
+        }
+
+        [TestMethod]
         [DataRow("name=fullspawner (.x spawnfull)", "name=fullspawner (.x spawnfull)")]
         [DataRow("WEIGHT=", "WEIGHT=")]
         public void Property(string source, string expectedResult)

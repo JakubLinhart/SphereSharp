@@ -80,7 +80,7 @@ namespace SphereSharp.Tests.Sphere99.Parser
             if (triggers != null)
                 output.Append($"menuTriggers:{triggers.Length};");
             else
-                output.Append($"menuTriggers:{triggers.Length};");
+                output.Append($"menuTriggers:0;");
 
             return base.VisitMenuTriggerList(context);
         }
@@ -91,9 +91,20 @@ namespace SphereSharp.Tests.Sphere99.Parser
             if (freeTextLines != null)
                 output.Append($"free:{freeTextLines.Length};");
             else
-                output.Append($"free:{freeTextLines.Length};");
+                output.Append("free:0;");
 
             return base.VisitScrollSection(context);
+        }
+
+        public override bool VisitPlevelSection([NotNull] sphereScript99Parser.PlevelSectionContext context)
+        {
+            var statements = context.codeBlock()?.statement();
+            if (statements != null)
+                output.Append($"stmts:{statements.Length};");
+            else
+                output.Append($"stmts:0;");
+
+            return base.VisitPlevelSection(context);
         }
     }
 }

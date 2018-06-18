@@ -412,5 +412,23 @@ return 1");
 Vidis zbesilou cmaranici plnou skrtanic a nesrozumitelnych popisku.
 ");
         }
+
+        [TestMethod]
+        public void Can_parse_plevel_section()
+        {
+            CheckStructure("stmts:3;",
+@"[plevel 1]
+gonorth
+gosouth
+goeast");
+        }
+
+        [TestMethod]
+        public void Can_parse_empty_plevel_section()
+        {
+            CheckStructure("stmts:0;",
+@"[plevel 1]
+");
+        }
     }
 }

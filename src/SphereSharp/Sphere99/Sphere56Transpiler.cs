@@ -367,6 +367,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitPlevelSectionHeader([NotNull] sphereScript99Parser.PlevelSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitDefNamesSectionHeader([NotNull] sphereScript99Parser.DefNamesSectionHeaderContext context)
         {
             builder.Append("[defname");
@@ -1587,7 +1594,8 @@ namespace SphereSharp.Sphere99
                     else if (name.Equals("argo", StringComparison.OrdinalIgnoreCase) && replaceArgoWithSrc)
                     {
                         builder.Append("src");
-                        Visit(context.customMemberAccess().chainedMemberAccess());
+                        if (context.customMemberAccess()?.chainedMemberAccess() != null)
+                            Visit(context.customMemberAccess().chainedMemberAccess());
                         return true;
                     }
                     else if (name.Equals("argv", StringComparison.OrdinalIgnoreCase))
