@@ -234,6 +234,13 @@ ON=*teach*
         }
 
         [TestMethod]
+        public void Can_parse_empty_speech_section()
+        {
+            CheckStructure("", @"[SPEECH spk_human_prime]
+");
+        }
+
+        [TestMethod]
         public void Can_parse_speech_trigger_with_whitespace_around_assign_operator()
         {
             CheckStructure("speechTriggers:1;", @"[SPEECH spk_human_prime]

@@ -80,7 +80,7 @@ pageLine: freeTextLine;
 bookSection: bookSectionHeader propertyList;
 bookSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL ']' NEWLINE;
 
-speechSection: speechSectionHeader speechTriggerList;
+speechSection: speechSectionHeader speechTriggerList?;
 speechSectionHeader: SPEECH_SECTION_HEADER_START speechName=SYMBOL ']' NEWLINE;
 speechTriggerList: speechTrigger+;
 speechTrigger: speechTriggerHeader+ triggerBody;
