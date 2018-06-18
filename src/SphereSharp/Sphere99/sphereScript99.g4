@@ -168,8 +168,9 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
-                | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK;
+                | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
+                | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK | CHECKBOX | CROPPEDTEXT | SPEAK | SAYUA | REMOVE | QVAL | ALLCLIENTS
+                | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+?;
@@ -276,6 +277,7 @@ DORAND: [dD][oO][rR][aA][nN][dD];
 ENDDO: [eE][nN][dD][dD][oO];
 
 SYSMESSAGE: [sS][yY][sS][mM][eE][sS][sS][aA][gG][eE];
+MESSAGE: [mM][eE][sS][sS][aA][gG][eE];
 RETURN: [rR][eE][tT][uU][rR][nN];
 TIMER: [tT][iI][mM][eE][rR];
 CONSUME: [cC][oO][nN][sS][uU][mM][eE];
@@ -317,6 +319,7 @@ NUKE: [nN][uU][kK][eE];
 COLOR: [cC][oO][lL][oO][rR];
 ANIM: [aA][nN][iI][mM];
 SAY: [sS][aA][yY];
+SAYU: [sS][aA][yY][uU];
 RESCOUNT: [rR][eE][sS][cC][oO][uU][nN][tT];
 RESTEST: [rR][eE][sS][tT][eE][sS][tT];
 SMSG: [sS][mM][sS][gG];
@@ -331,6 +334,20 @@ EMOTE: [eE][mM][oO][tT][eE];
 SEX: [sS][eE][xX];
 REGION: [rR][eE][gG][iI][oO][nN];
 BANK: [bB][aA][nN][kK];
+CHECKBOX: [cC][hH][eE][cC][kK][bB][oO][xX];
+CROPPEDTEXT: [cC][rR][oO][pP][pP][eE][dD][tT][eE][xX][tT];
+SPEAK: [sS][pP][eE][aA][kK];
+SAYUA: [sS][aA][yY][uU][aA];
+REMOVE: [rR][eE][mM][oO][vV][eE];
+QVAL: [qQ][vV][aA][lL];
+ALLCLIENTS: [aA][lL][lL][cC][lL][iI][eE][nN][tT][sS];
+GOITEMID: [gG][oO][iI][tT][eE][mM][iI][dD];
+NOMOVE: [nN][oO][mM][oO][vV][eE];
+NOCLOSE: [nN][oO][cC][lL][oO][sS][eE];
+EFFECT: [eE][fF][fF][eE][cC][tT];
+GUMPPICTILED: [gG][uU][mM][pP][pP][iI][cC][tT][iI][lL][eE][dD];
+CHECKERTRANS: [cC][hH][eE][cC][kK][eE][rR][tT][rR][aA][nN][sS];
+INVUL: [iI][nN][vV][uU][lL];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
