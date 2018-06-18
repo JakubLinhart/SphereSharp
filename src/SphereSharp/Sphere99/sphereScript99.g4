@@ -60,7 +60,7 @@ defNameSectionName: WS+ ~(NEWITEM | ']')+;
 
 dialogSection: dialogSectionHeader dialogPosition? codeBlock;
 dialogSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL ']' NEWLINE;
-dialogPosition: number WS* ',' WS* number NEWLINE;
+dialogPosition: WS* number WS* ',' WS* number NEWLINE;
 
 dialogTextSection: dialogTextSectionHeader dialogTextSectionLine*?;
 dialogTextSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ TEXT ']' NEWLINE;
@@ -70,7 +70,7 @@ dialogButtonSection: dialogButtonSectionHeader dialogButtonTriggerList;
 dialogButtonSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ BUTTON ']' NEWLINE;
 dialogButtonTriggerList: dialogButtonTrigger*;
 dialogButtonTrigger: dialogButtonTriggerHeader triggerBody?;
-dialogButtonTriggerHeader: HEADER=(TRIGGER_HEADER | BUTTON_TRIGGER_HEADER) dialogButtonTriggerName NEWLINE;
+dialogButtonTriggerHeader: WS* HEADER=(TRIGGER_HEADER | BUTTON_TRIGGER_HEADER) dialogButtonTriggerName NEWLINE;
 dialogButtonTriggerName: number | ANY_BUTTON;
 
 bookPageSection: bookPageSectionHeader pageLine*?;

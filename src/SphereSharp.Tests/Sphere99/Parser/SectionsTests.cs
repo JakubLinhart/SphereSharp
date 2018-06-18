@@ -136,6 +136,14 @@ argo.tag(sirka,400)");
         }
 
         [TestMethod]
+        public void Can_parse_dialog_section_with_indented_position()
+        {
+            CheckStructure("", @"[dialog d_input]
+    350,350
+    argo.tag(sirka,400)");
+        }
+
+        [TestMethod]
         public void Can_parse_dialog_section_without_position()
         {
             CheckStructure("", @"[dialog d_input]
@@ -168,6 +176,15 @@ on=3
 
 on=@anybutton
 
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_dialog_button_section_with_indented_button_triggers()
+        {
+            CheckStructure("buttonTriggers:1;", @"[dialog d_zmenajmena_duvod button]
+    on=0
+    dialog(d_zmenajmena_duvod)
 ");
         }
 
