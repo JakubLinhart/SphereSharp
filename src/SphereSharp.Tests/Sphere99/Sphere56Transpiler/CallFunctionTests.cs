@@ -703,6 +703,14 @@ ON=*hire*
 ON=*train*
 ON=*teach*
     call3");
+
+            TranspileFileCheck(
+@"[SPEECH spk_something]
+ON=*
+",
+@"[SPEECH spk_something]
+ON=*
+");
         }
 
         [TestMethod]
@@ -1137,6 +1145,16 @@ COLOR=colors_all
 @"[NEWBIE MALE_DEFAULT]
 ITEMNEWBIE=i_shirt_plain
 COLOR=colors_all
+");
+        }
+
+        [TestMethod]
+        public void Function_section()
+        {
+            TranspileFileCheck(
+@"[function fun1]
+",
+@"[function fun1]
 ");
         }
 

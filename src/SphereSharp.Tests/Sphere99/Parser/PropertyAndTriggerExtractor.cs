@@ -107,6 +107,17 @@ namespace SphereSharp.Tests.Sphere99.Parser
             return base.VisitPlevelSection(context);
         }
 
+        public override bool VisitFunctionSection([NotNull] sphereScript99Parser.FunctionSectionContext context)
+        {
+            var statements = context.codeBlock()?.statement();
+            if (statements != null)
+                output.Append($"stmts:{statements.Length};");
+            else
+                output.Append($"stmts:0;");
+
+            return base.VisitFunctionSection(context);
+        }
+
         public override bool VisitSkillMenuSection([NotNull] sphereScript99Parser.SkillMenuSectionContext context)
         {
             var items = context.skillMenuItemList()?.skillMenuItem();

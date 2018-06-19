@@ -243,6 +243,14 @@ ON=*teach*
         }
 
         [TestMethod]
+        public void Can_parse_speech_section_with_empty_trigger_body()
+        {
+            CheckStructure("speechTriggers:1;", @"[SPEECH spk_something]
+ON=*
+");
+        }
+
+        [TestMethod]
         public void Can_parse_empty_speech_section()
         {
             CheckStructure("", @"[SPEECH spk_human_prime]
@@ -502,6 +510,14 @@ call2
 @"[NEWBIE MALE_DEFAULT]
 ITEMNEWBIE=i_shirt_plain
 COLOR=colors_all
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_empty_function_section()
+        {
+            CheckStructure("stmts:0;",
+@"[function fun1]
 ");
         }
     }

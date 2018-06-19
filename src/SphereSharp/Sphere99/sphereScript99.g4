@@ -11,7 +11,7 @@ section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection
 saveFileSection: WS* (varNamesSection | worldCharSection | worldItemSection | sectorSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
-functionSection: functionSectionHeader codeBlock;
+functionSection: functionSectionHeader codeBlock?;
 functionSectionHeader: FUNCTION_SECTION_HEADER_START functionName ']' NEWLINE;
 functionName: SYMBOL | nativeFunctionName;
 
@@ -83,7 +83,7 @@ bookSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL ']' NEWLINE;
 speechSection: speechSectionHeader speechTriggerList?;
 speechSectionHeader: SPEECH_SECTION_HEADER_START speechName=SYMBOL ']' NEWLINE;
 speechTriggerList: speechTrigger+;
-speechTrigger: speechTriggerHeader+ triggerBody;
+speechTrigger: speechTriggerHeader+ triggerBody?;
 speechTriggerHeader: TRIGGER_HEADER speechTriggerName NEWLINE;
 speechTriggerName: ~(NEWLINE)+;
 
