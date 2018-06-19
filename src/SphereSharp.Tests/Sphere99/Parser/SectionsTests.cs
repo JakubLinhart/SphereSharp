@@ -136,6 +136,15 @@ argo.tag(sirka,400)");
         }
 
         [TestMethod]
+        public void Can_parse_dialog_section_with_position_separated_by_whitespace()
+        {
+            CheckStructure("", @"[dialog d_ovladani_npc]
+60 140
+page=0
+");
+        }
+
+        [TestMethod]
         public void Can_parse_dialog_section_with_indented_position()
         {
             CheckStructure("", @"[dialog d_input]

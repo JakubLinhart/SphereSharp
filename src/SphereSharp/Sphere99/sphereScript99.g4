@@ -60,7 +60,7 @@ defNameSectionName: WS+ ~(NEWITEM | ']')+;
 
 dialogSection: dialogSectionHeader dialogPosition? codeBlock;
 dialogSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL ']' NEWLINE;
-dialogPosition: WS* number WS* ',' WS* number NEWLINE;
+dialogPosition: WS* number WS* (',' | WS+) WS* number NEWLINE;
 
 dialogTextSection: dialogTextSectionHeader dialogTextSectionLine*?;
 dialogTextSectionHeader: DIALOG_SECTION_HEADER_START dialogName=SYMBOL WS+ TEXT ']' NEWLINE;
@@ -186,7 +186,8 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
                 | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
                 | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK | CHECKBOX | CROPPEDTEXT | SPEAK | SAYUA | REMOVE | QVAL | ALLCLIENTS
-                | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY | WEBLINK | EVERBTARG | GROUP | RADIO;
+                | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY | WEBLINK | EVERBTARG | GROUP | RADIO
+                | CAST;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+?;
@@ -373,6 +374,7 @@ WEBLINK: [wW][eE][bB][lL][iI][nN][kK];
 EVERBTARG: [eE][vV][eE][rR][bB][tT][aA][rR][gG];
 GROUP: [gG][rR][oO][uU][pP];
 RADIO: [rR][aA][dD][iI][oO];
+CAST: [cC][aA][sS][tT];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
