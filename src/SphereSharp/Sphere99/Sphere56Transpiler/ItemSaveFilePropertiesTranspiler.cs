@@ -11,8 +11,8 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             "CoOwner", "Friend" // TODO: needs to be translated for .56 somehow
         };
 
-        public ItemSaveFilePropertiesTranspiler(SourceCodeBuilder builder, Sphere56TranspilerVisitor parentVisitor)
-            : base(builder, parentVisitor, forbiddenProperties)
+        public ItemSaveFilePropertiesTranspiler(SourceCodeBuilder builder, Sphere56TranspilerVisitor parentVisitor, MultiValueDictionary<string, string> invalidPropertyValues)
+            : base(builder, parentVisitor, forbiddenProperties, invalidPropertyValues)
         {
         }
     }

@@ -12,6 +12,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private readonly SourceCodeBuilder builder;
         private readonly Sphere56TranspilerVisitor parentVisitor;
         private readonly ISet<string> forbiddenProperties;
+        private readonly MultiValueDictionary<string, string> invalidPropertyValues;
         private readonly Dictionary<string, uint> specificAttrValues = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase)
         {
             { "attr_identified",        0x00000001 },
@@ -69,11 +70,12 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         };
 
         public SaveFilePropertiesTranspiler(SourceCodeBuilder builder, Sphere56TranspilerVisitor parentVisitor,
-            ISet<string> forbiddenProperties)
+            ISet<string> forbiddenProperties, MultiValueDictionary<string, string> invalidPropertyValues)
         {
             this.builder = builder;
             this.parentVisitor = parentVisitor;
             this.forbiddenProperties = forbiddenProperties;
+            this.invalidPropertyValues = invalidPropertyValues;
         }
 
         public override bool VisitPropertyList([NotNull] sphereScript99Parser.PropertyListContext context)
@@ -92,6 +94,10 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                 var name = assignment.propertyName().GetText();
                 var value = assignment.propertyValue()?.GetText();
 
+                if (invalidPropertyValues.TryGetValue(name, out IReadOnlyCollection<string> invalidValues) && invalidValues.Contains(value))
+                {
+                    continue;
+                }
                 if (specificFlagValues.TryGetValue(name, out uint specificFlagValue))
                 {
                     if (!value.Equals("0", StringComparison.OrdinalIgnoreCase))

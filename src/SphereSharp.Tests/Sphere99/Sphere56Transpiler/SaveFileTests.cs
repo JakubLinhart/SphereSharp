@@ -13,6 +13,34 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
     public class SaveFileTests
     {
         [TestMethod]
+        public void Removes_worldchar_properties_with_invalid_values()
+        {
+            // TODO: must be configurable
+            TranspileSaveFileCheck(
+@"[WorldChar c_golem_verite]
+Serial=0527A6
+Tag.npc_knockback=)
+P=5631,106",
+@"[WorldChar c_golem_verite]
+Serial=0527A6
+P=5631,106");
+        }
+
+        [TestMethod]
+        public void Removes_worlditem_properties_with_invalid_values()
+        {
+            // TODO: must be configurable
+            TranspileSaveFileCheck(
+@"[WorldItem i_pouch]
+Serial=04000378A
+Tag.cm_dispid=)
+Cont=040002DFA",
+@"[WorldItem i_pouch]
+Serial=04000378A
+Cont=040002DFA");
+        }
+
+        [TestMethod]
         public void WorldChar_can_contain_assignment_to_region()
         {
             TranspileSaveFileCheck(

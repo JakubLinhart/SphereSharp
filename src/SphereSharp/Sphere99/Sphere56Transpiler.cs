@@ -298,7 +298,7 @@ namespace SphereSharp.Sphere99
         public override bool VisitWorldCharSection([NotNull] sphereScript99Parser.WorldCharSectionContext context)
         {
             Visit(context.worldCharSectionHeader());
-            new CharSaveFilePropertiesTranspiler(builder, this).Visit(context.propertyList());
+            new CharSaveFilePropertiesTranspiler(builder, this, invalidSavePropertyValues).Visit(context.propertyList());
 
             return true;
         }
@@ -313,10 +313,18 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+
+        // TODO: make it configurable
+        private static MultiValueDictionary<string, string> invalidSavePropertyValues = new MultiValueDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "Tag.cm_dispid", ")" },
+            { "Tag.npc_knockback", ")" }
+        };
+
         public override bool VisitWorldItemSection([NotNull] sphereScript99Parser.WorldItemSectionContext context)
         {
             Visit(context.worldItemSectionHeader());
-            new ItemSaveFilePropertiesTranspiler(builder, this).Visit(context.propertyList());
+            new ItemSaveFilePropertiesTranspiler(builder, this, invalidSavePropertyValues).Visit(context.propertyList());
 
             return true;
         }
