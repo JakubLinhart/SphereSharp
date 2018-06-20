@@ -582,6 +582,24 @@ var.u=<eval(<var.is_blunt>)>");
         }
 
         [TestMethod]
+        public void Global_variables_with_native_function_name_requires_explicit_access_to_be_explicitelly_prefixed()
+        {
+            TranspileFileCheck(
+@"[function fun1]
+var(p,1)
+[function fun2]
+p=1
+var(p,1)",
+
+@"[function fun1]
+var.p=1
+[function fun2]
+p=1
+var.p=1"
+);
+        }
+
+        [TestMethod]
         public void Defnames()
         {
             TranspileFileCheck(

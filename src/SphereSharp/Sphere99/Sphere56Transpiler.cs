@@ -14,6 +14,11 @@ namespace SphereSharp.Sphere99
         private readonly SpecialFunctionTranspiler specialFunctionTranspiler;
         private readonly ExpressionRequiresMacroVisitor expressionRequiresMacroVisitor = new ExpressionRequiresMacroVisitor();
 
+        private readonly HashSet<string> nativeNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "p", "price", "lastxpos", "lastypos", "lastybuttpos"
+        };
+
         private readonly SourceCodeBuilder builder;
 
         public string Output => builder.Output;
@@ -1725,7 +1730,7 @@ namespace SphereSharp.Sphere99
 
                             return true;
                         }
-                        else if (definitionRepository.IsGlobalVariable(name))
+                        else if (definitionRepository.IsGlobalVariable(name) && !nativeNames.Contains(name))
                         {
                             bool requiresUid = new HasChainedMemberVisitor().Visit(context);
                             if (requiresUid)
