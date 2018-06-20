@@ -1372,11 +1372,11 @@ namespace SphereSharp.Sphere99
                     }
                     else
                     {
-                        string chainedName = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.memberName()?.GetText();
+                        var chainedName = new FirstChainedMemberAccessNameVisitor().Visit(context);
                         if (chainedName != null && chainedName.Equals("remove", StringComparison.OrdinalIgnoreCase))
                         {
                             builder.Append(".");
-                            var chainedArgument = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
+                            var chainedArgument = new FinalChainedMemberAccessArgumentsVisitor().Visit(context);
                             if (chainedArgument != null && chainedArgument.Length == 1)
                             {
                                 Visit(chainedArgument[0]);
@@ -1386,7 +1386,7 @@ namespace SphereSharp.Sphere99
                         }
                         else
                         {
-                            var secondChainedName = context.chainedMemberAccess()?.memberAccess()?.firstMemberAccess()?.customMemberAccess()?.chainedMemberAccess()?.memberAccess().firstMemberAccess()?.customMemberAccess()?.memberName()?.GetText();
+                            var secondChainedName = new ChainedMemberAccessNameVisitor(2).Visit(context);
                             if (secondChainedName != null && secondChainedName.Equals("remove", StringComparison.OrdinalIgnoreCase))
                             {
                                 builder.Append('.');
