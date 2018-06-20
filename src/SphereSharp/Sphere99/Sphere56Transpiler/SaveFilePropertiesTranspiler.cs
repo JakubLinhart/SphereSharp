@@ -9,7 +9,11 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 {
     internal sealed class ItemSaveFilePropertiesTranspiler : SaveFilePropertiesTranspiler
     {
-        private static HashSet<string> forbiddenProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Age" };
+        private static HashSet<string> forbiddenProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Age", "Changer",
+            "CoOwner", "Friend" // TODO: needs to be translated for .56 somehow
+        };
 
         public ItemSaveFilePropertiesTranspiler(SourceCodeBuilder builder, Sphere56TranspilerVisitor parentVisitor)
             : base(builder, parentVisitor, forbiddenProperties)
@@ -19,7 +23,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
     internal sealed class CharSaveFilePropertiesTranspiler : SaveFilePropertiesTranspiler
     {
-        private static HashSet<string> forbiddenProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { };
+        private static HashSet<string> forbiddenProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Flag_running" };
 
         public CharSaveFilePropertiesTranspiler(SourceCodeBuilder builder, Sphere56TranspilerVisitor parentVisitor)
             : base(builder, parentVisitor, forbiddenProperties)
@@ -57,6 +61,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             { "Flag_invul",            0x000000001 },
             { "Flag_dead",             0x000000002 },
             { "Flag_freeze",           0x000000004 },
+            { "Flag_Immobile",         0x000000004 }, // identical to freeze, there is no freeze flag on Sphere 0.56
             { "Flag_invisible",        0x000000008 },
             { "Flag_sleeping",         0x000000010 },
             { "Flag_war",              0x000000020 },
@@ -121,7 +126,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                     if (!value.Equals("0", StringComparison.OrdinalIgnoreCase))
                         attrValue = attrValue.HasValue ? attrValue.Value | specificAttrValue : specificAttrValue;
                 }
-                else if (name.Equals("MORE1", StringComparison.OrdinalIgnoreCase))
+                else if (name.Equals("MORE1", StringComparison.OrdinalIgnoreCase) || name.Equals("MORE2", StringComparison.OrdinalIgnoreCase))
                 {
                     parentVisitor.AppendPropertyAssignment(assignment, value.Trim('"'));
                 }

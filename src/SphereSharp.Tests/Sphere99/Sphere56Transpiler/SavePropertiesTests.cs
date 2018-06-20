@@ -65,23 +65,27 @@ ATTR=0000000B4");
         }
 
         [TestMethod]
-        public void Removes_doublequotes_from_MORE1_property()
+        public void Removes_doublequotes_from_MORE1_and_MORE2_property()
         {
             TranspileSaveFileCheck(
 @"[WorldItem i_something]
-MORE1=""c_drapac_blood""",
+MORE1=""c_drapac_blood""
+MORE2=""c_drapac_blood""",
 @"[WorldItem i_something]
-MORE1=c_drapac_blood");
+MORE1=c_drapac_blood
+MORE2=c_drapac_blood");
         }
 
         [TestMethod]
-        public void Preserves_MORE1_value_without_doublequotes()
+        public void Preserves_MORE1_and_MORE2_value_without_doublequotes()
         {
             TranspileSaveFileCheck(
 @"[WorldItem i_something]
-MORE1=0B000B",
+MORE1=0B000B
+MORE2=0B000C",
 @"[WorldItem i_something]
-MORE1=0B000B");
+MORE1=0B000B
+MORE2=0B000C");
         }
     }
     
