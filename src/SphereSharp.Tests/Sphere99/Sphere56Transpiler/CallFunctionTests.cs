@@ -968,6 +968,23 @@ return i_test");
         }
 
         [TestMethod]
+        public void Adjusts_ItemDef_multics_id()
+        {
+            // multics are items with ids more than 04000 on Sphere 0.99 but
+            // on Sphere 0.56 multics start at 010000
+            TranspileFileCheck(
+@"[ItemDef 04123]
+DEFNAME=i_something
+ID=i_base",
+@"[ItemDef 010123]
+DEFNAME=i_something
+ID=i_base
+[function i_something]
+return i_something");
+        }
+
+
+        [TestMethod]
         public void Chardef_section()
         {
             TranspileFileCheck(

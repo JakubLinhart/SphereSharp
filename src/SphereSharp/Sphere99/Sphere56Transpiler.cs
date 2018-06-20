@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -980,6 +981,23 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitItemDefSectionHeader([NotNull] sphereScript99Parser.ItemDefSectionHeaderContext context)
         {
+            var name = context.sectionName().GetText();
+            if (name.StartsWith("0"))
+            {
+                var idText = name.TrimStart('0');
+                if (int.TryParse(idText, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int id) && id > 0x4000)
+                {
+                    int adjustedId = id - 0x4000 + 0x10000;
+                    builder.Append(context.ITEMDEF_SECTION_HEADER_START().GetText());
+                    builder.Append('0');
+                    builder.Append(adjustedId.ToString("X5"));
+                    builder.Append(']');
+                    builder.Append(context.NEWLINE().GetText());
+
+                    return true;
+                }
+            }
+
             builder.Append(context.GetText());
 
             return true;

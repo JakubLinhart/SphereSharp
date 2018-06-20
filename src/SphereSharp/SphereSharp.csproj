@@ -59,9 +59,11 @@
     <Compile Include="Sphere99\IDefinitionsRepository.cs" />
     <Compile Include="Sphere99\PropertyValueExtractor.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\ChainedMemberTranspiler.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\CharSaveFilePropertiesTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\CharsTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\DialogFunctionArgumentsTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\DialogPositionTranspiler.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\ItemSaveFilePropertiesTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\LiteralArgumentTranspiler.cs" />
     <Compile Include="Sphere99\DefinitionsCollector.cs" />
     <Compile Include="Sphere99\DefinitionsRepository.cs" />
