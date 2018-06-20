@@ -8,7 +8,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         private static HashSet<string> forbiddenProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "Age", "Changer",
-            "CoOwner", "Friend" // TODO: needs to be translated for .56 somehow
+            "CoOwner", "Friend", "Quality" // TODO: needs to be translated for .56 somehow
         };
 
         public ItemSaveFilePropertiesTranspiler(SourceCodeBuilder builder, Sphere56TranspilerVisitor parentVisitor, MultiValueDictionary<string, string> invalidPropertyValues)

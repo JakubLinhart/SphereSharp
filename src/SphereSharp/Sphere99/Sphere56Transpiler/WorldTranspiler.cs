@@ -46,6 +46,14 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             return dataVisitor.VisitVarNamesSection(context);
         }
 
+        public override bool VisitEofSection([NotNull] sphereScript99Parser.EofSectionContext context)
+        {
+            worldVisitor.VisitEofSection(context);
+            dataVisitor.VisitEofSection(context);
+
+            return true;
+        }
+
         public WorldTranspilationResult Transpile(IParseTree parseTree)
         {
             Visit(parseTree);

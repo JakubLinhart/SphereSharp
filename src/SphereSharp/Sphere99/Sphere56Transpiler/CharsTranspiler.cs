@@ -33,6 +33,11 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             return parentVisitor.VisitWorldItemSection(context);
         }
 
+        public override bool VisitEofSection([NotNull] sphereScript99Parser.EofSectionContext context)
+        {
+            return parentVisitor.VisitEofSection(context);
+        }
+
         public string Transpile(IParseTree parseTree)
         {
             Visit(parseTree);

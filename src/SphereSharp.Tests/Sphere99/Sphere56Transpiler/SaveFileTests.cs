@@ -94,6 +94,8 @@ Serial=040009AE2
 LocalLight=3
 RainChance=0
 ColdChance=0
+
+[EOF]
 ",
 @"Title=""Sphere World Script""
 Version=""0.99z8""
@@ -113,6 +115,8 @@ Serial=040009AE2
 LocalLight=3
 RainChance=0
 ColdChance=0
+
+[EOF]
 ");
         }
     }
