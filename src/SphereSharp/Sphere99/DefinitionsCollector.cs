@@ -59,6 +59,16 @@ namespace SphereSharp.Sphere99
             return base.VisitCustomMemberAccess(context);
         }
 
+        public override bool VisitVarNamesSection([NotNull] sphereScript99Parser.VarNamesSectionContext context)
+        {
+            foreach (var assignment in context.propertyList().propertyAssignment())
+            {
+                repository.DefineGlobalVariable(assignment.propertyName().GetText().Trim());
+            }
+
+            return true;
+        }
+
         private void DefineProperty(string propertyName) => repository.DefineDefName(propertyName);
     }
 }

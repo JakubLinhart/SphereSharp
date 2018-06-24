@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using CommandLine;
 using SphereSharp.Cli.TranspileSave;
+using SphereSharp.Cli.TranspileShard;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,10 +15,11 @@ namespace SphereSharp.Cli
     {
         static void Main(string[] args)
         {
-            CommandLine.Parser.Default.ParseArguments<RoundtripOptions, TranspileOptions, TranspileSaveOptions>(args)
+            CommandLine.Parser.Default.ParseArguments<RoundtripOptions, TranspileOptions, TranspileSaveOptions, TranspileShardOptions>(args)
                 .WithParsed<RoundtripOptions>(options => new RoundtripCommand().Roundtrip(options))
                 .WithParsed<TranspileOptions>(options => new TranspileCommand().Transpile(options))
-                .WithParsed<TranspileSaveOptions>(options => new TranspileSaveCommand().Transpile(options));
+                .WithParsed<TranspileSaveOptions>(options => new TranspileSaveCommand().Transpile(options))
+                .WithParsed<TranspileShardOptions>(options => new TranspileShardCommand().Transpile(options));
         }
     }
 }
