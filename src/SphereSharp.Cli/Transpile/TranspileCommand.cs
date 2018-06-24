@@ -6,25 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Cli
+namespace SphereSharp.Cli.Transpile
 {
     internal sealed class TranspileCommand
     {
         private Compilation compilation = new Compilation();
-        private PretranspilationReplacementScope[] replacementScopes = new[]
-        {
-            new PretranspilationReplacementScope("newbie_portals.scp", new PretranspilationReplacements(new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { "\"dialog(D_RACEclass_classes)\"", "\"dialog D_RACEclass_classes\"" },
-                { "\"dialog(D_RACEclass_races)\"", "\"dialog D_RACEclass_races\"" },
-                { "\"dialog(D_raceclass_nations)\"", "\"dialog D_raceclass_nations\"" },
-                { "\"dialog(D_RACEclass_stats)\"", "\"dialog D_RACEclass_stats\"" },
-            })),
-            new PretranspilationReplacementScope("funkce.scp", new PretranspilationReplacements(new Dictionary<string, string>
-            {
-                { "try s(<serverTime> <?args?>)", "serv.log(<serverTime> <?args?>)" }
-            }))
-        };
 
         public void Transpile(TranspileOptions options)
         {
@@ -71,21 +57,7 @@ namespace SphereSharp.Cli
             Console.WriteLine($"Parsing {inputFileName}");
             string src = File.ReadAllText(inputFileName);
 
-            src = Patch(inputFileName, src);
-
             compilation.AddFile(inputFileName, src);
-        }
-
-        private string Patch(string inputFileName, string src)
-        {
-            var fileNameWithoutPath = Path.GetFileName(inputFileName);
-            var replacement = replacementScopes.FirstOrDefault(x => x.Name.Equals(fileNameWithoutPath, StringComparison.OrdinalIgnoreCase));
-            if (replacement != null)
-            {
-                src = replacement.Apply(src);
-            }
-
-            return src;
         }
 
         private void ParseDirectory(string inputDirectory)

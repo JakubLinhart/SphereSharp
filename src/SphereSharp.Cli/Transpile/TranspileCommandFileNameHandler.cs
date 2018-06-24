@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Cli
+namespace SphereSharp.Cli.Transpile
 {
     public class TranspileCommandFileNameHandler
     {

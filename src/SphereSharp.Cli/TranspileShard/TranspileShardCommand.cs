@@ -1,4 +1,5 @@
-﻿using SphereSharp.Sphere99;
+﻿using Newtonsoft.Json;
+using SphereSharp.Sphere99;
 using SphereSharp.Sphere99.Sphere56Transpiler;
 using System;
 using System.Collections.Generic;
@@ -22,14 +23,16 @@ namespace SphereSharp.Cli.TranspileShard
 
             if (!File.Exists(options.SettingsFile))
             {
-                Console.WriteLine($"Setting file {options.SettingsFile} doesn't exist.");
+                Console.WriteLine($"Setting file {options.SettingsFile} doesn't exist, creating empty settings file.");
+                settings = new ShardSettings();
+                File.WriteAllText(options.SettingsFile, JsonConvert.SerializeObject(settings, Formatting.Indented));
                 return;
             }
 
             string settingsFileContent = File.ReadAllText(options.SettingsFile);
             currentDirectory = Path.GetDirectoryName(options.SettingsFile);
 
-            settings = Newtonsoft.Json.JsonConvert.DeserializeObject<ShardSettings>(settingsFileContent);
+            settings = JsonConvert.DeserializeObject<ShardSettings>(settingsFileContent);
 
             string scriptsPath = new DirectoryInfo(Path.Combine(currentDirectory, settings.ScriptsPath)).FullName;
             Console.WriteLine($"Parsing script directory {scriptsPath}");
@@ -101,6 +104,20 @@ namespace SphereSharp.Cli.TranspileShard
             }
         }
 
+        private string Patch(string inputFileName, string src)
+        {
+            inputFileName = FixPath(inputFileName);
+            var replacement = settings.PrePatches
+                .FirstOrDefault(x => FixPath(x.Scope).Equals(inputFileName, StringComparison.OrdinalIgnoreCase));
+            if (replacement != null)
+            {
+                Console.WriteLine($"Patching {inputFileName}");
+                src = replacement.Apply(src);
+            }
+
+            return src;
+        }
+
         private void ParseSaveFile(string savePath, string name, Action<string, string> action)
         {
             var fileName = new FileInfo(Path.Combine(savePath, name)).FullName;
@@ -149,9 +166,11 @@ namespace SphereSharp.Cli.TranspileShard
                 return;
             }
 
-            Console.WriteLine($"Parsing {relativeFileName}");
             string src = File.ReadAllText(fileName);
 
+            src = Patch(relativeFileName, src);
+
+            Console.WriteLine($"Parsing {relativeFileName}");
             compilation.AddFile(fileName, src);
         }
 

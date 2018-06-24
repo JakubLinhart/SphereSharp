@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Cli
+namespace SphereSharp.Cli.Roundtrip
 {
     public class RoundtripCommand
     {

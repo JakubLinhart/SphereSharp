@@ -79,18 +79,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineException.cs" />
-    <Compile Include="PretranspilationReplacements.cs" />
-    <Compile Include="PretranspilationReplacementScope.cs" />
-    <Compile Include="RoundtripCommand.cs" />
-    <Compile Include="RoundtripOptions.cs" />
+    <Compile Include="Patch.cs" />
+    <Compile Include="PatchSet.cs" />
+    <Compile Include="Roundtrip\RoundtripCommand.cs" />
+    <Compile Include="Roundtrip\RoundtripOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TranspileCommand.cs" />
-    <Compile Include="TranspileCommandFileNameHandler.cs" />
-    <Compile Include="TranspileOptions.cs" />
+    <Compile Include="Transpile\TranspileCommand.cs" />
+    <Compile Include="Transpile\TranspileCommandFileNameHandler.cs" />
+    <Compile Include="Transpile\TranspileOptions.cs" />
     <Compile Include="TranspileSave\TranspileSaveCommand.cs" />
     <Compile Include="TranspileSave\TranspileSaveOptions.cs" />
-    <Compile Include="TranspileShard\ShardSettings.cs" />
+    <Compile Include="CreateShardSettings\CreateShardSettingsCommand.cs" />
+    <Compile Include="CreateShardSettings\CreateShardSettingsOptions.cs" />
+    <Compile Include="ShardSettings.cs" />
     <Compile Include="TranspileShard\TranspileShardCommand.cs" />
     <Compile Include="TranspileShard\TranspileShardOptions.cs" />
   </ItemGroup>

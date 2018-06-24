@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using SphereSharp.Cli.Transpile;
 
 namespace SphereSharp.Cli.Tests
 {

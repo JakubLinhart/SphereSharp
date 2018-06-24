@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SphereSharp.Cli.TranspileShard
+namespace SphereSharp.Cli
 {
     public class ShardSettings
     {
@@ -12,5 +12,7 @@ namespace SphereSharp.Cli.TranspileShard
         public string SavePath { get; set; }
 
         public string[] IgnoredScripts { get; set; }
+
+        public PatchSet[] PrePatches { get; set; }
     }
 }
