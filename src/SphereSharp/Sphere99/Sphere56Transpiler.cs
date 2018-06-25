@@ -475,6 +475,14 @@ namespace SphereSharp.Sphere99
         {
             Visit(context.typeDefSectionHeader());
             Visit(context.triggerList());
+            builder.EnsureNewline();
+
+            var typeDefName = context.typeDefSectionHeader().SYMBOL().GetText();
+            builder.Append("[function ");
+            builder.Append(typeDefName);
+            builder.AppendLine(']');
+            builder.Append("return ");
+            builder.AppendLine(typeDefName);
 
             return true;
         }

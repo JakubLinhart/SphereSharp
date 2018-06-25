@@ -968,6 +968,17 @@ return i_test");
         }
 
         [TestMethod]
+        public void Typedef_section()
+        {
+            TranspileFileCheck(
+@"[typedef t_vendorplac]
+",
+@"[typedef t_vendorplac]
+[function t_vendorplac]
+return t_vendorplac");
+        }
+
+        [TestMethod]
         public void Adjusts_ItemDef_multics_id()
         {
             // multics are items with ids more than 04000 on Sphere 0.99 but
