@@ -87,6 +87,38 @@ MORE2=0B000C",
 MORE1=0B000B
 MORE2=0B000C");
         }
+
+        [TestMethod]
+        public void Strips_sharp_from_hexadecimal_tag_values()
+        {
+            TranspileSaveFileCheck(
+@"[worlditem i_something]
+Tag.equip1=""#040000D10""",
+@"[worlditem i_something]
+Tag.equip1=""040000D10""");
+        }
+
+        [TestMethod]
+        public void Transpiles_hex_uid_enclosed_in_doublequotes_and_prefixed_with_sharp()
+        {
+            TranspileSaveFileCheck(
+@"[worlditem i_something]
+Tag.combatSource=#076C56",
+@"[worlditem i_something]
+Tag.combatSource=076C56");
+        }
+
+
+        [TestMethod]
+        public void Keeps_sharp_in_nonhexadecimal_tag_value()
+        {
+            TranspileSaveFileCheck(
+@"[worlditem i_something]
+Tag.combatSource=#0nonhexasokeepit",
+@"[worlditem i_something]
+Tag.combatSource=#0nonhexasokeepit");
+
+        }
     }
     
 }

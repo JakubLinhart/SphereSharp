@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -111,6 +112,20 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                 else if (name.Equals("MORE1", StringComparison.OrdinalIgnoreCase) || name.Equals("MORE2", StringComparison.OrdinalIgnoreCase))
                 {
                     parentVisitor.AppendPropertyAssignment(assignment, value.Trim('"'));
+                }
+                else if (value != null && (value.StartsWith("#0") || value.StartsWith("\"#0")))
+                {
+                    bool startsWithDoubleQuotes = value.StartsWith("\"");
+                    string hexValueText = value.Trim('"').TrimStart('#');
+                    if (int.TryParse(hexValueText, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hexValue))
+                    {
+                        if (startsWithDoubleQuotes)
+                            hexValueText = '"' + hexValueText + '"';
+
+                        parentVisitor.AppendPropertyAssignment(assignment, hexValueText);
+                    }
+                    else
+                        parentVisitor.AppendPropertyAssignment(assignment);
                 }
                 else if (!forbiddenProperties.Contains(name))
                 {
