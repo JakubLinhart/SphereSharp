@@ -17,7 +17,7 @@ namespace SphereSharp.Sphere99
 
         private readonly HashSet<string> nativeNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "p", "price", "lastxpos", "lastypos", "lastybuttpos"
+            "p", "price", "lastxpos", "lastypos", "lastybuttpos", "WRESTLING","amount","ITEMID"
         };
 
         private readonly SourceCodeBuilder builder;
@@ -1309,8 +1309,8 @@ namespace SphereSharp.Sphere99
                     var argumentList = context.nativeArgumentList().GetText().Trim().TrimStart('(').TrimEnd(')');
                     if (!argumentList.StartsWith("@"))
                     {
-                        builder.Append(" @");
-                        builder.Append(argumentList);
+                        builder.Append(" ");
+                        AppendTriggerName(argumentList);
                         return true;
                     }
                 }

@@ -289,6 +289,7 @@ enddo");
             TranspileStatementCheck("arg(killer).trigger(@userdclick)", "uid.<local.killer>.trigger @dclick");
             TranspileStatementCheck("trigger timer", "trigger @timer");
             TranspileStatementCheck("trigger @userdclick", "trigger @dclick");
+            TranspileStatementCheck("finduid(<argv(0)>).trigger(userdclick)", "uid.<argv[0]>.trigger @dclick");
             TranspileStatementCheck("trigger @timer", "trigger @timer");
             TranspileStatementCheck("src.trigger @timer", "src.trigger @timer");
             TranspileStatementCheck("trigger(@timer)", "trigger @timer");
