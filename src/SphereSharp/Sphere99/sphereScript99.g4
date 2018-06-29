@@ -159,7 +159,7 @@ endWhile: WS* ENDWHILE;
 
 doswitchStatement: DOSWITCH BEFORE_CONDITION_WS=WS* condition NEWLINE codeBlock AFTER_BLOCK_WS=WS* ENDDO;
 
-dorandStatement: DORAND WS* condition NEWLINE codeBlock WS* ENDDO;
+dorandStatement: DORAND CONDITION_WS=WS* condition NEWLINE codeBlock ENDDO_WS=WS* ENDDO;
 
 condition: numericExpression;
 numericExpression: evalExpression;

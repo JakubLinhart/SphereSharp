@@ -161,14 +161,14 @@ namespace SphereSharp.Tests.Sphere99.Parser
         public void Can_parse_expressions_with_direct_calls()
         {
             RoundtripCheck("fun1(1)");
-            //RoundtripCheck("1+fun1(1)");
-            //RoundtripCheck("-fun1(1)");
-            //RoundtripCheck("-(fun1(1))");
-            //RoundtripCheck("fun1(1)+1");
-            //RoundtripCheck("fun1(1)+fun2(2)");
-            //RoundtripCheck("fun1(1)+fun2(2)+fun3(3)");
-            //RoundtripCheck("(fun1(1)+fun2(2))");
-            //RoundtripCheck("(fun1(1)+fun2(2))");
+            RoundtripCheck("1+fun1(1)");
+            RoundtripCheck("-fun1(1)");
+            RoundtripCheck("-(fun1(1))");
+            RoundtripCheck("fun1(1)+1");
+            RoundtripCheck("fun1(1)+fun2(2)");
+            RoundtripCheck("fun1(1)+fun2(2)+fun3(3)");
+            RoundtripCheck("(fun1(1)+fun2(2))");
+            RoundtripCheck("(fun1(1)+fun2(2))");
         }
 
         private void RoundtripCheck(string src)

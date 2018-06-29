@@ -268,6 +268,34 @@ enddo");
         }
 
         [TestMethod]
+        public void Dorand_statement()
+        {
+            TranspileStatementCheck(
+@"dorand 3
+    call1
+    call2
+    call3
+enddo",
+@"dorand 3
+    call1
+    call2
+    call3
+enddo");
+
+            TranspileStatementCheck(
+@"dorand(3)
+    call1
+    call2
+    call3
+enddo",
+@"dorand(3)
+    call1
+    call2
+    call3
+enddo");
+        }
+
+        [TestMethod]
         [DataRow("return 1", "return 1")]
         [DataRow("return<x>", "return <x>")]
         [DataRow("return <x>", "return <x>")]
@@ -1236,6 +1264,26 @@ COLOR=colors_all
         {
             TranspileConditionCheck("findlayer(tag(weaponuid).typedef.layer)", "<findlayer.<uid.<tag0.weaponuid>.typedef.layer>>");
             TranspileConditionCheck("findlayer.<args>", "<findlayer.<args>>");
+        }
+
+        [TestMethod]
+        public void Can_transpile_arg_between_two_macros_in_safe()
+        {
+            TranspileCodeBlockCheck(
+@"arg(l1,1)
+arg(result,<safe <f1><arg(l1)><f2>>)",
+@"local.l1=1
+local.result=<<f1><local.l1><f2>>");
+        }
+
+        [TestMethod]
+        public void Can_transpile_arg_between_two_macros_in_eval()
+        {
+            TranspileCodeBlockCheck(
+@"arg(l1,1)
+arg(result,<eval <f1><arg(l1)><f2>>)",
+@"local.l1=1
+local.result=<eval <f1><local.l1><f2>>");
         }
     }
 }

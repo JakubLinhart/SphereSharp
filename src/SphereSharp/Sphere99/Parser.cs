@@ -47,5 +47,8 @@ namespace SphereSharp.Sphere99
 
         public ParsingResult<sphereScript99Parser.PropertyAssignmentContext> ParsePropertyAssignment(string src)
             => Parse(src, parser => parser.propertyAssignment());
+
+        public ParsingResult<sphereScript99Parser.TriggerContext> ParseTrigger(string src)
+            => Parse(src, parser => parser.trigger());
     }
 }

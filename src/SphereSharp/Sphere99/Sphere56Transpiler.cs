@@ -136,7 +136,8 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitTriggerArgument([NotNull] sphereScript99Parser.TriggerArgumentContext context)
         {
-            AppendTriggerName(context.SYMBOL().GetText());
+            builder.Append('@');
+            builder.Append(TranslateTriggerName(context.SYMBOL().GetText()));
 
             return true;
         }
@@ -755,30 +756,40 @@ namespace SphereSharp.Sphere99
         {
             builder.Append(context.TRIGGER_HEADER());
 
-            var triggerName = context.triggerName().GetText();
-            AppendTriggerName(triggerName);
+            var triggerName = TranslateTriggerName(context.triggerName().GetText());
+            currentTriggerName = triggerName;
+            builder.Append('@');
+            builder.Append(triggerName);
 
             return true;
         }
 
-        private void AppendTriggerName(string triggerName)
+        private string TranslateTriggerName(string triggerName)
         {
-            builder.Append('@');
             if (triggerNames.TryGetValue(triggerName, out string translatedTriggerName))
-                builder.Append(translatedTriggerName);
+                return translatedTriggerName;
             else
-                builder.Append(triggerName);
+                return triggerName;
         }
+
+        private bool returnStatementRequiresValue = false;
+        private string currentTriggerName = null;
 
         public override bool VisitTrigger([NotNull] sphereScript99Parser.TriggerContext context)
         {
             Visit(context.triggerHeader());
+
+            if (currentTriggerName.Equals("timer", StringComparison.OrdinalIgnoreCase))
+                returnStatementRequiresValue = true;
 
             if (context.NEWLINE() != null)
                 builder.Append(context.NEWLINE().GetText());
 
             if (context.triggerBody() != null)
                 Visit(context.triggerBody());
+
+            currentTriggerName = null;
+            returnStatementRequiresValue = false;
 
             return true;
         }
@@ -788,6 +799,30 @@ namespace SphereSharp.Sphere99
             semanticContext.ClearLocalVariables();
             base.VisitTriggerBody(context);
             semanticContext.ClearLocalVariables();
+
+            if (returnStatementRequiresValue)
+            {
+                if (context.codeBlock()?.statement() != null)
+                {
+                    bool hasAddReturn = true;
+
+                    foreach (var statement in context.codeBlock().statement())
+                    {
+                        string name = statement.call()?.firstMemberAccess()?.genericNativeMemberAccess()?.nativeMemberAccess()?.nativeFunctionName()?.GetText();
+                        if (name != null && name.Equals("return", StringComparison.OrdinalIgnoreCase))
+                        {
+                            hasAddReturn = false;
+                            break;
+                        }
+                    }
+
+                    if (hasAddReturn)
+                    {
+                        builder.EnsureNewline();
+                        builder.AppendLine("return 0");
+                    }
+                }
+            }
 
             return true;
         }
@@ -1207,6 +1242,24 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitDorandStatement([NotNull] sphereScript99Parser.DorandStatementContext context)
+        {
+            builder.Append(context.DORAND());
+            if (context.CONDITION_WS?.Text != null)
+                builder.Append(context.CONDITION_WS.Text);
+
+            Visit(context.condition());
+
+            builder.Append(context.NEWLINE().GetText());
+
+            Visit(context.codeBlock());
+
+            if (context.ENDDO_WS?.Text != null)
+                builder.Append(context.ENDDO_WS.Text);
+            builder.Append(context.ENDDO().GetText());
+            return true;
+        }
+
         public override bool VisitTestIfStatement([NotNull] sphereScript99Parser.TestIfStatementContext context)
         {
             builder.Append(context.GetText());
@@ -1304,13 +1357,21 @@ namespace SphereSharp.Sphere99
                 var arguments = new FirstMemberAccessArgumentsVisitor().Visit(context);
                 builder.Append(name);
 
-                if (name.Equals("trigger", StringComparison.OrdinalIgnoreCase))
+                if (returnStatementRequiresValue && name.Equals("return", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!arguments.Any())
+                    {
+                        builder.Append(" 0");
+                        return true;
+                    }
+                }
+                else if (name.Equals("trigger", StringComparison.OrdinalIgnoreCase))
                 {
                     var argumentList = context.nativeArgumentList().GetText().Trim().TrimStart('(').TrimEnd(')');
                     if (!argumentList.StartsWith("@"))
                     {
-                        builder.Append(" ");
-                        AppendTriggerName(argumentList);
+                        builder.Append(" @");
+                        builder.Append(TranslateTriggerName(argumentList));
                         return true;
                     }
                 }

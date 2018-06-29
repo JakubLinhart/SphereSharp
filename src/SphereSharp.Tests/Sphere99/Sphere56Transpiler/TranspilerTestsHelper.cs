@@ -29,6 +29,9 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         public static void TranspilePropertyAssignmentCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParsePropertyAssignment(src));
 
+        public static void TranspileTriggerCheck(string input, string expectedOutput)
+            => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseTrigger(src));
+
         private static void TranspileCheck(string input, string expectedOutput, Func<string, SphereSharp.Sphere99.Parser, ParsingResult> parseFunc)
         {
             var definitionsRepository = new DefinitionsRepository();
