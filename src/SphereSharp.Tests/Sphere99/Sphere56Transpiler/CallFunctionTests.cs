@@ -1236,27 +1236,5 @@ COLOR=colors_all
             TranspileConditionCheck("findlayer(tag(weaponuid).typedef.layer)", "<findlayer.<uid.<tag0.weaponuid>.typedef.layer>>");
             TranspileConditionCheck("findlayer.<args>", "<findlayer.<args>>");
         }
-
-        [TestMethod]
-        public void Can_transpile_arg_between_two_macros_in_safe()
-        {
-            Assert.Inconclusive("Fixme");
-            TranspileCodeBlockCheck(
-@"arg(l1,1)
-arg(result,<safe <f1><arg(l1)><f2>>)",
-@"local.l1=1
-local.result=<<f1><local.l1><f2>>");
-        }
-
-        [TestMethod]
-        public void Can_transpile_arg_between_two_macros_in_eval()
-        {
-            Assert.Inconclusive("Fixme");
-            TranspileCodeBlockCheck(
-@"arg(l1,1)
-arg(result,<eval <f1><arg(l1)><f2>>)",
-@"local.l1=1
-local.result=<eval <f1><local.l1><f2>>");
-        }
     }
 }

@@ -24,26 +24,6 @@ return 0
         }
 
         [TestMethod]
-        public void Adds_return_statement_to_the_end_before_trailing_WS()
-        {
-            Assert.Inconclusive("Fixme");
-
-            TranspileTriggerCheck(
-@"on=@timer
-call1
-
-// here is some a comment
-// here is another comment",
-@"on=@timer
-call1
-return 0
-
-// here is some a comment
-// here is another comment
-");
-        }
-
-        [TestMethod]
         public void Doesnt_add_return_statement_to_the_end_if_return_in_main_flow()
         {
             TranspileTriggerCheck(
