@@ -51,7 +51,7 @@ namespace SphereSharp.Sphere99
 
             builder.StartMemberAccess();
             Visit(context.memberName());
-            builder.Append('_');
+            builder.Append('[');
             var indexMemberName = new FirstMemberAccessNameVisitor().Visit(context.numericExpression());
             if (indexMemberName == null || indexMemberName.Equals("eval", StringComparison.OrdinalIgnoreCase))
             {
@@ -65,7 +65,7 @@ namespace SphereSharp.Sphere99
                 });
             }
 
-            builder.Append('_');
+            builder.Append(']');
             builder.EndMemberAccess();
 
             return true;
@@ -428,9 +428,9 @@ namespace SphereSharp.Sphere99
             nameBuilder.Append(assignment.propertyName().propertyNameText().GetText());
             if (assignment.propertyName().propertyNameIndex()?.number() != null)
             {
-                nameBuilder.Append('_');
+                nameBuilder.Append('[');
                 nameBuilder.Append(assignment.propertyName().propertyNameIndex().number().GetText());
-                nameBuilder.Append('_');
+                nameBuilder.Append(']');
             }
 
             return nameBuilder.ToString();
@@ -457,16 +457,6 @@ namespace SphereSharp.Sphere99
 
                 if (assignment.NEWLINE() != null)
                     builder.Append(assignment.NEWLINE());
-            }
-
-            builder.AppendLine();
-
-            foreach (var assignment in context.propertyList().propertyAssignment())
-            {
-                string transformedDefName = TransformDefName(assignment);
-                builder.AppendLine($"[function {transformedDefName}]");
-                builder.AppendLine($"return <def.{transformedDefName}>");
-                builder.AppendLine();
             }
 
             return true;
@@ -501,8 +491,6 @@ namespace SphereSharp.Sphere99
 
             Visit(context.propertyList());
             builder.AppendLine();
-
-            GenerateFunctionsForPropertyList(context.propertyList());
 
             return true;
         }
@@ -1012,20 +1000,6 @@ namespace SphereSharp.Sphere99
                 Visit(context.propertyList());
             if (context.triggerList() != null)
                 Visit(context.triggerList());
-
-            string shadowFunctionName;
-            if (context.propertyList() != null && new PropertyValueExtractor().TryExtract("defname", context.propertyList(), out string defName))
-                shadowFunctionName = defName;
-            else
-                shadowFunctionName = context.itemDefSectionHeader().sectionName().GetText();
-
-            builder.AppendLine();
-            builder.Append("[function ");
-            builder.Append(shadowFunctionName);
-            builder.AppendLine(']');
-            builder.Append("return ");
-            builder.AppendLine(shadowFunctionName);
-            builder.AppendLine();
 
             return true;
         }
