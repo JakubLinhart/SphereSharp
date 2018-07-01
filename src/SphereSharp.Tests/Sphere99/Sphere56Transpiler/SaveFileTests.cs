@@ -53,7 +53,7 @@ REGION.Flag_AntiMagic_RecallIn=1");
         }
 
         [TestMethod]
-        public void Can_property_list_contain_empty_assignment()
+        public void Property_list_can_contain_empty_assignment()
         {
             TranspileSaveFileCheck(
 @"[WorldItem i_multi_ship_dragon_medium_w]
@@ -73,7 +73,7 @@ Serial=07F708");
         }
 
         [TestMethod]
-        public void Can_parse_file_with_leading_properties_with_all_supported_sections()
+        public void Can_parse_file_with_leading_properties_and_all_supported_sections()
         {
             TranspileSaveFileCheck(
 @"Title=""Sphere World Script""
