@@ -19,6 +19,18 @@ namespace SphereSharp.Cli.AnalyzeShard
         {
             this.options = options;
 
+            if (!string.IsNullOrEmpty(options.InputPath))
+            {
+                if (File.Exists(options.InputPath))
+                {
+                    currentDirectory = Path.GetDirectoryName(options.InputPath);
+                    ParseFile(options.InputPath);
+                    return;
+                }
+                else
+                    throw new CommandLineException($"Cannot find {options.InputPath}");
+            }
+
             if (!File.Exists(options.SettingsFile))
             {
                 Console.WriteLine($"Setting file {options.SettingsFile} doesn't exist, creating empty settings file.");
@@ -44,6 +56,9 @@ namespace SphereSharp.Cli.AnalyzeShard
         private string FixPath(string fileName) => fileName.Replace('\\', '/').Trim('/');
         private bool IsIgnored(string fileName)
         {
+            if (settings == null)
+                return false;
+
             string fixedFileName = FixPath(fileName);
 
             return settings.IgnoredScripts
