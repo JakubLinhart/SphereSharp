@@ -29,8 +29,12 @@ namespace SphereSharp.Cli.TranspileShard
                 return;
             }
 
+            Console.WriteLine($"Reading setting file {new FileInfo(options.SettingsFile).FullName}");
             string settingsFileContent = File.ReadAllText(options.SettingsFile);
-            currentDirectory = Path.GetDirectoryName(options.SettingsFile);
+            currentDirectory = new DirectoryInfo(Path.GetDirectoryName(options.SettingsFile)).FullName;
+            Console.WriteLine($"Shard directory: {currentDirectory}");
+
+            Console.WriteLine();
 
             settings = JsonConvert.DeserializeObject<ShardSettings>(settingsFileContent);
 

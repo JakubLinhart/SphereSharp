@@ -79,6 +79,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyzeShard\AnalyzeShardCommand.cs" />
+    <Compile Include="AnalyzeShard\AnalyzeShardOptions.cs" />
     <Compile Include="CommandLineException.cs" />
     <Compile Include="Patch.cs" />
     <Compile Include="PatchSet.cs" />
