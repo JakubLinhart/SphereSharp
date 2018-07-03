@@ -1036,20 +1036,6 @@ namespace SphereSharp.Sphere99
             if (context.triggerList() != null)
                 Visit(context.triggerList());
 
-            string shadowFunctionName;
-            if (context.propertyList() != null && new PropertyValueExtractor().TryExtract("defname", context.propertyList(), out string defName))
-                shadowFunctionName = defName;
-            else
-                shadowFunctionName = context.charDefSectionHeader().sectionName().GetText();
-
-            builder.AppendLine();
-            builder.Append("[function ");
-            builder.Append(shadowFunctionName);
-            builder.AppendLine(']');
-            builder.Append("return ");
-            builder.AppendLine(shadowFunctionName);
-            builder.AppendLine();
-
             return true;
         }
 

@@ -1002,17 +1002,13 @@ ID=i_base
 @"[chardef c_test]
 name=some name",
 @"[chardef c_test]
-name=some name
-[function c_test]
-return c_test");
+name=some name");
 
             TranspileFileCheck(
 @"[CHARDEF 0469]
 DEFNAME=c_test",
 @"[CHARDEF 0469]
-DEFNAME=c_test
-[function c_test]
-return c_test");
+DEFNAME=c_test");
         }
 
         [TestMethod]

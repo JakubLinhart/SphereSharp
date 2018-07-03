@@ -113,19 +113,9 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                 {
                     parentVisitor.AppendPropertyAssignment(assignment, value.Trim('"'));
                 }
-                else if (value != null && (value.StartsWith("#0") || value.StartsWith("\"#0")))
+                else if (SharpStriper.TryStrip(value, out string strippedValue))
                 {
-                    bool startsWithDoubleQuotes = value.StartsWith("\"");
-                    string hexValueText = value.Trim('"').TrimStart('#');
-                    if (int.TryParse(hexValueText, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hexValue))
-                    {
-                        if (startsWithDoubleQuotes)
-                            hexValueText = '"' + hexValueText + '"';
-
-                        parentVisitor.AppendPropertyAssignment(assignment, hexValueText);
-                    }
-                    else
-                        parentVisitor.AppendPropertyAssignment(assignment);
+                    parentVisitor.AppendPropertyAssignment(assignment, strippedValue);
                 }
                 else if (!forbiddenProperties.Contains(name))
                 {

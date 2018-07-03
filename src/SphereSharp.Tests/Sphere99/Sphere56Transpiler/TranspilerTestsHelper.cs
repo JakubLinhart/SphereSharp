@@ -32,6 +32,26 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         public static void TranspileTriggerCheck(string input, string expectedOutput)
             => TranspileCheck(input, expectedOutput, (src, parser) => parser.ParseTrigger(src));
 
+        public static void TranspileToDataSaveFileCheck(string input, string expectedOutput)
+        {
+            var definitionsRepository = new DefinitionsRepository();
+            var parser = new SphereSharp.Sphere99.Parser();
+            var parsingOutput = parser.ParseSaveFile(input);
+
+            if (parsingOutput.Errors.Any())
+            {
+                Assert.Fail(parsingOutput.GetErrorsText());
+            }
+
+            new DefinitionsCollector(definitionsRepository).Visit(parsingOutput.Tree);
+
+            var transpiler = new SphereSharp.Sphere99.Sphere56Transpiler.WorldTranspiler(definitionsRepository);
+            var result = transpiler.Transpile(parsingOutput.Tree);
+
+            result.Data.Trim().Should().Be(expectedOutput.Trim());
+        }
+
+
         private static void TranspileCheck(string input, string expectedOutput, Func<string, SphereSharp.Sphere99.Parser, ParsingResult> parseFunc)
         {
             var definitionsRepository = new DefinitionsRepository();
@@ -51,6 +71,5 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
 
             transpiler.Output.Trim().Should().Be(expectedOutput.Trim());
         }
-
     }
 }

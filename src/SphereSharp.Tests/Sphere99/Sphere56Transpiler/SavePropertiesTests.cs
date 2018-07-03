@@ -99,6 +99,17 @@ Tag.equip1=""040000D10""");
         }
 
         [TestMethod]
+        public void Strips_sharp_from_varnames_values()
+        {
+            TranspileToDataSaveFileCheck(
+@"[varnames]
+globalvar=#0400009DB
+",
+@"[GLOBALS]
+globalvar=0400009DB");
+        }
+
+        [TestMethod]
         public void Transpiles_hex_uid_enclosed_in_doublequotes_and_prefixed_with_sharp()
         {
             TranspileSaveFileCheck(
