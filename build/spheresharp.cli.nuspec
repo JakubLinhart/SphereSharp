@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>SphereSharp.Cli</id>
+    <version>1.0.0</version>
+    <authors>Jakub Linhart</authors>
+    <owners>Jakub Linhart</owners>
+    <projectUrl>https://github.com/JakubLinhart/SphereSharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Tools for SphereServer script transpilation and analysis.</description>
+    <tags>SphereServer</tags>
+  </metadata>
+  <files>
+	  <file src="_\SphereSharp.Cli\*.*" target="tools" />
+  </files>
+</package>
