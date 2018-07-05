@@ -65,18 +65,35 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             AppendVariable("var", name);
         }
 
+        public void StartArgv()
+        {
+            if (ScopeRequiresMacro)
+                Append('<');
+
+            Append("argv[");
+            StartRequireMacro();
+        }
+
+        public void EndArgv()
+        {
+            EndRequireMacro();
+            Append(']');
+            if (ScopeRequiresMacro)
+                Append('>');
+        }
+
         public void StartGlobalVariable() => StartVariable("var");
         public void EndGlobalVariable() => EndVariable();
         public void AppendDefNameVariable(string name) => AppendVariable("def", name);
 
-        private bool VariableRequiresMacro =>
+        private bool ScopeRequiresMacro =>
             scopes.Parent != Scope.VariablesRestriced
             && scopes.Current != Scope.Macro && scopes.Parent != Scope.Macro
             && scopes.Parent != Scope.None;
 
         private void StartVariable(string variableType)
         {
-            if (VariableRequiresMacro)
+            if (ScopeRequiresMacro)
                 builder.Append('<');
 
             if (scopes.Parent != Scope.VariablesRestriced)
@@ -88,7 +105,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
         private void EndVariable()
         {
-            if (VariableRequiresMacro)
+            if (ScopeRequiresMacro)
                 builder.Append('>');
         }
 

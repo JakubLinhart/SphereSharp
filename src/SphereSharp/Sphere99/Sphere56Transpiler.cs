@@ -1693,9 +1693,9 @@ namespace SphereSharp.Sphere99
                             bool requiresUid = new HasChainedMemberVisitor().Visit(context);
                             if (requiresUid)
                                 builder.Append("uid.<");
-                            builder.Append($"argv[");
+                            builder.StartArgv();
                             base.Visit(arguments[0]);
-                            builder.Append("]");
+                            builder.EndArgv();
                             if (requiresUid)
                             {
                                 builder.Append('>');
