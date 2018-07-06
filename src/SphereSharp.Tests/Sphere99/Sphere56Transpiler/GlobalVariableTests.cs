@@ -77,12 +77,6 @@ var.x=<var.x>+1");
 var(v,<eval u>)",
 @"var.u=1
 var.v=<eval <var.u>>");
-
-            TranspileCodeBlockCheck(
-@"var(u,1)
-fun1(u)",
-@"var.u=1
-fun1 <var.u>");
         }
 
         [TestMethod]
