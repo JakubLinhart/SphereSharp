@@ -190,7 +190,7 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | CAST;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
-memberName: (SYMBOL | macro | TAG | REGION)+?;
+memberName: (SYMBOL | macro | TAG | REGION)+;
 indexedMemberName: memberName '[' numericExpression ']';
 
 // properties

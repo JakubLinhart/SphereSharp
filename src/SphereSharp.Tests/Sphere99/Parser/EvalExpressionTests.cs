@@ -187,7 +187,7 @@ namespace SphereSharp.Tests.Sphere99.Parser
         {
             Parse(src, parser =>
             {
-                var expression = parser.evalExpression();
+                var expression = parser.condition();
                 var extractor = new EvalExpressionExtractor();
                 extractor.Visit(expression);
                 extractor.Result.Should().Be(expectedResult);

@@ -608,6 +608,16 @@ var.u=<eval(<var.is_blunt>)>");
         }
 
         [TestMethod]
+        public void MyTestMethod()
+        {
+            TranspileCodeBlockCheck(
+@"var.posy=1
+var.posy=<posy>*15",
+@"var.posy=1
+var.posy=<var.posy>*15");
+        }
+
+        [TestMethod]
         public void Global_variables_with_native_function_name_requires_explicit_access_to_be_explicitelly_prefixed()
         {
             TranspileFileCheck(
@@ -1231,6 +1241,19 @@ COLOR=colors_all
         {
             TranspileConditionCheck("findlayer(tag(weaponuid).typedef.layer)", "<findlayer.<uid.<tag0.weaponuid>.typedef.layer>>");
             TranspileConditionCheck("findlayer.<args>", "<findlayer.<args>>");
+        }
+
+        [TestMethod]
+        public void Adds_evaluation_for_argument_index()
+        {
+            TranspileStatementCheck("arg(l1,<argv(argv(0))>)", "local.l1=<argv[<argv[0]>]>");
+        }
+
+        [TestMethod]
+        public void Keeps_evaluation_for_argument_access_in_literals()
+        {
+            TranspileStatementCheck("arg(varname,nastaveni_cm_<argv(1)>_<argv(0)>)", "local.varname=nastaveni_cm_<argv[1]>_<argv[0]>");
+            TranspileStatementCheck("arg(varname,<argv[0]><argv[1]><argv[2]>)", "local.varname=<argv[0]><argv[1]><argv[2]>");
         }
     }
 }
