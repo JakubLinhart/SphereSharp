@@ -84,6 +84,7 @@
     <Compile Include="Sphere99\Sphere56Transpiler\GlobalVariableTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SaveFileTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SavePropertiesTests.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\SexTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\TimerTriggerTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\TranspilerTestsHelper.cs" />
   </ItemGroup>

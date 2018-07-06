@@ -1328,6 +1328,39 @@ namespace SphereSharp.Sphere99
                         return true;
                     }
                 }
+                else if (name.Equals("sex", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (arguments == null || arguments.Count() != 2)
+                    {
+                        if (arguments.Count() == 1)
+                        {
+                            var subArgs = arguments[0].GetText().Split(' ');
+                            if (subArgs.Length == 2)
+                            {
+                                builder.Append(' ');
+                                builder.Append(subArgs[0]);
+                                builder.Append('/');
+                                builder.Append(subArgs[1]);
+
+                                return true;
+                            }
+                        }
+
+                        throw new TranspilerException(context, "Wrong number of sex arguments.");
+                    }
+                    else
+                    {
+                        var literalArgumentStripper = new LiteralArgumentTranspiler(this, builder, true);
+
+                        builder.Append(' ');
+                        literalArgumentStripper.Visit(arguments[0]);
+                        builder.Append("/");
+                        literalArgumentStripper.Visit(arguments[1]);
+                    }
+
+                    return true;
+                }
+
 
                 if (arguments != null && (context.chainedMemberAccess() != null || AlwaysChainArguments(name)))
                 {
