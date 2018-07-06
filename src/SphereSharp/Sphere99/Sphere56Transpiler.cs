@@ -958,20 +958,13 @@ namespace SphereSharp.Sphere99
             }
 
             builder.Append(context.WS());
+            builder.StartStatement();
             var result = base.VisitStatement(context);
+            builder.EndStatement();
 
             builder.Append(context.NEWLINE());
 
             return result;
-        }
-
-        public override bool VisitCall([NotNull] sphereScript99Parser.CallContext context)
-        {
-            builder.StartCall();
-            base.VisitCall(context);
-            builder.EndCall();
-
-            return true;
         }
 
         public override bool VisitAssignment([NotNull] sphereScript99Parser.AssignmentContext context)
@@ -1459,6 +1452,10 @@ namespace SphereSharp.Sphere99
                                 builder.RestrictVariables();
                                 Visit(context.chainedMemberAccess());
                                 builder.AllowVariables();
+
+                                if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
+                                    builder.CaptureLastSharpSubstitution();
+
                                 return true;
                             }
                         }

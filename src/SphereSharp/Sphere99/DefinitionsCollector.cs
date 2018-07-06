@@ -53,6 +53,14 @@ namespace SphereSharp.Sphere99
                     {
                         repository.DefineGlobalVariable(arguments[0].GetText().Trim());
                     }
+                    else if (arguments == null || arguments.Length == 0)
+                    {
+                        var chainedName = new FirstChainedMemberAccessNameVisitor().Visit(context);
+                        if (!string.IsNullOrEmpty(chainedName))
+                        {
+                            repository.DefineGlobalVariable(chainedName);
+                        }
+                    }
                 }
             }
 

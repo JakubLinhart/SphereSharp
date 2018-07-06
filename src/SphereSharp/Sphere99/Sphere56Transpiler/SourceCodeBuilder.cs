@@ -194,25 +194,25 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         public void EndSpecialFunctionArguments() => scopes.Leave();
 
 
-        private int callStartIndex = -1;
+        private int statementStartIndex = -1;
         private int lastSharpSubstitutionStartIndex = -1;
         private int lastSharpSubstitutionEndIndex = -1;
 
-        public void StartCall()
+        public void StartStatement()
         {
-            callStartIndex = builder.Length;
+            statementStartIndex = builder.Length;
         }
 
-        public void EndCall()
+        public void EndStatement()
         {
-            callStartIndex = -1;
+            statementStartIndex = -1;
         }
 
         public void CaptureLastSharpSubstitution()
         {
-            if (callStartIndex >= 0)
+            if (statementStartIndex >= 0)
             {
-                lastSharpSubstitutionStartIndex = callStartIndex;
+                lastSharpSubstitutionStartIndex = statementStartIndex;
                 lastSharpSubstitutionEndIndex = builder.Length - 1;
             }
         }

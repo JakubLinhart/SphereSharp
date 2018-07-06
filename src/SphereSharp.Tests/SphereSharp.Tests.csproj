@@ -81,6 +81,7 @@
     <Compile Include="Sphere99\Parser\TriggerTests.cs" />
     <Compile Include="Sphere99\Parser\WhileTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\CallFunctionTests.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\GlobalVariableTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SaveFileTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SavePropertiesTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\TimerTriggerTests.cs" />
