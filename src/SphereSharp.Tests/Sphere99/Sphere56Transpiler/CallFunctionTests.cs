@@ -373,10 +373,7 @@ local.v=<eval <local.u>>");
         {
             TranspileStatementCheck("arg(u,#+1)", "local.u=<local.u>+1");
             TranspileStatementCheck("tag(u,#+1)", "tag.u=<tag.u>+1");
-            TranspileStatementCheck("var(u,#+1)", "var.u=<var.u>+1");
-            TranspileStatementCheck("var(u[arg(x)],#+1)", "var.u[<eval <local.x>>]=<var.u[<eval <local.x>>]>+1");
             TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u[<eval <local.x>>]=<tag.u[<eval <local.x>>]>+1");
-            TranspileStatementCheck("var(u[1],#+1)", "var.u[1]=<var.u[1]>+1");
             TranspileStatementCheck("tag(u[2],#+1)", "tag.u[2]=<tag.u[2]>+1");
             TranspileStatementCheck("src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
             TranspileStatementCheck("  src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
@@ -576,54 +573,6 @@ tag.v=<eval <tag0.u>>");
             //TranspileStatementCheck(
             //    "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
             //    "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>");
-        }
-
-        [TestMethod]
-        public void Global_variables()
-        {
-            TranspileStatementCheck("var(name,value)", "var.name=value");
-            TranspileStatementCheck("arg(u,var(name))", "local.u=var.name");
-
-            TranspileCodeBlockCheck(@"var(u,1)
-var(v,<eval u>)",
-@"var.u=1
-var.v=<eval <var.u>>");
-
-            TranspileCodeBlockCheck(
-@"var(name_<argv(0)>,1)
-var(name_<argv(0)>,2)",
-@"var.name_<argv[0]>=1
-var.name_<argv[0]>=2");
-
-            TranspileCodeBlockCheck(
-@"var(u,1)
-fun1(u)",
-@"var.u=1
-fun1 <var.u>");
-
-            TranspileCodeBlockCheck(
-@"var(is_blunt    ,1)
-var(u,<eval(is_blunt)>)",
-@"var.is_blunt    =1
-var.u=<eval(<var.is_blunt>)>");
-        }
-
-        [TestMethod]
-        public void Global_variables_with_native_function_name_requires_explicit_access_to_be_explicitelly_prefixed()
-        {
-            TranspileFileCheck(
-@"[function fun1]
-var(p,1)
-[function fun2]
-p=1
-var(p,1)",
-
-@"[function fun1]
-var.p=1
-[function fun2]
-p=1
-var.p=1"
-);
         }
 
         [TestMethod]
