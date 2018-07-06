@@ -98,6 +98,12 @@ var(u,<eval(is_blunt)>)",
 @"var.is_blunt    =1
 var.u=<eval(<var.is_blunt>)>");
         }
+
+        [TestMethod]
+        public void Remove()
+        {
+            TranspileStatementCheck("var.remove(globalvarname)", "var.globalvarname=");
+        }
     }
 }
 
