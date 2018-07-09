@@ -40,26 +40,32 @@ namespace SphereSharp.Tests.Sphere99.Parser
         {
             ShouldSucceed("findlayer.2");
             ShouldSucceed("findlayer.2.uid");
-            ShouldSucceed("findlayer.2+2.uid");
-            ShouldSucceed("findlayer.\"some quoted literal\".uid");
             ShouldSucceed("lastnew.tag.myfood");
+        }
+
+        [TestMethod]
+        public void Can_parse_enclosed_argument_list_as_chained_call()
+        {
+            ShouldSucceed("src.findid.(i_vyrobce_svitku)");
+            ShouldSucceed("src.findid.(i_vyrobce_svitku).remove");
+            ShouldSucceed("src.findid.(i_vyrobce_svitku).somefun(1)");
         }
 
         [TestMethod]
         public void Can_parse_functions_with_parametrized_names()
         {
-            //ShouldSucceed("fun1<param1>");
-            //ShouldSucceed("fun1_<param1>");
-            //ShouldSucceed("fun1<param1>(1)");
-            //ShouldSucceed("fun1_<param1>(1)");
-            //ShouldSucceed("fun1<param1><param2>");
-            //ShouldSucceed("fun1_<param1>_<param2>");
-            //ShouldSucceed("fun1<param1><param2>(1)");
-            //ShouldSucceed("fun1_<param1>_<param2>(1)");
-            //ShouldSucceed("fun1_<param1>_<param2>(1)");
-            //ShouldSucceed("<parametrized3>n1(123)");
-            //ShouldSucceed("fu<parametrized3>(123)");
-            //ShouldSucceed("fu<parametrized<param>>(123)");
+            ShouldSucceed("fun1<param1>");
+            ShouldSucceed("fun1_<param1>");
+            ShouldSucceed("fun1<param1>(1)");
+            ShouldSucceed("fun1_<param1>(1)");
+            ShouldSucceed("fun1<param1><param2>");
+            ShouldSucceed("fun1_<param1>_<param2>");
+            ShouldSucceed("fun1<param1><param2>(1)");
+            ShouldSucceed("fun1_<param1>_<param2>(1)");
+            ShouldSucceed("fun1_<param1>_<param2>(1)");
+            ShouldSucceed("<parametrized3>n1(123)");
+            ShouldSucceed("fu<parametrized3>(123)");
+            ShouldSucceed("fu<parametrized<param>>(123)");
             ShouldSucceed("<safe <f1><arg(u)><f3>>");
         }
 

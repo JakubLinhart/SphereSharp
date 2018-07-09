@@ -302,6 +302,8 @@ enddo");
         [DataRow("go 4764,1362,10", "go 4764,1362,10")]
         [DataRow("findid(i_rune_discordance).remove", "findid.i_rune_discordance.remove")]
         [DataRow("findid(i_rune_discordance)", "findid.i_rune_discordance")]
+        [DataRow("findid.(i_rune_discordance)", "findid.i_rune_discordance")]
+        [DataRow("findid.(i_rune_discordance).remove", "findid.i_rune_discordance.remove")]
         [DataRow("isevent(e_something)", "isevent.e_something")]
         [DataRow("isevent e_something", "isevent.e_something")]
         [DataRow("isevent.e_something", "isevent.e_something")]

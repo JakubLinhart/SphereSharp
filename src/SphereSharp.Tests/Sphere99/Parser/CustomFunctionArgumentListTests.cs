@@ -103,6 +103,8 @@ namespace SphereSharp.Tests.Sphere99.Parser
             CheckStructure("x(many words separated by space,and other words as second argument)",
                 new[] { "unq: many words separated by space", "unq: and other words as second argument" });
             CheckStructure("x(?!)", "unq: ?!");
+            CheckStructure("x(<src.sex a> a b c <name>)", "unq: <src.sex a> a b c <name>");
+            CheckStructure("x(<src.sex(ab)> this cannot be an expression <src.name>)", "unq: <src.sex(ab)> this cannot be an expression <src.name>");
         }
 
         [TestMethod]

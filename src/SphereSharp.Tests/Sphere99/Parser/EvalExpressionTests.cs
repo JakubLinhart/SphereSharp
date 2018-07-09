@@ -194,40 +194,6 @@ namespace SphereSharp.Tests.Sphere99.Parser
             });
         }
 
-        private class EvalExpressionExtractor : sphereScript99BaseVisitor<bool>
-        {
-            private StringBuilder result = new StringBuilder();
-
-            public string Result => result.ToString();
-
-            public override bool VisitEvalBinaryOperator([NotNull] sphereScript99Parser.EvalBinaryOperatorContext context)
-            {
-                result.Append("operator:");
-                result.Append(context.GetText());
-                result.Append(';');
-
-                return base.VisitEvalBinaryOperator(context);
-            }
-
-            public override bool VisitConstantExpression([NotNull] sphereScript99Parser.ConstantExpressionContext context)
-            {
-                result.Append("operand:");
-                result.Append(context.GetText());
-                result.Append(';');
-
-                return base.VisitConstantExpression(context);
-            }
-
-            public override bool VisitFirstMemberAccessExpression([NotNull] sphereScript99Parser.FirstMemberAccessExpressionContext context)
-            {
-                result.Append("operand:");
-                result.Append(context.GetText());
-                result.Append(';');
-
-                return base.VisitFirstMemberAccessExpression(context);
-            }
-        }
-
         private class EvalExpressionGenerator : sphereScript99BaseVisitor<bool>
         {
             private StringBuilder result = new StringBuilder();
@@ -335,4 +301,39 @@ namespace SphereSharp.Tests.Sphere99.Parser
             }
         }
     }
+
+    internal class EvalExpressionExtractor : sphereScript99BaseVisitor<bool>
+    {
+        private StringBuilder result = new StringBuilder();
+
+        public string Result => result.ToString();
+
+        public override bool VisitEvalBinaryOperator([NotNull] sphereScript99Parser.EvalBinaryOperatorContext context)
+        {
+            result.Append("operator:");
+            result.Append(context.GetText());
+            result.Append(';');
+
+            return base.VisitEvalBinaryOperator(context);
+        }
+
+        public override bool VisitConstantExpression([NotNull] sphereScript99Parser.ConstantExpressionContext context)
+        {
+            result.Append("operand:");
+            result.Append(context.GetText());
+            result.Append(';');
+
+            return base.VisitConstantExpression(context);
+        }
+
+        public override bool VisitFirstMemberAccessExpression([NotNull] sphereScript99Parser.FirstMemberAccessExpressionContext context)
+        {
+            result.Append("operand:");
+            result.Append(context.GetText());
+            result.Append(';');
+
+            return base.VisitFirstMemberAccessExpression(context);
+        }
+    }
+
 }

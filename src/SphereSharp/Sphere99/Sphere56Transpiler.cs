@@ -96,6 +96,21 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitArgumentAccess([NotNull] sphereScript99Parser.ArgumentAccessContext context)
+        {
+            if (context.enclosedArgumentList() != null)
+            {
+                Visit(context.enclosedArgumentList().argumentList());
+
+                if (context.chainedMemberAccess() != null)
+                    Visit(context.chainedMemberAccess());
+
+                return true;
+            }
+
+            return base.VisitArgumentAccess(context);
+        }
+
         public void AppendArguments(IEnumerable<IParseTree> arguments)
         {
             if (arguments == null)

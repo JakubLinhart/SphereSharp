@@ -177,8 +177,7 @@ evalCall: EVAL_FUNCTIONS WS* numericExpression;
 genericNativeMemberAccess: actionMemberAccess | nativeMemberAccess;
 nativeMemberAccess: nativeFunctionName nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | freeArgumentList;
-argumentAccess: (evalExpression | quotedLiteralArgument | unquotedArgumentAccess) chainedMemberAccess?;
-unquotedArgumentAccess: (SYMBOL | macro | binaryOperator | constantExpression | WS | '[' | ']' | '#' | ':' | '.'|  ',' | '?' | '!' | EQUAL)+? ;
+argumentAccess: (constantExpression | quotedLiteralArgument | enclosedArgumentList) chainedMemberAccess?;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
@@ -187,7 +186,7 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
                 | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK | CHECKBOX | CROPPEDTEXT | SPEAK | SAYUA | REMOVE | QVAL | ALLCLIENTS
                 | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY | WEBLINK | EVERBTARG | GROUP | RADIO
-                | CAST;
+                | CAST | P | NAME | PRIVSHOW | SAVE | ALLSKILLS | BOUNCE | SETLOCATION | SKILLCHECK | SCROLL | SKILLMENU | NUDGEDOWN | NUDGEUP | TYPE;
 actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
 actionNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+;
@@ -309,6 +308,7 @@ DIALOG: [dD][iI][aA][lL][oO][gG];
 SOUND: [sS][oO][uU][nN][dD];
 TRY: [tT][rR][yY];
 X: [xX];
+P: [pP];
 XXC: [xX][xX][cC];
 XXI: [xX][xX][iI];
 NEWITEM: [nN][eE][wW][iI][tT][eE][mM];
@@ -375,6 +375,18 @@ EVERBTARG: [eE][vV][eE][rR][bB][tT][aA][rR][gG];
 GROUP: [gG][rR][oO][uU][pP];
 RADIO: [rR][aA][dD][iI][oO];
 CAST: [cC][aA][sS][tT];
+NAME: [nN][aA][mM][eE];
+PRIVSHOW: [pP][rR][iI][vV][sS][hH][oO][wW];
+ALLSKILLS: [aA][lL][lL][sS][kK][iI][lL][lL][sS];
+SAVE: [sS][aA][vV][eE];
+BOUNCE: [bB][oO][uU][nN][cC][eE];
+SETLOCATION: [sS][eE][tT][lL][oO][cC][aA][tT][iI][oO][nN];
+SKILLCHECK: [sS][kK][iI][lL][lL][cC][hH][eE][cC][kK];
+SCROLL: [sS][cC][rR][oO][lL][lL];
+SKILLMENU: [sS][kK][iI][lL][lL][mM][eE][nN][uU];
+NUDGEUP: [nN][uU][dD][gG][eE][uU][pP];
+NUDGEDOWN: [nN][uU][dD][gG][eE][dD][oO][wW][nN];
+TYPE: [tT][yY][pP][eE];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
@@ -408,6 +420,7 @@ LOGICAL_NOT: '!';
 SQ: '\'';
 BACKSLASH: '\\';
 SEMICOLON: ';';
+COLON: ':';
 
 fragment VALID_SYMBOL_START
    : ('a' .. 'z') | ('A' .. 'Z') | '_'

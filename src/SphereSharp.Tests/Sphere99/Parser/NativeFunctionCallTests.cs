@@ -40,7 +40,6 @@ namespace SphereSharp.Tests.Sphere99.Parser
         public void Can_parse_calls_with_chained_parameters()
         {
             CheckStructure("safe.tag.HASTEUID");
-            CheckStructure("eval.1+1", "eval: 1+1");
         }
 
         [TestMethod]
