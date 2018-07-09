@@ -177,7 +177,7 @@ evalCall: EVAL_FUNCTIONS WS* numericExpression;
 genericNativeMemberAccess: actionMemberAccess | nativeMemberAccess;
 nativeMemberAccess: nativeFunctionName nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | freeArgumentList;
-argumentAccess: (constantExpression | quotedLiteralArgument | enclosedArgumentList) chainedMemberAccess?;
+argumentAccess: (constantExpression | quotedLiteralArgument | enclosedArgumentList | indexedMemberName) chainedMemberAccess?;
 customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 

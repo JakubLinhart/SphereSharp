@@ -51,5 +51,16 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return true;
         }
+
+        public override bool VisitArgumentAccess([NotNull] sphereScript99Parser.ArgumentAccessContext context)
+        {
+            if (context.indexedMemberName() != null)
+            {
+                arguments.Add($"indexed: {context.GetText()}");
+                return true;
+            }
+
+            return base.VisitArgumentAccess(context);
+        }
     }
 }

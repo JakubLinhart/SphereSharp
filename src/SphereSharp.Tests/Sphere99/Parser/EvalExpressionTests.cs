@@ -52,6 +52,12 @@ namespace SphereSharp.Tests.Sphere99.Parser
         }
 
         [TestMethod]
+        public void Can_parse_chained_indexed_member_access()
+        {
+            StructureCheck("<tag.radek[0]>", "operand:radek[0];");
+        }
+
+        [TestMethod]
         public void Can_parse_basic_expression()
         {
             RoundtripCheck("1");
@@ -334,6 +340,14 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
             return base.VisitFirstMemberAccessExpression(context);
         }
-    }
 
+        public override bool VisitIndexedMemberName([NotNull] sphereScript99Parser.IndexedMemberNameContext context)
+        {
+            result.Append("operand:");
+            result.Append(context.GetText());
+            result.Append(';');
+
+            return true;
+        }
+    }
 }

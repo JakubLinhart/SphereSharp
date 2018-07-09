@@ -37,9 +37,10 @@ namespace SphereSharp.Tests.Sphere99.Parser
         }
 
         [TestMethod]
-        public void Can_parse_calls_with_chained_parameters()
+        public void Can_parse_calls_with_chained_argument()
         {
             CheckStructure("safe.tag.HASTEUID");
+            CheckStructure("tag.HASTEUID[0]", "indexed: HASTEUID[0]");
         }
 
         [TestMethod]
