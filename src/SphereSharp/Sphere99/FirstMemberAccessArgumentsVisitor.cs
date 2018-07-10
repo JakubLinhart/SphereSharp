@@ -23,10 +23,12 @@ namespace SphereSharp.Sphere99
             return Visit(context.firstMemberAccess());
         }
 
-        public override IParseTree[] VisitActionMemberAccess([NotNull] sphereScript99Parser.ActionMemberAccessContext context)
+        public override IParseTree[] VisitStrictNativeMemberAccess([NotNull] sphereScript99Parser.StrictNativeMemberAccessContext context)
         {
-            if (context.actionNativeArgument() != null)
-                return new[] { context.actionNativeArgument().evalExpression() };
+            if (context.strictNativeArgumentList() != null)
+                return context.strictNativeArgumentList().evalExpression();
+            else if (context.enclosedArgumentList()?.argumentList()?.argument() != null)
+                return context.enclosedArgumentList().argumentList().argument();
 
             return Array.Empty<IParseTree>();
         }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SphereSharp.Tests.Sphere99.Parser.ParserTestsHelper;
 
 namespace SphereSharp.Tests.Sphere99.Parser
 {
@@ -16,8 +17,7 @@ namespace SphereSharp.Tests.Sphere99.Parser
         [TestMethod]
         public void Can_parse_expression_with_whitespace_around_operator()
         {
-            StructureCheck("fun1 == 1", "operand:fun1;operator:==;operand:1;");
-            StructureCheck("action == 1", "operand:action;operator:==;operand:1;");
+            CheckExpressionStructure("fun1 == 1", "operand:fun1;operator:==;operand:1;");
             RoundtripCheck("1 - 1");
             RoundtripCheck("1 * 1");
             RoundtripCheck("1 == 1");
@@ -54,7 +54,7 @@ namespace SphereSharp.Tests.Sphere99.Parser
         [TestMethod]
         public void Can_parse_chained_indexed_member_access()
         {
-            StructureCheck("<tag.radek[0]>", "operand:radek[0];");
+            CheckExpressionStructure("<tag.radek[0]>", "operand:radek[0];");
         }
 
         [TestMethod]
@@ -189,17 +189,6 @@ namespace SphereSharp.Tests.Sphere99.Parser
             });
         }
 
-        private void StructureCheck(string src, string expectedResult)
-        {
-            Parse(src, parser =>
-            {
-                var expression = parser.condition();
-                var extractor = new EvalExpressionExtractor();
-                extractor.Visit(expression);
-                extractor.Result.Should().Be(expectedResult);
-            });
-        }
-
         private class EvalExpressionGenerator : sphereScript99BaseVisitor<bool>
         {
             private StringBuilder result = new StringBuilder();
@@ -305,49 +294,6 @@ namespace SphereSharp.Tests.Sphere99.Parser
 
                 return false;
             }
-        }
-    }
-
-    internal class EvalExpressionExtractor : sphereScript99BaseVisitor<bool>
-    {
-        private StringBuilder result = new StringBuilder();
-
-        public string Result => result.ToString();
-
-        public override bool VisitEvalBinaryOperator([NotNull] sphereScript99Parser.EvalBinaryOperatorContext context)
-        {
-            result.Append("operator:");
-            result.Append(context.GetText());
-            result.Append(';');
-
-            return base.VisitEvalBinaryOperator(context);
-        }
-
-        public override bool VisitConstantExpression([NotNull] sphereScript99Parser.ConstantExpressionContext context)
-        {
-            result.Append("operand:");
-            result.Append(context.GetText());
-            result.Append(';');
-
-            return base.VisitConstantExpression(context);
-        }
-
-        public override bool VisitFirstMemberAccessExpression([NotNull] sphereScript99Parser.FirstMemberAccessExpressionContext context)
-        {
-            result.Append("operand:");
-            result.Append(context.GetText());
-            result.Append(';');
-
-            return base.VisitFirstMemberAccessExpression(context);
-        }
-
-        public override bool VisitIndexedMemberName([NotNull] sphereScript99Parser.IndexedMemberNameContext context)
-        {
-            result.Append("operand:");
-            result.Append(context.GetText());
-            result.Append(';');
-
-            return true;
         }
     }
 }

@@ -35,9 +35,9 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitActionMemberAccess([NotNull] sphereScript99Parser.ActionMemberAccessContext context)
+        public override bool VisitStrictNativeMemberAccess([NotNull] sphereScript99Parser.StrictNativeMemberAccessContext context)
         {
-            builder.Append(context.ACTION().GetText());
+            builder.Append(context.strictNativeFunctionName().GetText());
 
             return true;
         }

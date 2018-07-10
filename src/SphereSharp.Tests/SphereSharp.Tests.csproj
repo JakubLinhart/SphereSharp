@@ -72,6 +72,8 @@
     <Compile Include="Sphere99\Parser\FunctionSectionTests.cs" />
     <Compile Include="Sphere99\Parser\IfTests.cs" />
     <Compile Include="Sphere99\Parser\NativeFunctionCallTests.cs" />
+    <Compile Include="Sphere99\Parser\StrictNatvieFunctionParsingTests.cs" />
+    <Compile Include="Sphere99\Parser\ParserTestsHelper.cs" />
     <Compile Include="Sphere99\Parser\PropertyAndTriggerExtractor.cs" />
     <Compile Include="Sphere99\Parser\PropertyListTests.cs" />
     <Compile Include="Sphere99\Parser\SaveFileSectionTests.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Sphere99\Parser\WhileTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\CallFunctionTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\GlobalVariableTests.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\StrictNativeFunctionTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SaveFileTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SavePropertiesTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SexTests.cs" />

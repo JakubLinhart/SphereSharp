@@ -53,9 +53,10 @@ namespace SphereSharp.Sphere99
             return context.EVAL_FUNCTIONS().GetText();
         }
 
-        public override string VisitActionMemberAccess([NotNull] sphereScript99Parser.ActionMemberAccessContext context)
+
+        public override string VisitStrictNativeMemberAccess([NotNull] sphereScript99Parser.StrictNativeMemberAccessContext context)
         {
-            return context.ACTION().GetText();
+            return context.strictNativeFunctionName().GetText();
         }
     }
 }

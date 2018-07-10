@@ -174,7 +174,7 @@ assign: WS* ASSIGN WS*;
 memberAccess: firstMemberAccess | argumentAccess;
 firstMemberAccess: evalCall | genericNativeMemberAccess | customMemberAccess;
 evalCall: EVAL_FUNCTIONS WS* numericExpression; 
-genericNativeMemberAccess: actionMemberAccess | nativeMemberAccess;
+genericNativeMemberAccess: strictNativeMemberAccess | nativeMemberAccess;
 nativeMemberAccess: nativeFunctionName nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | freeArgumentList;
 argumentAccess: (constantExpression | quotedLiteralArgument | enclosedArgumentList | indexedMemberName) chainedMemberAccess?;
@@ -183,12 +183,13 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESCOUNT | RESTEST | SMSG | FIX | INPDLG | SAFE
+                | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESTEST | SMSG | FIX | INPDLG | SAFE
                 | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK | CHECKBOX | CROPPEDTEXT | SPEAK | SAYUA | REMOVE | QVAL | ALLCLIENTS
                 | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY | WEBLINK | EVERBTARG | GROUP | RADIO
-                | CAST | P | NAME | PRIVSHOW | SAVE | ALLSKILLS | BOUNCE | SETLOCATION | SKILLCHECK | SCROLL | SKILLMENU | NUDGEDOWN | NUDGEUP | TYPE;
-actionMemberAccess: ACTION (enclosedArgumentList | actionNativeArgument)?;
-actionNativeArgument: WS+ evalExpression;
+                | CAST | NAME | PRIVSHOW | SAVE | ALLSKILLS | BOUNCE | SETLOCATION | SKILLCHECK | SCROLL | SKILLMENU | NUDGEDOWN | NUDGEUP;
+strictNativeMemberAccess: strictNativeFunctionName (enclosedArgumentList | strictNativeArgumentList)?;
+strictNativeFunctionName: ACTION | TYPE | P | RESCOUNT;
+strictNativeArgumentList: (WS+ evalExpression)+;
 memberName: (SYMBOL | macro | TAG | REGION)+;
 indexedMemberName: memberName '[' numericExpression ']';
 
@@ -197,9 +198,9 @@ propertyList: NEWLINE? propertyAssignment+;
 propertyAssignment: LEADING_WS=WS* propertyName propertyAssignmentOperator? propertyValue? (NEWLINE | EOF);
 propertyAssignmentOperator: ((WS* ASSIGN WS*) | WS+);
 propertyName: propertyNameText propertyNameIndex?;
-propertyNameText: (propertyTagName | propertyRegionName | nativeFunctionName | SYMBOL | ACTION);
-propertyTagName: TAG '.' (nativeFunctionName | SYMBOL | ACTION);
-propertyRegionName: REGION '.' (nativeFunctionName | SYMBOL | ACTION);
+propertyNameText: (propertyTagName | propertyRegionName | nativeFunctionName | SYMBOL | strictNativeFunctionName);
+propertyTagName: TAG '.' (nativeFunctionName | SYMBOL | strictNativeFunctionName);
+propertyRegionName: REGION '.' (nativeFunctionName | SYMBOL | strictNativeFunctionName);
 propertyNameIndex: ('[' number ']');
 propertyValue: ~(NEWLINE)+?;
 
