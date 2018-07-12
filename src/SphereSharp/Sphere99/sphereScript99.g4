@@ -212,7 +212,9 @@ triggerName: nativeFunctionName | SYMBOL;
 triggerBody: codeBlock;
 
 // argument, argument expression
-enclosedArgumentList: LPAREN argumentList? RPAREN;
+enclosedArgumentList: LPAREN enclosedArgumentListInner? RPAREN;
+enclosedArgumentListInner: enclosedArgument (',' WS* enclosedArgument)*;
+enclosedArgument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentArgument | enclosedLiteralArgument | emptyArgument;
 freeArgumentList: firstFreeArgument (',' argument)*;
 firstFreeArgument: firstFreeArgumentOptionalWhiteSpace | firstFreeArgumentMandatoryWhiteSpace;
 firstFreeArgumentOptionalWhiteSpace: WS* (triggerArgument | evalExpression | quotedLiteralArgument);
@@ -225,7 +227,11 @@ assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
 innerQuotedLiteralArgument: (quotedTextLiteralSegment | macroLiteralSegment | lessThanSegment)*;
 lessThanSegment: LESS_THAN;
-quotedTextLiteralSegment: ~('"' | NEWLINE | LESS_THAN)+; 
+quotedTextLiteralSegment: ~('"' | NEWLINE | LESS_THAN)+;
+
+enclosedLiteralArgument: (enclosetTextLiteralSegment | macroLiteralSegment)+;
+enclosetTextLiteralSegment: ~(',' | NEWLINE | LESS_THAN | ')')+; 
+
 unquotedLiteralArgument: (textLiteralSegment | macroLiteralSegment)+;
 textLiteralSegment: ~(',' | NEWLINE | LESS_THAN)+;
 macroLiteralSegment: macro;

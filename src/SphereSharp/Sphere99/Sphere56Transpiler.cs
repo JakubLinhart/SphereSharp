@@ -96,11 +96,18 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitEnclosedArgumentListInner([NotNull] sphereScript99Parser.EnclosedArgumentListInnerContext context)
+        {
+            AppendArguments(context.enclosedArgument());
+
+            return true;
+        }
+
         public override bool VisitArgumentAccess([NotNull] sphereScript99Parser.ArgumentAccessContext context)
         {
-            if (context.enclosedArgumentList() != null)
+            if (context.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument() != null)
             {
-                Visit(context.enclosedArgumentList().argumentList());
+                Visit(context.enclosedArgumentList().enclosedArgumentListInner());
 
                 if (context.chainedMemberAccess() != null)
                     Visit(context.chainedMemberAccess());
@@ -133,6 +140,11 @@ namespace SphereSharp.Sphere99
         public override bool VisitArgument([NotNull] sphereScript99Parser.ArgumentContext context)
         {
             return semanticContext.Execute(() => base.VisitArgument(context));
+        }
+
+        public override bool VisitEnclosedArgument([NotNull] sphereScript99Parser.EnclosedArgumentContext context)
+        {
+            return semanticContext.Execute(() => base.VisitEnclosedArgument(context));
         }
 
         public override bool VisitFirstFreeArgumentMandatoryWhiteSpace([NotNull] sphereScript99Parser.FirstFreeArgumentMandatoryWhiteSpaceContext context)
@@ -1176,6 +1188,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitEnclosedLiteralArgument([NotNull] sphereScript99Parser.EnclosedLiteralArgumentContext context)
+        {
+            new LiteralArgumentTranspiler(this, builder).Visit(context);
+
+            return true;
+        }
+
         public override bool VisitNumericExpression([NotNull] sphereScript99Parser.NumericExpressionContext context)
         {
             try
@@ -1404,7 +1423,7 @@ namespace SphereSharp.Sphere99
             var name = context.memberName()?.GetText();
             if (!string.IsNullOrEmpty(name))
             {
-                var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
+                var arguments = context.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument();
                 if (name.Equals("tag", StringComparison.OrdinalIgnoreCase) || name.Equals("var", StringComparison.OrdinalIgnoreCase))
                 {
                     bool requiresUid = context.chainedMemberAccess() != null && arguments != null;
@@ -1652,7 +1671,7 @@ namespace SphereSharp.Sphere99
 
                 if (!string.IsNullOrEmpty(name))
                 {
-                    var arguments = context.customMemberAccess()?.enclosedArgumentList()?.argumentList()?.argument();
+                    var arguments = context.customMemberAccess()?.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument();
 
                     if (name.Equals("arg", StringComparison.OrdinalIgnoreCase))
                     {
@@ -1681,12 +1700,12 @@ namespace SphereSharp.Sphere99
                                 builder.Append('=');
 
                                 semanticContext.DefineLocalVariable(localVariableName);
-                                VisitArgument(arguments[1]);
+                                VisitEnclosedArgument(arguments[1]);
 
                                 foreach (var argument in arguments.Skip(2))
                                 {
                                     builder.Append(',');
-                                    VisitArgument(argument);
+                                    VisitEnclosedArgument(argument);
                                 }
 
                                 return true;

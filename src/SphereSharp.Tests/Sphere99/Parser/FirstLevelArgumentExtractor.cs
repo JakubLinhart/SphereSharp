@@ -24,6 +24,13 @@ namespace SphereSharp.Tests.Sphere99.Parser
             return true;
         }
 
+        public override bool VisitEnclosedLiteralArgument([NotNull] sphereScript99Parser.EnclosedLiteralArgumentContext context)
+        {
+            arguments.Add($"unq: {context.GetText()}");
+
+            return true;
+        }
+
         public override bool VisitEvalExpression([NotNull] sphereScript99Parser.EvalExpressionContext context)
         {
             arguments.Add($"eval: {context.GetText()}");

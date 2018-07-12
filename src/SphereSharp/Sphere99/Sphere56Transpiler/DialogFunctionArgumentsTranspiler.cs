@@ -48,6 +48,21 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             return parentTranspiler.Visit(context);
         }
 
+        public override bool VisitEnclosedLiteralArgument([NotNull] sphereScript99Parser.EnclosedLiteralArgumentContext context)
+        {
+            return parentTranspiler.Visit(context);
+        }
+
+        public override bool VisitEnclosedArgument([NotNull] sphereScript99Parser.EnclosedArgumentContext context)
+        {
+            if (context.quotedLiteralArgument() != null)
+            {
+                return new LiteralArgumentTranspiler(parentTranspiler, builder, true).Visit(context);
+            }
+
+            return parentTranspiler.Visit(context);
+        }
+
         public override bool VisitArgument([NotNull] sphereScript99Parser.ArgumentContext context)
         {
             if (context.quotedLiteralArgument() != null)

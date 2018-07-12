@@ -27,8 +27,8 @@ namespace SphereSharp.Sphere99
         {
             if (context.strictNativeArgumentList() != null)
                 return context.strictNativeArgumentList().evalExpression();
-            else if (context.enclosedArgumentList()?.argumentList()?.argument() != null)
-                return context.enclosedArgumentList().argumentList().argument();
+            else if (context.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument() != null)
+                return context.enclosedArgumentList().enclosedArgumentListInner().enclosedArgument();
 
             return Array.Empty<IParseTree>();
         }
@@ -40,7 +40,7 @@ namespace SphereSharp.Sphere99
             if (!CanVisitCustomMemberAccess(context))
                 return base.VisitCustomMemberAccess(context);
 
-            var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
+            var arguments = context.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument();
             if (arguments != null && arguments.Length > 0)
                 return arguments;
             else
@@ -54,8 +54,8 @@ namespace SphereSharp.Sphere99
             if (!CanVisitNatvieMemberAccess(context))
                 return base.VisitNativeMemberAccess(context);
 
-            if (context.nativeArgumentList()?.enclosedArgumentList()?.argumentList()?.argument() != null)
-                return context.nativeArgumentList().enclosedArgumentList().argumentList().argument().Select(x => x.children[0]).ToArray();
+            if (context.nativeArgumentList()?.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument() != null)
+                return context.nativeArgumentList().enclosedArgumentList().enclosedArgumentListInner().enclosedArgument().Select(x => x.children[0]).ToArray();
 
             var freeArgumentList = context.nativeArgumentList()?.freeArgumentList();
             if (freeArgumentList != null)

@@ -57,7 +57,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
         public override bool VisitEnclosedArgumentList([NotNull] sphereScript99Parser.EnclosedArgumentListContext context)
         {
-            var arguments = context.argumentList().argument();
+            var arguments = context.enclosedArgumentListInner().enclosedArgument();
             if (arguments == null || arguments.Length != 1)
                 throw new TranspilerException(context, "wrong number of arguments for safe method");
 

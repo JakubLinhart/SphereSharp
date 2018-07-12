@@ -48,7 +48,7 @@ namespace SphereSharp.Sphere99
             {
                 if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
                 {
-                    var arguments = context.enclosedArgumentList()?.argumentList()?.argument();
+                    var arguments = context.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument();
                     if (arguments != null && arguments.Length > 1)
                     {
                         repository.DefineGlobalVariable(arguments[0].GetText().Trim());
