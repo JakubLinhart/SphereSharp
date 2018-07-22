@@ -65,5 +65,23 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
 
             return true;
         }
+
+        public override bool VisitStrictNativeArgumentList([NotNull] sphereScript99Parser.StrictNativeArgumentListContext context)
+        {
+            var arguments = context.strictNativeArgument();
+            if (arguments != null && arguments.Length > 0)
+            {
+                transpiler.Visit(arguments[0]);
+
+                foreach (var argument in arguments.Skip(1))
+                {
+                    builder.Append(argument.WS());
+
+                    transpiler.Visit(argument.evalExpression());
+                }
+            }
+
+            return true;
+        }
     }
 }

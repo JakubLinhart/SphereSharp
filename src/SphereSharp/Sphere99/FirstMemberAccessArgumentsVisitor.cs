@@ -26,7 +26,7 @@ namespace SphereSharp.Sphere99
         public override IParseTree[] VisitStrictNativeMemberAccess([NotNull] sphereScript99Parser.StrictNativeMemberAccessContext context)
         {
             if (context.strictNativeArgumentList() != null)
-                return context.strictNativeArgumentList().evalExpression();
+                return context.strictNativeArgumentList().strictNativeArgument().Select(x => x.evalExpression()).ToArray();
             else if (context.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument() != null)
                 return context.enclosedArgumentList().enclosedArgumentListInner().enclosedArgument();
 

@@ -127,20 +127,6 @@ fun2 this is just sometext nothing more! no sometext variable replacement!");
         }
 
         [TestMethod]
-        public void Safe()
-        {
-            TranspileStatementCheck("safe(findid.i_something.remove)", "findid.i_something.remove");
-            TranspileStatementCheck("safe findid.i_something.remove", "findid.i_something.remove");
-            TranspileStatementCheck("safe(cast 020)", "cast 020");
-            TranspileStatementCheck("safe(events=+e_something)", "events=+e_something");
-            TranspileConditionCheck("safe fun1(<argv(0)>).isChar", "<fun1.<argv[0]>.isChar>");
-            TranspileConditionCheck("safe(fun1(<argv(0)>).isChar)", "<fun1.<argv[0]>.isChar>");
-            TranspileConditionCheck("safe.tag(orig_stealth)", "<tag0.orig_stealth>");
-            TranspileConditionCheck("<safe.tag(orig_stealth)>", "<tag0.orig_stealth>");
-            TranspileConditionCheck("safe(<eval (<args>)>)", "<eval (<args>)>");
-        }
-
-        [TestMethod]
         public void While_statement()
         {
             TranspileStatementCheck(@"while 1

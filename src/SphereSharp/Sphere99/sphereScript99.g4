@@ -183,13 +183,14 @@ chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
                 | MENU | GO | INVIS | SHOW | DAMAGE | ECHO | XXC | XXI | MOVE | RESIZEPIC | GUMPPIC | TILEPIC | HTMLGUMP | PAGE | TEXTENTRY | TEXT | BUTTON
-                | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESTEST | SMSG | FIX | INPDLG | SAFE
+                | TARGET | TARGETG | SKILL | SFX | ATTR | NUKE | NUKECHAR | COLOR | ANIM | SAY | SAYU | RESTEST | SMSG | FIX | INPDLG
                 | ISEVENT | SPELLEFFECT | ADDSPELL | NEWNPC | EMOTE | SEX | BANK | CHECKBOX | CROPPEDTEXT | SPEAK | SAYUA | REMOVE | QVAL | ALLCLIENTS
                 | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY | WEBLINK | EVERBTARG | GROUP | RADIO
                 | CAST | NAME | PRIVSHOW | SAVE | ALLSKILLS | BOUNCE | SETLOCATION | SKILLCHECK | SCROLL | SKILLMENU | NUDGEDOWN | NUDGEUP;
-strictNativeMemberAccess: strictNativeFunctionName (enclosedArgumentList | strictNativeArgumentList)?;
-strictNativeFunctionName: ACTION | TYPE | P | RESCOUNT;
-strictNativeArgumentList: (WS+ evalExpression)+;
+strictNativeMemberAccess: strictNativeFunctionName (enclosedArgumentList | strictNativeArgumentList | chainedMemberAccess)?;
+strictNativeFunctionName: ACTION | TYPE | P | RESCOUNT | SAFE;
+strictNativeArgumentList: strictNativeArgument+;
+strictNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+;
 indexedMemberName: memberName '[' numericExpression ']';
 
