@@ -41,16 +41,25 @@ namespace SphereSharp.Sphere99
         public override bool VisitMemberName([NotNull] sphereScript99Parser.MemberNameContext context)
         {
             AppendTerminalsVisitNodes(context.children);
+            return true;
+        }
 
+        public override bool VisitNativeFunctionName([NotNull] sphereScript99Parser.NativeFunctionNameContext context)
+        {
+            AppendTerminalsVisitNodes(context.children);
+            return true;
+        }
+
+        public override bool VisitStrictNativeFunctionName([NotNull] sphereScript99Parser.StrictNativeFunctionNameContext context)
+        {
+            AppendTerminalsVisitNodes(context.children);
             return true;
         }
 
         public override bool VisitIndexedMemberName([NotNull] sphereScript99Parser.IndexedMemberNameContext context)
         {
-            string memberName = context.memberName().GetText();
-
             builder.StartMemberAccess();
-            Visit(context.memberName());
+            Visit(context.indexedMemberNameCore());
             builder.Append('[');
             var indexMemberName = new FirstMemberAccessNameVisitor().Visit(context.numericExpression());
             if (indexMemberName == null || indexMemberName.Equals("eval", StringComparison.OrdinalIgnoreCase))

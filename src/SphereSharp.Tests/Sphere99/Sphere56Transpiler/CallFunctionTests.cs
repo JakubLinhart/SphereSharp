@@ -557,6 +557,9 @@ tag(v,<eval tag.u>)",
 tag.v=<eval <tag0.u>>");
 
             TranspileStatementCheck("tag(spawn_<eval arg(i)>)", "tag.spawn_<eval <local.i>>");
+            TranspileStatementCheck("tag(u[0],1)", "tag.u[0]=1");
+            TranspileStatementCheck("tag(u[arg(x)],1)", "tag.u[<eval <local.x>>]=1");
+            TranspileStatementCheck("tag(scroll[arg(x)],1)", "tag.scroll[<eval <local.x>>]=1");
         }
 
         [TestMethod]
