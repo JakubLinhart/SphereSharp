@@ -556,10 +556,7 @@ tag(v,<eval tag.u>)",
 @"tag.u=1
 tag.v=<eval <tag0.u>>");
 
-            // TODO:
-            //TranspileStatementCheck(
-            //    "act.damagecust(<arg(celk_dam)>,<hval tag(weapflag)<tag(mi_weapflags)>>,<eval tag(piercing)+typedef.tag(piercing)>)",
-            //    "act.damagecust <local.celk_dam>,<hval <tag.weapflag><tag.mi_weapflags>>,<eval <tag0.piercing>+<typedef.tag0.piercing>>");
+            TranspileStatementCheck("tag(spawn_<eval arg(i)>)", "tag.spawn_<eval <local.i>>");
         }
 
         [TestMethod]

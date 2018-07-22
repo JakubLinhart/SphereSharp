@@ -1473,7 +1473,9 @@ namespace SphereSharp.Sphere99
                         }
                         else if (arguments.Length == 1)
                         {
-                            builder.Append(arguments[0].GetText());
+                            builder.RestrictVariables();
+                            Visit(arguments[0]);
+                            builder.AllowVariables();
 
                             if (context.chainedMemberAccess() != null)
                             {
