@@ -188,7 +188,7 @@ nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | A
                 | GOITEMID | MESSAGE | NOMOVE | NOCLOSE | EFFECT | GUMPPICTILED | CHECKERTRANS | INVUL | POLY | WEBLINK | EVERBTARG | GROUP | RADIO
                 | CAST | NAME | PRIVSHOW | SAVE | ALLSKILLS | BOUNCE | SETLOCATION | SKILLCHECK | SCROLL | SKILLMENU | NUDGEDOWN | NUDGEUP;
 strictNativeMemberAccess: strictNativeFunctionName (enclosedArgumentList | strictNativeArgumentList | chainedMemberAccess)?;
-strictNativeFunctionName: ACTION | TYPE | P | RESCOUNT | SAFE;
+strictNativeFunctionName: ACTION | TYPE | P | RESCOUNT | SAFE | HOME;
 strictNativeArgumentList: strictNativeArgument+;
 strictNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+;
@@ -395,6 +395,7 @@ SKILLMENU: [sS][kK][iI][lL][lL][mM][eE][nN][uU];
 NUDGEUP: [nN][uU][dD][gG][eE][uU][pP];
 NUDGEDOWN: [nN][uU][dD][gG][eE][dD][oO][wW][nN];
 TYPE: [tT][yY][pP][eE];
+HOME: [hH][oO][mM][eE];
 
 EVAL_FUNCTIONS: EVAL | HVAL;
 EVAL: [eE][vV][aA][lL];
