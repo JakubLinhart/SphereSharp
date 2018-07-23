@@ -20,6 +20,7 @@ namespace SphereSharp.Tests.Sphere99.Parser
             CheckStructure("x(123,321)", new[] { "eval: 123", "eval: 321" });
             CheckStructure("x(123,321,987)", new[] { "eval: 123", "eval: 321", "eval: 987" });
             CheckStructure("x(123, 321, 987)", new[] { "eval: 123", "eval: 321", "eval: 987" });
+            CheckStructure("x(123 ,321 ,987)", new[] { "eval: 123", "eval: 321", "eval: 987" });
             CheckStructure("x(1,)", "eval: 1", "empty");
 
             CheckStructure("x(1+1)", "eval: 1+1");

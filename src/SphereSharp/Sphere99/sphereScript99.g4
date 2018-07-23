@@ -215,7 +215,7 @@ triggerBody: codeBlock;
 
 // argument, argument expression
 enclosedArgumentList: LPAREN enclosedArgumentListInner? RPAREN;
-enclosedArgumentListInner: enclosedArgument (',' WS* enclosedArgument)*;
+enclosedArgumentListInner: enclosedArgument (WS* ',' WS* enclosedArgument)*;
 enclosedArgument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentArgument | enclosedLiteralArgument | emptyArgument;
 freeArgumentList: firstFreeArgument (',' argument)*;
 firstFreeArgument: firstFreeArgumentOptionalWhiteSpace | firstFreeArgumentMandatoryWhiteSpace;

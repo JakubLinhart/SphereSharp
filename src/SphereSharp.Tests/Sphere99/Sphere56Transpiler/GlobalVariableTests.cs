@@ -95,7 +95,7 @@ var.name_<argv[0]>=2");
             TranspileCodeBlockCheck(
 @"var(is_blunt    ,1)
 var(u,<eval(is_blunt)>)",
-@"var.is_blunt    =1
+@"var.is_blunt=1
 var.u=<eval(<var.is_blunt>)>");
         }
 
