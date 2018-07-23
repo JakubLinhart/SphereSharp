@@ -1,6 +1,6 @@
 ﻿grammar sphereScript99;
 
-file: NEWLINE? section+ (eofSection | EOF);
+file: NEWLINE? section* (eofSection | EOF);
 saveFile: NEWLINE? propertyList? saveFileSection+ (eofSection | EOF);
 
 section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection

@@ -137,6 +137,35 @@ x=<y>
             RoundtripCheck(File.ReadAllText(@"Sphere99\Parser\example_test_file.scp"));
         }
 
+        [TestMethod]
+        public void Can_parse_empty_file()
+        {
+            CheckStructure("", "");
+        }
+
+        [TestMethod]
+        public void Can_parse_file_with_EOF_only()
+        {
+            CheckStructure("eof;", "[EOF]");
+        }
+
+        [TestMethod]
+        public void Can_parse_file_with_EOF_and_leading_whitespace()
+        {
+            CheckStructure("eof;",
+@"
+[EOF]");
+        }
+
+        [TestMethod]
+        public void Can_parse_file_with_EOF_and_trailing_whitespace()
+        {
+            CheckStructure("eof;",
+@"[EOF]
+    
+");
+        }
+
         private void ShouldSucceed(string src) => Parse(src, parser =>
         {
             var x = parser.file();
