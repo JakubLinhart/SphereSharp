@@ -60,27 +60,6 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
-        public void UnquotedArguments()
-        {
-            TranspileStatementCheck("sysmessage Some text <fun1>", "sysmessage Some text <fun1>");
-            TranspileStatementCheck("sysmessage Some text <fun1(1,2,3)>", "sysmessage Some text <fun1 1,2,3>");
-            TranspileStatementCheck("sysmessage Some text <?fun1(1,2,3)?>", "sysmessage Some text <fun1 1,2,3>");
-            TranspileStatementCheck("sysmessage Some text <arg(x)>", "sysmessage Some text <local.x>");
-            TranspileStatementCheck("arg(x,Some text <arg(x)>)", "local.x=Some text <local.x>");
-            TranspileStatementCheck("arg(x,Some text <?arg(x)?>)", "local.x=Some text <local.x>");
-            TranspileStatementCheck(
-                "serv.allclients(sendpacket(0c0 <hval(<argv(0)>)> <split4bytes(<xxx>)> <split2bytes(<nid(<argv(1)>)>)>))",
-                "serv.allclients sendpacket 0c0 <hval(<argv[0]>)> <split4bytes <xxx>> <split2bytes <nid <argv[1]>>>");
-
-            TranspileFileCheck(@"[function fun1]
-arg(sometext,1)
-fun2(this is just sometext nothing more! no sometext variable replacement!)",
-@"[function fun1]
-local.sometext=1
-fun2 this is just sometext nothing more! no sometext variable replacement!");
-        }
-
-        [TestMethod]
         [DataRow("lastnew.bounce", "new.bounce")]
         [DataRow("equip <lastnew>", "equip <new>")]
         [DataRow("equip lastnew", "equip <new>")]

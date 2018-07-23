@@ -93,6 +93,7 @@
     <Compile Include="Sphere99\Sphere56Transpiler\SexTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\TimerTriggerTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\TranspilerTestsHelper.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\UnquotedArgumentsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
