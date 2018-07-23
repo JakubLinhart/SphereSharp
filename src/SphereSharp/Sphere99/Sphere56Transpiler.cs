@@ -418,6 +418,13 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
+        public override bool VisitBookSectionHeader([NotNull] sphereScript99Parser.BookSectionHeaderContext context)
+        {
+            builder.Append(context.GetText());
+
+            return true;
+        }
+
         public override bool VisitPlevelSectionHeader([NotNull] sphereScript99Parser.PlevelSectionHeaderContext context)
         {
             builder.Append(context.GetText());

@@ -74,11 +74,13 @@ dialogButtonTriggerHeader: WS* HEADER=(TRIGGER_HEADER | BUTTON_TRIGGER_HEADER) d
 dialogButtonTriggerName: number | ANY_BUTTON;
 
 bookPageSection: bookPageSectionHeader pageLine*?;
-bookPageSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL WS+ pageNumber=DEC_NUMBER ']' NEWLINE;
+bookPageSectionHeader: BOOK_SECTION_HEADER_START bookSectionName WS+ pageNumber=DEC_NUMBER ']' NEWLINE;
 pageLine: freeTextLine;
 
-bookSection: bookSectionHeader propertyList;
-bookSectionHeader: BOOK_SECTION_HEADER_START bookName=SYMBOL ']' NEWLINE;
+bookSection: bookSectionHeader bookContent?;
+bookContent: propertyList | freeTextLine+;
+bookSectionHeader: BOOK_SECTION_HEADER_START bookSectionName ']' NEWLINE;
+bookSectionName: SYMBOL | number;
 
 speechSection: speechSectionHeader speechTriggerList?;
 speechSectionHeader: SPEECH_SECTION_HEADER_START speechName=SYMBOL ']' NEWLINE;

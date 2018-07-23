@@ -116,6 +116,35 @@ call1
         }
 
         [TestMethod]
+        public void Can_parse_empty_book_section()
+        {
+            CheckStructure("book emptyBook;",
+@"[book emptyBook]
+// just a comment and empty line
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_book_with_numeric_name()
+        {
+            CheckStructure("book 10;",
+@"[book 10]
+PAGES=10
+");
+        }
+
+        [TestMethod]
+        public void Can_parse_book_with_free_text_lines()
+        {
+            CheckStructure("book b_VoiceReason;",
+@"[BOOK b_VoiceReason]
+//Selected from Ayn Rand's The Voice of Reason
+If the good, the virtuous,
+the morally ideal is suffering
+");
+        }
+
+        [TestMethod]
         public void Can_handle_weird_problem_with_greedy_macro_grammer()
         {
             // the issue showed up only when both showbowtype_<src.tag(clienttype)> and [eof] were present
@@ -232,7 +261,14 @@ x=<y>
 
             public override bool VisitBookPageSection([NotNull] sphereScript99Parser.BookPageSectionContext context)
             {
-                output.Append($"bookPage {context.bookPageSectionHeader().bookName.Text} {context.bookPageSectionHeader().pageNumber.Text};");
+                output.Append($"bookPage {context.bookPageSectionHeader().bookSectionName().GetText()} {context.bookPageSectionHeader().pageNumber.Text};");
+
+                return true;
+            }
+
+            public override bool VisitBookSection([NotNull] sphereScript99Parser.BookSectionContext context)
+            {
+                output.Append($"book {context.bookSectionHeader().bookSectionName().GetText()};");
 
                 return true;
             }
