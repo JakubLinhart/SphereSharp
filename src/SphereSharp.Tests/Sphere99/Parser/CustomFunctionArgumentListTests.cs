@@ -106,6 +106,12 @@ namespace SphereSharp.Tests.Sphere99.Parser
             CheckStructure("x(?!)", "unq: ?!");
             CheckStructure("x(<src.sex a> a b c <name>)", "unq: <src.sex a> a b c <name>");
             CheckStructure("x(<src.sex(ab)> this cannot be an expression <src.name>)", "unq: <src.sex(ab)> this cannot be an expression <src.name>");
+            CheckStructure("sysmessage Some text <?fun1?>some text with <BASEFONT SIZE=\"+5\" COLOR=\"#000080\">html</BASEFONT> tags",
+                "unq: Some text <?fun1?>some text with <BASEFONT SIZE=\"+5\" COLOR=\"#000080\">html</BASEFONT> tags");
+            CheckStructure("sysmessage(Some text <?fun1?>some text with <BASEFONT SIZE=\"+5\" COLOR=\"#000080\">html</BASEFONT> tags)",
+                "unq: Some text <?fun1?>some text with <BASEFONT SIZE=\"+5\" COLOR=\"#000080\">html</BASEFONT> tags");
+            CheckStructure("sysmessage(<basefont color=#ffff88> sipe <basefont color=#ffffff>)",
+                "unq: <basefont color=#ffff88> sipe <basefont color=#ffffff>");
         }
 
         [TestMethod]
@@ -124,6 +130,11 @@ namespace SphereSharp.Tests.Sphere99.Parser
             CheckStructure("x(\"\")", "quoted: ");
             CheckStructure("x(\"Natocil <?arg(u)?> <?<findres(itemdef,<tag(id)>)>.name?> z uid=<?uid?>  (<?amount?> <?name?>) umisten <?p?> (<?region.name?>)\")", "quoted: Natocil <?arg(u)?> <?<findres(itemdef,<tag(id)>)>.name?> z uid=<?uid?>  (<?amount?> <?name?>) umisten <?p?> (<?region.name?>)");
             CheckStructure("x(\"<fun1(\"something\")>\")", "quoted: <fun1(\"something\")>");
+            CheckStructure("x(\"Some text <?fun1?>some text with <BASEFONT SIZE=\"+5\" COLOR=\"#000080\">html</BASEFONT> tags\")",
+                "quoted: Some text <?fun1?>some text with <BASEFONT SIZE=\"+5\" COLOR=\"#000080\">html</BASEFONT> tags");
+            CheckStructure("x(\"<basefont color=#ffff88>* sipe *<basefont color=#ffffff>\")",
+                "quoted: <basefont color=#ffff88>* sipe *<basefont color=#ffffff>");
+
         }
 
         [TestMethod]

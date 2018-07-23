@@ -166,7 +166,7 @@ dorandStatement: DORAND CONDITION_WS=WS* condition NEWLINE codeBlock ENDDO_WS=WS
 condition: numericExpression;
 numericExpression: evalExpression;
 macro: escapedMacro | nonEscapedMacro;
-escapedMacro: LESS_THAN '?' LEFT_WS=WS* macroBody RIGHT_WS=WS* '?' MORE_THAN ;
+escapedMacro: ESCAPED_MACRO_START LEFT_WS=WS* macroBody RIGHT_WS=WS* ESCAPED_MACRO_END;
 nonEscapedMacro: LESS_THAN macroBody  MORE_THAN ;
 macroBody: (firstMemberAccess | indexedMemberName);
 call: firstMemberAccess;
@@ -229,15 +229,20 @@ emptyArgument: ;
 triggerArgument: '@' SYMBOL;
 assignmentArgument: assignment;
 quotedLiteralArgument: '"' innerQuotedLiteralArgument '"';
-innerQuotedLiteralArgument: (quotedTextLiteralSegment | macroLiteralSegment | lessThanSegment)*;
+innerQuotedLiteralArgument: (quotedTextLiteralSegment | macroLiteralSegment | htmlElementEndSegment | htmlElementSegment | lessThanSegment)*;
 lessThanSegment: LESS_THAN;
-quotedTextLiteralSegment: ~('"' | NEWLINE | LESS_THAN)+;
+quotedTextLiteralSegment: ~('"' | NEWLINE | LESS_THAN | ESCAPED_MACRO_START | HTML_ELEMENT_END_PREFIX)+;
 
-enclosedLiteralArgument: (enclosetTextLiteralSegment | macroLiteralSegment)+;
-enclosetTextLiteralSegment: ~(',' | NEWLINE | LESS_THAN | ')')+; 
+enclosedLiteralArgument: (enclosetTextLiteralSegment | macroLiteralSegment | htmlElementEndSegment | htmlElementSegment)+;
+enclosetTextLiteralSegment: ~(',' | NEWLINE | LESS_THAN | ESCAPED_MACRO_START | ')')+; 
 
-unquotedLiteralArgument: (textLiteralSegment | macroLiteralSegment)+;
-textLiteralSegment: ~(',' | NEWLINE | LESS_THAN)+;
+unquotedLiteralArgument: (textLiteralSegment | macroLiteralSegment | htmlElementEndSegment | htmlElementSegment)+;
+textLiteralSegment: ~(',' | NEWLINE | LESS_THAN | ESCAPED_MACRO_START | HTML_ELEMENT_END_PREFIX)+;
+htmlElementSegment: LESS_THAN htmlName htmlAttribute* MORE_THAN;
+htmlElementEndSegment: HTML_ELEMENT_END_PREFIX htmlName MORE_THAN;
+htmlAttribute: WS* htmlName ASSIGN htmlAttributeValue WS*;
+htmlAttributeValue: '"'? ~(NEWLINE | '"')+ '"'?;
+htmlName: SYMBOL | nativeFunctionName | strictNativeFunctionName;
 macroLiteralSegment: macro;
 
 // eval expression
@@ -412,6 +417,9 @@ ANY_BUTTON: '@' [aA][nN][yY][bB][uU][tT][tT][oO][nN];
 SYMBOL: VALID_SYMBOL_START VALID_SYMBOL_CHAR*;
 DEC_NUMBER: ('1' .. '9') DEC_DIGIT*  ('.' ('0'..'9')+)?;
 HEX_NUMBER: '#'? '0' HEX_DIGIT* ;
+ESCAPED_MACRO_START: '<?';
+ESCAPED_MACRO_END: '?>';
+HTML_ELEMENT_END_PREFIX: '</';
 
 EQUAL: '==';
 NOT_EQUAL: '!=';
@@ -433,6 +441,8 @@ SQ: '\'';
 BACKSLASH: '\\';
 SEMICOLON: ';';
 COLON: ':';
+EXCLAMATION_MARK: '!';
+QUESTION_MARK: '?';
 
 fragment VALID_SYMBOL_START
    : ('a' .. 'z') | ('A' .. 'Z') | '_'
