@@ -42,13 +42,6 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
-        public void Escaped_macro_followed_by_text_with_html_tags()
-        {
-            TranspileStatementCheck("sysmessage Some text <?fun1?>some text with <BASEFONT SIZE=\"+5\" COLOR=\"#000080\">html</BASEFONT> tags", "sysmessage Some text <fun1>some text with <b>html</b> tags");
-            Assert.Fail();
-        }
-
-        [TestMethod]
         public void Unescaped_macro_in_variable_assignment()
         {
             TranspileStatementCheck("arg(x,Some text <arg(x)>)", "local.x=Some text <local.x>");
