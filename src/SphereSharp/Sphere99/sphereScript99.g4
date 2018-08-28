@@ -8,7 +8,7 @@ section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection
             | bookSection | bookPageSection | speechSection | commentSection | professionSection | spellSection
             | areaSection | regionTypeSection | regionResourceSection | namesSection | spawnSection | menuSection
             | scrollSection | plevelSection | skillMenuSection | newbieSection) WS*;
-saveFileSection: WS* (varNamesSection | worldCharSection | worldItemSection | sectorSection) WS*;
+saveFileSection: WS* (varNamesSection | worldCharSection | worldItemSection | sectorSection | gmPageSection) WS*;
 eofSection: EOF_SECTION_HEADER;
 
 functionSection: functionSectionHeader codeBlock?;
@@ -136,6 +136,9 @@ newbieSectionHeader: NEWBIE_SECTION_HEADER_START sectionName ']' NEWLINE;
 sectorSection: sectorSectionHeader propertyList;
 sectorSectionHeader: SECTOR_SECTION_HEADER_START sectorName ']' NEWLINE;
 sectorName: ~(NEWITEM | ']')+;
+
+gmPageSection: gmPageSectionHeader propertyList;
+gmPageSectionHeader: GMPAGE_SECTION_HEADER_START sectionName ']' NEWLINE;
 
 freeTextLine: ~(FUNCTION_SECTION_HEADER_START | ITEMDEF_SECTION_HEADER_START | CHARDEF_SECTION_HEADER_START
     | TYPEDEF_SECTION_HEADER_START | TEMPLATE_SECTION_HEADER_START | EVENTS_SECTION_HEADER_START | DEFNAMES_SECTION_HEADER_START
@@ -300,6 +303,7 @@ SCROLL_SECTION_HEADER_START: '[' [sS][cC][rR][oO][lL][lL] WS+;
 PLEVEL_SECTION_HEADER_START: '[' [pP][lL][eE][vV][eE][lL] WS+;
 SKILLMENU_SECTION_HEADER_START: '[' [sS][kK][iI][lL][lL][mM][eE][nN][uU] WS+;
 NEWBIE_SECTION_HEADER_START: '[' [nN][eE][wW][bB][iI][eE] WS+;
+GMPAGE_SECTION_HEADER_START: '[' [gG][mM][pP][aA][gG][eE] WS+;
 
 IF: [iI][fF];
 TESTIF: [tT][eE][sS][tT][iI][fF];

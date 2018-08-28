@@ -27,6 +27,15 @@ Serial=040061260");
 Serial=07F708");
         }
 
+        [TestMethod]
+        public void Can_parse_gmpage_section()
+        {
+            CheckSaveStructure("props:1;",
+@"[GMPage xxx]
+Reason=""just for fun""
+");
+        }
+
         private void CheckSaveStructure(string expectedResult, string src)
         {
             sphereScript99Parser.SaveFileSectionContext section = null;
@@ -41,6 +50,5 @@ Serial=07F708");
 
             extractor.Output.Should().Be(expectedResult);
         }
-
     }
 }
