@@ -539,6 +539,18 @@ tag.v=<eval <tag0.u>>");
             TranspileStatementCheck("tag(u[0],1)", "tag.u[0]=1");
             TranspileStatementCheck("tag(u[arg(x)],1)", "tag.u[<eval <local.x>>]=1");
             TranspileStatementCheck("tag(scroll[arg(x)],1)", "tag.scroll[<eval <local.x>>]=1");
+            TranspileStatementCheck("tag(u_0,1)", "tag.u[0]=1");
+            TranspileStatementCheck("tag(a_b_c_0,1)", "tag.a_b_c[0]=1");
+            TranspileStatementCheck("arg(u,tag(v_0))", "local.u=tag.v[0]");
+            TranspileStatementCheck("tag(<argv(0)>,\"<argv(1)>\")", "tag.<argv[0]>=\"<argv[1]>\"");
+            TranspileStatementCheck("tag(<arg(tagname)>,<arg(tagval)>)", "tag.<local.tagname>=<local.tagval>");
+            TranspileStatementCheck("tag(<args>)", "tag.<args>");
+            TranspileStatementCheck("tag(prefix_<arg(u)>_postfix_0)", "tag.prefix_<local.u>_postfix[0]");
+            TranspileStatementCheck("tag.remove(tagname_0)", "tag.tagname[0]=");
+
+            TranspileStatementCheck("tag(\"u\",value)", "tag.u=value");
+            TranspileStatementCheck("tag(\"u\")", "tag.u");
+            TranspileStatementCheck("tag.remove(\"u\")", "tag.u=");
         }
 
         [TestMethod]

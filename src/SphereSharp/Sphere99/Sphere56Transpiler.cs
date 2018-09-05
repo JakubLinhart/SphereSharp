@@ -56,10 +56,8 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitIndexedMemberName([NotNull] sphereScript99Parser.IndexedMemberNameContext context)
+        public override bool VisitMemberNameIndex([NotNull] sphereScript99Parser.MemberNameIndexContext context)
         {
-            builder.StartMemberAccess();
-            Visit(context.indexedMemberNameCore());
             builder.Append('[');
             var indexMemberName = new FirstMemberAccessNameVisitor().Visit(context.numericExpression());
             if (indexMemberName == null || indexMemberName.Equals("eval", StringComparison.OrdinalIgnoreCase))
@@ -75,6 +73,14 @@ namespace SphereSharp.Sphere99
             }
 
             builder.Append(']');
+            return true;
+        }
+
+        public override bool VisitIndexedMemberName([NotNull] sphereScript99Parser.IndexedMemberNameContext context)
+        {
+            builder.StartMemberAccess();
+            Visit(context.indexedMemberNameCore());
+            Visit(context.memberNameIndex());
             builder.EndMemberAccess();
 
             return true;
@@ -1162,7 +1168,7 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        private void AppendTerminalsVisitNodes(IList<IParseTree> children)
+        public void AppendTerminalsVisitNodes(IList<IParseTree> children)
         {
             if (children != null)
             {
@@ -1452,25 +1458,17 @@ namespace SphereSharp.Sphere99
                     {
                         builder.Append('0');
                     }
+
+                    var variableNameTranspiler = new VariableNameTranspiler(builder, this);
                     if (arguments != null)
                     {
                         builder.Append(".");
                         if (arguments.Length > 1)
                         {
-                            if (name.Equals("var", StringComparison.OrdinalIgnoreCase))
-                            {
-                                builder.RestrictVariables();
-                                Visit(arguments[0]);
-                                builder.AllowVariables();
-                                builder.CaptureLastSharpSubstitution();
-                            }
-                            else
-                            {
-                                builder.RestrictVariables();
-                                Visit(arguments[0]);
-                                builder.CaptureLastSharpSubstitution();
-                                builder.AllowVariables();
-                            }
+                            builder.RestrictVariables();
+                            variableNameTranspiler.Visit(arguments[0]);
+                            builder.AllowVariables();
+                            builder.CaptureLastSharpSubstitution();
 
                             builder.Append("=");
 
@@ -1490,7 +1488,7 @@ namespace SphereSharp.Sphere99
                         else if (arguments.Length == 1)
                         {
                             builder.RestrictVariables();
-                            Visit(arguments[0]);
+                            variableNameTranspiler.Visit(arguments[0]);
                             builder.AllowVariables();
 
                             if (context.chainedMemberAccess() != null)
@@ -1514,7 +1512,7 @@ namespace SphereSharp.Sphere99
                             var chainedArgument = new FinalChainedMemberAccessArgumentsVisitor().Visit(context);
                             if (chainedArgument != null && chainedArgument.Length == 1)
                             {
-                                Visit(chainedArgument[0]);
+                                variableNameTranspiler.Visit(chainedArgument[0]);
                                 builder.Append('=');
                                 return true;
                             }

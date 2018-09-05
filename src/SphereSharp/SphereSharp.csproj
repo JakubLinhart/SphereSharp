@@ -72,6 +72,7 @@
     <Compile Include="Sphere99\DefinitionsRepository.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SaveFilePropertiesTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\SharpStriper.cs" />
+    <Compile Include="Sphere99\Sphere56Transpiler\VariableNameTranspiler.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\WorldTranspilationResult.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\WorldTranspiler.cs" />
     <Compile Include="TextBuilder.cs" />

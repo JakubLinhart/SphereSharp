@@ -197,7 +197,8 @@ strictNativeFunctionName: ACTION | TYPE | P | RESCOUNT | SAFE | HOME;
 strictNativeArgumentList: strictNativeArgument+;
 strictNativeArgument: WS+ evalExpression;
 memberName: (SYMBOL | macro | TAG | REGION)+;
-indexedMemberName: indexedMemberNameCore '[' numericExpression ']';
+indexedMemberName: indexedMemberNameCore memberNameIndex;
+memberNameIndex: '[' numericExpression ']';
 indexedMemberNameCore: memberName | strictNativeFunctionName | nativeFunctionName;
 
 // properties
