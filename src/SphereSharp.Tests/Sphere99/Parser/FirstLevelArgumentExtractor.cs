@@ -38,6 +38,13 @@ namespace SphereSharp.Tests.Sphere99.Parser
             return true;
         }
 
+        public override bool VisitArgumentExpression([NotNull] sphereScript99Parser.ArgumentExpressionContext context)
+        {
+            arguments.Add($"arg: {context.GetText()}");
+
+            return true;
+        }
+
         public override bool VisitTriggerArgument([NotNull] sphereScript99Parser.TriggerArgumentContext context)
         {
             arguments.Add($"trigger: {context.SYMBOL().GetText()}");

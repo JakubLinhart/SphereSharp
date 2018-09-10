@@ -71,7 +71,7 @@ var.x=<var.x>+1");
         public void Basic_tests()
         {
             TranspileStatementCheck("var(name,value)", "var.name=value");
-            TranspileStatementCheck("arg(u,var(name))", "local.u=var.name");
+            TranspileStatementCheck("arg(u,var(name))", "local.u=var(name)");
 
             TranspileCodeBlockCheck(@"var(u,1)
 var(v,<eval u>)",
@@ -97,6 +97,16 @@ var.name_<argv[0]>=2");
 var(u,<eval(is_blunt)>)",
 @"var.is_blunt=1
 var.u=<eval(<var.is_blunt>)>");
+        }
+
+        [TestMethod]
+        public void Ignores_literal_arguments_with_global_variable_name_in_custom_function_call()
+        {
+            TranspileCodeBlockCheck(
+@"var(varname,1)
+customFun(varname)",
+@"var.varname=1
+customFun varname");
         }
 
         [TestMethod]

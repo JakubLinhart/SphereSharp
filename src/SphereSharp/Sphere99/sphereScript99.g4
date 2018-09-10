@@ -183,7 +183,7 @@ genericNativeMemberAccess: strictNativeMemberAccess | nativeMemberAccess;
 nativeMemberAccess: nativeFunctionName nativeArgumentList? chainedMemberAccess?;
 nativeArgumentList: enclosedArgumentList | freeArgumentList;
 argumentAccess: (constantExpression | quotedLiteralArgument | enclosedArgumentList | indexedMemberName) chainedMemberAccess?;
-customMemberAccess: memberName enclosedArgumentList? chainedMemberAccess?;
+customMemberAccess: memberName customFunctionEnclosedArgumentList? chainedMemberAccess?;
 chainedMemberAccess: '.' memberAccess;
 
 nativeFunctionName: SYSMESSAGE | RETURN | TIMER | CONSUME | EVENTS | TRIGGER | ARROWQUEST | DIALOG | EVAL_FUNCTIONS | SOUND | TRY | X | NEWITEM | EQUIP | NEWEQUIP
@@ -220,9 +220,12 @@ triggerName: nativeFunctionName | SYMBOL;
 triggerBody: codeBlock;
 
 // argument, argument expression
+customFunctionEnclosedArgumentList: LPAREN customFunctionEnclosedArgumentListInner? RPAREN;
+customFunctionEnclosedArgumentListInner: customFunctionEnclosedArgument (WS* ',' WS* customFunctionEnclosedArgument)*;
+customFunctionEnclosedArgument: argumentExpression | triggerArgument | quotedLiteralArgument | assignmentArgument | enclosedLiteralArgument | emptyArgument;
 enclosedArgumentList: LPAREN enclosedArgumentListInner? RPAREN;
 enclosedArgumentListInner: enclosedArgument (WS* ',' WS* enclosedArgument)*;
-enclosedArgument: triggerArgument | evalExpression | quotedLiteralArgument | assignmentArgument | enclosedLiteralArgument | emptyArgument;
+enclosedArgument: evalExpression | triggerArgument | quotedLiteralArgument | assignmentArgument | enclosedLiteralArgument | emptyArgument;
 freeArgumentList: firstFreeArgument (',' argument)*;
 firstFreeArgument: firstFreeArgumentOptionalWhiteSpace | firstFreeArgumentMandatoryWhiteSpace;
 firstFreeArgumentOptionalWhiteSpace: WS* (triggerArgument | evalExpression | quotedLiteralArgument);
@@ -237,8 +240,9 @@ innerQuotedLiteralArgument: (quotedTextLiteralSegment | macroLiteralSegment | ht
 lessThanSegment: LESS_THAN;
 quotedTextLiteralSegment: ~('"' | NEWLINE | LESS_THAN | ESCAPED_MACRO_START | HTML_ELEMENT_END_PREFIX)+;
 
-enclosedLiteralArgument: (enclosetTextLiteralSegment | macroLiteralSegment | htmlElementEndSegment | htmlElementSegment)+;
-enclosetTextLiteralSegment: ~(',' | NEWLINE | LESS_THAN | ESCAPED_MACRO_START | ')')+; 
+enclosedLiteralArgument: (macroLiteralSegment | htmlElementEndSegment | htmlElementSegment | enclosedTextLiteralSubSegment | enclosedTextLiteralSegment)+?;
+enclosedTextLiteralSegment: ~(',' | NEWLINE | LESS_THAN | ESCAPED_MACRO_START | ')' | '(')+?;
+enclosedTextLiteralSubSegment: '(' enclosedLiteralArgument? ')';
 
 unquotedLiteralArgument: (textLiteralSegment | macroLiteralSegment | htmlElementEndSegment | htmlElementSegment)+;
 textLiteralSegment: ~(',' | NEWLINE | LESS_THAN | ESCAPED_MACRO_START | HTML_ELEMENT_END_PREFIX)+;
@@ -262,6 +266,15 @@ binaryOperator: PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | LOGICAL_AND | LOGICA
 moreThanEqual: MORE_THAN ASSIGN;
 lessThanEqual: LESS_THAN ASSIGN;
 rightBitShiftOperator: LEADING_WS=WS+ MORE_THAN MORE_THAN TRAILING_WS=WS+;
+
+// argument expression
+argumentExpression: signedArgumentOperand argumentBinaryOperation*?;
+signedArgumentOperand: unaryOperator signedArgumentOperand | argumentOperand;
+argumentOperand: constantExpression | macroConstantExpression | macro | argumentSubExpression | '#';
+argumentBinaryOperation: argumentOperator signedArgumentOperand;
+argumentOperator: LEADING_WS=WS* argumentBinaryOperator TRAILING_WS=WS* ;
+argumentSubExpression: '(' LEFT_WS=WS* numericExpression RIGHT_WS=WS* ')' ;
+argumentBinaryOperator: binaryOperator | EQUAL | NOT_EQUAL | moreThanEqual | lessThanEqual | MORE_THAN | LESS_THAN | rightBitShiftOperator;
 
 macroConstantExpression: constantExpression macro;
 constantExpression: number;

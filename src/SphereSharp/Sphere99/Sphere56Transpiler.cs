@@ -104,6 +104,13 @@ namespace SphereSharp.Sphere99
             return base.VisitEnclosedArgumentList(context);
         }
 
+        public override bool VisitCustomFunctionEnclosedArgumentList([NotNull] sphereScript99Parser.CustomFunctionEnclosedArgumentListContext context)
+        {
+            builder.Append(" ");
+
+            return base.VisitCustomFunctionEnclosedArgumentList(context);
+        }
+
         public override bool VisitArgumentList([NotNull] sphereScript99Parser.ArgumentListContext context)
         {
             AppendArguments(context.argument());
@@ -114,6 +121,13 @@ namespace SphereSharp.Sphere99
         public override bool VisitEnclosedArgumentListInner([NotNull] sphereScript99Parser.EnclosedArgumentListInnerContext context)
         {
             AppendArguments(context.enclosedArgument());
+
+            return true;
+        }
+
+        public override bool VisitCustomFunctionEnclosedArgumentListInner([NotNull] sphereScript99Parser.CustomFunctionEnclosedArgumentListInnerContext context)
+        {
+            AppendArguments(context.customFunctionEnclosedArgument());
 
             return true;
         }
@@ -162,6 +176,11 @@ namespace SphereSharp.Sphere99
             return semanticContext.Execute(() => base.VisitEnclosedArgument(context));
         }
 
+        public override bool VisitCustomFunctionEnclosedArgument([NotNull] sphereScript99Parser.CustomFunctionEnclosedArgumentContext context)
+        {
+            return semanticContext.Execute(() => base.VisitCustomFunctionEnclosedArgument(context));
+        }
+
         public override bool VisitFirstFreeArgumentMandatoryWhiteSpace([NotNull] sphereScript99Parser.FirstFreeArgumentMandatoryWhiteSpaceContext context)
         {
             builder.Append(context.WS());
@@ -195,6 +214,17 @@ namespace SphereSharp.Sphere99
             return base.VisitEvalOperand(context);
         }
 
+        public override bool VisitArgumentOperand([NotNull] sphereScript99Parser.ArgumentOperandContext context)
+        {
+            if (context.GetText().Equals("#", StringComparison.OrdinalIgnoreCase))
+            {
+                builder.AppendLastSharpSubstitution();
+                return true;
+            }
+
+            return base.VisitArgumentOperand(context);
+        }
+
         public override bool VisitEvalOperator([NotNull] sphereScript99Parser.EvalOperatorContext context)
         {
             if (context.LEADING_WS?.Text != null)
@@ -208,6 +238,29 @@ namespace SphereSharp.Sphere99
                 builder.Append("<op_shiftright>"); 
                 if (context.evalBinaryOperator().rightBitShiftOperator().LEADING_WS?.Text != null)
                     builder.Append(context.evalBinaryOperator().rightBitShiftOperator().TRAILING_WS?.Text);
+            }
+            else
+                builder.Append(op);
+
+            if (context.TRAILING_WS?.Text != null)
+                builder.Append(context.TRAILING_WS.Text);
+
+            return true;
+        }
+
+        public override bool VisitArgumentOperator([NotNull] sphereScript99Parser.ArgumentOperatorContext context)
+        {
+            if (context.LEADING_WS?.Text != null)
+                builder.Append(context.LEADING_WS.Text);
+
+            var op = context.argumentBinaryOperator().GetText();
+            if (context.argumentBinaryOperator()?.rightBitShiftOperator() != null)
+            {
+                if (context.argumentBinaryOperator().rightBitShiftOperator().LEADING_WS?.Text != null)
+                    builder.Append(context.argumentBinaryOperator().rightBitShiftOperator().LEADING_WS?.Text);
+                builder.Append("<op_shiftright>");
+                if (context.argumentBinaryOperator().rightBitShiftOperator().LEADING_WS?.Text != null)
+                    builder.Append(context.argumentBinaryOperator().rightBitShiftOperator().TRAILING_WS?.Text);
             }
             else
                 builder.Append(op);
@@ -1445,7 +1498,7 @@ namespace SphereSharp.Sphere99
             var name = context.memberName()?.GetText();
             if (!string.IsNullOrEmpty(name))
             {
-                var arguments = context.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument();
+                var arguments = context.customFunctionEnclosedArgumentList()?.customFunctionEnclosedArgumentListInner()?.customFunctionEnclosedArgument();
                 if (name.Equals("tag", StringComparison.OrdinalIgnoreCase) || name.Equals("var", StringComparison.OrdinalIgnoreCase))
                 {
                     bool requiresUid = context.chainedMemberAccess() != null && arguments != null;
@@ -1687,7 +1740,7 @@ namespace SphereSharp.Sphere99
 
                 if (!string.IsNullOrEmpty(name))
                 {
-                    var arguments = context.customMemberAccess()?.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument();
+                    var arguments = context.customMemberAccess()?.customFunctionEnclosedArgumentList()?.customFunctionEnclosedArgumentListInner()?.customFunctionEnclosedArgument();
 
                     if (name.Equals("arg", StringComparison.OrdinalIgnoreCase))
                     {
@@ -1716,12 +1769,12 @@ namespace SphereSharp.Sphere99
                                 builder.Append('=');
 
                                 semanticContext.DefineLocalVariable(localVariableName);
-                                VisitEnclosedArgument(arguments[1]);
+                                VisitCustomFunctionEnclosedArgument(arguments[1]);
 
                                 foreach (var argument in arguments.Skip(2))
                                 {
                                     builder.Append(',');
-                                    VisitEnclosedArgument(argument);
+                                    VisitCustomFunctionEnclosedArgument(argument);
                                 }
 
                                 return true;

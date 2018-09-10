@@ -321,7 +321,7 @@ enddo");
         public void Local_variables()
         {
             TranspileStatementCheck("arg(u,1)", "local.u=1");
-            TranspileStatementCheck("arg(u,arg(v))", "local.u=<local.v>");
+            TranspileStatementCheck("arg(u,arg(v))", "local.u=arg(v)");
             TranspileStatementCheck("arg(u,<argcount>)", "local.u=<argv>");
             TranspileStatementCheck("arg(u,<argv(0)>)", "local.u=<argv[0]>");
             TranspileStatementCheck("arg(u,<arg(u)>,<arg(v)>)", "local.u=<local.u>,<local.v>");
@@ -524,7 +524,6 @@ var.asciitext=1");
         public void Tags()
         {
             TranspileStatementCheck("tag(name,value)", "tag.name=value");
-            TranspileStatementCheck("arg(u,tag(name))", "local.u=tag.name");
             TranspileStatementCheck("tag.remove(u)", "tag.u=");
             TranspileStatementCheck("tag.remove(u[<arg(x)>])", "tag.u[<eval <local.x>>]=");
             TranspileStatementCheck("tag.u.remove", "tag.u=");

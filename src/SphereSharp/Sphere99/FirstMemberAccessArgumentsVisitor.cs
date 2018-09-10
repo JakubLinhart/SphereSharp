@@ -40,7 +40,7 @@ namespace SphereSharp.Sphere99
             if (!CanVisitCustomMemberAccess(context))
                 return base.VisitCustomMemberAccess(context);
 
-            var arguments = context.enclosedArgumentList()?.enclosedArgumentListInner()?.enclosedArgument();
+            var arguments = context.customFunctionEnclosedArgumentList()?.customFunctionEnclosedArgumentListInner()?.customFunctionEnclosedArgument();
             if (arguments != null && arguments.Length > 0)
                 return arguments;
             else
