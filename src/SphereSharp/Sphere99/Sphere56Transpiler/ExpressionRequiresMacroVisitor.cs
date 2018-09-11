@@ -17,6 +17,14 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             return Visit(context.signedEvalOperand());
         }
 
+        public override bool VisitArgumentExpression([NotNull] sphereScript99Parser.ArgumentExpressionContext context)
+        {
+            if (context.children.Count != 1 || context.signedArgumentOperand() == null)
+                return true;
+
+            return Visit(context.signedArgumentOperand());
+        }
+
         public override bool VisitSignedEvalOperand([NotNull] sphereScript99Parser.SignedEvalOperandContext context)
         {
             if (context.ChildCount != 1 || context.evalOperand() == null)
@@ -25,12 +33,28 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             return Visit(context.evalOperand());
         }
 
+        public override bool VisitSignedArgumentOperand([NotNull] sphereScript99Parser.SignedArgumentOperandContext context)
+        {
+            if (context.ChildCount != 1 || context.argumentOperand() == null)
+                return false;
+
+            return Visit(context.argumentOperand());
+        }
+
         public override bool VisitEvalOperand([NotNull] sphereScript99Parser.EvalOperandContext context)
         {
             if (context.ChildCount == 1 && context.firstMemberAccessExpression() == null)
             {
                 return false;
             }
+
+            return true;
+        }
+
+        public override bool VisitArgumentOperand([NotNull] sphereScript99Parser.ArgumentOperandContext context)
+        {
+            if (context.ChildCount == 1 && context.argumentSubExpression() == null)
+                return false;
 
             return true;
         }

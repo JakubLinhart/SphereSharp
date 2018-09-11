@@ -23,6 +23,9 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [DataRow("fun1_2", "fun1_2")]
         [DataRow("fun1_2(3)", "fun1_2 3")]
         [DataRow("fun1_2(3,4,5)", "fun1_2 3,4,5")]
+        [DataRow("fun1(1+1)", "fun1 <eval 1+1>")]
+        [DataRow("fun1(1,(1+1))", "fun1 1,<eval 1+1>")]
+        [DataRow("fun1(1+<var(var1)>)", "fun1 <eval 1+<var.var1>>")]
         [DataRow("a.b.c.fun1", "a.b.c.fun1")]
         [DataRow("a.b.c.fun1(1,2,3)", "a.b.c.fun1 1,2,3")]
         [DataRow("sysmessage(Zameruj jen monstra)", "sysmessage Zameruj jen monstra")]
@@ -298,8 +301,6 @@ enddo");
         [DataRow("arg(length,strlen(<argv(1)>)+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
         [DataRow("arg(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "local.u=<eval strcmpi(<argv[0]>,<argv[1]>)>")]
-        [DataRow("arg(u,strcmpi(<secondnumb>,skill_inscription))", "local.u=<eval strcmpi(<secondnumb>,skill_inscription)>")]
-        [DataRow("arg(u,strcmpi(<secondnumb>,<skill_inscription>))", "local.u=<eval strcmpi(<secondnumb>,<serv.skill.inscription>)>")]
         [DataRow("tag(class,<strmid(\"class_necro\",6,20)>)", "tag.class=<strsub 6 20 class_necro>")]
         [DataRow("tag(class,<strmid(<x>,6,20)>)", "tag.class=<strsub 6 20 <x>>")]
         [DataRow(

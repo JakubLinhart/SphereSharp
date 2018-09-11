@@ -19,6 +19,7 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
         {
             "strlen",
             "strcmpi",
+            "strcmp",
             "strmatch",
         };
 
@@ -54,7 +55,8 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                     {
                         transpiler.Visit(arguments[0]);
 
-                        if (name.Equals("strcmpi", StringComparison.OrdinalIgnoreCase))
+                        if (name.Equals("strcmpi", StringComparison.OrdinalIgnoreCase) ||
+                            name.Equals("strcmp", StringComparison.OrdinalIgnoreCase))
                         {
                             builder.StartSpecialFunctionArguments();
                             builder.Append(',');

@@ -13,7 +13,6 @@ namespace SphereSharp.Sphere99
     public sealed class Sphere56TranspilerVisitor : sphereScript99BaseVisitor<bool>
     {
         private readonly SpecialFunctionTranspiler specialFunctionTranspiler;
-        private readonly ExpressionRequiresMacroVisitor expressionRequiresMacroVisitor = new ExpressionRequiresMacroVisitor();
 
         private readonly HashSet<string> nativeNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -128,6 +127,23 @@ namespace SphereSharp.Sphere99
         public override bool VisitCustomFunctionEnclosedArgumentListInner([NotNull] sphereScript99Parser.CustomFunctionEnclosedArgumentListInnerContext context)
         {
             AppendArguments(context.customFunctionEnclosedArgument());
+
+            return true;
+        }
+
+        public override bool VisitArgumentExpression([NotNull] sphereScript99Parser.ArgumentExpressionContext context)
+        {
+            var requiresMacroVisitor = new ExpressionRequiresMacroVisitor();
+
+            if (requiresMacroVisitor.Visit(context))
+            {
+                builder.EnsureEvalCall("eval", () =>
+                {
+                    base.VisitArgumentExpression(context);
+                });
+            }
+            else
+                base.VisitArgumentExpression(context);
 
             return true;
         }
