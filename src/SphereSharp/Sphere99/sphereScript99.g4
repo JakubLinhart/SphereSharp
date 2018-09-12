@@ -171,13 +171,13 @@ numericExpression: evalExpression;
 macro: escapedMacro | nonEscapedMacro;
 escapedMacro: ESCAPED_MACRO_START LEFT_WS=WS* macroBody RIGHT_WS=WS* ESCAPED_MACRO_END;
 nonEscapedMacro: LESS_THAN macroBody  MORE_THAN ;
-macroBody: (firstMemberAccess | indexedMemberName);
+macroBody: (variableReadAccess | firstMemberAccess | indexedMemberName);
 call: firstMemberAccess;
 assignment: firstMemberAccess assign argumentList?;
 assign: WS* ASSIGN WS*;
 
 memberAccess: firstMemberAccess | argumentAccess;
-firstMemberAccess: evalCall | genericNativeMemberAccess | customMemberAccess;
+firstMemberAccess: evalCall | genericNativeMemberAccess | customMemberAccess | variableAccess;
 evalCall: EVAL_FUNCTIONS WS* numericExpression; 
 genericNativeMemberAccess: strictNativeMemberAccess | nativeMemberAccess;
 nativeMemberAccess: nativeFunctionName nativeArgumentList? chainedMemberAccess?;
@@ -196,7 +196,21 @@ strictNativeMemberAccess: strictNativeFunctionName (enclosedArgumentList | stric
 strictNativeFunctionName: ACTION | TYPE | P | RESCOUNT | SAFE | HOME;
 strictNativeArgumentList: strictNativeArgument+;
 strictNativeArgument: WS+ evalExpression;
-memberName: (SYMBOL | macro | TAG | REGION)+;
+
+variableFunctionName: TAG;
+variableAccess: variableReadAccess | variableAssignment | variableRemoveAccess;
+variableRemoveAccess: variableChainedRemoveAccess | variableArgumentedRemoveAccess;
+variableChainedRemoveAccess: variableFunctionName '.' variableName '.' REMOVE;
+variableArgumentedRemoveAccess: variableFunctionName '.' REMOVE WS* '(' WS* variableName WS* ')';
+variableReadAccess: (argumentedReadVariableAccess | chainedReadVariableAccess) chainedMemberAccess?;
+argumentedReadVariableAccess: variableFunctionName WS* '(' WS* variableName WS* ')';
+chainedReadVariableAccess: variableFunctionName '.' variableName;
+variableAssignment: variableFunctionName WS* '(' WS* variableName WS* ',' WS* customFunctionEnclosedArgumentListInner WS* ')';
+variableName: quotedVariableName | unquotedVariableName;
+quotedVariableName: '"' unquotedVariableName '"';
+unquotedVariableName: (indexedMemberName | nativeFunctionName | memberName | SYMBOL | strictNativeFunctionName);
+
+memberName: (SYMBOL | macro | REGION)+;
 indexedMemberName: indexedMemberNameCore memberNameIndex;
 memberNameIndex: '[' numericExpression ']';
 indexedMemberNameCore: memberName | strictNativeFunctionName | nativeFunctionName;
@@ -256,7 +270,7 @@ macroLiteralSegment: macro;
 // eval expression
 evalExpression: signedEvalOperand evalBinaryOperation*? ;
 signedEvalOperand: unaryOperator signedEvalOperand | evalOperand;
-evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccessExpression | '#';
+evalOperand: randomExpression | constantExpression | macroConstantExpression | evalSubExpression | macro | indexedMemberName | firstMemberAccessExpression | variableReadAccess | '#';
 firstMemberAccessExpression: firstMemberAccess;
 evalBinaryOperation: evalOperator signedEvalOperand ;
 evalOperator: LEADING_WS=WS* evalBinaryOperator TRAILING_WS=WS* ;

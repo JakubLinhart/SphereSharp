@@ -1509,6 +1509,83 @@ namespace SphereSharp.Sphere99
             return base.VisitNativeMemberAccess(context);
         }
 
+        public override bool VisitVariableName([NotNull] sphereScript99Parser.VariableNameContext context)
+        {
+            var variableNameTranspiler = new VariableNameTranspiler(builder, this);
+            builder.RestrictVariables();
+            variableNameTranspiler.Visit(context);
+            builder.AllowVariables();
+
+            return true;
+        }
+
+        public override bool VisitVariableArgumentedRemoveAccess([NotNull] sphereScript99Parser.VariableArgumentedRemoveAccessContext context)
+        {
+            var name = context.variableFunctionName().GetText();
+            builder.Append(name);
+            builder.Append('.');
+            Visit(context.variableName());
+            builder.Append('=');
+
+            return true;
+        }
+
+        public override bool VisitVariableChainedRemoveAccess([NotNull] sphereScript99Parser.VariableChainedRemoveAccessContext context)
+        {
+            var name = context.variableFunctionName().GetText();
+            builder.Append(name);
+            builder.Append('.');
+            Visit(context.variableName());
+            builder.Append('=');
+
+            return true;
+        }
+
+        public override bool VisitArgumentedReadVariableAccess([NotNull] sphereScript99Parser.ArgumentedReadVariableAccessContext context)
+        {
+            var name = context.variableFunctionName().GetText();
+            builder.Append(name);
+            if (semanticContext.IsNumeric)
+            {
+                builder.Append('0');
+            }
+
+            builder.Append(".");
+            Visit(context.variableName());
+
+            return true;
+        }
+
+        public override bool VisitChainedReadVariableAccess([NotNull] sphereScript99Parser.ChainedReadVariableAccessContext context)
+        {
+            var name = context.variableFunctionName().GetText();
+            builder.Append(name);
+            if (semanticContext.IsNumeric)
+            {
+                builder.Append('0');
+            }
+
+            builder.Append('.');
+            Visit(context.variableName());
+
+            return true;
+        }
+
+        public override bool VisitVariableAssignment([NotNull] sphereScript99Parser.VariableAssignmentContext context)
+        {
+            var name = context.variableFunctionName().GetText();
+            builder.Append(name);
+            builder.Append(".");
+
+            Visit(context.variableName());
+            builder.CaptureLastSharpSubstitution();
+
+            builder.Append("=");
+            Visit(context.customFunctionEnclosedArgumentListInner());
+
+            return true;
+        }
+
         public override bool VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context)
         {
             var name = context.memberName()?.GetText();

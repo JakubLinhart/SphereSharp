@@ -24,6 +24,20 @@ namespace SphereSharp.Sphere99
             return context.EVAL_FUNCTIONS().GetText();
         }
 
+        public override string VisitVariableFunctionName([NotNull] sphereScript99Parser.VariableFunctionNameContext context)
+        {
+            return context.GetText();
+        }
+
+        public override string VisitVariableAccess([NotNull] sphereScript99Parser.VariableAccessContext context)
+        {
+            return context.variableAssignment()?.variableFunctionName()?.GetText()
+                ?? context.variableReadAccess()?.argumentedReadVariableAccess()?.variableFunctionName().GetText()
+                ?? context.variableReadAccess()?.chainedReadVariableAccess()?.variableFunctionName().GetText()
+                ?? context.variableRemoveAccess()?.variableArgumentedRemoveAccess()?.variableFunctionName().GetText()
+                ?? context.variableRemoveAccess()?.variableChainedRemoveAccess()?.variableFunctionName().GetText();
+        }
+
         public override string VisitStrictNativeMemberAccess([NotNull] sphereScript99Parser.StrictNativeMemberAccessContext context)
         {
             return context.strictNativeFunctionName().GetText();

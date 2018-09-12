@@ -65,6 +65,14 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             return true;
         }
 
+        public override bool VisitCustomFunctionEnclosedArgument([NotNull] sphereScript99Parser.CustomFunctionEnclosedArgumentContext context)
+        {
+            var literalTranspiler = new LiteralArgumentTranspiler(parentTranspiler, builder, false);
+            literalTranspiler.Visit(context);
+
+            return true;
+        }
+
         public override bool VisitMemberName([NotNull] sphereScript99Parser.MemberNameContext context)
         {
             var lastSegmentText = context.children.Last().GetText();
