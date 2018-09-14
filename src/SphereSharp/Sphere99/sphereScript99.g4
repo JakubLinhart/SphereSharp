@@ -199,9 +199,7 @@ strictNativeArgument: WS+ evalExpression;
 
 variableFunctionName: TAG;
 variableAccess: variableReadAccess | variableAssignment | variableRemoveAccess;
-variableRemoveAccess: variableChainedRemoveAccess | variableArgumentedRemoveAccess;
-variableChainedRemoveAccess: variableFunctionName '.' variableName '.' REMOVE;
-variableArgumentedRemoveAccess: variableFunctionName '.' REMOVE WS* '(' WS* variableName WS* ')';
+variableRemoveAccess: variableFunctionName '.' REMOVE WS* '(' WS* variableName WS* ')';
 variableReadAccess: (argumentedReadVariableAccess | chainedReadVariableAccess) chainedMemberAccess?;
 argumentedReadVariableAccess: variableFunctionName WS* '(' WS* variableName WS* ')';
 chainedReadVariableAccess: variableFunctionName '.' variableName;

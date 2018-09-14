@@ -527,7 +527,6 @@ var.asciitext=1");
             TranspileStatementCheck("tag(name,value)", "tag.name=value");
             TranspileStatementCheck("tag.remove(u)", "tag.u=");
             TranspileStatementCheck("tag.remove(u[<arg(x)>])", "tag.u[<eval <local.x>>]=");
-            TranspileStatementCheck("tag.u.remove", "tag.u=");
             TranspileStatementCheck("tag(name,value1,value2)", "tag.name=value1,value2");
             TranspileStatementCheck("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>");
             TranspileCodeBlockCheck(@"tag(u,1)

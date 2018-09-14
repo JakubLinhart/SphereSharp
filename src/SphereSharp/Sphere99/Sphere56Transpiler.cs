@@ -1519,18 +1519,7 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitVariableArgumentedRemoveAccess([NotNull] sphereScript99Parser.VariableArgumentedRemoveAccessContext context)
-        {
-            var name = context.variableFunctionName().GetText();
-            builder.Append(name);
-            builder.Append('.');
-            Visit(context.variableName());
-            builder.Append('=');
-
-            return true;
-        }
-
-        public override bool VisitVariableChainedRemoveAccess([NotNull] sphereScript99Parser.VariableChainedRemoveAccessContext context)
+        public override bool VisitVariableRemoveAccess([NotNull] sphereScript99Parser.VariableRemoveAccessContext context)
         {
             var name = context.variableFunctionName().GetText();
             builder.Append(name);
