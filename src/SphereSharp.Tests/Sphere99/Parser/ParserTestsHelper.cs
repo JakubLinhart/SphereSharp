@@ -3,10 +3,7 @@ using Antlr4.Runtime.Misc;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SphereSharp.Tests.Sphere99.Parser
 {
@@ -16,35 +13,69 @@ namespace SphereSharp.Tests.Sphere99.Parser
         {
             Parse(src, parser =>
             {
-                var expression = parser.condition();
-                var extractor = new EvalExpressionExtractor();
+                sphereScript99Parser.ConditionContext expression = parser.condition();
+                EvalExpressionExtractor extractor = new EvalExpressionExtractor();
                 extractor.Visit(expression);
                 extractor.Result.Should().Be(expectedResult);
             });
         }
 
-        public static void Parse(string src, Action<sphereScript99Parser> parserAction)
+        public static void StatementShouldSucceed(string src)
+        {
+            CheckedParse(src, parser =>
+            {
+                sphereScript99Parser.StatementContext statement = parser.statement();
+            });
+        }
+
+        public static void StatementShouldFail(string src)
         {
             try
             {
-                AntlrInputStream inputStream = new AntlrInputStream(src);
-                var lexer = new sphereScript99Lexer(inputStream);
-                var tokenStream = new CommonTokenStream(lexer);
-                var parser = new sphereScript99Parser(tokenStream);
-                var errorListener = new FailTestErrorListener();
-                parser.AddErrorListener(errorListener);
-
-                parserAction(parser);
-
-                if (parser.InputStream.Index + 1 < parser.InputStream.Size)
+                Parse(src, parser =>
                 {
-                    Assert.Fail($"Input stream not fully parsed index: {parser.InputStream.Index}, size: {parser.InputStream.Size}");
-                }
+                    sphereScript99Parser.StatementContext statement = parser.statement();
+                });
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            Assert.Fail($"Statement parse should fail: {src}");
+        }
+
+        public static void CheckedParse(string src, Action<sphereScript99Parser> parserAction)
+        {
+            try
+            {
+                Parse(src, parser =>
+                {
+                    if (parser.InputStream.Index + 1 < parser.InputStream.Size)
+                    {
+                        Assert.Fail($"Input stream not fully parsed index: {parser.InputStream.Index}, size: {parser.InputStream.Size}");
+                    }
+
+                    parserAction(parser);
+                });
             }
             catch (Exception ex)
             {
                 Assert.Fail($"Testing '{src.Substring(0, Math.Min(src.Length, 40))}'\n\nMessage: {ex.Message}\n\n{ex}");
             }
+        }
+
+
+        public static void Parse(string src, Action<sphereScript99Parser> parserAction)
+        {
+            AntlrInputStream inputStream = new AntlrInputStream(src);
+            sphereScript99Lexer lexer = new sphereScript99Lexer(inputStream);
+            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+            sphereScript99Parser parser = new sphereScript99Parser(tokenStream);
+            FailTestErrorListener errorListener = new FailTestErrorListener();
+            parser.AddErrorListener(errorListener);
+
+            parserAction(parser);
         }
     }
 

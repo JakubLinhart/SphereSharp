@@ -1530,32 +1530,33 @@ namespace SphereSharp.Sphere99
             return true;
         }
 
-        public override bool VisitArgumentedReadVariableAccess([NotNull] sphereScript99Parser.ArgumentedReadVariableAccessContext context)
+        public override bool VisitVariableReadAccess([NotNull] sphereScript99Parser.VariableReadAccessContext context)
         {
-            var name = context.variableFunctionName().GetText();
-            builder.Append(name);
-            if (semanticContext.IsNumeric)
+            bool requiresUid = context.argumentedReadVariableAccess()?.chainedMemberAccess() != null;
+
+            if (requiresUid)
+                builder.Append("uid.<");
+
+            var variableTypeName = context.chainedReadVariableAccess()?.variableFunctionName().GetText()
+                ?? context.argumentedReadVariableAccess()?.variableFunctionName().GetText();
+            builder.Append(variableTypeName);
+
+            if (semanticContext.IsNumeric || requiresUid)
             {
                 builder.Append('0');
             }
-
             builder.Append(".");
-            Visit(context.variableName());
 
-            return true;
-        }
+            var variableName = context.chainedReadVariableAccess()?.variableName() ??
+                context.argumentedReadVariableAccess()?.variableName();
 
-        public override bool VisitChainedReadVariableAccess([NotNull] sphereScript99Parser.ChainedReadVariableAccessContext context)
-        {
-            var name = context.variableFunctionName().GetText();
-            builder.Append(name);
-            if (semanticContext.IsNumeric)
-            {
-                builder.Append('0');
-            }
+            VisitVariableName(variableName);
 
-            builder.Append('.');
-            Visit(context.variableName());
+            if (requiresUid)
+                builder.Append(">");
+
+            if (context.argumentedReadVariableAccess()?.chainedMemberAccess() != null)
+                Visit(context.argumentedReadVariableAccess()?.chainedMemberAccess());
 
             return true;
         }

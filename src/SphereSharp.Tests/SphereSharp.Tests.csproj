@@ -81,6 +81,7 @@
     <Compile Include="Sphere99\Parser\StatementExtractor.cs" />
     <Compile Include="Sphere99\Parser\TriggerCodeBlockExtractor.cs" />
     <Compile Include="Sphere99\Parser\TriggerTests.cs" />
+    <Compile Include="Sphere99\Parser\TagAccessTests.cs" />
     <Compile Include="Sphere99\Parser\WhileTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\BookTests.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\CallFunctionTests.cs" />
