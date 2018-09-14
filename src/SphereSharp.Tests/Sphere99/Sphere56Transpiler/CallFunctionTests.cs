@@ -340,11 +340,6 @@ local.v=<eval <local.u>>");
         public void Self_reference_sharp_replacement()
         {
             TranspileStatementCheck("arg(u,#+1)", "local.u=<local.u>+1");
-            TranspileStatementCheck("tag(u,#+1)", "tag.u=<tag.u>+1");
-            TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u[<eval <local.x>>]=<tag.u[<eval <local.x>>]>+1");
-            TranspileStatementCheck("tag(u[2],#+1)", "tag.u[2]=<tag.u[2]>+1");
-            TranspileStatementCheck("src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
-            TranspileStatementCheck("  src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
         }
 
         [TestMethod]
@@ -549,6 +544,12 @@ tag.v=<eval <tag0.u>>");
             TranspileStatementCheck("tag(\"u\",value)", "tag.u=value");
             TranspileStatementCheck("tag(\"u\")", "tag.u");
             TranspileStatementCheck("tag.remove(\"u\")", "tag.u=");
+
+            TranspileStatementCheck("tag(u,#+1)", "tag.u=<tag.u>+1");
+            TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u[<eval <local.x>>]=<tag.u[<eval <local.x>>]>+1");
+            TranspileStatementCheck("tag(u[2],#+1)", "tag.u[2]=<tag.u[2]>+1");
+            TranspileStatementCheck("tag(u_2,#+1)", "tag.u[2]=<tag.u[2]>+1");
+            TranspileStatementCheck("src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
         }
 
         [TestMethod]

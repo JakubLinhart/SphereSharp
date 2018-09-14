@@ -1571,7 +1571,9 @@ namespace SphereSharp.Sphere99
             builder.CaptureLastSharpSubstitution();
 
             builder.Append("=");
+            builder.StartNumericExpression();
             Visit(context.customFunctionEnclosedArgumentListInner());
+            builder.EndNumericExpression();
 
             return true;
         }
