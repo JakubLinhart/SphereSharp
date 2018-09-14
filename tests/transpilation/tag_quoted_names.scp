@@ -1,0 +1,37 @@
+[function tst_trans_access_to_tag_with_quoted_tag_names]
+tag("quotedtagname",123)
+if (<tag(quotedtagname)> != 123)
+    tst_error("tst_trans_access_to_tag_with_quoted_tag_names - cannot access a tag defined with quoted name via the same unquoted name")
+    return
+endif
+tag.remove("quotedtagname")
+if (<tag(quotedtagname)> == 123)
+    tst_error("tst_trans_access_to_tag_with_quoted_tag_names - remove a tag defined with quoted name via the same unquoted name failed")
+    return
+endif
+
+tag("quotedtagname2",234)
+if (<tag("quotedtagname2")> != 234)
+    tst_error("tst_trans_access_to_tag_with_quoted_tag_names - cannot access a tag defined with quoted name via the same quoted name")
+    return
+endif
+
+tag.remove("quotedtagname2")
+if (<tag("quotedtagname2")> == 234)
+    tst_error("tst_trans_access_to_tag_with_quoted_tag_names - remove a tag defined with quoted name via the same quoted name failed")
+    return
+endif
+
+tag(unquotedtagname,345)
+if (<tag("unquotedtagname")> != 345)
+    tst_error("tst_trans_access_to_tag_with_quoted_tag_names - cannot access a tag defined with unquoted name via the same quoted name")
+    return
+endif
+
+tag.remove("unquotedtagname")
+if (<tag("unquotedtagname")> == 345)
+    tst_error("tst_trans_access_to_tag_with_quoted_tag_names - remove a tag defined with unquoted name via the same quoted name failed")
+    return
+endif
+
+tst_success("tst_trans_access_to_tag_with_quoted_tag_names")

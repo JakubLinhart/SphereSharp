@@ -1,0 +1,22 @@
+[function tst_trans_tag_values]
+tag(tag1,1+1)
+ShouldBeSameString(2,<tag(tag1)>)
+
+tag(tag2,(2+2))
+ShouldBeSameString(4,<tag(tag2)>)
+
+var(var1,1)
+
+tag(tag3,var1)
+ShouldBeSameString(var1,<tag(tag3)>)
+
+tag(tag4,var1+1)
+ShouldBeSameString(var1+1,<tag(tag4)>)
+
+tag(tag5,<var1>+1)
+ShouldBeSameString(2,<tag(tag5)>)
+
+tag.tag6=tagvalue
+ShouldBeSameString(tagvalue,<tag.tag6>)
+
+tst_success("tst_trans_tag_values")

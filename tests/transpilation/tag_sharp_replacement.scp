@@ -1,0 +1,11 @@
+[function tst_trans_tag_sharp_replacement]
+tag(myTag,2)
+tag(myTag,#+3)
+ShouldBeSameString(5,<tag(myTag)>)
+
+arg(x,4)
+tag(u[arg(x)],5)
+tag(u[arg(x)],#+1)
+ShouldBeSameString(6,<tag(u[4])>)
+
+tst_success("tst_trans_tag_sharp_replacement")

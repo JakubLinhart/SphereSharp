@@ -1,0 +1,6 @@
+[function tst_trans_tag_induced_uid]
+tag(myId,<uid>)
+
+ShouldBeSameString(<name>,<tag(myId).name>)
+
+tst_success("tst_trans_tag_remove")

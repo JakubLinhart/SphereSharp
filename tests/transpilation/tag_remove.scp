@@ -1,0 +1,6 @@
+[function tst_trans_tag_remove]
+tag(tag1,tagvalue)
+tag.remove(tag1)
+ShouldBeEmpty(<tag(tag1)>,"tag(tag1)")
+
+tst_success("tst_trans_tag_remove")

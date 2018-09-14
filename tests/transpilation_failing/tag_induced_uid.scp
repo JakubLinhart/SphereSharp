@@ -1,0 +1,6 @@
+[function tst_trans_tag_induced_uid_failing]
+tag(myId,<uid>)
+
+ShouldBeSameString(<name>,<tag.myId.name>)
+ShouldBeSameString(<name>,<<tag(myId)>.name>)
+ShouldBeSameString(<name>,<<tag.myId>.name>)
