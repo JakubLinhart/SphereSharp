@@ -3,13 +3,4 @@ arg(x,123)
 tag(scroll[arg(x)],321)
 ShouldBeSameString(321,<tag(scroll[123])>)
 
-arg(i,127)
-tag(spawn_<eval arg(i)>,123)
-ShouldBeSameString(123,<tag(spawn_127)>)
-if (tag(spawn_127) != 123)
-    tst_error("tst_trans_tag_underscore_index - tag name with underscored variable index")
-    return
-endif
-
-
 tst_success("tst_trans_tag_indexed_access")

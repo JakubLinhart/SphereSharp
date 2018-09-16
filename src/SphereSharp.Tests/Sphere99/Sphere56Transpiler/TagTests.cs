@@ -38,6 +38,8 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         [TestMethod]
         public void Assignment_to_indexed_tag_by_underscore_with_variable_index()
         {
+            // This is most likely not correct. SphereSharp should convert this tag name
+            // to indexed tag. Not needed so far.
             TranspileStatementCheck("tag(spawn_<eval arg(i)>)", "tag.spawn_<eval <local.i>>");
         }
 
