@@ -1,0 +1,11 @@
+[function tst_trans_var_sharp_replacement]
+var(myVar,2)
+var(myVar,#+3)
+ShouldBeSameString(5,<var(myVar)>)
+
+arg(x,4)
+var(u[arg(x)],5)
+var(u[arg(x)],#+1)
+ShouldBeSameString(6,<var(u[4])>)
+
+tst_success("tst_trans_var_sharp_replacement")

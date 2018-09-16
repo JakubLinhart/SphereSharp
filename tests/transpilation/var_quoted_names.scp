@@ -1,0 +1,18 @@
+[function tst_trans_var_quoted_names]
+var("quotedvarname",123)
+if (<var(quotedvarname)> != 123)
+    tst_error("tst_trans_var_quoted_names - cannot access a var defined with quoted name via the same unquoted name")
+    return
+endif
+
+var("quotedvarname2",234)
+if (<var("quotedvarname2")> != 234)
+    tst_error("tst_trans_var_quoted_names - cannot access a var defined with quoted name via the same quoted name")
+endif
+
+var(unquotedvarname,345)
+if (<var("unquotedvarname")> != 345)
+    tst_error("tst_trans_var_quoted_names - cannot access a var defined with unquoted name via the same quoted name")
+endif
+
+tst_success("tst_trans_var_quoted_names")

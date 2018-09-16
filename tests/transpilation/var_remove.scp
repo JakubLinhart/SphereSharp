@@ -1,0 +1,6 @@
+[function tst_trans_var_remove]
+var(var1,varvalue)
+var.var1=
+ShouldBeEmpty(<var(var1)>,"var(var1)")
+
+tst_success("tst_trans_var_remove")

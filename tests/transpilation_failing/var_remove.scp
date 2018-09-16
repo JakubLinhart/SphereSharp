@@ -1,0 +1,19 @@
+[function tst_trans_var_remove_failing]
+var(var1,varvalue)
+var.remove(var1)
+ShouldBeEmpty(<var(var1)>,"var(var1)")
+
+var(var2,varvalue)
+var.remove.var2
+ShouldBeEmpty(<var(var2)>,"var(var2)")
+
+arg(x,123)
+var(var3[arg(x)],varvalue)
+var.remove(var3[arg(x)])
+ShouldBeEmpty(<var(var3[arg(x)])>,"var3[arg(x)]")
+
+var(var4[666],varvalue)
+var.remove(var4[666])
+ShouldBeEmpty(<var(var4[666])>,"var4[666]")
+
+tst_success("tst_trans_var_remove")

@@ -197,7 +197,7 @@ strictNativeFunctionName: ACTION | TYPE | P | RESCOUNT | SAFE | HOME;
 strictNativeArgumentList: strictNativeArgument+;
 strictNativeArgument: WS+ evalExpression;
 
-variableFunctionName: TAG;
+variableFunctionName: TAG | VAR;
 variableAccess: variableReadAccess | variableAssignment | variableRemoveAccess;
 variableRemoveAccess: argumentedVariableRemoveAccess | chainedVariableRemoveAccess;
 argumentedVariableRemoveAccess: variableFunctionName '.' REMOVE WS* '(' WS* variableName WS* ')';
@@ -205,7 +205,9 @@ chainedVariableRemoveAccess: variableFunctionName '.' REMOVE '.' variableName;
 variableReadAccess: (argumentedReadVariableAccess | chainedReadVariableAccess);
 argumentedReadVariableAccess: variableFunctionName WS* '(' WS* variableName WS* ')' chainedMemberAccess?;
 chainedReadVariableAccess: variableFunctionName '.' variableName;
-variableAssignment: variableFunctionName WS* '(' WS* variableName WS* ',' WS* customFunctionEnclosedArgumentListInner WS* ')';
+variableAssignment: argumentedVariableAssignment | chainedVariableAssignment;
+argumentedVariableAssignment: variableFunctionName WS* '(' WS* variableName WS* ',' WS* customFunctionEnclosedArgumentListInner WS* ')';
+chainedVariableAssignment: variableFunctionName '.' variableName WS* ASSIGN WS* customFunctionEnclosedArgumentListInner;
 variableName: quotedVariableName | unquotedVariableName;
 quotedVariableName: '"' unquotedVariableName '"';
 unquotedVariableName: (indexedMemberName | nativeFunctionName | memberName | SYMBOL | strictNativeFunctionName);
@@ -442,6 +444,7 @@ EVAL: [eE][vV][aA][lL];
 HVAL: [hH][vV][aA][lL];
 
 TAG: [tT][aA][gG];
+VAR: [vV][aA][rR];
 
 TRIGGER_HEADER: [oO][nN] WS* '=' WS*;
 BUTTON_TRIGGER_HEADER: [oO][nN][bB][uU][tT][tT][oO][nN] '=';

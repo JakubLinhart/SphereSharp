@@ -1,0 +1,6 @@
+[function tst_trans_var_induced_uid]
+var(myId,<uid>)
+
+ShouldBeSameString(<name>,<var(myId).name>)
+
+tst_success("tst_trans_var_induced_uid")

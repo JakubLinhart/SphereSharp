@@ -1,0 +1,6 @@
+[function tst_trans_var_indexed_access]
+arg(x,123)
+var(scroll[arg(x)],321)
+ShouldBeSameString(321,<var(scroll[123])>)
+
+tst_success("tst_trans_var_indexed_access")

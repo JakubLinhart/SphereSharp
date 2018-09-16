@@ -31,7 +31,8 @@ namespace SphereSharp.Sphere99
 
         public override string VisitVariableAccess([NotNull] sphereScript99Parser.VariableAccessContext context)
         {
-            return context.variableAssignment()?.variableFunctionName()?.GetText()
+            return context.variableAssignment()?.argumentedVariableAssignment()?.variableFunctionName()?.GetText()
+                ?? context.variableAssignment()?.chainedVariableAssignment()?.variableFunctionName()?.GetText()
                 ?? context.variableReadAccess()?.argumentedReadVariableAccess()?.variableFunctionName().GetText()
                 ?? context.variableReadAccess()?.chainedReadVariableAccess()?.variableFunctionName().GetText()
                 ?? context.variableRemoveAccess()?.argumentedVariableRemoveAccess()?.variableFunctionName().GetText()

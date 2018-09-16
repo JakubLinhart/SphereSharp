@@ -13,10 +13,17 @@ tst_trans_local_variable_values
 tst_trans_tag_assignment
 tst_trans_tag_indexed_access
 tst_trans_tag_induced_uid
-tst_trans_quoted_names
+tst_trans_tag_quoted_names
 tst_trans_tag_remove
 tst_trans_tag_sharp_replacement
 tst_trans_tag_underscore_index
+
+tst_trans_var_assignment
+tst_trans_var_indexed_access
+tst_trans_var_induced_uid
+tst_trans_var_quoted_names
+tst_trans_var_remove
+tst_trans_var_sharp_replacement
 
 classMessage("transpilation tests done")
 

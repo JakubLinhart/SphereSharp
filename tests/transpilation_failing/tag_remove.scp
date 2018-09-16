@@ -1,0 +1,4 @@
+[function tst_trans_tag_remove_failing]
+tag(tag5,tagvalue)
+tag.tag5=
+ShouldBeEmpty(<tag(tag5)>,"tag5")

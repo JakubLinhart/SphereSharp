@@ -41,6 +41,37 @@ namespace SphereSharp.Sphere99
             return base.VisitFunctionName(context);
         }
 
+        public override bool VisitVariableReadAccess([NotNull] sphereScript99Parser.VariableReadAccessContext context)
+        {
+            var functionName = context.chainedReadVariableAccess()?.variableFunctionName().GetText()
+                ?? context.argumentedReadVariableAccess()?.variableFunctionName().GetText();
+
+            if (functionName.Equals("var", StringComparison.OrdinalIgnoreCase))
+            {
+                var variableName = context.chainedReadVariableAccess()?.variableName().GetText()
+                    ?? context.argumentedReadVariableAccess()?.variableName().GetText();
+
+                repository.DefineGlobalVariable(variableName.Trim());
+            }
+
+            return true;
+        }
+
+        public override bool VisitVariableAssignment([NotNull] sphereScript99Parser.VariableAssignmentContext context)
+        {
+            var functionName = context.argumentedVariableAssignment()?.variableFunctionName().GetText() ??
+                context.chainedVariableAssignment()?.variableFunctionName().GetText();
+
+            if (functionName.Equals("var", StringComparison.OrdinalIgnoreCase))
+            {
+                var variableName = context.argumentedVariableAssignment()?.variableName().GetText()
+                    ?? context.chainedVariableAssignment().variableName().GetText();
+                repository.DefineGlobalVariable(variableName.Trim());
+            }
+
+            return true;
+        }
+
         public override bool VisitCustomMemberAccess([NotNull] sphereScript99Parser.CustomMemberAccessContext context)
         {
             var name = context.memberName()?.GetText();
