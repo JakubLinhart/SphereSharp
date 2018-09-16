@@ -7,12 +7,16 @@ tst_trans_item_eval_returns_id
 tst_trans_item_id_returns_defname_
 tst_trans_item_defname_returns_id
 tst_trans_findId_returns_empty_string_when_item_doesnt_exist
-tst_trans_brackets_and_underscore_are_equivalent_for_tag_indexing
 tst_trans_custom_function_arguments
-tst_trans_tag_values
-tst_trans_tag_remove
-tst_trans_tag_induced_uid
 tst_trans_local_variable_values
+
+tst_trans_tag_assignment
+tst_trans_tag_indexed_access
+tst_trans_tag_induced_uid
+tst_trans_quoted_names
+tst_trans_tag_remove
+tst_trans_tag_sharp_replacement
+tst_trans_tag_underscore_index
 
 classMessage("transpilation tests done")
 
@@ -161,6 +165,14 @@ ShouldBeSameString("var1",var1)
 ShouldBeSameString("var1+1",var1+1)
 ShouldBeSameString("1",<var1>)
 ShouldBeSameString("124",<var1>+123)
+
+[function tst_trans_findId_returns_empty_string_when_item_doesnt_exist]
+arg(nonExistentId,<findId(i_dont_exist)>)
+if !(strlen(<arg(nonExistentId)>))
+    tst_success("tst_trans_findId_returns_empty_string_when_item_doesnt_exist")
+else
+    tst_error("tst_trans_findId_returns_empty_string_when_item_doesnt_exist")
+endif
 
 [function ShouldBeSameString]
 if (strcmp(<argv(0)>,<argv(1)>))

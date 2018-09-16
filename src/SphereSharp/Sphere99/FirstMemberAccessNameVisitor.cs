@@ -34,7 +34,8 @@ namespace SphereSharp.Sphere99
             return context.variableAssignment()?.variableFunctionName()?.GetText()
                 ?? context.variableReadAccess()?.argumentedReadVariableAccess()?.variableFunctionName().GetText()
                 ?? context.variableReadAccess()?.chainedReadVariableAccess()?.variableFunctionName().GetText()
-                ?? context.variableRemoveAccess()?.variableFunctionName().GetText();
+                ?? context.variableRemoveAccess()?.argumentedVariableRemoveAccess()?.variableFunctionName().GetText()
+                ?? context.variableRemoveAccess()?.chainedVariableRemoveAccess()?.variableFunctionName().GetText();
         }
 
         public override string VisitStrictNativeMemberAccess([NotNull] sphereScript99Parser.StrictNativeMemberAccessContext context)

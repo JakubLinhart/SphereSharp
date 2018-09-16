@@ -1521,10 +1521,13 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitVariableRemoveAccess([NotNull] sphereScript99Parser.VariableRemoveAccessContext context)
         {
-            var name = context.variableFunctionName().GetText();
+            var name = context.argumentedVariableRemoveAccess()?.variableFunctionName().GetText()
+                ?? context.chainedVariableRemoveAccess()?.variableFunctionName().GetText();
+            var variableName = context.argumentedVariableRemoveAccess()?.variableName()
+                ?? context.chainedVariableRemoveAccess()?.variableName();
             builder.Append(name);
             builder.Append('.');
-            Visit(context.variableName());
+            Visit(variableName);
             builder.Append('=');
 
             return true;

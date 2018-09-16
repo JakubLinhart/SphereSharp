@@ -1,28 +1,23 @@
-[function tst_trans_findId_returns_empty_string_when_item_doesnt_exist]
-arg(nonExistentId,<findId(i_dont_exist)>)
-if !(strlen(<arg(nonExistentId)>))
-    tst_success("tst_trans_findId_returns_empty_string_when_item_doesnt_exist")
-else
-    tst_error("tst_trans_findId_returns_empty_string_when_item_doesnt_exist")
-endif
-
-[function tst_trans_brackets_and_underscore_are_equivalent_for_tag_indexing]
+[function tst_trans_tag_underscore_index]
 tag(sometag[0],123)
 if (<tag(sometag_0)> != 123)
-    tst_error("tst_trans_brackets_and_underscore_are_equivalent_for_tag_indexing - assign to brackets read from underscore")
+    tst_error("tst_trans_tag_underscore_index - assign to brackets read from underscore")
     return
 endif
 
 tag(sometag_1,666)
 if (<tag(sometag[1])> != 666)
-    tst_error("tst_trans_brackets_and_underscore_are_equivalent_for_tag_indexing - assign to underscore read from brackets")
+    tst_error("tst_trans_tag_underscore_index - assign to underscore read from brackets")
     return
 endif
 
 tag.remove(sometag_1)
-if (<tag(sometag[1])> == 666)
-    tst_error("tst_trans_brackets_and_underscore_are_equivalent_for_tag_indexing - remove tag value")
+ShouldBeEmpty(<tag(sometag[1])>,"tag(sometag[1])")
+
+tag(a_b_c_0,1)
+if (<tag(a_b_c[0])> != 1)
+    tst_error("tst_trans_tag_underscore_index - tag name with underscores")
     return
 endif
 
-tst_success("tst_trans_brackets_and_underscore_are_equivalent_for_tag_indexing")
+tst_success("tst_trans_tag_underscore_index")

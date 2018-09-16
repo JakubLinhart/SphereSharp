@@ -3,4 +3,17 @@ tag(tag1,tagvalue)
 tag.remove(tag1)
 ShouldBeEmpty(<tag(tag1)>,"tag(tag1)")
 
+tag(tag2,tagvalue)
+tag.remove.tag2
+ShouldBeEmpty(<tag(tag2)>,"tag(tag2)")
+
+arg(x,123)
+tag(tag3[arg(x)],tagvalue)
+tag.remove(tag3[arg(x)])
+ShouldBeEmpty(<tag(tag3[arg(x)])>,"tag3[arg(x)]")
+
+tag(tag4[666],tagvalue)
+tag.remove(tag4[666])
+ShouldBeEmpty(<tag(tag4[666])>,"tag4[666]")
+
 tst_success("tst_trans_tag_remove")

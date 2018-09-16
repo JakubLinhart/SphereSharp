@@ -517,42 +517,6 @@ var.asciitext=1");
         }
 
         [TestMethod]
-        public void Tags()
-        {
-            TranspileStatementCheck("tag(name,value)", "tag.name=value");
-            TranspileStatementCheck("tag.remove(u)", "tag.u=");
-            TranspileStatementCheck("tag.remove(u[<arg(x)>])", "tag.u[<eval <local.x>>]=");
-            TranspileStatementCheck("tag(name,value1,value2)", "tag.name=value1,value2");
-            TranspileStatementCheck("link.timerd=<link.tag.hitspeed>", "link.timerd=<link.tag.hitspeed>");
-            TranspileCodeBlockCheck(@"tag(u,1)
-tag(v,<eval tag.u>)",
-@"tag.u=1
-tag.v=<eval <tag0.u>>");
-
-            TranspileStatementCheck("tag(spawn_<eval arg(i)>)", "tag.spawn_<eval <local.i>>");
-            TranspileStatementCheck("tag(u[0],1)", "tag.u[0]=1");
-            TranspileStatementCheck("tag(u[arg(x)],1)", "tag.u[<eval <local.x>>]=1");
-            TranspileStatementCheck("tag(scroll[arg(x)],1)", "tag.scroll[<eval <local.x>>]=1");
-            TranspileStatementCheck("tag(u_0,1)", "tag.u[0]=1");
-            TranspileStatementCheck("tag(a_b_c_0,1)", "tag.a_b_c[0]=1");
-            TranspileStatementCheck("tag(<argv(0)>,\"<argv(1)>\")", "tag.<argv[0]>=\"<argv[1]>\"");
-            TranspileStatementCheck("tag(<arg(tagname)>,<arg(tagval)>)", "tag.<local.tagname>=<local.tagval>");
-            TranspileStatementCheck("tag(<args>)", "tag.<args>");
-            TranspileStatementCheck("tag(prefix_<arg(u)>_postfix_0)", "tag.prefix_<local.u>_postfix[0]");
-            TranspileStatementCheck("tag.remove(tagname_0)", "tag.tagname[0]=");
-
-            TranspileStatementCheck("tag(\"u\",value)", "tag.u=value");
-            TranspileStatementCheck("tag(\"u\")", "tag.u");
-            TranspileStatementCheck("tag.remove(\"u\")", "tag.u=");
-
-            TranspileStatementCheck("tag(u,#+1)", "tag.u=<tag.u>+1");
-            TranspileStatementCheck("tag(u[arg(x)],#+1)", "tag.u[<eval <local.x>>]=<tag.u[<eval <local.x>>]>+1");
-            TranspileStatementCheck("tag(u[2],#+1)", "tag.u[2]=<tag.u[2]>+1");
-            TranspileStatementCheck("tag(u_2,#+1)", "tag.u[2]=<tag.u[2]>+1");
-            TranspileStatementCheck("src.tag(u,#+1)", "src.tag.u=<src.tag.u>+1");
-        }
-
-        [TestMethod]
         [DataRow("findlayer(layer_pack).remove", "findlayer.<layer_pack>.remove")]
         [DataRow("arg(u,findlayer(layer_pack))", "local.u=findlayer.<layer_pack>")]
         public void DottedArguments(string source, string expectedResult)
@@ -571,7 +535,7 @@ call2",
 @"[function fun1]
 call1
 call2");
-        }
+        }   
 
         [TestMethod]
         public void TypeDefs_section()
