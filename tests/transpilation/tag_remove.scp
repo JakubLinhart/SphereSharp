@@ -16,4 +16,8 @@ tag(tag4[666],tagvalue)
 tag.remove(tag4[666])
 ShouldBeEmpty(<tag(tag4[666])>,"tag4[666]")
 
+tag(tag5,tagvalue)
+tag.remove.(tag5)
+ShouldBeEmpty(<tag(tag5)>,"tag(tag5)")
+
 tst_success("tst_trans_tag_remove")

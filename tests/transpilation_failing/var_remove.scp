@@ -16,4 +16,8 @@ var(var4[666],varvalue)
 var.remove(var4[666])
 ShouldBeEmpty(<var(var4[666])>,"var4[666]")
 
+var(var5,varvalue)
+var.remove.(var5)
+ShouldBeEmpty(<var(var5)>,"var(var5)")
+
 tst_success("tst_trans_var_remove")

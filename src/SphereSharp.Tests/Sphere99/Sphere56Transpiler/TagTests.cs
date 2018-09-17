@@ -134,6 +134,12 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
+        public void Remove_tag_with_extraneous_dot()
+        {
+            TranspileStatementCheck("tag.remove.(u)", "tag.u=");
+        }
+
+        [TestMethod]
         public void Chained_remove_tag()
         {
             TranspileStatementCheck("tag.remove.u", "tag.u=");

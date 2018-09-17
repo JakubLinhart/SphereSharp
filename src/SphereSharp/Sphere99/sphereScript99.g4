@@ -200,7 +200,7 @@ strictNativeArgument: WS+ evalExpression;
 variableFunctionName: TAG | VAR;
 variableAccess: variableRemoveAccess | variableReadAccess | variableAssignment;
 variableRemoveAccess: argumentedVariableRemoveAccess | chainedVariableRemoveAccess;
-argumentedVariableRemoveAccess: variableFunctionName '.' REMOVE WS* '(' WS* variableName WS* ')';
+argumentedVariableRemoveAccess: variableFunctionName '.' REMOVE (WS* | '.') '(' WS* variableName WS* ')';
 chainedVariableRemoveAccess: variableFunctionName '.' REMOVE '.' variableName;
 variableReadAccess: (argumentedReadVariableAccess | chainedReadVariableAccess);
 argumentedReadVariableAccess: variableFunctionName WS* '(' WS* variableName WS* ')' chainedMemberAccess?;
