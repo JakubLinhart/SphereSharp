@@ -1,0 +1,4 @@
+[function tst_trans_var_assignment_failing]
+
+var.var12(var12value)
+ShouldBeSameString(var12value,<var(var12)>)

@@ -59,13 +59,15 @@ namespace SphereSharp.Sphere99
 
         public override bool VisitVariableAssignment([NotNull] sphereScript99Parser.VariableAssignmentContext context)
         {
-            var functionName = context.argumentedVariableAssignment()?.variableFunctionName().GetText() ??
-                context.chainedVariableAssignment()?.variableFunctionName().GetText();
+            var functionName = context.argumentedVariableAssignment()?.variableFunctionName().GetText()
+                ?? context.chainedVariableAssignment()?.variableFunctionName().GetText()
+                ?? context.chainedArgumentedVariableAssignment()?.variableFunctionName().GetText();
 
-            if (functionName.Equals("var", StringComparison.OrdinalIgnoreCase))
+            if (functionName != null && functionName.Equals("var", StringComparison.OrdinalIgnoreCase))
             {
                 var variableName = context.argumentedVariableAssignment()?.variableName().GetText()
-                    ?? context.chainedVariableAssignment().variableName().GetText();
+                    ?? context.chainedVariableAssignment()?.variableName().GetText()
+                    ?? context.chainedArgumentedVariableAssignment()?.variableName().GetText();
                 repository.DefineGlobalVariable(variableName.Trim());
             }
 

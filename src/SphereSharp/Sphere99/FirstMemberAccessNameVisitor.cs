@@ -33,6 +33,7 @@ namespace SphereSharp.Sphere99
         {
             return context.variableAssignment()?.argumentedVariableAssignment()?.variableFunctionName()?.GetText()
                 ?? context.variableAssignment()?.chainedVariableAssignment()?.variableFunctionName()?.GetText()
+                ?? context.variableAssignment()?.chainedArgumentedVariableAssignment()?.variableFunctionName()?.GetText()
                 ?? context.variableReadAccess()?.argumentedReadVariableAccess()?.variableFunctionName().GetText()
                 ?? context.variableReadAccess()?.chainedReadVariableAccess()?.variableFunctionName().GetText()
                 ?? context.variableRemoveAccess()?.argumentedVariableRemoveAccess()?.variableFunctionName().GetText()

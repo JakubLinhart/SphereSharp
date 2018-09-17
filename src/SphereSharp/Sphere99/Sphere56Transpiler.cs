@@ -1567,18 +1567,23 @@ namespace SphereSharp.Sphere99
         public override bool VisitVariableAssignment([NotNull] sphereScript99Parser.VariableAssignmentContext context)
         {
             var name = context.argumentedVariableAssignment()?.variableFunctionName().GetText()
-                ?? context.chainedVariableAssignment()?.variableFunctionName().GetText();
+                ?? context.chainedVariableAssignment()?.variableFunctionName().GetText()
+                ?? context.chainedArgumentedVariableAssignment()?.variableFunctionName().GetText();
+
             builder.Append(name);
             builder.Append(".");
 
             Visit(context.argumentedVariableAssignment()?.variableName()
-                ?? context.chainedVariableAssignment()?.variableName());
+                ?? context.chainedVariableAssignment()?.variableName()
+                ?? context.chainedArgumentedVariableAssignment()?.variableName());
             builder.CaptureLastSharpSubstitution();
 
             builder.Append("=");
             builder.StartNumericExpression();
             Visit(context.argumentedVariableAssignment()?.customFunctionEnclosedArgumentListInner()
-                ?? context.chainedVariableAssignment()?.customFunctionEnclosedArgumentListInner());
+                ?? context.chainedVariableAssignment()?.customFunctionEnclosedArgumentListInner()
+                ?? context.chainedVariableAssignment()?.customFunctionEnclosedArgumentListInner()
+                ?? context.chainedArgumentedVariableAssignment()?.customFunctionEnclosedArgumentListInner());
             builder.EndNumericExpression();
 
             return true;

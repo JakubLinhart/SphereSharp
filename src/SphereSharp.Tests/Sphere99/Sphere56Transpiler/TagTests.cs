@@ -18,12 +18,6 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         }
 
         [TestMethod]
-        public void Argumented_eval_assignment()
-        {
-
-        }
-
-        [TestMethod]
         public void Argumented_assignment_to_indexed_tag()
         {
             TranspileStatementCheck("tag(u[0],1)", "tag.u[0]=1");
@@ -71,6 +65,12 @@ namespace SphereSharp.Tests.Sphere99.Sphere56Transpiler
         public void Chained_assignment()
         {
             TranspileStatementCheck("tag.name=value", "tag.name=value");
+        }
+
+        [TestMethod]
+        public void Chained_argumented_assignment()
+        {
+            TranspileStatementCheck("tag.name(value)", "tag.name=value");
         }
 
         [TestMethod]
