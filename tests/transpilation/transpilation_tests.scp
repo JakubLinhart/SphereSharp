@@ -25,6 +25,10 @@ tst_trans_var_quoted_names
 tst_trans_var_remove
 tst_trans_var_sharp_replacement
 
+tst_trans_intrinsics_strcmp_match
+tst_trans_intrinsics_strcmp_mismatch
+tst_trans_intrinsics_strlen
+
 classMessage("transpilation tests done")
 
 [function tst_trans_unqualified_global_variable_access]
@@ -121,20 +125,6 @@ if (<tag(sometag[1])> == 666)
 endif
 
 tst_success("tst_trans_brackets_and_underscore_are_equivalent_for_tag_indexing")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -53,16 +53,17 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
                     }
                     else
                     {
-                        transpiler.Visit(arguments[0]);
-
                         if (name.Equals("strcmpi", StringComparison.OrdinalIgnoreCase) ||
                             name.Equals("strcmp", StringComparison.OrdinalIgnoreCase))
                         {
                             builder.StartSpecialFunctionArguments();
+                            QuoteIntrinsicArgument(arguments[0]);
                             builder.Append(',');
-                            transpiler.Visit(arguments[1]);
+                            QuoteIntrinsicArgument(arguments[1]);
                             builder.EndSpecialFunctionArguments();
                         }
+                        else
+                            UnquoteIntrinsicArgument(arguments[0]);
                     }
                     builder.Append(')');
                 });
@@ -71,6 +72,33 @@ namespace SphereSharp.Sphere99.Sphere56Transpiler
             }
 
             return false;
+        }
+
+        private void UnquoteIntrinsicArgument(IParseTree argument)
+        {
+            if (argument.GetChild(0) is sphereScript99Parser.QuotedLiteralArgumentContext quotedArgument)
+            {
+                var argumentTranspiler = new LiteralArgumentTranspiler(transpiler, builder, true);
+                argumentTranspiler.Visit(quotedArgument);
+            }
+            else
+            {
+                transpiler.Visit(argument);
+            }
+        }
+
+        private void QuoteIntrinsicArgument(IParseTree argument)
+        {
+            if (argument.GetChild(0) is sphereScript99Parser.QuotedLiteralArgumentContext) 
+            {
+                transpiler.Visit(argument);
+            }
+            else
+            {
+                builder.Append('"');
+                transpiler.Visit(argument);
+                builder.Append('"');
+            }
         }
     }
 }

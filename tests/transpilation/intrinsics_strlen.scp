@@ -1,0 +1,8 @@
+[function tst_trans_intrinsics_strlen]
+ShouldBeSameString(4,<strlen(asdf)>)
+ShouldBeSameString(5,<strlen("asdfg")>)
+
+var(somestr,"asdfgh")
+ShouldBeSameString(<eval strlen(<var(somestr)>)>,6)
+
+tst_success("tst_trans_intrinsics_strlen success")

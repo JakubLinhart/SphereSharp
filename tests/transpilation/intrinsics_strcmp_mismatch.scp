@@ -1,0 +1,98 @@
+[function tst_trans_intrinsics_strcmp_mismatch]
+arg(str1,some unquoted literal - mismatch)
+arg(str2,some unquoted literal)
+
+if (!strcmp(<arg(str1)>,<arg(str2)>))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp unquoted literals in local var")
+endif
+
+if (!strcmp("<arg(str1)>","<arg(str2)>"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp unquoted literals in quoted local var")
+endif
+
+if (!strcmpi(<arg(str1)>,<arg(str2)>))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi unquoted literals in local var")
+endif
+
+if (!strcmpi("<arg(str1)>","<arg(str2)>"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi unquoted literals in quoted local var")
+endif
+
+
+arg(str1,"some quoted literal - mismatch")
+arg(str2,"some quoted literal")
+
+if (!strcmp(<arg(str1)>,<arg(str2)>))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp quoted literals in local var")
+endif
+
+if (!strcmp("<arg(str1)>","<arg(str2)>"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp quoted literals in quoted local var")
+endif
+
+if (!strcmpi(<arg(str1)>,<arg(str2)>))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi quoted literals in local var")
+endif
+
+if (!strcmpi("<arg(str1)>","<arg(str2)>"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi quoted literals in quoted local var")
+endif
+
+
+arg(str1,"some quoted literal with (parentheses) asdf - mismatch")
+arg(str2,"some quoted literal with (parentheses) asdf")
+
+if (!strcmp(<arg(str1)>,<arg(str2)>))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp quoted literals with parentheses in local var")
+endif
+
+if (!strcmp("<arg(str1)>","<arg(str2)>"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp quoted literals with parentheses in quoted local var")
+endif
+
+if (!strcmpi(<arg(str1)>,<arg(str2)>))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi quoted literals with parentheses in local var")
+endif
+
+if (!strcmpi("<arg(str1)>","<arg(str2)>"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi quoted literals with parentheses in quoted local var")
+endif
+
+
+arg(str1,some unquoted literal with (parentheses) asdf - mismatch)
+arg(str2,some unquoted literal with (parentheses) asdf)
+
+if (!strcmp(<arg(str1)>,<arg(str2)>))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp unquoted literals with parentheses in local var")
+endif
+
+if (!strcmp("<arg(str1)>","<arg(str2)>"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp unquoted literals with parentheses in quoted local var")
+endif
+
+if (!strcmpi(<arg(str1)>,<arg(str2)>))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi unquoted literals with parentheses in local var")
+endif
+
+if (!strcmpi("<arg(str1)>","<arg(str2)>"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi unquoted literals with parentheses in quoted local var")
+endif
+
+
+if (!strcmp(unquoted text,unquoted text - mismatch))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp unquoted direct literals")
+endif
+
+if (!strcmpi(unquoted text,unquoted text - mismatch))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi unquoted direct literals")
+endif
+
+if (!strcmp("quoted text","quoted text - mismatch"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmp quoted direct literals")
+endif
+
+if (!strcmpi("quoted text","quoted text - mismatch"))
+    tst_error("tst_trans_intrinsics_strcmp_mismatch failed - strcmpi quoted direct literals")
+endif
+
+tst_success("tst_trans_intrinsics_strcmp_mismatch success")

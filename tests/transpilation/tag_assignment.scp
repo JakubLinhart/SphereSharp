@@ -65,4 +65,7 @@ arg(x,123)
 tag(tagname4,<eval <arg(x)>>)
 ShouldBeSameString(123,<tag(tagname4)>)
 
+tag(tag8,strlen(asdf))
+ShouldBeSameString("strlen(asdf)",<tag(tag8)>)
+
 tst_success("tst_trans_tag_assignment")

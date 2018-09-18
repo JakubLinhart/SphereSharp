@@ -62,4 +62,7 @@ arg(x,123)
 var(varname5,<eval <arg(x)>>)
 ShouldBeSameString(123,<var(varname5)>)
 
+var(varname6,strlen(asdf))
+ShouldBeSameString("strlen(asdf)",<var(varname6)>)
+
 tst_success("tst_trans_var_assignment")

@@ -297,15 +297,18 @@ enddo");
         }
 
         [TestMethod]
-        [DataRow("arg(length,<strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
-        [DataRow("arg(length,strlen(<argv(1)>)+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
-        [DataRow("arg(length,<eval strlen(<argv(1)>)>+45)", "local.length=<eval strlen(<argv[1]>)>+45")]
-        [DataRow("arg(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "local.u=<eval strcmpi(<argv[0]>,<argv[1]>)>")]
+        [DataRow("tag(length,<strlen(<argv(1)>)>+45)", "tag.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("tag(length,<eval strlen(<argv(1)>)>+45)", "tag.length=<eval strlen(<argv[1]>)>+45")]
+        [DataRow("tag(length,<eval strlen(\"asdf\")>)", "tag.length=<eval strlen(asdf)>")]
+        [DataRow("tag(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "tag.u=<eval strcmpi(\"<argv[0]>\",\"<argv[1]>\")>")]
+        [DataRow("tag(u,<eval strcmpi(<argv(0)>,<argv(1)>)>)", "tag.u=<eval strcmpi(\"<argv[0]>\",\"<argv[1]>\")>")]
+        [DataRow("tag(u,<eval strcmpi(str1,str2)>)", "tag.u=<eval strcmpi(\"str1\",\"str2\")>")]
+        [DataRow("tag(u,<eval strcmpi(\"str1\",\"str2\")>)", "tag.u=<eval strcmpi(\"str1\",\"str2\")>")]
         [DataRow("tag(class,<strmid(\"class_necro\",6,20)>)", "tag.class=<strsub 6 20 class_necro>")]
         [DataRow("tag(class,<strmid(<x>,6,20)>)", "tag.class=<strsub 6 20 <x>>")]
         [DataRow(
-            "arg(u,<eval strcmpi(<argv(0)>,someunquotedliterallookinglikefunctionname)>)",
-            "local.u=<eval strcmpi(<argv[0]>,someunquotedliterallookinglikefunctionname)>")]
+            "tag(u,<eval strcmpi(<argv(0)>,someunquotedliterallookinglikefunctionname)>)",
+            "tag.u=<eval strcmpi(\"<argv[0]>\",\"someunquotedliterallookinglikefunctionname\")>")]
         public void Special_functions(string source, string expectedResult)
         {
             TranspileStatementCheck(source, expectedResult);
