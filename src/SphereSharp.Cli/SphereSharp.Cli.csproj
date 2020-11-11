@@ -8,10 +8,11 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>SphereSharp.Cli</RootNamespace>
     <AssemblyName>SphereSharp.Cli</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <StartAction>Program</StartAction>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -79,6 +80,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accounts\AccountsCommand.cs" />
+    <Compile Include="Accounts\AccountsOptions.cs" />
     <Compile Include="AnalyzeShard\AnalyzeShardCommand.cs" />
     <Compile Include="AnalyzeShard\AnalyzeShardOptions.cs" />
     <Compile Include="CommandLineException.cs" />
