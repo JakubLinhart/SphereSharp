@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using CommandLine;
+using SphereSharp.Cli.Accounts;
 using SphereSharp.Cli.AnalyzeShard;
 using SphereSharp.Cli.CreateShardSettings;
 using SphereSharp.Cli.Roundtrip;
@@ -20,13 +21,14 @@ namespace SphereSharp.Cli
     {
         static void Main(string[] args)
         {
-            CommandLine.Parser.Default.ParseArguments<RoundtripOptions, TranspileOptions, TranspileSaveOptions, TranspileShardOptions, CreateShardSettingsOptions, AnalyzeShardOptions>(args)
+            CommandLine.Parser.Default.ParseArguments<RoundtripOptions, TranspileOptions, TranspileSaveOptions, TranspileShardOptions, CreateShardSettingsOptions, AnalyzeShardOptions, ListAccountsOptions>(args)
                 .WithParsed<RoundtripOptions>(options => ExecuteCommand(() => new RoundtripCommand().Roundtrip(options)))
                 .WithParsed<TranspileOptions>(options => ExecuteCommand(() => new TranspileCommand().Transpile(options)))
                 .WithParsed<TranspileSaveOptions>(options => ExecuteCommand(() => new TranspileSaveCommand().Transpile(options)))
                 .WithParsed<TranspileShardOptions>(options => ExecuteCommand(() => new TranspileShardCommand().Transpile(options)))
                 .WithParsed<CreateShardSettingsOptions>(options => ExecuteCommand(() => new CreateShardSettingsCommand().Create(options)))
-                .WithParsed<AnalyzeShardOptions>(options => ExecuteCommand(() => new AnalyzeShardCommand().Analyze(options)));
+                .WithParsed<AnalyzeShardOptions>(options => ExecuteCommand(() => new AnalyzeShardCommand().Analyze(options)))
+                .WithParsed<ListAccountsOptions>(options => ExecuteCommand(() => new ListAccountsCommand().List(options)));
         }
 
         private static void ExecuteCommand(Action commandAction)

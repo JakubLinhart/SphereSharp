@@ -80,8 +80,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accounts\AccountsCommand.cs" />
-    <Compile Include="Accounts\AccountsOptions.cs" />
+    <Compile Include="ListAccounts\ListAccountsCommand.cs" />
+    <Compile Include="ListAccounts\ListAccountsOptions.cs" />
+    <Compile Include="ListAccounts\CollectAccountsVisitor.cs" />
+    <Compile Include="ListAccounts\Account.cs" />
     <Compile Include="AnalyzeShard\AnalyzeShardCommand.cs" />
     <Compile Include="AnalyzeShard\AnalyzeShardOptions.cs" />
     <Compile Include="CommandLineException.cs" />
