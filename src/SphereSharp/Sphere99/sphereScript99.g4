@@ -2,6 +2,7 @@
 
 file: NEWLINE? section* (eofSection | EOF);
 saveFile: NEWLINE? propertyList? saveFileSection+ (eofSection | EOF);
+accountsFile: WS* accountSection+ (eofSection | EOF);
 
 section: WS* (functionSection | itemDefSection | charDefSection | typeDefSection | typeDefsSection | templateSection
             | eventsSection | defNamesSection | dialogSection | dialogTextSection | dialogButtonSection
@@ -93,6 +94,10 @@ commentSection: commentSectionHeader commentLines*?;
 commentSectionHeader: COMMENT_SECTION_HEADER_START WS? commentSectionName? ']' NEWLINE;
 commentSectionName: ~(NEWITEM | ']')+;
 commentLines: freeTextLine;
+
+accountSection: accountSectionHeader propertyList;
+accountSectionHeader: '[' accountSectionName ']' NEWLINE;
+accountSectionName: (VALID_SYMBOL_CHAR | SYMBOL | DEC_NUMBER | HEX_NUMBER | nativeFunctionName | strictNativeFunctionName)+;
 
 varNamesSection: varNamesSectionHeader propertyList;
 varNamesSectionHeader: VARNAMES_SECTION_HEADER_START ']' NEWLINE;

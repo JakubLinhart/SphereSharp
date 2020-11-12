@@ -33,6 +33,9 @@ namespace SphereSharp.Sphere99
         public ParsingResult<sphereScript99Parser.SaveFileContext> ParseSaveFile(string src)
             => Parse(src, (parser) => parser.saveFile());
 
+        public ParsingResult<sphereScript99Parser.AccountsFileContext> ParseAccountsFile(string src)
+            => Parse(src, (parser) => parser.accountsFile());
+
         public ParsingResult<sphereScript99Parser.StatementContext> ParseStatement(string src) 
             => Parse(src, parser => parser.statement());
 

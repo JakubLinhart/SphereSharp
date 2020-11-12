@@ -16,6 +16,7 @@ namespace SphereSharp
         public IEnumerable<CompiledFile> CompiledFiles => compiledFiles;
         public CompiledFile CompiledCharSaveFile { get; private set; }
         public CompiledFile CompiledWorldSaveFile { get; private set; }
+        public CompiledFile CompiledAccountSaveFile { get; private set; }
         public IEnumerable<Error> CompilationErrors => compilationErrors;
         public IDefinitionsRepository DefinitionRepository => repository;
 
@@ -51,6 +52,16 @@ namespace SphereSharp
             Process(inputFileName, result);
 
             CompiledWorldSaveFile = new CompiledFile(inputFileName, result.Tree);
+        }
+
+        public void AddAccountsSaveFile(string inputFileName, string src)
+        {
+            var parser = new Parser();
+            var result = parser.ParseAccountsFile(src);
+            
+            Process(inputFileName, result);
+
+            CompiledAccountSaveFile = new CompiledFile(inputFileName, result.Tree);
         }
 
         private void Process(string inputFileName, ParsingResult result)
