@@ -82,7 +82,7 @@
   <ItemGroup>
     <Compile Include="ListAccounts\ListAccountsCommand.cs" />
     <Compile Include="ListAccounts\ListAccountsOptions.cs" />
-    <Compile Include="ListAccounts\CollectAccountsVisitor.cs" />
+    <Compile Include="ListAccounts\AccountsVisitor.cs" />
     <Compile Include="ListAccounts\Account.cs" />
     <Compile Include="AnalyzeShard\AnalyzeShardCommand.cs" />
     <Compile Include="AnalyzeShard\AnalyzeShardOptions.cs" />
@@ -115,6 +115,9 @@
       <Project>{88cf5fbd-4e99-4fdb-81b7-658169dbf4d0}</Project>
       <Name>SphereSharp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ObjectStats\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
