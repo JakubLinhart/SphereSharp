@@ -66,6 +66,14 @@
     <Compile Include="Sphere99\FirstMemberAccessNameTranspiler.cs" />
     <Compile Include="Sphere99\IDefinitionsRepository.cs" />
     <Compile Include="Sphere99\PropertyValueExtractor.cs" />
+    <Compile Include="Sphere99\Save\GameObjectBuilderVisitor.cs" />
+    <Compile Include="Sphere99\Save\ModelBuilderVisitor.cs" />
+    <Compile Include="Sphere99\Save\Model\Char.cs" />
+    <Compile Include="Sphere99\Save\Model\GameObject.cs" />
+    <Compile Include="Sphere99\Save\Model\GameObjectEnumerableExtensions.cs" />
+    <Compile Include="Sphere99\Save\Model\GameObjectRepository.cs" />
+    <Compile Include="Sphere99\Save\Model\Item.cs" />
+    <Compile Include="Sphere99\Save\Model\ValuesHolder.cs" />
     <Compile Include="Sphere99\Save\ObjectStatsVisistor.cs" />
     <Compile Include="Sphere99\Save\ObjectStats.cs" />
     <Compile Include="Sphere99\Sphere56Transpiler\ChainedMemberTranspiler.cs" />

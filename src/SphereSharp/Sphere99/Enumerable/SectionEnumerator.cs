@@ -33,7 +33,7 @@ namespace SphereSharp.Sphere99.Enumerable
                 return null;
 
             var section = saveFileContent.Substring(sectionStart, currentIndex - sectionStart);
-            return new SectionParsingResult<T>(parser(section), currentLineOffset);
+            return new SectionParsingResult<T>(parser(section), sectionStartLineOffset);
         }
 
         public void Dispose()
