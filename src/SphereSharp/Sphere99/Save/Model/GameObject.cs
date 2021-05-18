@@ -22,6 +22,9 @@ namespace SphereSharp.Sphere99.Save.Model
             Serial = properties.GetHexUInt("Serial");
         }
 
+        public bool IsDefname(params string[] defNames)
+            => defNames.Contains(DefName, StringComparer.OrdinalIgnoreCase);
+
         public bool HasTag(string name) => tags.IsDefined(name);
         public string GetTag(string name) => tags.GetSingle(name);
         public bool TryGetTag(string name, out string result) => tags.TryGetSingle(name, out result);
